@@ -1,52 +1,50 @@
-﻿const { app, BrowserWindow } = require('electron');
-const d3 = require('d3');
+﻿import * as d3 from 'd3';
+import { Selection } from 'd3';
+window.addEventListener('load', main);
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-
-function createWindow()
+async function sleep(ms: number)
 {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
-    // and load the index.html of the app.
-    mainWindow.loadFile('index.html');
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function ()
-    {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
-    });
+    await _sleep(ms);
+}
+function _sleep(ms: number)
+{
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function ()
+async function main()
 {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
+    let data = [10, 50, 100];
 
-app.on('activate', function ()
-{
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow();
-    }
-});
+    let svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
 
-// code. You can also put them in separate files and require them here.
+    function updateData(data: number[])
+    {
+        let selector = svg.selectAll("circle").data(data);
+
+        //enter
+        selector
+            .enter()
+            .append("circle")
+            .attr("r", 10)
+           //.merge(selector) // update + enter
+            //.transition()
+            .attr("cx", function (d: number) { return d; })
+            .attr("cy", function (d: number) { return d; });
+
+        //update(pouze co už byly přidané)
+        selector
+            .transition()
+            .attr("cx", function (d: number) { return d; })
+            .attr("cy", function (d: number) { return d; });
+
+    }
+    updateData(data);
+    await sleep(2000);
+    data.push(150);
+    data[0] = 75;
+    console.log(data);
+    updateData(data);
+
+}

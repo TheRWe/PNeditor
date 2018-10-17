@@ -1,41 +1,50 @@
-const { app, BrowserWindow } = require('electron');
-const d3 = require('d3');
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-function createWindow() {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
-    // and load the index.html of the app.
-    mainWindow.loadFile('index.html');
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const d3 = require("d3");
+window.addEventListener('load', main);
+function sleep(ms) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield _sleep(ms);
     });
 }
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow();
-    }
-});
-// code. You can also put them in separate files and require them here.
+function _sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let data = [10, 50, 100];
+        let svg = d3.select("svg"), width = +svg.attr("width"), height = +svg.attr("height");
+        function updateData(data) {
+            let selector = svg.selectAll("circle").data(data);
+            //enter
+            selector
+                .enter()
+                .append("circle")
+                .attr("r", 10);
+            //.merge(selector) // update + enter
+            //.transition()
+            //.attr("cx", function (d: number) { return d; })
+            //.attr("cy", function (d: number) { return d; });
+            //update(pouze co už byly přidané)
+            selector
+                .transition()
+                .attr("cx", function (d) { return d; })
+                .attr("cy", function (d) { return d; });
+        }
+        updateData(data);
+        yield sleep(2000);
+        data.push(150);
+        data[0] = 75;
+        console.log(data);
+        updateData(data);
+    });
+}
 //# sourceMappingURL=main.js.map
