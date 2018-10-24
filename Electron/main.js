@@ -28,11 +28,11 @@ function main() {
             selector
                 .enter()
                 .append("circle")
-                .attr("r", 10);
-            //.merge(selector) // update + enter
-            //.transition()
-            //.attr("cx", function (d: number) { return d; })
-            //.attr("cy", function (d: number) { return d; });
+                .attr("r", 10)
+                //.merge(selector) // update + enter
+                //.transition()
+                .attr("cx", function (d) { return d; })
+                .attr("cy", function (d) { return d; });
             //update(pouze co už byly přidané)
             selector
                 .transition()

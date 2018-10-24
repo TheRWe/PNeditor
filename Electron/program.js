@@ -1,44 +1,66 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+const debug = true;
 function createWindow() {
-    // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
         width: 1200, height: 900,
+        title: 'PetriNetEdit'
     });
-    // and load the index.html of the app.
     mainWindow.loadFile('index.html');
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
-    // Emitted when the window is closed.
     mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
+        // delete reference for not used object
         mainWindow = null;
+        // close app when mainWindow closes
+        electron_1.app.quit();
     });
+    let mainMenuTemplate = [{
+            label: "File",
+            submenu: [
+                { label: "open" },
+                { label: "save" },
+                { label: "close" },
+                { label: "recent" },
+                {
+                    label: "Quit",
+                    accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+                    click: () => {
+                        electron_1.app.quit();
+                    }
+                },
+            ]
+        }];
+    if (process.platform === 'darwin') {
+        mainMenuTemplate.unshift({});
+    }
+    if (debug) {
+        mainWindow.webContents.openDevTools();
+        mainMenuTemplate.push({
+            label: "DEBUG",
+            submenu: [
+                {
+                    label: "DevTools",
+                    accelerator: "F12",
+                    click: () => {
+                        mainWindow.webContents.toggleDevTools();
+                    }
+                }
+            ]
+        });
+    }
+    const mainMenu = electron_1.Menu.buildFromTemplate(mainMenuTemplate);
+    electron_1.Menu.setApplicationMenu(mainMenu);
 }
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 electron_1.app.on('ready', createWindow);
-// Quit when all windows are closed.
-electron_1.app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
+electron_1.app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         electron_1.app.quit();
     }
 });
-electron_1.app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
+electron_1.app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
     }
 });
-// code. You can also put them in separate files and require them here.
 //# sourceMappingURL=program.js.map
