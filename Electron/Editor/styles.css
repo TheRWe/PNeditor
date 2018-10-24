@@ -1,0 +1,28 @@
+﻿
+
+body {
+    width: auto;
+    height: auto;
+    background-color: rgb(10, 214, 255);
+}
+
+.SVGCircle {
+    animation: example 0.5s cubic-bezier(1,1.5,0.7,2);
+}
+
+
+@keyframes example {
+    0% {
+        opacity: 0.1;
+        transform: scale(0);
+        transform-origin: center;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        transform-origin: center;
+    }
+}

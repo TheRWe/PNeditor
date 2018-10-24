@@ -9,17 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const d3 = require("d3");
+const p = require("./Helpers/Purify");
+const Purify_1 = require("./Helpers/Purify");
 window.addEventListener('load', main);
-function sleep(ms) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield _sleep(ms);
-    });
-}
-function _sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        p.fileExample();
         let data = [10, 50, 100];
         let svg = d3.select("svg"), width = +svg.attr("width"), height = +svg.attr("height");
         function updateData(data) {
@@ -40,7 +35,7 @@ function main() {
                 .attr("cy", function (d) { return d; });
         }
         updateData(data);
-        yield sleep(2000);
+        yield Purify_1.sleep(2000);
         data.push(150);
         data[0] = 75;
         console.log(data);

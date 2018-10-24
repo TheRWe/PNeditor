@@ -1,18 +1,16 @@
 ﻿import * as d3 from 'd3';
-import { Selection } from 'd3';
+import * as file from 'fs';
+import * as p from './Helpers/Purify';
+import * as PNE from './Editor/Editor';
+import { sleep } from './Helpers/Purify';
+
 window.addEventListener('load', main);
 
-async function sleep(ms: number)
-{
-    await _sleep(ms);
-}
-function _sleep(ms: number)
-{
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function main()
 {
+    p.fileExample();
+
     let data = [10, 50, 100];
 
     let svg = d3.select("svg"),
@@ -48,3 +46,4 @@ async function main()
     updateData(data);
 
 }
+

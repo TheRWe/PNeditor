@@ -38,24 +38,40 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="Editor\styles.css" />
     <Content Include="index.html" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="renderer.js" />
+    <Content Include="settings.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="pkg\gpu.js" />
     <Compile Include="Run.js">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Editor\Editor.ts" />
+    <TypeScriptCompile Include="Editor\PNet.ts" />
+    <TypeScriptCompile Include="Editor\script.ts" />
+    <TypeScriptCompile Include="Helpers\Color.ts" />
     <TypeScriptCompile Include="main.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pkg\gpu.d.ts" />
     <TypeScriptCompile Include="program.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Helpers\purify.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Editor\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="pkg\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
