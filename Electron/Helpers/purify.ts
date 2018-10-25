@@ -1,24 +1,30 @@
 ﻿import * as file from 'fs';
+import { promises } from 'fs';
 
-export function readObjectFromFileSync<T>(path: string | number | Buffer | URL)
+//todo: testování
+export function readObjectFromFileSync<T extends object>(path: string | number | Buffer | URL): T | null
 {
-    let objString = file.readFileSync(path, { encoding: "utf8" });
-
-
+    try {
+        let objString = file.readFileSync(path, { encoding: "utf8" });
+        const obj = JSON.parse(objString);
+        const typedObj: T = {} as T;
+        return Object.assign(typedObj, obj);
+    } catch{
+        return null;
+    }
+}
+//todo: testování
+export function writeObjectToFileSync<T>(path: string | number | Buffer | URL, obj: T): boolean
+{
+    try {
+        file.writeFileSync(path, JSON.stringify(obj), { encoding: "utf8" });
+    } catch{
+        return false;
+    }
+    return true;
 }
 
-/*
-export function readObjectFromFile<T>(path: string | number | Buffer | URL, handler)
-{
-    file.readFile(path, { encoding: "utf8" }, (err, data: string) =>
-    {
-        if (err)
-            console.error('failed to read');
-        else
-            console.log(data);
-    });
-}
-*/
+//todo: async
 
 export function fileExample()
 {

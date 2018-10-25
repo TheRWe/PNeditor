@@ -17,5 +17,8 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^4.0.0"
+  },
+  "dependencies": {
+    "ts-keycode-enum": "^1.0.6"
   }
 }

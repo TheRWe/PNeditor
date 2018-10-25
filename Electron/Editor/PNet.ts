@@ -1,11 +1,8 @@
-﻿class PNet
+﻿export class PNet
 {
-    static mode: "normal" | "arc" = "normal";
-
     //todo: vlastní typy
-    public Places: Place[];
-    public Transformations: Transformation[];
-    //public readonly SVG: SVG;
+    public places: Place[];
+    public transition: Transition[];
 
     public toString():string
     {
@@ -21,49 +18,37 @@
         return Object.assign(net, obj);
     }
 
-    public ArcMode(_fromElm: Place)
-    {
-
-    }
-
     constructor()
     {
-        this.Places = [];
-        this.Transformations = [];
-        //this.SVG = new SVG(300, 300);
-
-        //this.SVG.HTMLElement.addEventListener("mousedown", e =>
-        //{
-        //    // 0 left, 1 middle, 2 right
-        //    if (e.button !== 0) return;
-
-        //    let p: Place = new Place(this, this.SVG);
-        //    p.svg.position.x = e.offsetX;
-        //    p.svg.position.y = e.offsetY;
-        //    e.stopPropagation();
-        //});
+        this.places = [];
+        this.transition = [];
     }
 }
 
-type Transformation = { place: Place, qty: number, /*svg: SVGObject*/ }[]
-
-class Place /*implements SVGObjectProvider*/
+export class Transition
 {
-    public name: string | undefined;
-    //public svg: SVGObject;
-    public id: number | undefined;
-    public readonly parentPNet: PNet;
+    public arcs: { place: Place, qty: number }[];
+    public position: Position | null;
 
-    constructor(pnet:PNet/*, svg: SVG*/, id: number | undefined = undefined, name: string | undefined = undefined)
+    constructor(position: Position | null = null)
     {
-        this.parentPNet = pnet
-        //this.svg = svg.DrawCircle(10);
-        this.name = name;
-        //this.svg.svgElement.addEventListener("mousedown", e =>
-        //    {
-        //        //this.parentPNet.
-        //        e.stopPropagation();
-        //    });
-        this.id = id;
+        this.arcs = [];
+        this.position = position;
     }
 }
+
+export class Place
+{
+    public name: string | null;
+    public id: number | null;
+    public position: Position | null;
+
+    constructor(id: number | null = null, name: string | null = null, position: Position | null = null)
+    {
+        this.name = name;
+        this.id = id;
+        this.position = position;
+    }
+}
+
+export type Position = { x: number, y: number }

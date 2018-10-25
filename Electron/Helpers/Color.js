@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const RGB_COLOR_REGEX = /\((\d+),\s*(\d+),\s*(\d+)(,\s*(\d*.\d*))?\)/;
 //https://gist.github.com/EvAlex/ad0e43f4087e2e813a8f4cd872b433b8
 class Color {
@@ -36,4 +38,5 @@ class Color {
         return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
     }
 }
+exports.Color = Color;
 //# sourceMappingURL=Color.js.map

@@ -1,19 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class PNet {
-    constructor() {
-        this.Places = [];
-        this.Transformations = [];
-        //this.SVG = new SVG(300, 300);
-        //this.SVG.HTMLElement.addEventListener("mousedown", e =>
-        //{
-        //    // 0 left, 1 middle, 2 right
-        //    if (e.button !== 0) return;
-        //    let p: Place = new Place(this, this.SVG);
-        //    p.svg.position.x = e.offsetX;
-        //    p.svg.position.y = e.offsetY;
-        //    e.stopPropagation();
-        //});
-    }
-    //public readonly SVG: SVG;
     toString() {
         //todo: https://github.com/dsherret/ts-nameof
         let ignore = [];
@@ -24,21 +11,25 @@ class PNet {
         const net = new PNet();
         return Object.assign(net, obj);
     }
-    ArcMode(_fromElm) {
+    constructor() {
+        this.places = [];
+        this.transition = [];
     }
 }
-PNet.mode = "normal";
-class Place /*implements SVGObjectProvider*/ {
-    constructor(pnet /*, svg: SVG*/, id = undefined, name = undefined) {
-        this.parentPNet = pnet;
-        //this.svg = svg.DrawCircle(10);
+exports.PNet = PNet;
+class Transition {
+    constructor(position = null) {
+        this.arcs = [];
+        this.position = position;
+    }
+}
+exports.Transition = Transition;
+class Place {
+    constructor(id = null, name = null, position = null) {
         this.name = name;
-        //this.svg.svgElement.addEventListener("mousedown", e =>
-        //    {
-        //        //this.parentPNet.
-        //        e.stopPropagation();
-        //    });
         this.id = id;
+        this.position = position;
     }
 }
+exports.Place = Place;
 //# sourceMappingURL=PNet.js.map

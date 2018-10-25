@@ -1,7 +1,7 @@
 ﻿import * as d3 from 'd3';
 import * as file from 'fs';
 import * as p from './Helpers/Purify';
-import * as PNE from './Editor/Editor';
+import { PNEditor as PNE } from './Editor/Editor';
 import { sleep } from './Helpers/Purify';
 
 window.addEventListener('load', main);
@@ -17,6 +17,9 @@ async function main()
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
+    const editor = new PNE(svg);
+
+    /*
     function updateData(data: number[])
     {
         let selector = svg.selectAll("circle").data(data);
@@ -38,12 +41,14 @@ async function main()
             .attr("cy", function (d: number) { return d; });
 
     }
+
     updateData(data);
-    await sleep(2000);
+    await sleep(5000);
     data.push(150);
     data[0] = 75;
     console.log(data);
     updateData(data);
+    */
 
 }
 

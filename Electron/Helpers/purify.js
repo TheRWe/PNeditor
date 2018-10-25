@@ -9,22 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const file = require("fs");
+//todo: testování
 function readObjectFromFileSync(path) {
-    let objString = file.readFileSync(path, { encoding: "utf8" });
+    try {
+        let objString = file.readFileSync(path, { encoding: "utf8" });
+        const obj = JSON.parse(objString);
+        const typedObj = {};
+        return Object.assign(typedObj, obj);
+    }
+    catch (_a) {
+        return null;
+    }
 }
 exports.readObjectFromFileSync = readObjectFromFileSync;
-/*
-export function readObjectFromFile<T>(path: string | number | Buffer | URL, handler)
-{
-    file.readFile(path, { encoding: "utf8" }, (err, data: string) =>
-    {
-        if (err)
-            console.error('failed to read');
-        else
-            console.log(data);
-    });
+//todo: testování
+function writeObjectToFileSync(path, obj) {
+    try {
+        file.writeFileSync(path, JSON.stringify(obj), { encoding: "utf8" });
+    }
+    catch (_a) {
+        return false;
+    }
+    return true;
 }
-*/
+exports.writeObjectToFileSync = writeObjectToFileSync;
+//todo: async
 function fileExample() {
     const fileName = "settings.json";
     let sett = {
@@ -51,4 +60,4 @@ exports.sleep = sleep;
 function _sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
-//# sourceMappingURL=Purify.js.map
+//# sourceMappingURL=purify.js.map

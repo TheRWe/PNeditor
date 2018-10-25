@@ -51,6 +51,12 @@
     <Compile Include="Run.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SMAZAT\smazat.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SMAZAT\smazat2.js">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Editor\Editor.ts" />
@@ -71,6 +77,7 @@
   <ItemGroup>
     <Folder Include="Editor\" />
     <Folder Include="Helpers\" />
+    <Folder Include="SMAZAT\" />
     <Folder Include="pkg\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
