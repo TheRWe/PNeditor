@@ -9,6 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const file = require("fs");
+function flatten(arr) {
+    return Array.prototype.concat(...arr);
+}
+exports.flatten = flatten;
+function classify(srr, ...fncs) {
+    return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
+}
+exports.classify = classify;
 //todo: testování
 function readObjectFromFileSync(path) {
     try {

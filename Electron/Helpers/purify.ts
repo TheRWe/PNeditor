@@ -1,6 +1,16 @@
 ﻿import * as file from 'fs';
 import { promises } from 'fs';
 
+export function flatten<T>(arr: (T[] | T)[]):T[]
+{
+    return Array.prototype.concat(...arr);
+}
+
+export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { element: T, classifications: boolean[] }[]
+{
+    return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
+}
+
 //todo: testování
 export function readObjectFromFileSync<T extends object>(path: string | number | Buffer | URL): T | null
 {

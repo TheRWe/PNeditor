@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const PNet_1 = require("./PNet");
-const Color_1 = require("../Helpers/Color");
+const ArrowEndpointCalculationHelper_1 = require("./EditorHelpers/ArrowEndpointCalculationHelper");
 class PNEditor {
     constructor(svgElement) {
         this.selectedNode = null;
@@ -20,87 +20,41 @@ class PNEditor {
             shiftNodeDrag: false,
             selectedText: null
         };
+        this.html = {
+            names: {
+                classes: {
+                    defs: {
+                        arc: "defs-arc",
+                        transition: "defs-transition",
+                        place: "defs-place"
+                    },
+                    arc: "arc",
+                    transition: "transition",
+                    place: "place"
+                }
+            }
+        };
         this.svg = svgElement;
         this.net = new PNet_1.PNet();
+        this.AECH = new ArrowEndpointCalculationHelper_1.AECH(this.net);
         //testing todo: smazat
         const net = this.net;
-        net.places.push(new PNet_1.Place(0, "", { x: 50, y: 100 }));
-        net.places.push(new PNet_1.Place(1, "", { x: 30, y: 70 }));
-        net.transition.push(new PNet_1.Transition({ x: 200, y: 50 }));
-        net.transition[0].arcs = [{ place: net.places[0], qty: 10 }];
-        this.InititalizeEditor();
-        //this.svg = d3.select(this.svgElement);
-        //this.SVG = new SVG(300, 300);
-        //this.SVG.HTMLElement.addEventListener("mousedown", e =>
-        //{
-        //    // 0 left, 1 middle, 2 right
-        //    if (e.button !== 0) return;
-        //    let p: Place = new Place(this, this.SVG);
-        //    p.svg.position.x = e.offsetX;
-        //    p.svg.position.y = e.offsetY;
-        //    e.stopPropagation();
-        //});
-    }
-    resetMouseVars() {
-        this.mousedownNode = null;
-        this.mouseupNode = null;
-        this.mousedownLink = null;
-    }
-    updateData() {
-        const net = this.net;
-        const places = this.selectors.places.data(net.places);
-        const transitions = this.selectors.transitions.data(net.transition);
-        console.log(net);
-        const fixNullPosition = (item) => {
-            if (item.position == null)
-                item.position = { x: 0, y: 0 };
-        };
-        places
-            .enter()
-            .each(fixNullPosition)
-            .append("circle")
-            .style("fill", "none")
-            .style("stroke", "black")
-            .style("stroke-width", "2")
-            .attr("r", 10)
-            .merge(places) // update + enter
-            //.transition()
-            .attr("cx", function (p) { return p.position.x; })
-            .attr("cy", function (p) { return p.position.y; });
-        transitions
-            .enter()
-            .each(fixNullPosition)
-            .append("rect")
-            .style("fill", new Color_1.Color(0, 0, 0).toHex())
-            .attr("width", 20)
-            .attr("height", 20)
-            .merge(transitions) // update + enter
-            .attr("x", function (t) { return t.position.x; })
-            .attr("y", function (t) { return t.position.y; });
-        const arcData = net.transition
-            .map(t => t.arcs
-            .map(a => ({ pPos: a.place.position, tPos: t.position, qty: a.qty })))
-            .reduce((a, b) => a.concat(b), [])
-            .map(a => (a.qty < 0) ?
-            { from: a.tPos, to: a.pPos, qty: -a.qty } :
-            { from: a.pPos, to: a.tPos, qty: a.qty });
-        const arcs = this.selectors.arcs.data(arcData);
-        arcs
-            .enter()
-            .append("line")
-            .style("stroke", "black")
-            .style("stroke-width", "1")
-            .merge(arcs) // update + enter
-            .attr("x1", a => a.from.x)
-            .attr("y1", a => a.from.y)
-            .attr("x2", a => a.to.x)
-            .attr("y2", a => a.to.y);
-    }
-    InititalizeEditor() {
+        net.places.push(new PNet_1.Place(0, "", { x: 25, y: 100 }));
+        net.places.push(new PNet_1.Place(1, "", { x: 180, y: 100 }));
+        net.places.push(new PNet_1.Place(2, "", { x: 260, y: 20 }));
+        net.places.push(new PNet_1.Place(2, "", { x: 180, y: 20 }));
+        net.transitions.push(new PNet_1.Transition({ x: 200, y: 50 }));
+        net.transitions[0].arcs = [
+            { place: net.places[0], qty: 10 },
+            { place: net.places[1], qty: 10 },
+            { place: net.places[2], qty: 10 },
+            { place: net.places[3], qty: 10 },
+        ];
+        // initialize editor
         const svg = this.svg;
+        const defs = svg.append('svg:defs');
         const state = this.state;
         // define arrow markers for graph links
-        var defs = svg.append('svg:defs');
         defs.append('svg:marker')
             .attr('id', 'end-arrow')
             .attr('viewBox', '0 -5 10 10')
@@ -132,7 +86,92 @@ class PNEditor {
             places: G.append("g").selectAll("circle"),
             transitions: G.append("g").selectAll("rect")
         };
+        const defsNames = this.html.names.classes.defs;
+        defs.append("g")
+            .attr("id", defsNames.place)
+            .append("circle")
+            .style("fill", "none")
+            .style("stroke", "black")
+            .style("stroke-width", "2")
+            .attr("r", 10);
         this.updateData();
+    }
+    resetMouseVars() {
+        this.mousedownNode = null;
+        this.mouseupNode = null;
+        this.mousedownLink = null;
+    }
+    updateData() {
+        const net = this.net;
+        const places = this.selectors.places.data(net.places);
+        const transitions = this.selectors.transitions.data(net.transitions);
+        const defsNames = this.html.names.classes.defs;
+        console.log(net);
+        const fixNullPosition = (item) => {
+            if (item.position == null)
+                item.position = { x: 0, y: 0 };
+        };
+        places
+            .enter()
+            .each(fixNullPosition)
+            .append("use").attr("xlink:href", `#${defsNames.place}`)
+            //.append("circle")
+            //.style("fill", "none")
+            //.style("stroke", "black")
+            //.style("stroke-width","2")
+            //.attr("r", 10)
+            .merge(places) // update + enter
+            //.transition()
+            .attr("x", function (p) { return p.position.x; })
+            .attr("y", function (p) { return p.position.y; });
+        transitions
+            .enter()
+            .each(fixNullPosition)
+            .append("rect")
+            //.style("fill", d3.color(d3.rgb(0, 0, 0)).hex())
+            /////
+            .style("fill", "none")
+            .style("stroke", "black")
+            .style("stroke-width", "0,5")
+            /////
+            .attr("width", 20)
+            .attr("height", 20)
+            .merge(transitions) // update + enter
+            .attr("x", function (t) { return t.position.x - 10; })
+            .attr("y", function (t) { return t.position.y - 10; });
+        /*
+        const arcData = net.transitions
+            .map(t => t.arcs
+                .map(a => ({ pPos: a.place.position, tPos: t.position, qty: a.qty })))
+            .reduce((a, b) => a.concat(b), [])
+            .map(a => (a.qty < 0) ?
+                { from: a.tPos, to: a.pPos, qty: -a.qty } :
+                { from: a.pPos, to: a.tPos, qty: a.qty });
+        const arcs = this.selectors.arcs.data(arcData);
+
+        arcs
+            .enter()
+            .append("line")
+            .style("stroke", "black")
+            .style("stroke-width", "1")
+           .merge(arcs) // update + enter
+            .attr("x1", a => a.from.x)
+            .attr("y1", a => a.from.y)
+            .attr("x2", a => a.to.x)
+            .attr("y2", a => a.to.y);
+        */
+        const arcData = net.AllArces;
+        const arcs = this.selectors.arcs.data(arcData.map(x => this.AECH.GetArcEndpoints(x)));
+        arcs
+            .enter()
+            .append("line")
+            .style("stroke", "black")
+            .style("stroke-width", "1")
+            .merge(arcs) // update + enter
+            .attr("x1", a => a.from.x)
+            .attr("y1", a => a.from.y)
+            .attr("x2", a => a.to.x)
+            .attr("y2", a => a.to.y);
     }
 }
 exports.PNEditor = PNEditor;

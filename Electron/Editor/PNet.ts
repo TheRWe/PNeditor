@@ -1,8 +1,16 @@
-﻿export class PNet
+﻿import { map, transition } from "d3";
+import { flatten } from "../Helpers/purify";
+
+export class PNet
 {
     //todo: vlastní typy
     public places: Place[];
-    public transition: Transition[];
+    public transitions: Transition[];
+
+    public get AllArces(): Arc[]
+    {
+        return flatten(this.transitions.map(x => x.Arces))
+    }
 
     public toString():string
     {
@@ -21,14 +29,19 @@
     constructor()
     {
         this.places = [];
-        this.transition = [];
+        this.transitions = [];
     }
 }
 
 export class Transition
 {
-    public arcs: { place: Place, qty: number }[];
     public position: Position | null;
+    public arcs: { place: Place, qty: number }[];
+
+    public get Arces(): Arc[]
+    {
+        return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
+    }
 
     constructor(position: Position | null = null)
     {
@@ -52,3 +65,4 @@ export class Place
 }
 
 export type Position = { x: number, y: number }
+export type Arc = { t: Transition, p: Place, qty: number }

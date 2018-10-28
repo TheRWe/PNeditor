@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Editor\Editor.ts" />
+    <TypeScriptCompile Include="Editor\EditorHelpers\ArrowEndpointCalculationHelper.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\PNet.ts" />
     <TypeScriptCompile Include="Editor\script.ts" />
     <TypeScriptCompile Include="Helpers\Color.ts" />
@@ -76,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Editor\" />
+    <Folder Include="Editor\EditorHelpers\" />
     <Folder Include="Helpers\" />
     <Folder Include="SMAZAT\" />
     <Folder Include="pkg\" />

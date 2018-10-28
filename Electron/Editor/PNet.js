@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const purify_1 = require("../Helpers/purify");
 class PNet {
+    get AllArces() {
+        return purify_1.flatten(this.transitions.map(x => x.Arces));
+    }
     toString() {
         //todo: https://github.com/dsherret/ts-nameof
         let ignore = [];
@@ -13,11 +17,14 @@ class PNet {
     }
     constructor() {
         this.places = [];
-        this.transition = [];
+        this.transitions = [];
     }
 }
 exports.PNet = PNet;
 class Transition {
+    get Arces() {
+        return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
+    }
     constructor(position = null) {
         this.arcs = [];
         this.position = position;
