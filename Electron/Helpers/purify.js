@@ -9,10 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const file = require("fs");
+function SortKeySelector(fncSelector) {
+    function f(a, b) {
+        const valA = fncSelector(a);
+        const valB = fncSelector(b);
+        return valA > valB ? 1 : valA === valB ? 0 : -1;
+    }
+    return f;
+}
+exports.SortKeySelector = SortKeySelector;
 function flatten(arr) {
     return Array.prototype.concat(...arr);
 }
 exports.flatten = flatten;
+//todo: named tuple(univerzálně ne jenom bool)
 function classify(srr, ...fncs) {
     return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
 }

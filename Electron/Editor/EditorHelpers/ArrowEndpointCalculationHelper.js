@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const purify_1 = require("../../Helpers/purify");
 // pomocná třída 
 class AECH {
+    //todo: casching
     GetArcEndpoints(arc) {
+        //todo: implement
         const tPos = arc.t.position;
         // get all arces of transition
         const arcesT = arc.t.Arces;
@@ -11,27 +13,45 @@ class AECH {
         // main diag
         (a) => { return a.p.position.y < (a.p.position.x - a.t.position.x + a.t.position.y); }, 
         // scnd diag
-        (a) => { return (a.p.position.y > (-a.p.position.x + a.t.position.x + a.t.position.y)); });
-        const TEndpointsTOP = arcesClassified.filter(x => x.classifications[0] && !x.classifications[1]).map(x => x.element);
-        const TEndpointsLEFT = arcesClassified.filter(x => !x.classifications[0] && !x.classifications[1]).map(x => x.element);
-        const TEndpointsRIGHT = arcesClassified.filter(x => x.classifications[0] && x.classifications[1]).map(x => x.element);
-        const TEndpointsBOT = arcesClassified.filter(x => !x.classifications[0] && x.classifications[1]).map(x => x.element);
-        console.log(arcesClassified);
-        const leftPoint = { x: tPos.x - 10, y: tPos.y };
-        const rightPoint = { x: tPos.x + 10, y: tPos.y };
-        const topPoint = { x: tPos.x, y: tPos.y - 10 };
-        const botPoint = { x: tPos.x, y: tPos.y + 10 };
-        // todo: json comparison
-        const toPos = TEndpointsTOP.findIndex((a) => { return a.p === arc.p && a.t === arc.t && a.qty === arc.qty; }) >= 0 ? topPoint :
-            TEndpointsLEFT.findIndex((a) => { return a.p === arc.p && a.t === arc.t && a.qty === arc.qty; }) >= 0 ? leftPoint :
-                TEndpointsRIGHT.findIndex((a) => { return a.p === arc.p && a.t === arc.t && a.qty === arc.qty; }) >= 0 ? rightPoint :
-                    TEndpointsBOT.findIndex((a) => { return a.p === arc.p && a.t === arc.t && a.qty === arc.qty; }) >= 0 ? botPoint :
-                        { x: 0, y: 0 };
+        (a) => { return a.p.position.y > (-a.p.position.x + a.t.position.x + a.t.position.y); });
+        const sides = ["TOP", "BOT", "LEFT", "RIGHT"];
+        const arcesWithSides = arcesClassified.map(x => {
+            const side = (x.classifications[0] && !x.classifications[1]) ? "TOP" :
+                (!x.classifications[0] && !x.classifications[1]) ? "LEFT" :
+                    (x.classifications[0] && x.classifications[1]) ? "RIGHT" : "BOT";
+            return { arc: x.element, side: side };
+        });
+        const defaultTransitionPositionSides = {
+            "TOP": { x: tPos.x - 10, y: tPos.y - 10 },
+            "BOT": { x: tPos.x - 10, y: tPos.y + 10 },
+            "LEFT": { x: tPos.x - 10, y: tPos.y + 10 },
+            "RIGHT": { x: tPos.x + 10, y: tPos.y + 10 },
+        };
+        const arcWithTransitionPosition = [];
+        sides.forEach(s => {
+            const sideDependentValue = (s === "BOT" || s === "TOP") ? "x" : "y";
+            const selectorHelper = purify_1.SortKeySelector((x) => { return x.arc[sideDependentValue]; });
+            const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
+            const len = arcsInThisSide.length;
+            if (len === 0)
+                return;
+            // odskok
+            const jump = ((s === "BOT" || s === "TOP") ? 1 : -1) * 20 / (len + 1);
+            let pos = defaultTransitionPositionSides[s];
+            arcsInThisSide.forEach(a => {
+                pos[sideDependentValue] += jump;
+                const pospos = { x: pos.x, y: pos.y };
+                arcWithTransitionPosition.push({ arc: a.arc, pos: pospos });
+            });
+        });
+        var transitionPos = arcWithTransitionPosition.find((ap) => {
+            const a = ap.arc;
+            return arc.qty === a.qty && arc.p === a.p && arc.t === a.t;
+        }).pos;
         return {
             from: arc.p.position,
-            to: toPos
+            to: transitionPos
         };
-        //todo: implement
         //throw { name: "NotImplementedError", message: "too lazy to implement" }; 
     }
     constructor(net) {

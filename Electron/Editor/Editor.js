@@ -40,15 +40,23 @@ class PNEditor {
         //testing todo: smazat
         const net = this.net;
         net.places.push(new PNet_1.Place(0, "", { x: 25, y: 100 }));
-        net.places.push(new PNet_1.Place(1, "", { x: 180, y: 100 }));
+        net.places.push(new PNet_1.Place(1, "", { x: 180, y: 120 }));
         net.places.push(new PNet_1.Place(2, "", { x: 260, y: 20 }));
-        net.places.push(new PNet_1.Place(2, "", { x: 180, y: 20 }));
+        net.places.push(new PNet_1.Place(3, "", { x: 180, y: 20 }));
+        net.places.push(new PNet_1.Place(4, "", { x: 60, y: 50 }));
+        net.places.push(new PNet_1.Place(5, "", { x: 40, y: 20 }));
+        net.places.push(new PNet_1.Place(6, "", { x: 200, y: 100 }));
+        net.places.push(new PNet_1.Place(6, "", { x: 220, y: 20 }));
         net.transitions.push(new PNet_1.Transition({ x: 200, y: 50 }));
         net.transitions[0].arcs = [
             { place: net.places[0], qty: 10 },
             { place: net.places[1], qty: 10 },
             { place: net.places[2], qty: 10 },
             { place: net.places[3], qty: 10 },
+            { place: net.places[4], qty: 10 },
+            { place: net.places[5], qty: 10 },
+            { place: net.places[6], qty: 10 },
+            { place: net.places[7], qty: 10 },
         ];
         // initialize editor
         const svg = this.svg;
