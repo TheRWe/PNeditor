@@ -2,6 +2,7 @@
 import { PNet, Place, Transition } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
+import { color, rgb } from 'd3';
 
 export class PNEditor
 {
@@ -108,6 +109,7 @@ export class PNEditor
             .append("line")
             .style("stroke", "black")
             .style("stroke-width", "1")
+            .style('marker-end', `url(#${defsNames.arrowEnd})`)
            .merge(arcs) // update + enter
             .attr("x1", a => a.from.x)
             .attr("y1", a => a.from.y)
@@ -133,7 +135,8 @@ export class PNEditor
                 defs: {
                     arc: "defs-arc",
                     transition: "defs-transition",
-                    place: "defs-place"
+                    place: "defs-place",
+                    arrowEnd: "defs-arrow-end"
                 },
                 arc: "arc",
                 transition: "transition",
@@ -177,25 +180,15 @@ export class PNEditor
         const svg = this.svg;
         const defs = svg.append('svg:defs');
         const state = this.state;
-
-        // define arrow markers for graph links
-        defs.append('svg:marker')
-            .attr('id', 'end-arrow')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 32)
-            .attr('markerWidth', 3.5)
-            .attr('markerHeight', 3.5)
-            .attr('orient', 'auto')
-            .append('svg:path')
-            .attr('d', 'M0,-5L10,0L0,5');
+        const defsNames = this.html.names.classes.defs;
 
         // define arrow markers for leading arrow
         defs.append('svg:marker')
-            .attr('id', 'mark-end-arrow')
+            .attr('id', defsNames.arrowEnd)
             .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 7)
-            .attr('markerWidth', 3.5)
-            .attr('markerHeight', 3.5)
+            .attr('refX', 9)
+            .attr('markerWidth', 8)
+            .attr('markerHeight', 8)
             .attr('orient', 'auto')
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
@@ -215,12 +208,11 @@ export class PNEditor
             transitions: G.append("g").selectAll("rect")
         };
 
-        const defsNames = this.html.names.classes.defs;
 
         defs.append("g")
             .attr("id", defsNames.place)
             .append("circle")
-            .style("fill", "none")
+            .style("fill", `${rgb(255, 255, 255).hex()}`)
             .style("stroke", "black")
             .style("stroke-width", "2")
             .attr("r", 10)
