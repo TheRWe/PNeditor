@@ -48,10 +48,18 @@ class AECH {
             const a = ap.arc;
             return arc.qty === a.qty && arc.p === a.p && arc.t === a.t;
         }).pos;
-        return {
-            from: arc.p.position,
-            to: transitionPos
-        };
+        if (arc.qty >= 0)
+            return {
+                from: transitionPos,
+                to: arc.p.position,
+                endsIn: "P"
+            };
+        else
+            return {
+                from: arc.p.position,
+                to: transitionPos,
+                endsIn: "T"
+            };
         //throw { name: "NotImplementedError", message: "too lazy to implement" }; 
     }
     constructor(net) {

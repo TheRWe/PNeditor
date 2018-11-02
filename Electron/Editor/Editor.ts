@@ -66,8 +66,36 @@ export class PNEditor
         transitions
             .enter()
             .each(fixNullPosition)
+            .append("use").attr("xlink:href", `#${defsNames.transition}`)
+            .on("click", e =>
+            {
+                console.log("transition click");
+                console.log(e);
+                d3.event.stopPropagation();
+            })
+            //.on("dragstart", e =>
+            //{
+            //    console.log("dragstart");
+            //})
+            .merge(transitions) // update + enter
+            .attr("x", function (t: Transition) { return t.position.x; })
+            .attr("y", function (t: Transition) { return t.position.y; });
+
+        //todo drag
+        //transitions
+        //    .call(d3.drag()
+        //        .on("start", d => { console.log("start"); }) /*as any*/
+
+        //        //.on("drag", () => { })
+        //        //.on("end", () => { })
+        //    );
+
+        /*
+        transitions
+            .enter()
+            .each(fixNullPosition)
             .append("rect")
-            //.style("fill", d3.color(d3.rgb(0, 0, 0)).hex())
+            .style("fill", d3.color(d3.rgb(0, 0, 0)).hex())
             /////
             .style("fill", "none")
             .style("stroke", "black")
@@ -78,7 +106,7 @@ export class PNEditor
            .merge(transitions) // update + enter
             .attr("x", function (t: Transition) { return t.position.x-10; })
             .attr("y", function (t: Transition) { return t.position.y-10; });
-
+        */
         /*
         const arcData = net.transitions
             .map(t => t.arcs
@@ -102,15 +130,17 @@ export class PNEditor
         */
 
         const arcData = net.AllArces;
-        const arcs = this.selectors.arcs.data(arcData.map(x => this.AECH.GetArcEndpoints(x)));
+        const arcs =
+            this.selectors.arcs
+                .data(arcData.map(x => this.AECH.GetArcEndpoints(x)));
 
         arcs
             .enter()
             .append("line")
             .style("stroke", "black")
-            .style("stroke-width", "1")
-            .style('marker-end', `url(#${defsNames.arrowEnd})`)
-           .merge(arcs) // update + enter
+            .style("stroke-width", 1.5)
+            .merge(arcs) // update + enter
+            .style('marker-end', a => `url(#${a.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.from.x)
             .attr("y1", a => a.from.y)
             .attr("x2", a => a.to.x)
@@ -136,7 +166,8 @@ export class PNEditor
                     arc: "defs-arc",
                     transition: "defs-transition",
                     place: "defs-place",
-                    arrowEnd: "defs-arrow-end"
+                    arrowTransitionEnd: "defs-arrow-t-end",
+                    arrowPlaceEnd: "defs-arrow-p-end"
                 },
                 arc: "arc",
                 transition: "transition",
@@ -144,6 +175,8 @@ export class PNEditor
             }
         }
     }
+
+    private readonly mouseMode: MouseModeCls = new MouseModeCls();
 
     constructor(svgElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
     {
@@ -160,15 +193,15 @@ export class PNEditor
         net.places.push(new Place(4, "", { x: 60, y: 50 }));
         net.places.push(new Place(5, "", { x: 40, y: 20 }));
         net.places.push(new Place(6, "", { x: 200, y: 100 }));
-        net.places.push(new Place(6, "", { x: 220, y: 20 }));
+        net.places.push(new Place(7, "", { x: 220, y: 20 }));
 
         net.transitions.push(new Transition({ x: 200, y: 50 }));
 
         net.transitions[0].arcs = [
             { place: net.places[0], qty: 10 },
             { place: net.places[1], qty: 10 },
-            { place: net.places[2], qty: 10 },
-            { place: net.places[3], qty: 10 },
+            { place: net.places[2], qty: -10 },
+            { place: net.places[3], qty: -10 },
             { place: net.places[4], qty: 10 },
             { place: net.places[5], qty: 10 },
             { place: net.places[6], qty: 10 },
@@ -184,7 +217,7 @@ export class PNEditor
 
         // define arrow markers for leading arrow
         defs.append('svg:marker')
-            .attr('id', defsNames.arrowEnd)
+            .attr('id', defsNames.arrowTransitionEnd)
             .attr('viewBox', '0 -5 10 10')
             .attr('refX', 9)
             .attr('markerWidth', 8)
@@ -192,6 +225,34 @@ export class PNEditor
             .attr('orient', 'auto')
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
+
+        // define arrow markers for leading arrow
+        defs.append('svg:marker')
+            .attr('id', defsNames.arrowPlaceEnd)
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 18)
+            .attr('markerWidth', 8)
+            .attr('markerHeight', 8)
+            .attr('orient', 'auto')
+            .append('svg:path')
+            .attr('d', 'M0,-5L10,0L0,5');
+
+        defs.append("g")
+            .attr("id", defsNames.place)
+            .append("circle")
+            .style("fill", rgb(255, 255, 255).hex())
+            .style("stroke", "black")
+            .style("stroke-width", "2")
+            .attr("r", 10)
+
+        defs.append("g")
+            .attr("id", defsNames.transition)
+            .append("rect")
+            .style("fill", "param(blah)"/*rgb(0, 0, 0).hex()*/)
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", -10)
+            .attr("y", -10);
 
         // line displayed when dragging new nodes
         const dragLine = svg
@@ -208,15 +269,23 @@ export class PNEditor
             transitions: G.append("g").selectAll("rect")
         };
 
+        svg.data([svg]).on("click", (e, d) =>
+        {
+            console.log("svg click");
+            if (this.mouseMode.baseMode == "normal") {
+                const coords = d3.mouse(svg.node() as SVGSVGElement);
+                net.transitions.push(new Transition({ x: coords[0], y: coords[1] }));
+                this.updateData();
+            }
+        });
 
-        defs.append("g")
-            .attr("id", defsNames.place)
-            .append("circle")
-            .style("fill", `${rgb(255, 255, 255).hex()}`)
-            .style("stroke", "black")
-            .style("stroke-width", "2")
-            .attr("r", 10)
 
         this.updateData();
     }
+}
+
+class MouseModeCls
+{
+    public baseMode: "normal" | "delete" | "edit" | "selection" | "multi-selection" | "arc-make" = "normal";
+    public selectionHardToggle: boolean = false;
 }

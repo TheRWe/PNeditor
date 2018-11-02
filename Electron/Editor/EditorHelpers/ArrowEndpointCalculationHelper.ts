@@ -1,5 +1,6 @@
 ﻿import { Transition, Place, PNet, Position, Arc } from "../PNet";
 import { classify, SortKeySelector } from "../../Helpers/purify";
+import { transition } from "d3";
 
 // pomocná třída 
 export class AECH
@@ -7,7 +8,7 @@ export class AECH
     private readonly net: PNet;
 
     //todo: casching
-    public GetArcEndpoints(arc: Arc): { from: Position, to: Position }
+    public GetArcEndpoints(arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" }
     {
         //todo: implement
         const tPos = arc.t.position;
@@ -67,10 +68,19 @@ export class AECH
             return arc.qty === a.qty && arc.p === a.p && arc.t === a.t;
         }).pos;
 
-        return {
-            from: arc.p.position,
-            to: transitionPos
-        };
+        if (arc.qty >= 0)
+            return {
+                from: transitionPos,
+                to: arc.p.position,
+                endsIn: "P"
+            };
+        else
+            return {
+                from: arc.p.position,
+                to: transitionPos,
+                endsIn: "T"
+            };
+
 
         //throw { name: "NotImplementedError", message: "too lazy to implement" }; 
     } 
