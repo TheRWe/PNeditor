@@ -227,7 +227,7 @@ export class PNEditor
                 switch (mouse.mode.main) {
                     case mainMouseModes.normal:
                         //todo: marking
-                        console.log
+                        console.log("markings change");
                         d3.event.stopPropagation();
                         break;
                     default:
