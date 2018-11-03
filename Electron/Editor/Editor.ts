@@ -1,8 +1,9 @@
 ﻿import * as d3 from 'd3';
-import { PNet, Place, Transition } from './PNet';
+import { PNet, Place, Transition, Position } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
-import { color, rgb } from 'd3';
+import { color, rgb, Arc } from 'd3';
+import { Transform } from 'stream';
 
 export class PNEditor
 {
@@ -16,6 +17,7 @@ export class PNEditor
         places: d3.Selection<d3.BaseType, {}, d3.BaseType, any>,
         arcs: d3.Selection<d3.BaseType, {}, d3.BaseType, any>,
         transitions: d3.Selection<d3.BaseType, {}, d3.BaseType, any>,
+        dragline: d3.Selection<d3.BaseType, {}, d3.BaseType, any>,
     };
 
     private path: any;
@@ -33,7 +35,8 @@ export class PNEditor
         this.mousedownLink = null;
     }
 
-    private updateData()
+    /**apply changes in data to DOM */
+    private update()
     {
         const net = this.net;
 
@@ -41,12 +44,12 @@ export class PNEditor
         const transitions = this.selectors.transitions.data(net.transitions);
         const defsNames = this.html.names.classes.defs;
 
-        console.log(net);
+        console.log("update");
 
         const fixNullPosition = (item: Place | Transition): void =>
         {
             if (item.position == null)
-                item.position = {x:0, y:0};
+                item.position = { x: 0, y: 0 };
         }
 
         places
@@ -58,7 +61,7 @@ export class PNEditor
             //.style("stroke", "black")
             //.style("stroke-width","2")
             //.attr("r", 10)
-           .merge(places) // update + enter
+            .merge(places) // update + enter
             //.transition()
             .attr("x", function (p: Place) { return p.position.x; })
             .attr("y", function (p: Place) { return p.position.y; });
@@ -67,16 +70,7 @@ export class PNEditor
             .enter()
             .each(fixNullPosition)
             .append("use").attr("xlink:href", `#${defsNames.transition}`)
-            .on("click", e =>
-            {
-                console.log("transition click");
-                console.log(e);
-                d3.event.stopPropagation();
-            })
-            //.on("dragstart", e =>
-            //{
-            //    console.log("dragstart");
-            //})
+            .on("click", this.mouse.transition.onClick)
             .merge(transitions) // update + enter
             .attr("x", function (t: Transition) { return t.position.x; })
             .attr("y", function (t: Transition) { return t.position.y; });
@@ -176,7 +170,120 @@ export class PNEditor
         }
     }
 
-    private readonly mouseMode: MouseModeCls = new MouseModeCls();
+
+    //#region Mouse
+
+    private InitMouseEvents()
+    {
+        this.svg.on("click", this.mouse.svg.onClick);
+    }
+
+    private readonly mouse = {
+        mode: new MouseModeCls(),
+        svg: {
+            onClick: () =>
+            {
+                console.log("svg click");
+
+                const mouse = this.mouse;
+                switch (mouse.mode.main) {
+                    case mainMouseModes.normal:
+                        this.net.transitions.push(new Transition(mouse.getPosition()));
+                        this.update();
+                        break;
+                    case mainMouseModes.arcMake:
+                        const addedPlace = this.net.AddPlace(mouse.getPosition());
+                        this.net.AddArc(mouse.mode.arcMakeHolder as Transition, addedPlace, 1);
+                        this.mouseEndArc();
+                        this.update();
+                        break;
+                    default:
+                }
+            }
+        },
+        transition: {
+            onClick: (t: Transition) =>
+            {
+                console.debug("transition click");
+
+                const mouse = this.mouse;
+                switch (mouse.mode.main) {
+                    case mainMouseModes.normal:
+                        this.mouseStartArc(t.position, t);
+                        d3.event.stopPropagation();
+                        break;
+                    case mainMouseModes.arcMake:
+                        this.mouseEndArc();
+                        d3.event.stopPropagation();
+                        break;
+                    default:
+                }
+            }
+        },
+        place: {
+            onClick: (p: Place) =>
+            {
+                const mouse = this.mouse;
+                switch (mouse.mode.main) {
+                    case mainMouseModes.normal:
+                        //todo: marking
+                        console.log
+                        d3.event.stopPropagation();
+                        break;
+                    default:
+                }
+            }
+        },
+        /** returns PNet Position relative to main svg element*/
+        getPosition: (): Position =>
+        {
+            const coords = d3.mouse(this.svg.node() as SVGSVGElement);
+            return { x: coords[0], y: coords[1] };
+        }
+    }
+
+    private mouseStartArc(pos: Position, tp: Transition | Place)
+    {
+        this.mouse.mode.main = mainMouseModes.arcMake;
+        this.mouse.mode.arcMakeHolder = tp;
+
+        const mousePos = this.mouse.getPosition();
+        this.selectors.dragline
+            .attr("visibility", null)
+            .attr("x1", pos.x)
+            .attr("y1", pos.y)
+            .attr("x2", mousePos.x)
+            .attr("y2", mousePos.y);
+
+        //todo metody start drag, stop drag
+        this.svg.on("mousemove", e =>
+        {
+            const mousePos = this.mouse.getPosition();
+            this.selectors.dragline
+                .attr("x2", mousePos.x)
+                .attr("y2", mousePos.y);
+        })
+
+    }
+
+    private mouseEndArc(toMode: mainMouseModes = mainMouseModes.normal)
+    {
+        this.mouse.mode.main = toMode;
+        this.mouse.mode.arcMakeHolder = null;
+
+        this.svg.on("mousemove", null);
+
+        this.selectors.dragline
+            .attr("visibility", "hidden")
+            .attr("x1", null)
+            .attr("y1", null)
+            .attr("x2", null)
+            .attr("y2", null);
+    }
+
+    //#endregion
+
+    //todo force for nearby objects(disablable in settings)
 
     constructor(svgElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
     {
@@ -186,7 +293,7 @@ export class PNEditor
 
         //testing todo: smazat
         const net = this.net;
-        net.places.push(new Place(0, "", { x: 25, y: 100}));
+        net.places.push(new Place(0, "", { x: 25, y: 100 }));
         net.places.push(new Place(1, "", { x: 180, y: 120 }));
         net.places.push(new Place(2, "", { x: 260, y: 20 }));
         net.places.push(new Place(3, "", { x: 180, y: 20 }));
@@ -214,6 +321,15 @@ export class PNEditor
         const defs = svg.append('svg:defs');
         const state = this.state;
         const defsNames = this.html.names.classes.defs;
+
+        const G = svg.append("g");
+
+        this.selectors = {
+            arcs: G.append("g").attr("type-arces","").selectAll("g"),
+            places: G.append("g").attr("type-places", "").selectAll("circle"),
+            transitions: G.append("g").attr("type-transitions", "").selectAll("rect"),
+            dragline: G.append("line")
+        };
 
         // define arrow markers for leading arrow
         defs.append('svg:marker')
@@ -248,44 +364,40 @@ export class PNEditor
         defs.append("g")
             .attr("id", defsNames.transition)
             .append("rect")
+            //todo params
             .style("fill", "param(blah)"/*rgb(0, 0, 0).hex()*/)
             .attr("width", 20)
             .attr("height", 20)
             .attr("x", -10)
             .attr("y", -10);
 
-        // line displayed when dragging new nodes
-        const dragLine = svg
-            .append('svg:path')
-            .attr('class', 'link dragline hidden')
-            .attr('d', 'M0,0L0,0')
-            .style('marker-end', 'url(#mark-end-arrow)');
-
-        const G = svg.append("g");
-
-        this.selectors = {
-            arcs: G.append("g").selectAll("g"),
-            places: G.append("g").selectAll("circle"),
-            transitions: G.append("g").selectAll("rect")
-        };
-
-        svg.data([svg]).on("click", (e, d) =>
-        {
-            console.log("svg click");
-            if (this.mouseMode.baseMode == "normal") {
-                const coords = d3.mouse(svg.node() as SVGSVGElement);
-                net.transitions.push(new Transition({ x: coords[0], y: coords[1] }));
-                this.updateData();
-            }
-        });
+        this.selectors.dragline
+            .style("stroke", "black")
+            .style("stroke-width", 1.5)
+            .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
+            .attr("visibility", "hidden");
 
 
-        this.updateData();
+        this.InitMouseEvents();
+        this.update();
     }
 }
 
+//todo RUNMODES
+enum mainMouseModes
+{
+    normal = "normal",
+    delete = "delete",
+    edit = "edit",
+    selection = "selection",
+    multiSelect = "multi-selection",
+    arcMake = "arc-make"
+};
 class MouseModeCls
 {
-    public baseMode: "normal" | "delete" | "edit" | "selection" | "multi-selection" | "arc-make" = "normal";
+    public main: mainMouseModes = mainMouseModes.normal;
     public selectionHardToggle: boolean = false;
+
+    /** holds object for creating arcs */
+    public arcMakeHolder: Transition | Place | null = null;
 }

@@ -14,7 +14,7 @@ export class AECH
         const tPos = arc.t.position;
 
         // get all arces of transition
-        const arcesT = arc.t.Arces;
+        const arcesT = arc.t.ArcesIndependent;
         const arcesClassified = classify(arcesT,
             // main diag
             (a) => { return a.p.position.y < (a.p.position.x - a.t.position.x + a.t.position.y); },

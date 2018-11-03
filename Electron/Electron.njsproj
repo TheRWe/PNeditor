@@ -57,6 +57,9 @@
     <Compile Include="SMAZAT\smazat2.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SMAZAT\smazat3.js">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Editor\Editor.ts" />

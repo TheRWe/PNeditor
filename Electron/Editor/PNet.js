@@ -2,9 +2,24 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const purify_1 = require("../Helpers/purify");
 class PNet {
-    get AllArces() {
-        return purify_1.flatten(this.transitions.map(x => x.Arces));
+    constructor() {
+        //#region Modifications
+        this.placeID = 0;
+        this.places = [];
+        this.transitions = [];
     }
+    get AllArces() {
+        return purify_1.flatten(this.transitions.map(x => x.ArcesIndependent));
+    }
+    AddPlace(pos, name = null) {
+        const place = new Place(this.placeID++, name, pos);
+        this.places.push(place);
+        return place;
+    }
+    AddArc(t, p, qty) {
+        t.arcs.push({ place: p, qty: qty });
+    }
+    //#endregion
     toString() {
         //todo: https://github.com/dsherret/ts-nameof
         let ignore = [];
@@ -15,14 +30,11 @@ class PNet {
         const net = new PNet();
         return Object.assign(net, obj);
     }
-    constructor() {
-        this.places = [];
-        this.transitions = [];
-    }
 }
 exports.PNet = PNet;
 class Transition {
-    get Arces() {
+    /** returns arc with transaction to work independent od this object */
+    get ArcesIndependent() {
         return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
     }
     constructor(position = null) {

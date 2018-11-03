@@ -3,14 +3,32 @@ import { flatten } from "../Helpers/purify";
 
 export class PNet
 {
-    //todo: vlastní typy
     public places: Place[];
     public transitions: Transition[];
 
     public get AllArces(): Arc[]
     {
-        return flatten(this.transitions.map(x => x.Arces))
+        return flatten(this.transitions.map(x => x.ArcesIndependent))
     }
+
+
+    //#region Modifications
+
+    private placeID = 0;
+    public AddPlace(pos: Position, name: string = null): Place
+    {
+        const place = new Place(this.placeID++, name, pos);
+        this.places.push(place);
+        return place;
+    }
+
+    public AddArc(t: Transition, p: Place, qty: number)
+    {
+        t.arcs.push({ place: p, qty: qty});
+    }
+
+	//#endregion
+
 
     public toString():string
     {
@@ -38,7 +56,8 @@ export class Transition
     public position: Position | null;
     public arcs: { place: Place, qty: number }[];
 
-    public get Arces(): Arc[]
+    /** returns arc with transaction to work independent od this object */
+    public get ArcesIndependent(): Arc[]
     {
         return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
     }
