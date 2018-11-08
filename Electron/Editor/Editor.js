@@ -4,6 +4,7 @@ const d3 = require("d3");
 const PNet_1 = require("./PNet");
 const ArrowEndpointCalculationHelper_1 = require("./EditorHelpers/ArrowEndpointCalculationHelper");
 const d3_1 = require("d3");
+// todo: invariant with force
 class PNEditor {
     //#endregion
     //todo force for nearby objects(disablable in settings)
@@ -26,11 +27,15 @@ class PNEditor {
         };
         this.html = {
             names: {
+                id: {
+                    g: {
+                        arcs: "type-arcs",
+                        places: "type-places",
+                        transitions: "type-transitions"
+                    }
+                },
                 classes: {
                     defs: {
-                        arc: "defs-arc",
-                        transition: "defs-transition",
-                        place: "defs-place",
                         arrowTransitionEnd: "defs-arrow-t-end",
                         arrowPlaceEnd: "defs-arrow-p-end"
                     },
@@ -127,12 +132,10 @@ class PNEditor {
         const state = this.state;
         const defsNames = this.html.names.classes.defs;
         const G = svg.append("g");
-        this.selectors = {
-            arcs: G.append("g").attr("type-arces", "").selectAll("g"),
-            places: G.append("g").attr("type-places", "").selectAll("circle"),
-            transitions: G.append("g").attr("type-transitions", "").selectAll("rect"),
-            dragline: G.append("line")
-        };
+        G.append("g").attr("id", this.html.names.id.g.arcs);
+        G.append("g").attr("id", this.html.names.id.g.places);
+        G.append("g").attr("id", this.html.names.id.g.transitions);
+        this.dragline = G.append("line");
         // define arrow markers for leading arrow
         defs.append('svg:marker')
             .attr('id', defsNames.arrowTransitionEnd)
@@ -153,23 +156,7 @@ class PNEditor {
             .attr('orient', 'auto')
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
-        defs.append("g")
-            .attr("id", defsNames.place)
-            .append("circle")
-            .style("fill", d3_1.rgb(255, 255, 255).hex())
-            .style("stroke", "black")
-            .style("stroke-width", "2")
-            .attr("r", 10);
-        defs.append("g")
-            .attr("id", defsNames.transition)
-            .append("rect")
-            //todo params
-            .style("fill", "param(blah)" /*rgb(0, 0, 0).hex()*/)
-            .attr("width", 20)
-            .attr("height", 20)
-            .attr("x", -10)
-            .attr("y", -10);
-        this.selectors.dragline
+        this.dragline
             .style("stroke", "black")
             .style("stroke-width", 1.5)
             .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
@@ -185,94 +172,60 @@ class PNEditor {
     /**apply changes in data to DOM */
     update() {
         const net = this.net;
-        const places = this.selectors.places.data(net.places);
-        const transitions = this.selectors.transitions.data(net.transitions);
         const defsNames = this.html.names.classes.defs;
+        const places = () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(net.places);
+        const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
+        const arcs = () => d3.select("#" + this.html.names.id.g.arcs).selectAll("line")
+            .data(net.AllArces.map(x => this.AECH.GetArcEndpoints(x)));
+        console.log("#" + this.html.names.id.g.arcs);
         console.log("update");
         const fixNullPosition = (item) => {
             if (item.position == null)
                 item.position = { x: 0, y: 0 };
         };
-        places
+        const grup = places()
             .enter()
             .each(fixNullPosition)
-            .append("use").attr("xlink:href", `#${defsNames.place}`)
-            //.append("circle")
-            //.style("fill", "none")
-            //.style("stroke", "black")
-            //.style("stroke-width","2")
-            //.attr("r", 10)
-            .merge(places) // update + enter
-            //.transition()
-            .attr("x", function (p) { return p.position.x; })
-            .attr("y", function (p) { return p.position.y; });
-        transitions
-            .enter()
-            .each(fixNullPosition)
-            .append("use").attr("xlink:href", `#${defsNames.transition}`)
-            .on("click", this.mouse.transition.onClick)
-            .merge(transitions) // update + enter
-            .attr("x", function (t) { return t.position.x; })
-            .attr("y", function (t) { return t.position.y; });
-        //todo drag
-        //transitions
-        //    .call(d3.drag()
-        //        .on("start", d => { console.log("start"); }) /*as any*/
-        //        //.on("drag", () => { })
-        //        //.on("end", () => { })
-        //    );
-        /*
-        transitions
+            .append("g")
+            .on("click", this.mouse.place.onClick)
+            .classed(this.html.names.classes.place, true);
+        grup.append("circle")
+            .style("fill", d3_1.rgb(255, 255, 255).hex())
+            .style("stroke", "black")
+            .style("stroke-width", "2")
+            .attr("r", 10);
+        grup.append("text")
+            .text("AA");
+        places()
+            .attr("transform", (p) => `translate(${p.position.x}, ${p.position.y})`);
+        transitions()
             .enter()
             .each(fixNullPosition)
             .append("rect")
-            .style("fill", d3.color(d3.rgb(0, 0, 0)).hex())
-            /////
-            .style("fill", "none")
-            .style("stroke", "black")
-            .style("stroke-width","0,5")
-            /////
+            .on("click", this.mouse.transition.onClick)
+            .style("fill", d3_1.rgb(0, 0, 0).hex())
             .attr("width", 20)
             .attr("height", 20)
-           .merge(transitions) // update + enter
-            .attr("x", function (t: Transition) { return t.position.x-10; })
-            .attr("y", function (t: Transition) { return t.position.y-10; });
-        */
-        /*
-        const arcData = net.transitions
-            .map(t => t.arcs
-                .map(a => ({ pPos: a.place.position, tPos: t.position, qty: a.qty })))
-            .reduce((a, b) => a.concat(b), [])
-            .map(a => (a.qty < 0) ?
-                { from: a.tPos, to: a.pPos, qty: -a.qty } :
-                { from: a.pPos, to: a.tPos, qty: a.qty });
-        const arcs = this.selectors.arcs.data(arcData);
-
-        arcs
+            .attr("x", -10)
+            .attr("y", -10);
+        transitions()
+            .attr("x", function (t) { return t.position.x - 10; })
+            .attr("y", function (t) { return t.position.y - 10; });
+        arcs()
             .enter()
             .append("line")
             .style("stroke", "black")
-            .style("stroke-width", "1")
-           .merge(arcs) // update + enter
-            .attr("x1", a => a.from.x)
-            .attr("y1", a => a.from.y)
-            .attr("x2", a => a.to.x)
-            .attr("y2", a => a.to.y);
-        */
-        const arcData = net.AllArces;
-        const arcs = this.selectors.arcs
-            .data(arcData.map(x => this.AECH.GetArcEndpoints(x)));
-        arcs
-            .enter()
-            .append("line")
-            .style("stroke", "black")
-            .style("stroke-width", 1.5)
-            .merge(arcs) // update + enter
+            .style("stroke-width", 1.5);
+        arcs()
             .style('marker-end', a => `url(#${a.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.from.x)
             .attr("y1", a => a.from.y)
             .attr("x2", a => a.to.x)
-            .attr("y2", a => a.to.y);
+            .attr("y2", a => a.to.y)
+            .exit().call(x => { console.log(x); }).remove();
+        console.log(this.net);
+        places().exit().remove();
+        transitions().exit().remove();
     }
     //#region Mouse
     InitMouseEvents() {
@@ -282,7 +235,7 @@ class PNEditor {
         this.mouse.mode.main = mainMouseModes.arcMake;
         this.mouse.mode.arcMakeHolder = tp;
         const mousePos = this.mouse.getPosition();
-        this.selectors.dragline
+        this.dragline
             .attr("visibility", null)
             .attr("x1", pos.x)
             .attr("y1", pos.y)
@@ -291,7 +244,7 @@ class PNEditor {
         //todo metody start drag, stop drag
         this.svg.on("mousemove", e => {
             const mousePos = this.mouse.getPosition();
-            this.selectors.dragline
+            this.dragline
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
         });
@@ -300,7 +253,7 @@ class PNEditor {
         this.mouse.mode.main = toMode;
         this.mouse.mode.arcMakeHolder = null;
         this.svg.on("mousemove", null);
-        this.selectors.dragline
+        this.dragline
             .attr("visibility", "hidden")
             .attr("x1", null)
             .attr("y1", null)

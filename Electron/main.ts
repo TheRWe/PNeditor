@@ -1,8 +1,6 @@
 ﻿import * as d3 from 'd3';
-import * as file from 'fs';
 import * as p from './Helpers/Purify';
 import { PNEditor as PNE } from './Editor/Editor';
-import { sleep } from './Helpers/Purify';
 
 window.addEventListener('load', main);
 

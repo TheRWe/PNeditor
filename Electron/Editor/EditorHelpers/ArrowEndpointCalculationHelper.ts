@@ -10,7 +10,6 @@ export class AECH
     //todo: casching
     public GetArcEndpoints(arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" }
     {
-        //todo: implement
         const tPos = arc.t.position;
 
         // get all arces of transition
@@ -34,8 +33,8 @@ export class AECH
         const defaultTransitionPositionSides = {
             "TOP": { x: tPos.x-10, y: tPos.y - 10 },
             "BOT": { x: tPos.x-10, y: tPos.y + 10 },
-            "LEFT": { x: tPos.x - 10, y: tPos.y+10 },
-            "RIGHT": { x: tPos.x + 10, y: tPos.y+10 },
+            "LEFT": { x: tPos.x - 10, y: tPos.y-10 },
+            "RIGHT": { x: tPos.x + 10, y: tPos.y-10 },
         }
 
         const arcWithTransitionPosition: { arc: Arc, pos: Position }[] = [];
@@ -44,13 +43,13 @@ export class AECH
         {
             const sideDependentValue = (s === "BOT" || s === "TOP") ? "x" : "y";
             const selectorHelper =
-                SortKeySelector((x: any) => { return x.arc[sideDependentValue] as number; });
+                SortKeySelector((x: any) => { return x.arc.p.position[sideDependentValue] as number; });
 
             const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
             const len = arcsInThisSide.length;
             if (len === 0) return;
             // odskok
-            const jump = ((s === "BOT" || s === "TOP")?1:-1)*20 / (len + 1);
+            const jump = 20 / (len + 1);
             
             let pos: Position = defaultTransitionPositionSides[s] as Position;
 

@@ -5,7 +5,6 @@ const purify_1 = require("../../Helpers/purify");
 class AECH {
     //todo: casching
     GetArcEndpoints(arc) {
-        //todo: implement
         const tPos = arc.t.position;
         // get all arces of transition
         const arcesT = arc.t.ArcesIndependent;
@@ -24,19 +23,19 @@ class AECH {
         const defaultTransitionPositionSides = {
             "TOP": { x: tPos.x - 10, y: tPos.y - 10 },
             "BOT": { x: tPos.x - 10, y: tPos.y + 10 },
-            "LEFT": { x: tPos.x - 10, y: tPos.y + 10 },
-            "RIGHT": { x: tPos.x + 10, y: tPos.y + 10 },
+            "LEFT": { x: tPos.x - 10, y: tPos.y - 10 },
+            "RIGHT": { x: tPos.x + 10, y: tPos.y - 10 },
         };
         const arcWithTransitionPosition = [];
         sides.forEach(s => {
             const sideDependentValue = (s === "BOT" || s === "TOP") ? "x" : "y";
-            const selectorHelper = purify_1.SortKeySelector((x) => { return x.arc[sideDependentValue]; });
+            const selectorHelper = purify_1.SortKeySelector((x) => { return x.arc.p.position[sideDependentValue]; });
             const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
             const len = arcsInThisSide.length;
             if (len === 0)
                 return;
             // odskok
-            const jump = ((s === "BOT" || s === "TOP") ? 1 : -1) * 20 / (len + 1);
+            const jump = 20 / (len + 1);
             let pos = defaultTransitionPositionSides[s];
             arcsInThisSide.forEach(a => {
                 pos[sideDependentValue] += jump;
