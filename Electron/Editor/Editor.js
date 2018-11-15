@@ -11,23 +11,9 @@ class PNEditor {
     //#endregion
     //todo force for nearby objects(disablable in settings)
     constructor(svgElement) {
-        this.selectedNode = null;
-        this.selectedLink = null;
-        this.mousedownLink = null;
-        this.mousedownNode = null;
-        this.mouseupNode = null;
-        this.state = {
-            selectedNode: null,
-            selectedEdge: null,
-            mouseDownNode: null,
-            mouseDownLink: null,
-            justDragged: false,
-            justScaleTransGraph: false,
-            lastKeyDown: -1,
-            shiftNodeDrag: false,
-            selectedText: null
-        };
+        /** helper for manipulating with html nodes*/
         this.html = {
+            /** names of html entities */
             names: {
                 id: {
                     g: {
@@ -47,6 +33,7 @@ class PNEditor {
                 }
             }
         };
+        /** mouse properties */
         this.mouse = {
             mode: new MouseModeCls(),
             svg: {
@@ -59,9 +46,7 @@ class PNEditor {
                             this.update();
                             break;
                         case mainMouseModes.arcMake:
-                            const addedPlace = this.net.AddPlace(mouse.getPosition());
-                            this.net.AddArc(mouse.mode.arcMakeHolder, addedPlace, 1);
-                            this.mouseEndArc();
+                            this.mouseEndArc("new");
                             this.update();
                             break;
                         case mainMouseModes.marking:
@@ -78,7 +63,7 @@ class PNEditor {
                     const mouse = this.mouse;
                     switch (mouse.mode.main) {
                         case mainMouseModes.normal:
-                            this.mouseStartArc(t.position, t);
+                            this.mouseStartArc(t);
                             d3.event.stopPropagation();
                             break;
                         case mainMouseModes.arcMake:
@@ -87,7 +72,9 @@ class PNEditor {
                             break;
                         default:
                     }
-                }
+                },
+                /** helper class to identify ending of arcs on transitions */
+                AECH: purify_1.typpedNull()
             },
             place: {
                 onClick: (p) => {
@@ -110,9 +97,12 @@ class PNEditor {
                 return { x: coords[0], y: coords[1] };
             }
         };
+        /** keyboard properties */
         this.keyboard = {
+            /** input element props */
             inputs: {
                 marking: {
+                    /** curently edited place with marking edit input */
                     editedPlace: purify_1.typpedNull(),
                     onKeyPress: () => {
                         if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
@@ -126,7 +116,7 @@ class PNEditor {
         };
         this.svg = svgElement;
         this.net = new PNet_1.PNet();
-        this.AECH = new ArrowEndpointCalculationHelper_1.AECH(this.net);
+        this.mouse.transition.AECH = new ArrowEndpointCalculationHelper_1.AECH(this.net);
         //testing todo: smazat
         const net = this.net;
         net.places.push(new PNet_1.Place(0, "", { x: 25, y: 100 }));
@@ -151,13 +141,12 @@ class PNEditor {
         // initialize editor
         const svg = this.svg;
         const defs = svg.append('svg:defs');
-        const state = this.state;
         const defsNames = this.html.names.classes.defs;
         const G = svg.append("g");
         G.append("g").attr("id", this.html.names.id.g.arcs);
         G.append("g").attr("id", this.html.names.id.g.places);
         G.append("g").attr("id", this.html.names.id.g.transitions);
-        this.dragline = G.append("line");
+        this.arcDragLine = G.append("line");
         let markingForeign = G.append("foreignObject")
             .attr("visibility", "hidden");
         this.inputMarking = {
@@ -190,7 +179,7 @@ class PNEditor {
             .attr('orient', 'auto')
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
-        this.dragline
+        this.arcDragLine
             .style("stroke", "black")
             .style("stroke-width", 1.5)
             .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
@@ -199,20 +188,15 @@ class PNEditor {
         this.InitKeyboardEvents();
         this.update();
     }
-    resetMouseVars() {
-        this.mousedownNode = null;
-        this.mouseupNode = null;
-        this.mousedownLink = null;
-    }
     // todo classed všechny možné definice budou v css
-    /**apply changes in data to DOM */
+    /** apply changes in data to DOM */
     update() {
         const net = this.net;
         const defsNames = this.html.names.classes.defs;
         const places = () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(net.places);
         const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
         const arcs = () => d3.select("#" + this.html.names.id.g.arcs).selectAll("line")
-            .data(net.AllArces.map(x => this.AECH.GetArcEndpoints(x)));
+            .data(net.AllArces.map(x => this.mouse.transition.AECH.GetArcEndpoints(x)));
         console.log("#" + this.html.names.id.g.arcs);
         console.log("update");
         const fixNullPosition = (item) => {
@@ -273,46 +257,77 @@ class PNEditor {
         transitions().exit().remove();
     }
     //#region Mouse
+    /** initialize keyboard *on* handlers related to mouse */
     InitMouseEvents() {
         this.svg.on("click", this.mouse.svg.onClick);
         this.inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
     }
-    mouseStartArc(pos, tp) {
+    /**
+     * start arc from given transition or place
+     * @param tp transition or place
+     */
+    mouseStartArc(tp) {
         this.mouse.mode.main = mainMouseModes.arcMake;
         this.mouse.mode.arcMakeHolder = tp;
         const mousePos = this.mouse.getPosition();
-        this.dragline
+        this.arcDragLine
             .attr("visibility", null)
-            .attr("x1", pos.x)
-            .attr("y1", pos.y)
+            .attr("x1", tp.position.x)
+            .attr("y1", tp.position.y)
             .attr("x2", mousePos.x)
             .attr("y2", mousePos.y);
         //todo metody start drag, stop drag
         this.svg.on("mousemove", e => {
             const mousePos = this.mouse.getPosition();
-            this.dragline
+            this.arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
         });
     }
-    mouseEndArc(toMode = mainMouseModes.normal) {
-        this.mouse.mode.main = toMode;
-        this.mouse.mode.arcMakeHolder = null;
+    // todo: vracet propojitelnost se zadaným objektem ?
+    /**
+     * end creating arc with given ending
+     *  null -> no changes
+     *  Transition | Place -> connect to place
+     *  "new" -> creates new Place | Transition to connect
+     */
+    mouseEndArc(ending = null) {
+        this.mouse.mode.main = this.mouse.mode.prev;
+        //todo: nebezpečné, vymyslet alternativu
         this.svg.on("mousemove", null);
-        this.dragline
+        this.arcDragLine
             .attr("visibility", "hidden")
             .attr("x1", null)
             .attr("y1", null)
             .attr("x2", null)
             .attr("y2", null);
+        if (ending == null)
+            return;
+        if (ending === "new") {
+            if (this.mouse.mode.arcMakeHolder instanceof PNet_1.Transition) {
+                const addedPlace = this.net.AddPlace(this.mouse.getPosition());
+                this.net.AddArc(this.mouse.mode.arcMakeHolder, addedPlace, 1);
+            }
+            else if (this.mouse.mode.arcMakeHolder instanceof PNet_1.Place) {
+                //todo place making
+                console.error("make transition");
+            }
+        }
+        else {
+            //todo: propojování
+            console.error("connect");
+        }
+        this.mouse.mode.arcMakeHolder = null;
     }
     //#endregion Mouse
     //#region Keyboard
+    /** initialize keyboard *on* handlers related to keyboard */
     InitKeyboardEvents() {
         this.inputMarking.input
             .on("keypress", this.keyboard.inputs.marking.onKeyPress);
     }
+    /** open marking edit window for given place*/
     StartInputMarking(p) {
         this.mouse.mode.main = mainMouseModes.marking;
         this.keyboard.inputs.marking.editedPlace = p;
@@ -322,6 +337,10 @@ class PNEditor {
         this.inputMarking.input.node().value = p.marking || null;
         this.inputMarking.input.node().focus();
     }
+    /**
+     * end editing place marking and close window
+     * @param save changes propagate to net ?
+     */
     EndInputMarking(save = true) {
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
