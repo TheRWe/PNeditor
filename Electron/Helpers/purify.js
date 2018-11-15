@@ -18,6 +18,11 @@ function SortKeySelector(fncSelector) {
     return f;
 }
 exports.SortKeySelector = SortKeySelector;
+/** returns null as specified type - helper for declaring types in anonymous classes */
+function typpedNull() {
+    return null;
+}
+exports.typpedNull = typpedNull;
 function flatten(arr) {
     return Array.prototype.concat(...arr);
 }

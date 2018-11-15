@@ -3,6 +3,7 @@ import { PNet, Place, Transition, Position } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
 import { rgb } from 'd3';
+import { typpedNull } from '../Helpers/purify';
 
 // todo: invariant with force
 export class PNEditor
@@ -13,6 +14,7 @@ export class PNEditor
     private readonly AECH: AECH;
 
     private readonly dragline: d3.Selection<d3.BaseType, { }, d3.BaseType, any>;
+    private readonly inputMarking: { foreign: d3.Selection<d3.BaseType, {}, d3.BaseType, any>, input: d3.Selection<d3.BaseType, {}, d3.BaseType, any>};
 
     private path: any;
 
@@ -29,6 +31,7 @@ export class PNEditor
         this.mousedownLink = null;
     }
 
+    // todo classed všechny možné definice budou v css
     /**apply changes in data to DOM */
     private update()
     {
@@ -49,23 +52,35 @@ export class PNEditor
                 item.position = { x: 0, y: 0 };
         }
 
-        const grup =
+        const placesEnterGroup =
             places()
                 .enter()
                 .each(fixNullPosition)
                 .append("g")
                 .on("click", this.mouse.place.onClick)
                 .classed(this.html.names.classes.place, true);
-        grup.append("circle")
-            .style("fill", rgb(255, 255, 255).hex())
-            .style("stroke", "black")
-            .style("stroke-width", "2")
-            .attr("r", 10)
-        grup.append("text")
-            .text("AA");
+        const placesEnterCircle =
+            placesEnterGroup.append("circle")
+                .style("fill", rgb(255, 255, 255).hex())
+                .style("stroke", "black")
+                .style("stroke-width", "2")
+                .attr("r", 10);
+        //todo: kolečka pro nízké počty
+        const placesEnterText =
+            placesEnterGroup.append("text")
+                .classed("unselectable", true)
+                .attr("text-anchor", "middle")
+                .attr("dy", ".3em")
+                .attr("font-size", 10)
+                .text(d => d.marking || "");
 
         places()
             .attr("transform", (p: Place) => `translate(${p.position.x}, ${p.position.y})`)
+        places()
+            //todo: scaling
+            .select("text")
+            .text(d => d.marking || "");
+
 
         transitions()
            .enter()
@@ -139,6 +154,8 @@ export class PNEditor
     private InitMouseEvents()
     {
         this.svg.on("click", this.mouse.svg.onClick);
+        this.inputMarking.input
+            .on("click", () => { d3.event.stopPropagation(); })
     }
 
     private readonly mouse = {
@@ -159,6 +176,10 @@ export class PNEditor
                         this.net.AddArc(mouse.mode.arcMakeHolder as Transition, addedPlace, 1);
                         this.mouseEndArc();
                         this.update();
+                        break;
+                    case mainMouseModes.marking:
+                        //todo: bude uloženo v settings
+                        this.EndInputMarking(false);
                         break;
                     default:
                 }
@@ -188,16 +209,18 @@ export class PNEditor
             {
                 const mouse = this.mouse;
                 switch (mouse.mode.main) {
+                    case mainMouseModes.marking:
                     case mainMouseModes.normal:
-                        //todo: marking
-                        console.log("markings change");
+                        if (p.marking == null) p.marking = 0;
+
+                        this.StartInputMarking(p);
                         d3.event.stopPropagation();
                         break;
                     default:
                 }
             }
         },
-        /** returns PNet Position relative to main svg element*/
+        /** returns PNet Position relative to main svg element */
         getPosition: (): Position =>
         {
             const coords = d3.mouse(this.svg.node() as SVGSVGElement);
@@ -244,7 +267,66 @@ export class PNEditor
             .attr("y2", null);
     }
 
-    //#endregion
+    //#endregion Mouse
+
+    //#region Keyboard
+
+    private InitKeyboardEvents()
+    {
+        this.inputMarking.input
+            .on("keypress", this.keyboard.inputs.marking.onKeyPress);
+    }
+
+    private readonly keyboard = {
+        inputs: {
+            marking: {
+                editedPlace: typpedNull<Place>(),
+                onKeyPress: () =>
+                {
+                    if (d3.event.keyCode == Key.Enter) {
+                        this.EndInputMarking();
+                        this.update();
+                    }
+
+                    d3.event.stopPropagation();
+                }
+            }
+        }
+    }
+
+    private StartInputMarking(p: Place)
+    {
+        this.mouse.mode.main = mainMouseModes.marking;
+        this.keyboard.inputs.marking.editedPlace = p;
+        this.inputMarking.foreign.attr("visibility", "visible");
+        this.inputMarking.foreign.attr("x", p.position.x - 20);
+        this.inputMarking.foreign.attr("y", p.position.y - 10);
+
+        (this.inputMarking.input.node() as any).value = p.marking || null;
+        (this.inputMarking.input.node() as any).focus();
+    }
+
+    private EndInputMarking(save: boolean = true)
+    {
+        //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
+        //      zobrazený pouze zástupný znak a hodnota bude v seznamu
+        //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
+
+        this.inputMarking.foreign.attr("visibility", "hidden");
+        this.inputMarking.foreign.attr("x", null);
+        this.inputMarking.foreign.attr("y", null);
+
+        if (save) {
+            let val = +(this.inputMarking.input.node() as any).value;
+            console.log(val);
+            this.keyboard.inputs.marking.editedPlace.marking = val;
+        }
+
+        this.keyboard.inputs.marking.editedPlace = null;
+        this.mouse.mode.main = this.mouse.mode.prev;
+    }
+
+	//#endregion
 
     //todo force for nearby objects(disablable in settings)
 
@@ -294,6 +376,22 @@ export class PNEditor
         this.dragline = G.append("line");
 
 
+        let markingForeign = G.append("foreignObject")
+            .attr("visibility", "hidden");
+
+        this.inputMarking = {
+            input: markingForeign.append("xhtml:div").append("xhtml:input"),
+            foreign: markingForeign
+        };
+
+        this.inputMarking.input
+            .attr("type", "number")
+            .attr("min", 0)
+            .attr("max", 999)
+            .style("width", "40px")
+            .style("height", "15px")
+
+
         // define arrow markers for leading arrow
         defs.append('svg:marker')
             .attr('id', defsNames.arrowTransitionEnd)
@@ -324,6 +422,7 @@ export class PNEditor
 
 
         this.InitMouseEvents();
+        this.InitKeyboardEvents();
         this.update();
     }
 }
@@ -336,11 +435,14 @@ enum mainMouseModes
     edit = "edit",
     selection = "selection",
     multiSelect = "multi-selection",
-    arcMake = "arc-make"
+    arcMake = "arc-make",
+    marking = "mark-modif"
 };
 class MouseModeCls
 {
+    // todo: main properta a prev bude private, pokaždé když se změní main tak se nahraje do prev a bude existovat metoda co main a prev prohodí
     public main: mainMouseModes = mainMouseModes.normal;
+    public prev: mainMouseModes = mainMouseModes.normal;
     public selectionHardToggle: boolean = false;
 
     /** holds object for creating arcs */

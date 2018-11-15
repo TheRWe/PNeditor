@@ -74,12 +74,14 @@ export class Place
     public name: string | null;
     public id: number | null;
     public position: Position | null;
+    public marking: number | null;
 
-    constructor(id: number | null = null, name: string | null = null, position: Position | null = null)
+    constructor(id: number | null = null, name: string | null = null, position: Position | null = null, marking: number | null = null)
     {
         this.name = name;
         this.id = id;
         this.position = position;
+        this.marking = marking;
     }
 }
 

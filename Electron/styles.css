@@ -3,10 +3,10 @@
 body {
     width: auto;
     height: auto;
-    background-color: rgb(10, 214, 255);
+    /*background-color: rgb(10, 214, 255);*/
 }
 
-.SVGCircle {
+/*.SVGCircle {
     animation: example 0.5s cubic-bezier(1,1.5,0.7,2);
 }
 
@@ -25,4 +25,13 @@ body {
         transform: scale(1);
         transform-origin: center;
     }
+}*/
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

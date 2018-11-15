@@ -13,6 +13,11 @@ export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSele
     return f;
 }
 
+/** returns null as specified type - helper for declaring types in anonymous classes */
+export function typpedNull<T>(): T | null{
+    return null;
+}
+
 export function flatten<T>(arr: (T[] | T)[]):T[]
 {
     return Array.prototype.concat(...arr);

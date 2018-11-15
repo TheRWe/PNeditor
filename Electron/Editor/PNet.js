@@ -44,10 +44,11 @@ class Transition {
 }
 exports.Transition = Transition;
 class Place {
-    constructor(id = null, name = null, position = null) {
+    constructor(id = null, name = null, position = null, marking = null) {
         this.name = name;
         this.id = id;
         this.position = position;
+        this.marking = marking;
     }
 }
 exports.Place = Place;
