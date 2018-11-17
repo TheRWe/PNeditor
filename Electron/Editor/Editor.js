@@ -91,6 +91,18 @@ class PNEditor {
                     }
                 }
             },
+            arc: {
+                onClick: (a) => {
+                    const mouse = this.mouse;
+                    switch (mouse.mode.main) {
+                        case mainMouseModes.normal:
+                            console.log("arc edit");
+                            d3.event.stopPropagation();
+                            break;
+                        default:
+                    }
+                }
+            },
             /** returns PNet Position relative to main svg element */
             getPosition: () => {
                 const coords = d3.mouse(this.svg.node());
@@ -148,9 +160,11 @@ class PNEditor {
         G.append("g").attr("id", this.html.names.id.g.transitions);
         this.arcDragLine = G.append("line");
         let markingForeign = G.append("foreignObject")
-            .attr("visibility", "hidden");
+            .attr("visibility", "hidden").attr("width", "100%");
+        const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
         this.inputMarking = {
-            input: markingForeign.append("xhtml:div").append("xhtml:input"),
+            input: markingDiv.append("xhtml:input"),
+            button: markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px"),
             foreign: markingForeign
         };
         this.inputMarking.input
@@ -244,7 +258,8 @@ class PNEditor {
             .enter()
             .append("line")
             .style("stroke", "black")
-            .style("stroke-width", 1.5);
+            .style("stroke-width", 1.5)
+            .on("click", this.mouse.arc.onClick);
         arcs()
             .style('marker-end', a => `url(#${a.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.from.x)
@@ -262,6 +277,8 @@ class PNEditor {
         this.svg.on("click", this.mouse.svg.onClick);
         this.inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
+        this.inputMarking.button
+            .on("click", () => { this.EndInputMarking(); this.update(); d3.event.stopPropagation(); });
     }
     /**
      * start arc from given transition or place

@@ -15,7 +15,7 @@ export class PNEditor
     /** line for creating arces */
     private readonly arcDragLine: d3.Selection<d3.BaseType, { }, d3.BaseType, any>;
     /** arc editor input */
-    private readonly inputMarking: { foreign: d3.Selection<d3.BaseType, {}, d3.BaseType, any>, input: d3.Selection<d3.BaseType, {}, d3.BaseType, any> };
+    private readonly inputMarking: { foreign: d3.Selection<d3.BaseType, {}, d3.BaseType, any>, input: d3.Selection<d3.BaseType, {}, d3.BaseType, any>, button: d3.Selection<d3.BaseType, {}, d3.BaseType, any> };
 
     // todo classed všechny možné definice budou v css
     /** apply changes in data to DOM */
@@ -87,6 +87,7 @@ export class PNEditor
             .append("line")
             .style("stroke", "black")
             .style("stroke-width", 1.5)
+            .on("click", this.mouse.arc.onClick)
         arcs()
             .style('marker-end', a => `url(#${a.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.from.x)
@@ -133,6 +134,8 @@ export class PNEditor
         this.svg.on("click", this.mouse.svg.onClick);
         this.inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
+        this.inputMarking.button
+            .on("click", () => { this.EndInputMarking(); this.update(); d3.event.stopPropagation(); });
     }
 
     /** mouse properties */
@@ -192,6 +195,20 @@ export class PNEditor
                         if (p.marking == null) p.marking = 0;
 
                         this.StartInputMarking(p);
+                        d3.event.stopPropagation();
+                        break;
+                    default:
+                }
+            }
+        },
+        arc: {
+            onClick: (a: any) =>
+            {
+                const mouse = this.mouse;
+                switch (mouse.mode.main) {
+                    case mainMouseModes.normal:
+                        console.log("arc edit")
+
                         d3.event.stopPropagation();
                         break;
                     default:
@@ -394,10 +411,12 @@ export class PNEditor
 
 
         let markingForeign = G.append("foreignObject")
-            .attr("visibility", "hidden");
+            .attr("visibility", "hidden").attr("width", "100%");
+        const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
 
         this.inputMarking = {
-            input: markingForeign.append("xhtml:div").append("xhtml:input"),
+            input: markingDiv.append("xhtml:input"),
+            button: markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px"),
             foreign: markingForeign
         };
 
