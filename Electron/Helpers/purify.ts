@@ -13,6 +13,25 @@ export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSele
     return f;
 }
 
+export class Ref<T>{
+    public get value(): T
+    {
+        return this.get();
+    }
+    public set value(newValue: T)
+    {
+        this.set(newValue);
+    }
+    private readonly get: () => T;
+    private readonly set: (value: T) => void;
+
+    constructor(get: () => T, set: (value: T) => void)
+    {
+        this.get = get;
+        this.set = set;
+    }
+}
+
 /** returns null as specified type - helper for declaring types in anonymous classes */
 export function typpedNull<T>(): T | null{
     return null;

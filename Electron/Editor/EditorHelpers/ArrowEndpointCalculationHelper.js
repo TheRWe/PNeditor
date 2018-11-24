@@ -45,9 +45,9 @@ class AECH {
         });
         var transitionPos = arcWithTransitionPosition.find((ap) => {
             const a = ap.arc;
-            return arc.qty === a.qty && arc.p === a.p && arc.t === a.t;
+            return arc.qty.value === a.qty.value && arc.p === a.p && arc.t === a.t;
         }).pos;
-        if (arc.qty >= 0)
+        if (arc.qty.value >= 0)
             return {
                 from: transitionPos,
                 to: arc.p.position,

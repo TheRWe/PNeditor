@@ -23,6 +23,10 @@ class PNEditor {
                     }
                 },
                 classes: {
+                    helper: {
+                        arcVisibleLine: "arc-visible-line",
+                        arcHitboxLine: "arc-hitbox-line",
+                    },
                     defs: {
                         arrowTransitionEnd: "defs-arrow-t-end",
                         arrowPlaceEnd: "defs-arrow-p-end"
@@ -49,9 +53,10 @@ class PNEditor {
                             this.mouseEndArc("new");
                             this.update();
                             break;
-                        case mainMouseModes.marking:
+                        case mainMouseModes.valueEdit:
                             //todo: bude uloženo v settings
                             this.EndInputMarking(false);
+                            this.EndInputArc(false);
                             break;
                         default:
                     }
@@ -80,10 +85,12 @@ class PNEditor {
                 onClick: (p) => {
                     const mouse = this.mouse;
                     switch (mouse.mode.main) {
-                        case mainMouseModes.marking:
+                        case mainMouseModes.valueEdit:
                         case mainMouseModes.normal:
                             if (p.marking == null)
                                 p.marking = 0;
+                            this.EndInputMarking(false);
+                            this.EndInputArc(false);
                             this.StartInputMarking(p);
                             d3.event.stopPropagation();
                             break;
@@ -92,11 +99,15 @@ class PNEditor {
                 }
             },
             arc: {
-                onClick: (a) => {
+                onClickHitbox: (a) => {
                     const mouse = this.mouse;
                     switch (mouse.mode.main) {
+                        case mainMouseModes.valueEdit:
                         case mainMouseModes.normal:
                             console.log("arc edit");
+                            this.EndInputMarking(false);
+                            this.EndInputArc(false);
+                            this.StartInputArc(a);
                             d3.event.stopPropagation();
                             break;
                         default:
@@ -122,7 +133,30 @@ class PNEditor {
                             this.update();
                         }
                         d3.event.stopPropagation();
-                    }
+                    },
+                    /** marking editor input */
+                    selectors: {
+                        foreign: purify_1.typpedNull(),
+                        input: purify_1.typpedNull(),
+                        buttonOK: purify_1.typpedNull()
+                    },
+                },
+                arcValue: {
+                    /** curently edited arc with value edit input */
+                    editedArc: purify_1.typpedNull(),
+                    onKeyPress: () => {
+                        if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
+                            this.EndInputArc();
+                            this.update();
+                        }
+                        d3.event.stopPropagation();
+                    },
+                    /** marking editor input */
+                    selectors: {
+                        foreign: purify_1.typpedNull(),
+                        input: purify_1.typpedNull(),
+                        button: purify_1.typpedNull()
+                    },
                 }
             }
         };
@@ -162,16 +196,28 @@ class PNEditor {
         let markingForeign = G.append("foreignObject")
             .attr("visibility", "hidden").attr("width", "100%");
         const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
-        this.inputMarking = {
-            input: markingDiv.append("xhtml:input"),
-            button: markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px"),
-            foreign: markingForeign
-        };
-        this.inputMarking.input
+        const inputMarking = this.keyboard.inputs.marking.selectors;
+        inputMarking.input = markingDiv.append("xhtml:input");
+        inputMarking.buttonOK = markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
+        inputMarking.foreign = markingForeign;
+        inputMarking.input
             .attr("type", "number")
             .attr("min", 0)
             .attr("max", 999)
             .style("width", "40px")
+            .style("height", "15px");
+        let arcValueForeign = G.append("foreignObject")
+            .attr("visibility", "hidden").attr("width", "100%");
+        const arcValueDiv = arcValueForeign.append("xhtml:div").style("height", "50");
+        const inputArcValue = this.keyboard.inputs.arcValue.selectors;
+        inputArcValue.input = arcValueDiv.append("xhtml:input");
+        inputArcValue.button = arcValueDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
+        inputArcValue.foreign = arcValueForeign;
+        inputArcValue.input
+            .attr("type", "number")
+            .attr("min", -999)
+            .attr("max", 999)
+            .style("width", "45px")
             .style("height", "15px");
         // define arrow markers for leading arrow
         defs.append('svg:marker')
@@ -209,8 +255,8 @@ class PNEditor {
         const defsNames = this.html.names.classes.defs;
         const places = () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(net.places);
         const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
-        const arcs = () => d3.select("#" + this.html.names.id.g.arcs).selectAll("line")
-            .data(net.AllArces.map(x => this.mouse.transition.AECH.GetArcEndpoints(x)));
+        const arcs = () => d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
+            .data(net.AllArces.map(x => { return { arc: x, line: this.mouse.transition.AECH.GetArcEndpoints(x) }; }));
         console.log("#" + this.html.names.id.g.arcs);
         console.log("update");
         const fixNullPosition = (item) => {
@@ -254,19 +300,33 @@ class PNEditor {
         transitions()
             .attr("x", function (t) { return t.position.x - 10; })
             .attr("y", function (t) { return t.position.y - 10; });
-        arcs()
+        const enterArc = arcs()
             .enter()
+            .append("g");
+        enterArc
             .append("line")
+            .classed(this.html.names.classes.helper.arcVisibleLine, true)
             .style("stroke", "black")
-            .style("stroke-width", 1.5)
-            .on("click", this.mouse.arc.onClick);
-        arcs()
-            .style('marker-end', a => `url(#${a.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
-            .attr("x1", a => a.from.x)
-            .attr("y1", a => a.from.y)
-            .attr("x2", a => a.to.x)
-            .attr("y2", a => a.to.y)
-            .exit().call(x => { console.log(x); }).remove();
+            .style("stroke-width", 1.5);
+        enterArc
+            .append("line")
+            .classed(this.html.names.classes.helper.arcHitboxLine, true)
+            .style("stroke", "black")
+            .attr("opacity", "0")
+            .style("stroke-width", 8)
+            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
+        arcs().select(`.${this.html.names.classes.helper.arcVisibleLine}`)
+            .style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
+            .attr("x1", a => a.line.from.x)
+            .attr("y1", a => a.line.from.y)
+            .attr("x2", a => a.line.to.x)
+            .attr("y2", a => a.line.to.y);
+        arcs().select(`.${this.html.names.classes.helper.arcHitboxLine}`)
+            .attr("x1", a => a.line.from.x)
+            .attr("y1", a => a.line.from.y)
+            .attr("x2", a => a.line.to.x)
+            .attr("y2", a => a.line.to.y);
+        arcs().exit().call(x => { console.log(`removing ${x}`); }).remove();
         console.log(this.net);
         places().exit().remove();
         transitions().exit().remove();
@@ -275,10 +335,16 @@ class PNEditor {
     /** initialize keyboard *on* handlers related to mouse */
     InitMouseEvents() {
         this.svg.on("click", this.mouse.svg.onClick);
-        this.inputMarking.input
+        const inputMarking = this.keyboard.inputs.marking.selectors;
+        inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
-        this.inputMarking.button
+        inputMarking.buttonOK
             .on("click", () => { this.EndInputMarking(); this.update(); d3.event.stopPropagation(); });
+        const arcValueMarking = this.keyboard.inputs.arcValue.selectors;
+        arcValueMarking.input
+            .on("click", () => { d3.event.stopPropagation(); });
+        arcValueMarking.button
+            .on("click", () => { this.EndInputArc(); this.update(); d3.event.stopPropagation(); });
     }
     /**
      * start arc from given transition or place
@@ -341,18 +407,54 @@ class PNEditor {
     //#region Keyboard
     /** initialize keyboard *on* handlers related to keyboard */
     InitKeyboardEvents() {
-        this.inputMarking.input
+        this.keyboard.inputs.marking.selectors.input
             .on("keypress", this.keyboard.inputs.marking.onKeyPress);
+        this.keyboard.inputs.arcValue.selectors.input
+            .on("keypress", this.keyboard.inputs.arcValue.onKeyPress);
+    }
+    /** open marking edit window for given place*/
+    StartInputArc(a) {
+        this.mouse.mode.main = mainMouseModes.valueEdit;
+        this.keyboard.inputs.arcValue.editedArc = a;
+        const inputArc = this.keyboard.inputs.arcValue.selectors;
+        inputArc.foreign.attr("visibility", "visible");
+        const mousePos = this.mouse.getPosition();
+        inputArc.foreign.attr("x", mousePos.x - 20);
+        inputArc.foreign.attr("y", mousePos.y - 10);
+        inputArc.input.node().value = a.qty.value;
+        inputArc.input.node().focus();
+    }
+    /**
+     * end editing arc value and close window
+     * @param save changes propagate to net ?
+     */
+    EndInputArc(save = true) {
+        //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
+        //      zobrazený pouze zástupný znak a hodnota bude v seznamu
+        //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
+        console.log("inputarc end");
+        const inputArc = this.keyboard.inputs.arcValue.selectors;
+        inputArc.foreign.attr("visibility", "hidden");
+        inputArc.foreign.attr("x", null);
+        inputArc.foreign.attr("y", null);
+        if (save) {
+            let val = +inputArc.input.node().value;
+            console.log(val);
+            this.keyboard.inputs.arcValue.editedArc.qty.value = val;
+        }
+        this.keyboard.inputs.marking.editedPlace = null;
+        this.mouse.mode.main = this.mouse.mode.prev;
     }
     /** open marking edit window for given place*/
     StartInputMarking(p) {
-        this.mouse.mode.main = mainMouseModes.marking;
+        this.mouse.mode.main = mainMouseModes.valueEdit;
         this.keyboard.inputs.marking.editedPlace = p;
-        this.inputMarking.foreign.attr("visibility", "visible");
-        this.inputMarking.foreign.attr("x", p.position.x - 20);
-        this.inputMarking.foreign.attr("y", p.position.y - 10);
-        this.inputMarking.input.node().value = p.marking || null;
-        this.inputMarking.input.node().focus();
+        const inputMarking = this.keyboard.inputs.marking.selectors;
+        inputMarking.foreign.attr("visibility", "visible");
+        inputMarking.foreign.attr("x", p.position.x - 20);
+        inputMarking.foreign.attr("y", p.position.y - 10);
+        inputMarking.input.node().value = p.marking || null;
+        inputMarking.input.node().focus();
     }
     /**
      * end editing place marking and close window
@@ -362,11 +464,12 @@ class PNEditor {
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
-        this.inputMarking.foreign.attr("visibility", "hidden");
-        this.inputMarking.foreign.attr("x", null);
-        this.inputMarking.foreign.attr("y", null);
+        const inputMarking = this.keyboard.inputs.marking.selectors;
+        inputMarking.foreign.attr("visibility", "hidden");
+        inputMarking.foreign.attr("x", null);
+        inputMarking.foreign.attr("y", null);
         if (save) {
-            let val = +this.inputMarking.input.node().value;
+            let val = +inputMarking.input.node().value;
             console.log(val);
             this.keyboard.inputs.marking.editedPlace.marking = val;
         }
@@ -384,7 +487,7 @@ var mainMouseModes;
     mainMouseModes["selection"] = "selection";
     mainMouseModes["multiSelect"] = "multi-selection";
     mainMouseModes["arcMake"] = "arc-make";
-    mainMouseModes["marking"] = "mark-modif";
+    mainMouseModes["valueEdit"] = "value-edit";
 })(mainMouseModes || (mainMouseModes = {}));
 ;
 class MouseModeCls {

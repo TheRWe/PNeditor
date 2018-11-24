@@ -18,6 +18,19 @@ function SortKeySelector(fncSelector) {
     return f;
 }
 exports.SortKeySelector = SortKeySelector;
+class Ref {
+    constructor(get, set) {
+        this.get = get;
+        this.set = set;
+    }
+    get value() {
+        return this.get();
+    }
+    set value(newValue) {
+        this.set(newValue);
+    }
+}
+exports.Ref = Ref;
 /** returns null as specified type - helper for declaring types in anonymous classes */
 function typpedNull() {
     return null;

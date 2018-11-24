@@ -1,5 +1,5 @@
 ﻿import { map, transition } from "d3";
-import { flatten } from "../Helpers/purify";
+import { flatten, Ref } from "../Helpers/purify";
 
 export class PNet
 {
@@ -59,7 +59,7 @@ export class Transition
     /** returns arc with transaction to work independent od this object */
     public get ArcesIndependent(): Arc[]
     {
-        return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
+        return this.arcs.map(x => ({ qty: new Ref<number>(() => x.qty, (v) => x.qty = v), t: this, p: x.place }));
     }
 
     constructor(position: Position | null = null)
@@ -86,4 +86,4 @@ export class Place
 }
 
 export type Position = { x: number, y: number }
-export type Arc = { t: Transition, p: Place, qty: number }
+export type Arc = { t: Transition, p: Place, qty: Ref<number> }

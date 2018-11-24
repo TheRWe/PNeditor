@@ -35,7 +35,7 @@ exports.PNet = PNet;
 class Transition {
     /** returns arc with transaction to work independent od this object */
     get ArcesIndependent() {
-        return this.arcs.map(x => ({ qty: x.qty, t: this, p: x.place }));
+        return this.arcs.map(x => ({ qty: new purify_1.Ref(() => x.qty, (v) => x.qty = v), t: this, p: x.place }));
     }
     constructor(position = null) {
         this.arcs = [];
