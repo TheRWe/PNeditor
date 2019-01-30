@@ -6,6 +6,7 @@ const ts_keycode_enum_1 = require("ts-keycode-enum");
 const ArrowEndpointCalculationHelper_1 = require("./EditorHelpers/ArrowEndpointCalculationHelper");
 const d3_1 = require("d3");
 const purify_1 = require("../Helpers/purify");
+// todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 // todo: invariant with force
 class PNEditor {
     //#endregion
@@ -315,6 +316,13 @@ class PNEditor {
             .attr("opacity", "0")
             .style("stroke-width", 8)
             .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
+        enterArc
+            .append("text")
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".3em")
+            .attr("font-size", 10)
+            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
         arcs().select(`.${this.html.names.classes.helper.arcVisibleLine}`)
             .style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.line.from.x)
@@ -326,6 +334,11 @@ class PNEditor {
             .attr("y1", a => a.line.from.y)
             .attr("x2", a => a.line.to.x)
             .attr("y2", a => a.line.to.y);
+        //todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
+        arcs().select('text')
+            .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
+            .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
+            .text(d => Math.abs(d.arc.qty.value) || "");
         arcs().exit().call(x => { console.log(`removing ${x}`); }).remove();
         console.log(this.net);
         places().exit().remove();

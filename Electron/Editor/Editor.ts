@@ -2,9 +2,10 @@
 import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
-import { rgb } from 'd3';
+import { rgb, min } from 'd3';
 import { typpedNull } from '../Helpers/purify';
 
+// todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 // todo: invariant with force
 export class PNEditor
 {
@@ -88,14 +89,24 @@ export class PNEditor
             .append("line")
             .classed(this.html.names.classes.helper.arcVisibleLine, true)
             .style("stroke", "black")
-            .style("stroke-width", 1.5)
+            .style("stroke-width", 1.5);
         enterArc
             .append("line")
             .classed(this.html.names.classes.helper.arcHitboxLine, true)
             .style("stroke", "black")
             .attr("opacity", "0")
             .style("stroke-width", 8)
-            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc))
+            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
+
+        enterArc
+            .append("text")
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".3em")
+            .attr("font-size", 10)
+            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
+
+
 
         arcs().select(`.${this.html.names.classes.helper.arcVisibleLine}`)
             .style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
@@ -109,6 +120,12 @@ export class PNEditor
             .attr("y1", a => a.line.from.y)
             .attr("x2", a => a.line.to.x)
             .attr("y2", a => a.line.to.y);
+
+        //todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
+        arcs().select('text')
+            .attr("x", a => Math.abs(a.line.to.x - a.line.from.x)/2 + Math.min(a.line.to.x, a.line.from.x)-5)
+            .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
+            .text(d => Math.abs(d.arc.qty.value) || "");
 
         arcs().exit().call(x => { console.log(`removing ${x}`); }).remove();
 
