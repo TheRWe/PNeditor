@@ -1,20 +1,17 @@
 {
-  "name": "electron-quick-start",
+  "name": "pnet_editor",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "PNET Electron application",
   "main": "program.js",
   "scripts": {
     "start": "electron ."
   },
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Pnet",
+    "editor"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Wehmhoner Roman",
   "devDependencies": {
     "electron": "^4.0.0"
   },
