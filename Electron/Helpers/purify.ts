@@ -33,7 +33,7 @@ export class Ref<T>{
 }
 
 /** returns null as specified type - helper for declaring types in anonymous classes */
-export function typpedNull<T>(): T | null{
+export function typedNull<T>(): T | null{
     return null;
 }
 

@@ -10,10 +10,31 @@ const purify_1 = require("../Helpers/purify");
 // todo: invariant with force
 class PNEditor {
     //#endregion
+    //#region Constructor
     //todo force for nearby objects(disablable in settings)
     constructor(divElement) {
+        //#region HTML
         /** helper for manipulating with html nodes*/
         this.html = {
+            /** D3 selectors for elements */
+            selectors: {
+                /** main div element */
+                div: purify_1.typedNull(),
+                /** svg PN view */
+                svg: purify_1.typedNull(),
+                /** control buttons - holders */
+                controlBar: {
+                    /** div */
+                    base: purify_1.typedNull(),
+                    /** always shown buttons */
+                    main: purify_1.typedNull(),
+                    /** run dependent butons */
+                    run: purify_1.typedNull(),
+                    /** edit dependent butons */
+                    edit: purify_1.typedNull(),
+                },
+                arcDragLine: purify_1.typedNull(),
+            },
             /** names of html entities */
             names: {
                 id: {
@@ -80,7 +101,7 @@ class PNEditor {
                     }
                 },
                 /** helper class to identify ending of arcs on transitions */
-                AECH: purify_1.typpedNull()
+                AECH: purify_1.typedNull()
             },
             place: {
                 onClick: (p) => {
@@ -117,7 +138,7 @@ class PNEditor {
             },
             /** returns PNet Position relative to main svg element */
             getPosition: () => {
-                const coords = d3.mouse(this.svg.node());
+                const coords = d3.mouse(this.html.selectors.svg.node());
                 return { x: coords[0], y: coords[1] };
             }
         };
@@ -127,7 +148,7 @@ class PNEditor {
             inputs: {
                 marking: {
                     /** curently edited place with marking edit input */
-                    editedPlace: purify_1.typpedNull(),
+                    editedPlace: purify_1.typedNull(),
                     onKeyPress: () => {
                         if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
                             this.EndInputMarking();
@@ -137,14 +158,14 @@ class PNEditor {
                     },
                     /** marking editor input */
                     selectors: {
-                        foreign: purify_1.typpedNull(),
-                        input: purify_1.typpedNull(),
-                        buttonOK: purify_1.typpedNull()
+                        foreign: purify_1.typedNull(),
+                        input: purify_1.typedNull(),
+                        buttonOK: purify_1.typedNull()
                     },
                 },
                 arcValue: {
                     /** curently edited arc with value edit input */
-                    editedArc: purify_1.typpedNull(),
+                    editedArc: purify_1.typedNull(),
                     onKeyPress: () => {
                         if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
                             this.EndInputArc();
@@ -154,19 +175,45 @@ class PNEditor {
                     },
                     /** marking editor input */
                     selectors: {
-                        foreign: purify_1.typpedNull(),
-                        input: purify_1.typpedNull(),
-                        button: purify_1.typpedNull()
+                        foreign: purify_1.typedNull(),
+                        input: purify_1.typedNull(),
+                        button: purify_1.typedNull()
                     },
                 }
             }
         };
-        this.div = divElement;
-        this.controlBar = divElement
-            .append("div")
-            .style("height", "30px")
-            .style("background", d3_1.rgb(223, 223, 223).hex());
-        this.svg = divElement
+        this.html.selectors.div = divElement;
+        //#region Controlbar
+        const controlbarBase = this.html.selectors.controlBar.base =
+            divElement.append("div")
+                .style("height", "30px")
+                .style("background", d3_1.rgb(223, 223, 223).hex());
+        const controlbarMain = this.html.selectors.controlBar.main = controlbarBase.append("div")
+            //to show none -> inline-block
+            .style("display", "inline-block")
+            .style("margin", "5px 5px");
+        const controlbarMainRunToggle = controlbarMain.append("div")
+            .classed("onoffswitch", true);
+        controlbarMainRunToggle.append("input")
+            .attr("type", "checkbox")
+            .attr("name", "onoffswitch")
+            .classed("onoffswitch-checkbox", true)
+            .attr("id", "myonoffswitch");
+        const controlbarMainRunToggleLabel = controlbarMainRunToggle.append("label")
+            .classed("onoffswitch-label", true)
+            .attr("for", "myonoffswitch");
+        controlbarMainRunToggleLabel.append("span")
+            .classed("onoffswitch-inner", true);
+        controlbarMainRunToggleLabel.append("span")
+            .classed("onoffswitch-switch", true);
+        this.html.selectors.controlBar.edit = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "inline-block");
+        this.html.selectors.controlBar.run = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "none");
+        //#endregion
+        const svg = this.html.selectors.svg = divElement
             .append("svg")
             .attr("width", "auto")
             .attr("height", 600);
@@ -194,14 +241,13 @@ class PNEditor {
             { place: net.places[7], qty: 10 },
         ];
         // initialize editor
-        const svg = this.svg;
         const defs = svg.append('svg:defs');
         const defsNames = this.html.names.classes.defs;
         const G = svg.append("g");
         G.append("g").attr("id", this.html.names.id.g.arcs);
         G.append("g").attr("id", this.html.names.id.g.places);
         G.append("g").attr("id", this.html.names.id.g.transitions);
-        this.arcDragLine = G.append("line");
+        this.html.selectors.arcDragLine = G.append("line");
         let markingForeign = G.append("foreignObject")
             .attr("visibility", "hidden").attr("width", "100%");
         const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
@@ -248,7 +294,7 @@ class PNEditor {
             .attr('orient', 'auto')
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
-        this.arcDragLine
+        this.html.selectors.arcDragLine
             .style("stroke", "black")
             .style("stroke-width", 1.5)
             .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
@@ -257,6 +303,8 @@ class PNEditor {
         this.InitKeyboardEvents();
         this.update();
     }
+    //#endregion
+    //#region Update
     // todo classed všechny možné definice budou v css
     /** apply changes in data to DOM */
     update() {
@@ -352,10 +400,11 @@ class PNEditor {
         places().exit().remove();
         transitions().exit().remove();
     }
+    //#endregion
     //#region Mouse
     /** initialize keyboard *on* handlers related to mouse */
     InitMouseEvents() {
-        this.svg.on("click", this.mouse.svg.onClick);
+        this.html.selectors.svg.on("click", this.mouse.svg.onClick);
         const inputMarking = this.keyboard.inputs.marking.selectors;
         inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
@@ -375,16 +424,16 @@ class PNEditor {
         this.mouse.mode.main = mainMouseModes.arcMake;
         this.mouse.mode.arcMakeHolder = tp;
         const mousePos = this.mouse.getPosition();
-        this.arcDragLine
+        this.html.selectors.arcDragLine
             .attr("visibility", null)
             .attr("x1", tp.position.x)
             .attr("y1", tp.position.y)
             .attr("x2", mousePos.x)
             .attr("y2", mousePos.y);
         //todo metody start drag, stop drag
-        this.svg.on("mousemove", e => {
+        this.html.selectors.svg.on("mousemove", e => {
             const mousePos = this.mouse.getPosition();
-            this.arcDragLine
+            this.html.selectors.arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
         });
@@ -399,8 +448,8 @@ class PNEditor {
     mouseEndArc(ending = null) {
         this.mouse.mode.main = this.mouse.mode.prev;
         //todo: nebezpečné, vymyslet alternativu
-        this.svg.on("mousemove", null);
-        this.arcDragLine
+        this.html.selectors.svg.on("mousemove", null);
+        this.html.selectors.arcDragLine
             .attr("visibility", "hidden")
             .attr("x1", null)
             .attr("y1", null)

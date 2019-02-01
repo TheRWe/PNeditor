@@ -32,10 +32,10 @@ class Ref {
 }
 exports.Ref = Ref;
 /** returns null as specified type - helper for declaring types in anonymous classes */
-function typpedNull() {
+function typedNull() {
     return null;
 }
-exports.typpedNull = typpedNull;
+exports.typedNull = typedNull;
 function flatten(arr) {
     return Array.prototype.concat(...arr);
 }

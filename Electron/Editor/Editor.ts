@@ -3,7 +3,7 @@ import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
 import { rgb, min } from 'd3';
-import { typpedNull } from '../Helpers/purify';
+import { typedNull } from '../Helpers/purify';
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 // todo: invariant with force
@@ -11,17 +11,59 @@ export class PNEditor
 {
     private net: PNet;
 
-    /** selector for main div element */
-    private readonly div: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 
-    /** selector for controlBar element */
-    private readonly controlBar: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+    //#region HTML
 
-    /** selector for main svg element */
-    private readonly svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+    /** helper for manipulating with html nodes*/
+    private readonly html = {
+        /** D3 selectors for elements */
+        selectors: {
+            /** main div element */
+            div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+            /** svg PN view */
+            svg: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+            /** control buttons - holders */
+            controlBar: {
+                /** div */
+                base: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+                /** always shown buttons */
+                main: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+                /** run dependent butons */
+                run: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+                /** edit dependent butons */
+                edit: typedNull<d3.Selection< d3.BaseType, { }, HTMLElement, any >> (),
+            },
+            arcDragLine: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+        },
+        /** names of html entities */
+        names: {
+            id: {
+                g: {
+                    arcs: "type-arcs",
+                    places: "type-places",
+                    transitions: "type-transitions"
+                }
+            },
+            classes: {
+                helper: {
+                    arcVisibleLine: "arc-visible-line",
+                    arcHitboxLine: "arc-hitbox-line",
+                },
+                defs: {
+                    arrowTransitionEnd: "defs-arrow-t-end",
+                    arrowPlaceEnd: "defs-arrow-p-end"
+                },
+                arc: "arc",
+                transition: "transition",
+                place: "place"
+            }
+        }
+    }
 
-    /** line for creating arces */
-    private readonly arcDragLine: d3.Selection<d3.BaseType, { }, d3.BaseType, any>;
+	//#endregion
+
+
+    //#region Update
 
     // todo classed všechny možné definice budou v css
     /** apply changes in data to DOM */
@@ -142,32 +184,7 @@ export class PNEditor
         transitions().exit().remove();
     }
 
-    /** helper for manipulating with html nodes*/
-    private readonly html = {
-        /** names of html entities */
-        names: {
-            id: {
-                g: {
-                    arcs: "type-arcs",
-                    places: "type-places",
-                    transitions: "type-transitions"
-                }
-            },
-            classes: {
-                helper: {
-                    arcVisibleLine: "arc-visible-line",
-                    arcHitboxLine: "arc-hitbox-line",
-                },
-                defs: {
-                    arrowTransitionEnd: "defs-arrow-t-end",
-                    arrowPlaceEnd: "defs-arrow-p-end"
-                },
-                arc: "arc",
-                transition: "transition",
-                place: "place"
-            }
-        }
-    }
+	//#endregion
 
 
     //#region Mouse
@@ -175,7 +192,7 @@ export class PNEditor
     /** initialize keyboard *on* handlers related to mouse */
     private InitMouseEvents()
     {
-        this.svg.on("click", this.mouse.svg.onClick);
+        this.html.selectors.svg.on("click", this.mouse.svg.onClick);
         const inputMarking = this.keyboard.inputs.marking.selectors;
         inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
@@ -235,7 +252,7 @@ export class PNEditor
                 }
             },
             /** helper class to identify ending of arcs on transitions */
-            AECH: typpedNull<AECH>()
+            AECH: typedNull<AECH>()
         },
         place: {
             onClick: (p: Place) =>
@@ -278,7 +295,7 @@ export class PNEditor
         /** returns PNet Position relative to main svg element */
         getPosition: (): Position =>
         {
-            const coords = d3.mouse(this.svg.node() as SVGSVGElement);
+            const coords = d3.mouse(this.html.selectors.svg.node() as SVGSVGElement);
             return { x: coords[0], y: coords[1] };
         }
     }
@@ -293,7 +310,7 @@ export class PNEditor
         this.mouse.mode.arcMakeHolder = tp;
 
         const mousePos = this.mouse.getPosition();
-        this.arcDragLine
+        this.html.selectors.arcDragLine
             .attr("visibility", null)
             .attr("x1", tp.position.x)
             .attr("y1", tp.position.y)
@@ -301,10 +318,10 @@ export class PNEditor
             .attr("y2", mousePos.y);
 
         //todo metody start drag, stop drag
-        this.svg.on("mousemove", e =>
+        this.html.selectors.svg.on("mousemove", e =>
         {
             const mousePos = this.mouse.getPosition();
-            this.arcDragLine
+            this.html.selectors.arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
         })
@@ -323,9 +340,9 @@ export class PNEditor
         this.mouse.mode.main = this.mouse.mode.prev;
 
         //todo: nebezpečné, vymyslet alternativu
-        this.svg.on("mousemove", null);
+        this.html.selectors.svg.on("mousemove", null);
 
-        this.arcDragLine
+        this.html.selectors.arcDragLine
             .attr("visibility", "hidden")
             .attr("x1", null)
             .attr("y1", null)
@@ -372,7 +389,7 @@ export class PNEditor
         inputs: {
             marking: {
                 /** curently edited place with marking edit input */
-                editedPlace: typpedNull<Place>(),
+                editedPlace: typedNull<Place>(),
                 onKeyPress: () =>
                 {
                     if (d3.event.keyCode == Key.Enter) {
@@ -384,14 +401,14 @@ export class PNEditor
                 },
                 /** marking editor input */
                 selectors: {
-                    foreign: typpedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    input: typpedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    buttonOK: typpedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
+                    foreign: typedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
+                    input: typedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
+                    buttonOK: typedNull <d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
                 },
             },
             arcValue: {
                 /** curently edited arc with value edit input */
-                editedArc: typpedNull<Arc>(),
+                editedArc: typedNull<Arc>(),
                 onKeyPress: () =>
                 {
                     if (d3.event.keyCode == Key.Enter) {
@@ -403,9 +420,9 @@ export class PNEditor
                 },
                 /** marking editor input */
                 selectors: {
-                    foreign: typpedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    input: typpedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    button: typpedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
+                    foreign: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
+                    input: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
+                    button: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
                 },
             }
         }
@@ -491,17 +508,59 @@ export class PNEditor
 
 	//#endregion
 
-    //todo force for nearby objects(disablable in settings)
 
+    //#region Constructor
+
+    //todo force for nearby objects(disablable in settings)
     constructor(divElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
     {
-        this.div = divElement;
-        this.controlBar = divElement
-            .append("div")
-            .style("height", "30px")
-            .style("background", rgb(223, 223, 223).hex());
+        this.html.selectors.div = divElement;
 
-        this.svg = divElement
+
+        //#region Controlbar
+
+        const controlbarBase = this.html.selectors.controlBar.base =
+            divElement.append("div")
+                .style("height", "30px")
+                .style("background", rgb(223, 223, 223).hex());
+
+        const controlbarMain = this.html.selectors.controlBar.main = controlbarBase.append("div")
+            //to show none -> inline-block
+            .style("display", "inline-block")
+            .style("margin", "5px 5px");
+
+        const controlbarMainRunToggle = controlbarMain.append("div")
+            .classed("onoffswitch", true);
+
+        controlbarMainRunToggle.append("input")
+            .attr("type", "checkbox")
+            .attr("name", "onoffswitch")
+            .classed("onoffswitch-checkbox", true)
+            .attr("id", "myonoffswitch");
+
+        const controlbarMainRunToggleLabel = controlbarMainRunToggle.append("label")
+            .classed("onoffswitch-label", true)
+            .attr("for", "myonoffswitch");
+
+        controlbarMainRunToggleLabel.append("span")
+            .classed("onoffswitch-inner", true);
+            
+        controlbarMainRunToggleLabel.append("span")
+            .classed("onoffswitch-switch", true);
+
+
+        this.html.selectors.controlBar.edit = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "inline-block");
+
+        this.html.selectors.controlBar.run = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "none");
+
+	    //#endregion
+
+
+        const svg = this.html.selectors.svg = divElement
             .append("svg")
             .attr("width", "auto")
             .attr("height", 600);
@@ -535,7 +594,6 @@ export class PNEditor
 
         // initialize editor
 
-        const svg = this.svg;
         const defs = svg.append('svg:defs');
         const defsNames = this.html.names.classes.defs;
 
@@ -545,7 +603,7 @@ export class PNEditor
         G.append("g").attr("id", this.html.names.id.g.arcs);
         G.append("g").attr("id", this.html.names.id.g.places);
         G.append("g").attr("id", this.html.names.id.g.transitions);
-        this.arcDragLine = G.append("line");
+        this.html.selectors.arcDragLine = G.append("line");
 
 
         let markingForeign = G.append("foreignObject")
@@ -605,7 +663,7 @@ export class PNEditor
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
 
-        this.arcDragLine
+        this.html.selectors.arcDragLine
             .style("stroke", "black")
             .style("stroke-width", 1.5)
             .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
@@ -616,6 +674,9 @@ export class PNEditor
         this.InitKeyboardEvents();
         this.update();
     }
+
+	//#endregion
+
 }
 
 //todo RUNMODES
