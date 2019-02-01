@@ -11,11 +11,9 @@ async function main()
 
     let data = [10, 50, 100];
 
-    let svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
-
-    const editor = new PNE(svg);
+    let div = d3.select(".editor");
+    console.debug(div);
+    const editor = new PNE(div);
 
     /*
     function updateData(data: number[])

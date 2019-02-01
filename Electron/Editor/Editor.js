@@ -11,7 +11,7 @@ const purify_1 = require("../Helpers/purify");
 class PNEditor {
     //#endregion
     //todo force for nearby objects(disablable in settings)
-    constructor(svgElement) {
+    constructor(divElement) {
         /** helper for manipulating with html nodes*/
         this.html = {
             /** names of html entities */
@@ -161,7 +161,15 @@ class PNEditor {
                 }
             }
         };
-        this.svg = svgElement;
+        this.div = divElement;
+        this.controlBar = divElement
+            .append("div")
+            .style("height", "30px")
+            .style("background", d3_1.rgb(223, 223, 223).hex());
+        this.svg = divElement
+            .append("svg")
+            .attr("width", "auto")
+            .attr("height", 600);
         this.net = new PNet_1.PNet();
         this.mouse.transition.AECH = new ArrowEndpointCalculationHelper_1.AECH(this.net);
         //testing todo: smazat

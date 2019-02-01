@@ -10,6 +10,13 @@ import { typpedNull } from '../Helpers/purify';
 export class PNEditor
 {
     private net: PNet;
+
+    /** selector for main div element */
+    private readonly div: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+
+    /** selector for controlBar element */
+    private readonly controlBar: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+
     /** selector for main svg element */
     private readonly svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 
@@ -486,9 +493,19 @@ export class PNEditor
 
     //todo force for nearby objects(disablable in settings)
 
-    constructor(svgElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
+    constructor(divElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
     {
-        this.svg = svgElement;
+        this.div = divElement;
+        this.controlBar = divElement
+            .append("div")
+            .style("height", "30px")
+            .style("background", rgb(223, 223, 223).hex());
+
+        this.svg = divElement
+            .append("svg")
+            .attr("width", "auto")
+            .attr("height", 600);
+
         this.net = new PNet();
         this.mouse.transition.AECH = new AECH(this.net);
 

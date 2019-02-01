@@ -16,8 +16,9 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         p.fileExample();
         let data = [10, 50, 100];
-        let svg = d3.select("svg"), width = +svg.attr("width"), height = +svg.attr("height");
-        const editor = new Editor_1.PNEditor(svg);
+        let div = d3.select(".editor");
+        console.debug(div);
+        const editor = new Editor_1.PNEditor(div);
         /*
         function updateData(data: number[])
         {
