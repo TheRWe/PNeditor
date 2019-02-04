@@ -3,8 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const purify_1 = require("../Helpers/purify");
 class PNet {
     constructor() {
-        //#region Modifications
+        //#region Edit Modifications
         this.placeID = 0;
+        //#endregion
+        //#region Running methods
+        this.savedMarkings = [];
         this.places = [];
         this.transitions = [];
     }
@@ -18,6 +21,28 @@ class PNet {
     }
     AddArc(t, p, qty) {
         t.arcs.push({ place: p, qty: qty });
+    }
+    SaveMarkings() {
+        this.savedMarkings = this.places.map((p, i) => { return { id: p.id, marking: p.marking }; });
+    }
+    LoadMarkings() {
+        this.ClearMarkings();
+        this.savedMarkings.forEach(m => { this.places.find((p, i) => { return m.id === p.id; }).marking = m.marking; });
+    }
+    ClearMarkings() {
+        this.places.forEach(p => { p.marking = 0; });
+    }
+    IsTransitionEnabled(transition) {
+        return transition != null && transition.arcs.every(v => (v.qty + v.place.marking) >= 0);
+    }
+    get EnabledTransitions() {
+        return this.transitions.filter(t => this.IsTransitionEnabled(t));
+    }
+    RunTransition(transition) {
+        if (!this.IsTransitionEnabled(transition))
+            return false;
+        transition.arcs.forEach(a => { a.place.marking += a.qty; });
+        return true;
     }
     //#endregion
     toString() {
@@ -33,7 +58,7 @@ class PNet {
 }
 exports.PNet = PNet;
 class Transition {
-    /** returns arc with transaction to work independent od this object */
+    /** returns arc with transaction to work independent on this object */
     get ArcesIndependent() {
         return this.arcs.map(x => ({ qty: new purify_1.Ref(() => x.qty, (v) => x.qty = v), t: this, p: x.place }));
     }

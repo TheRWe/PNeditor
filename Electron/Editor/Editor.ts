@@ -128,7 +128,8 @@ export class PNEditor
             .attr("y", -10);
         transitions()
             .attr("x", function (t: Transition) { return t.position.x-10; })
-            .attr("y", function (t: Transition) { return t.position.y-10; });
+            .attr("y", function (t: Transition) { return t.position.y - 10; })
+            .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex());
 
         const enterArc =
             arcs()
@@ -570,10 +571,10 @@ export class PNEditor
 
         //testing todo: smazat
         const net = this.net;
-        net.places.push(new Place(0, "", { x: 25, y: 100 }));
-        net.places.push(new Place(1, "", { x: 180, y: 120 }));
-        net.places.push(new Place(2, "", { x: 260, y: 20 }));
-        net.places.push(new Place(3, "", { x: 180, y: 20 }));
+        net.places.push(new Place(0, "", { x: 25, y: 100 }, 10));
+        net.places.push(new Place(1, "", { x: 180, y: 120 }, 10));
+        net.places.push(new Place(2, "", { x: 260, y: 20 }, 15));
+        net.places.push(new Place(3, "", { x: 180, y: 20 }, 20));
         net.places.push(new Place(4, "", { x: 60, y: 50 }));
         net.places.push(new Place(5, "", { x: 40, y: 20 }));
         net.places.push(new Place(6, "", { x: 200, y: 100 }));
@@ -591,6 +592,14 @@ export class PNEditor
             { place: net.places[6], qty: 10 },
             { place: net.places[7], qty: 10 },
         ];
+
+        net.SaveMarkings();
+        net.ClearMarkings();
+        net.LoadMarkings();
+
+        net.RunTransition(net.EnabledTransitions[0]);
+        net.RunTransition(net.EnabledTransitions[0]);
+
 
         // initialize editor
 
