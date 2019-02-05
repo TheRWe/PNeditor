@@ -84,16 +84,16 @@ body {
 }
 
 .onoffswitch-inner:before {
-    content: "Edit";
+    content: "Run";
     padding-left: 8px;
-    background-color: #2E8DEF;
+    background-color: #FF0000;
     color: #FFFFFF;
 }
 
 .onoffswitch-inner:after {
-    content: "Run";
+    content: "Edit";
     padding-right: 8px;
-    background-color: #FF0000;
+    background-color: #2E8DEF;
     color: #FFFFFF;
     text-align: right;
 }

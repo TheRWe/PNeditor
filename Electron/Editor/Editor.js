@@ -25,13 +25,19 @@ class PNEditor {
                 /** control buttons - holders */
                 controlBar: {
                     /** div */
-                    base: purify_1.typedNull(),
+                    baseDiv: purify_1.typedNull(),
                     /** always shown buttons */
-                    main: purify_1.typedNull(),
+                    main: {
+                        div: purify_1.typedNull(),
+                    },
                     /** run dependent butons */
-                    run: purify_1.typedNull(),
+                    run: {
+                        div: purify_1.typedNull(),
+                    },
                     /** edit dependent butons */
-                    edit: purify_1.typedNull(),
+                    edit: {
+                        div: purify_1.typedNull(),
+                    }
                 },
                 arcDragLine: purify_1.typedNull(),
             },
@@ -68,7 +74,7 @@ class PNEditor {
                     const mouse = this.mouse;
                     switch (mouse.mode.main) {
                         case mainMouseModes.normal:
-                            this.net.transitions.push(new PNet_1.Transition(mouse.getPosition()));
+                            this.net.transitions.push(new PNet_1.Transition(mouse.svg.getPosition()));
                             this.update();
                             break;
                         case mainMouseModes.arcMake:
@@ -81,6 +87,37 @@ class PNEditor {
                             this.EndInputArc(false);
                             break;
                         default:
+                    }
+                },
+                /** returns PNet Position relative to main svg element */
+                getPosition: () => {
+                    const coords = d3.mouse(this.html.selectors.svg.node());
+                    return { x: coords[0], y: coords[1] };
+                }
+            },
+            controlBar: {
+                main: {
+                    runToggle: {
+                        onChange: (_, i, nodes) => {
+                            const elm = d3.select(nodes[i]);
+                            const checked = elm.property("checked");
+                            console.debug(checked);
+                            this.mouse.controlBar.main.runToggle.onCheckedChange(checked);
+                        },
+                        onCheckedChange: (checked) => {
+                            const controlBarRun = this.html.selectors.controlBar.run.div
+                                .style("display", "none");
+                            const controlBarEdit = this.html.selectors.controlBar.edit.div
+                                .style("display", "none");
+                            if (checked) {
+                                controlBarRun
+                                    .style("display", "inline-block");
+                            }
+                            else {
+                                controlBarEdit
+                                    .style("display", "inline-block");
+                            }
+                        }
                     }
                 }
             },
@@ -136,11 +173,6 @@ class PNEditor {
                     }
                 }
             },
-            /** returns PNet Position relative to main svg element */
-            getPosition: () => {
-                const coords = d3.mouse(this.html.selectors.svg.node());
-                return { x: coords[0], y: coords[1] };
-            }
         };
         /** keyboard properties */
         this.keyboard = {
@@ -183,22 +215,31 @@ class PNEditor {
             }
         };
         this.html.selectors.div = divElement;
+        this.net = new PNet_1.PNet();
         //#region Controlbar
-        const controlbarBase = this.html.selectors.controlBar.base =
+        const controlbarBase = this.html.selectors.controlBar.baseDiv =
             divElement.append("div")
                 .style("height", "30px")
                 .style("background", d3_1.rgb(223, 223, 223).hex());
-        const controlbarMain = this.html.selectors.controlBar.main = controlbarBase.append("div")
+        const controlbarMain = this.html.selectors.controlBar.main.div = controlbarBase.append("div")
             //to show none -> inline-block
             .style("display", "inline-block")
             .style("margin", "5px 5px");
+        this.html.selectors.controlBar.edit.div = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "inline-block");
+        this.html.selectors.controlBar.run.div = controlbarBase.append("div")
+            .style("margin", "5px 5px")
+            .style("display", "none");
+        //#region RunToggle
         const controlbarMainRunToggle = controlbarMain.append("div")
             .classed("onoffswitch", true);
         controlbarMainRunToggle.append("input")
             .attr("type", "checkbox")
             .attr("name", "onoffswitch")
             .classed("onoffswitch-checkbox", true)
-            .attr("id", "myonoffswitch");
+            .attr("id", "myonoffswitch")
+            .on("change", this.mouse.controlBar.main.runToggle.onChange);
         const controlbarMainRunToggleLabel = controlbarMainRunToggle.append("label")
             .classed("onoffswitch-label", true)
             .attr("for", "myonoffswitch");
@@ -206,46 +247,13 @@ class PNEditor {
             .classed("onoffswitch-inner", true);
         controlbarMainRunToggleLabel.append("span")
             .classed("onoffswitch-switch", true);
-        this.html.selectors.controlBar.edit = controlbarBase.append("div")
-            .style("margin", "5px 5px")
-            .style("display", "inline-block");
-        this.html.selectors.controlBar.run = controlbarBase.append("div")
-            .style("margin", "5px 5px")
-            .style("display", "none");
         //#endregion
+        //#endregion
+        //#region Initialize SVG-HTML
         const svg = this.html.selectors.svg = divElement
             .append("svg")
             .attr("width", "auto")
             .attr("height", 600);
-        this.net = new PNet_1.PNet();
-        this.mouse.transition.AECH = new ArrowEndpointCalculationHelper_1.AECH(this.net);
-        //testing todo: smazat
-        const net = this.net;
-        net.places.push(new PNet_1.Place(0, "", { x: 25, y: 100 }, 10));
-        net.places.push(new PNet_1.Place(1, "", { x: 180, y: 120 }, 10));
-        net.places.push(new PNet_1.Place(2, "", { x: 260, y: 20 }, 15));
-        net.places.push(new PNet_1.Place(3, "", { x: 180, y: 20 }, 20));
-        net.places.push(new PNet_1.Place(4, "", { x: 60, y: 50 }));
-        net.places.push(new PNet_1.Place(5, "", { x: 40, y: 20 }));
-        net.places.push(new PNet_1.Place(6, "", { x: 200, y: 100 }));
-        net.places.push(new PNet_1.Place(7, "", { x: 220, y: 20 }));
-        net.transitions.push(new PNet_1.Transition({ x: 200, y: 50 }));
-        net.transitions[0].arcs = [
-            { place: net.places[0], qty: 10 },
-            { place: net.places[1], qty: 10 },
-            { place: net.places[2], qty: -10 },
-            { place: net.places[3], qty: -10 },
-            { place: net.places[4], qty: 10 },
-            { place: net.places[5], qty: 10 },
-            { place: net.places[6], qty: 10 },
-            { place: net.places[7], qty: 10 },
-        ];
-        net.SaveMarkings();
-        net.ClearMarkings();
-        net.LoadMarkings();
-        net.RunTransition(net.EnabledTransitions[0]);
-        net.RunTransition(net.EnabledTransitions[0]);
-        // initialize editor
         const defs = svg.append('svg:defs');
         const defsNames = this.html.names.classes.defs;
         const G = svg.append("g");
@@ -304,10 +312,42 @@ class PNEditor {
             .style("stroke-width", 1.5)
             .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
             .attr("visibility", "hidden");
+        //#endregion
+        //todo: nahradit uloženou sítí a QuickLoadem
+        //#region TestingNet
+        const net = this.net;
+        net.places.push(new PNet_1.Place(0, "", { x: 25, y: 100 }, 10));
+        net.places.push(new PNet_1.Place(1, "", { x: 180, y: 120 }, 10));
+        net.places.push(new PNet_1.Place(2, "", { x: 260, y: 20 }, 15));
+        net.places.push(new PNet_1.Place(3, "", { x: 180, y: 20 }, 20));
+        net.places.push(new PNet_1.Place(4, "", { x: 60, y: 50 }));
+        net.places.push(new PNet_1.Place(5, "", { x: 40, y: 20 }));
+        net.places.push(new PNet_1.Place(6, "", { x: 200, y: 100 }));
+        net.places.push(new PNet_1.Place(7, "", { x: 220, y: 20 }));
+        net.transitions.push(new PNet_1.Transition({ x: 200, y: 50 }));
+        net.transitions[0].arcs = [
+            { place: net.places[0], qty: 10 },
+            { place: net.places[1], qty: 10 },
+            { place: net.places[2], qty: -10 },
+            { place: net.places[3], qty: -10 },
+            { place: net.places[4], qty: 10 },
+            { place: net.places[5], qty: 10 },
+            { place: net.places[6], qty: 10 },
+            { place: net.places[7], qty: 10 },
+        ];
+        net.SaveMarkings();
+        net.ClearMarkings();
+        net.LoadMarkings();
+        net.RunTransition(net.EnabledTransitions[0]);
+        net.RunTransition(net.EnabledTransitions[0]);
+        //#endregion
         this.InitMouseEvents();
         this.InitKeyboardEvents();
         this.update();
     }
+    get net() { return this._net; }
+    set net(val) { this._net = val; if (val != null)
+        this.mouse.transition.AECH = new ArrowEndpointCalculationHelper_1.AECH(val); }
     //#endregion
     //#region Update
     // todo classed všechny možné definice budou v css
@@ -429,7 +469,7 @@ class PNEditor {
     mouseStartArc(tp) {
         this.mouse.mode.main = mainMouseModes.arcMake;
         this.mouse.mode.arcMakeHolder = tp;
-        const mousePos = this.mouse.getPosition();
+        const mousePos = this.mouse.svg.getPosition();
         this.html.selectors.arcDragLine
             .attr("visibility", null)
             .attr("x1", tp.position.x)
@@ -438,7 +478,7 @@ class PNEditor {
             .attr("y2", mousePos.y);
         //todo metody start drag, stop drag
         this.html.selectors.svg.on("mousemove", e => {
-            const mousePos = this.mouse.getPosition();
+            const mousePos = this.mouse.svg.getPosition();
             this.html.selectors.arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
@@ -465,7 +505,7 @@ class PNEditor {
             return;
         if (ending === "new") {
             if (this.mouse.mode.arcMakeHolder instanceof PNet_1.Transition) {
-                const addedPlace = this.net.AddPlace(this.mouse.getPosition());
+                const addedPlace = this.net.AddPlace(this.mouse.svg.getPosition());
                 this.net.AddArc(this.mouse.mode.arcMakeHolder, addedPlace, 1);
             }
             else if (this.mouse.mode.arcMakeHolder instanceof PNet_1.Place) {
@@ -494,7 +534,7 @@ class PNEditor {
         this.keyboard.inputs.arcValue.editedArc = a;
         const inputArc = this.keyboard.inputs.arcValue.selectors;
         inputArc.foreign.attr("visibility", "visible");
-        const mousePos = this.mouse.getPosition();
+        const mousePos = this.mouse.svg.getPosition();
         inputArc.foreign.attr("x", mousePos.x - 20);
         inputArc.foreign.attr("y", mousePos.y - 10);
         inputArc.input.node().value = a.qty.value;
