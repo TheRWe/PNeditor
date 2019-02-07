@@ -17,7 +17,6 @@ function main() {
         p.fileExample();
         let data = [10, 50, 100];
         let div = d3.select(".editor");
-        console.debug(div);
         const editor = new Editor_1.PNEditor(div);
         /*
         function updateData(data: number[])
@@ -46,7 +45,6 @@ function main() {
         await sleep(5000);
         data.push(150);
         data[0] = 75;
-        console.log(data);
         updateData(data);
         */
     });

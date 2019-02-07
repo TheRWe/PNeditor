@@ -1,0 +1,136 @@
+{
+    "savedMarkings": [
+        {
+            "place_id": 0,
+            "marking": 10
+        },
+        {
+            "place_id": 1,
+            "marking": 10
+        },
+        {
+            "place_id": 2,
+            "marking": 15
+        },
+        {
+            "place_id": 3,
+            "marking": 20
+        }
+    ],
+    "places": [
+        {
+            "name": "",
+            "id": 0,
+            "position": {
+                "x": 25,
+                "y": 100
+            },
+            "marking": 20
+        },
+        {
+            "name": "",
+            "id": 1,
+            "position": {
+                "x": 180,
+                "y": 120
+            },
+            "marking": 20
+        },
+        {
+            "name": "",
+            "id": 2,
+            "position": {
+                "x": 260,
+                "y": 20
+            },
+            "marking": 5
+        },
+        {
+            "name": "",
+            "id": 3,
+            "position": {
+                "x": 180,
+                "y": 20
+            },
+            "marking": 10
+        },
+        {
+            "name": "",
+            "id": 4,
+            "position": {
+                "x": 60,
+                "y": 50
+            },
+            "marking": 10
+        },
+        {
+            "name": "",
+            "id": 5,
+            "position": {
+                "x": 40,
+                "y": 20
+            },
+            "marking": 10
+        },
+        {
+            "name": "",
+            "id": 6,
+            "position": {
+                "x": 200,
+                "y": 100
+            },
+            "marking": 10
+        },
+        {
+            "name": "",
+            "id": 7,
+            "position": {
+                "x": 220,
+                "y": 20
+            },
+            "marking": 10
+        }
+    ],
+    "transitions": [
+        {
+            "arcs": [
+                {
+                    "place_id": 0,
+                    "qty": 10
+                },
+                {
+                    "place_id": 1,
+                    "qty": 10
+                },
+                {
+                    "place_id": 2,
+                    "qty": -10
+                },
+                {
+                    "place_id": 3,
+                    "qty": -10
+                },
+                {
+                    "place_id": 4,
+                    "qty": 10
+                },
+                {
+                    "place_id": 5,
+                    "qty": 10
+                },
+                {
+                    "place_id": 6,
+                    "qty": 10
+                },
+                {
+                    "place_id": 7,
+                    "qty": 10
+                }
+            ],
+            "position": {
+                "x": 200,
+                "y": 50
+            }
+        }
+    ]
+}

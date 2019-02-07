@@ -1,17 +1,52 @@
 ﻿import * as d3 from 'd3';
 import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
-import { AECH } from './EditorHelpers/ArrowEndpointCalculationHelper';
-import { rgb, min } from 'd3';
+import { GetArcEndpoints } from './EditorHelpers/ArrowEndpointCalculationHelper';
+import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
+import * as file from 'fs';
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 // todo: invariant with force
-export class PNEditor
-{
-    private _net: PNet;
-    private get net(): PNet { return this._net; }
-    private set net(val: PNet) { this._net = val; if (val != null) this.mouse.transition.AECH = new AECH(val); }
+export class PNEditor {
+    private net: PNet;
+
+    //#region File
+
+    // todo: implicitní verzování ?
+    public autoSavePath = "autoSavedNet.pnet.json";
+
+    public AutoSave(): boolean { return this.Save(this.autoSavePath); }
+    public AutoLoad(): boolean { return this.Load(this.autoSavePath); }
+
+    /** Saves current net to given path */
+    public Save(path: string | number | Buffer | URL): boolean {
+        const stringJSON = this.net.toString();
+        try {
+            file.writeFileSync(path, stringJSON, { encoding: "utf8" });
+        } catch {
+            return false;
+        }
+        console.log("%c net SAVED", "color: rgb(0, 0, 255)");
+        return true;
+    }
+
+    /** load net from given path */
+    public Load(path: string | number | Buffer | URL): boolean {
+        let objString: string;
+        try {
+            objString  = file.readFileSync(path, { encoding: "utf8" });
+        } catch{
+            return false;
+        }
+        this.net = PNet.fromString(objString);
+        console.log("%c LOADED net", "color: rgb(0, 0, 255)");
+        console.log(this.net);
+        this.update();
+        return true;
+    }
+
+	//#endregion
 
 
     //#region HTML
@@ -79,14 +114,14 @@ export class PNEditor
     {
         const net = this.net;
 
+        console.debug("%c update", "color: rgb(0, 160, 160)");
+
         const defsNames = this.html.names.classes.defs;
         const places = () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(net.places);
         const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
         const arcs = () =>
             d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
-                .data(net.AllArces.map(x => { return { arc: x, line: this.mouse.transition.AECH.GetArcEndpoints(x) }; }));
-        console.log("#" + this.html.names.id.g.arcs);
-        console.log("update");
+                .data(net.AllArces.map(x => { return { arc: x, line: GetArcEndpoints(x) }; }));
 
         const fixNullPosition = (item: Place | Transition): void =>
         {
@@ -185,9 +220,7 @@ export class PNEditor
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
             .text(d => Math.abs(d.arc.qty.value) || "");
 
-        arcs().exit().call(x => { console.log(`removing ${x}`); }).remove();
-
-        console.log(this.net);
+        arcs().exit().call(x => { console.debug({ removing: x }); }).remove();
 
         places().exit().remove();
         transitions().exit().remove();
@@ -221,8 +254,6 @@ export class PNEditor
         svg: {
             onClick: () =>
             {
-                console.log("svg click");
-
                 const mouse = this.mouse;
                 switch (mouse.mode.main) {
                     case mainMouseModes.normal:
@@ -253,7 +284,6 @@ export class PNEditor
                     onChange: (_: any, i: number, nodes: d3.BaseType[] | d3.ArrayLike<d3.BaseType>) => {
                         const elm = d3.select(nodes[i]);
                         const checked = (elm.property("checked") as boolean);
-                        console.debug(checked);
                         this.mouse.controlBar.main.runToggle.onCheckedChange(checked);
                     },
                     onCheckedChange: (checked: boolean) => {
@@ -276,8 +306,6 @@ export class PNEditor
         transition: {
             onClick: (t: Transition) =>
             {
-                console.debug("transition click");
-
                 const mouse = this.mouse;
                 switch (mouse.mode.main) {
                     case mainMouseModes.normal:
@@ -290,9 +318,7 @@ export class PNEditor
                         break;
                     default:
                 }
-            },
-            /** helper class to identify ending of arcs on transitions */
-            AECH: typedNull<AECH>()
+            }
         },
         place: {
             onClick: (p: Place) =>
@@ -320,8 +346,6 @@ export class PNEditor
                 switch (mouse.mode.main) {
                     case mainMouseModes.valueEdit:
                     case mainMouseModes.normal:
-                        console.log("arc edit")
-
                         this.EndInputMarking(false);
                         this.EndInputArc(false);
 
@@ -487,7 +511,6 @@ export class PNEditor
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
-        console.log("inputarc end")
         const inputArc = this.keyboard.inputs.arcValue.selectors;
         inputArc.foreign.attr("visibility", "hidden");
         inputArc.foreign.attr("x", null);
@@ -495,7 +518,6 @@ export class PNEditor
 
         if (save) {
             let val = +(inputArc.input.node() as any).value;
-            console.log(val);
             this.keyboard.inputs.arcValue.editedArc.qty.value = val;
         }
 
@@ -533,7 +555,6 @@ export class PNEditor
 
         if (save) {
             let val = +(inputMarking.input.node() as any).value;
-            console.log(val);
             this.keyboard.inputs.marking.editedPlace.marking = val;
         }
 
@@ -550,7 +571,6 @@ export class PNEditor
     constructor(divElement: d3.Selection<d3.BaseType, {}, HTMLElement, any>)
     {
         this.html.selectors.div = divElement;
-        this.net = new PNet();
 
 
         //#region Controlbar
@@ -604,7 +624,7 @@ export class PNEditor
 
         const svg = this.html.selectors.svg = divElement
             .append("svg")
-            .attr("width", "auto")
+            .attr("width", "100%")
             .attr("height", 600);
 
 
@@ -684,46 +704,14 @@ export class PNEditor
 
 	    //#endregion
 
-
-        //todo: nahradit uloženou sítí a QuickLoadem
-        //#region TestingNet
-
-        const net = this.net;
-        net.places.push(new Place(0, "", { x: 25, y: 100 }, 10));
-        net.places.push(new Place(1, "", { x: 180, y: 120 }, 10));
-        net.places.push(new Place(2, "", { x: 260, y: 20 }, 15));
-        net.places.push(new Place(3, "", { x: 180, y: 20 }, 20));
-        net.places.push(new Place(4, "", { x: 60, y: 50 }));
-        net.places.push(new Place(5, "", { x: 40, y: 20 }));
-        net.places.push(new Place(6, "", { x: 200, y: 100 }));
-        net.places.push(new Place(7, "", { x: 220, y: 20 }));
-
-        net.transitions.push(new Transition({ x: 200, y: 50 }));
-
-        net.transitions[0].arcs = [
-            { place: net.places[0], qty: 10 },
-            { place: net.places[1], qty: 10 },
-            { place: net.places[2], qty: -10 },
-            { place: net.places[3], qty: -10 },
-            { place: net.places[4], qty: 10 },
-            { place: net.places[5], qty: 10 },
-            { place: net.places[6], qty: 10 },
-            { place: net.places[7], qty: 10 },
-        ];
-
-        net.SaveMarkings();
-        net.ClearMarkings();
-        net.LoadMarkings();
-
-        net.RunTransition(net.EnabledTransitions[0]);
-        net.RunTransition(net.EnabledTransitions[0]);
-
-	    //#endregion
-
-
         this.InitMouseEvents();
         this.InitKeyboardEvents();
-        this.update();
+
+
+        if (!this.AutoLoad()) {
+            this.net = new PNet();
+            this.update();
+        }
     }
 
 	//#endregion

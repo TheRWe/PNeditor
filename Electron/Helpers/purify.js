@@ -45,30 +45,6 @@ function classify(srr, ...fncs) {
     return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
 }
 exports.classify = classify;
-//todo: testování
-function readObjectFromFileSync(path) {
-    try {
-        let objString = file.readFileSync(path, { encoding: "utf8" });
-        const obj = JSON.parse(objString);
-        const typedObj = {};
-        return Object.assign(typedObj, obj);
-    }
-    catch (_a) {
-        return null;
-    }
-}
-exports.readObjectFromFileSync = readObjectFromFileSync;
-//todo: testování
-function writeObjectToFileSync(path, obj) {
-    try {
-        file.writeFileSync(path, JSON.stringify(obj), { encoding: "utf8" });
-    }
-    catch (_a) {
-        return false;
-    }
-    return true;
-}
-exports.writeObjectToFileSync = writeObjectToFileSync;
 //todo: async
 function fileExample() {
     const fileName = "settings.json";

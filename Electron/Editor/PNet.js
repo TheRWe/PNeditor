@@ -23,11 +23,11 @@ class PNet {
         t.arcs.push({ place: p, qty: qty });
     }
     SaveMarkings() {
-        this.savedMarkings = this.places.map((p, i) => { return { id: p.id, marking: p.marking }; });
+        this.savedMarkings = this.places.map((p, i) => { return { place: p, marking: p.marking }; });
     }
     LoadMarkings() {
         this.ClearMarkings();
-        this.savedMarkings.forEach(m => { this.places.find((p, i) => { return m.id === p.id; }).marking = m.marking; });
+        this.savedMarkings.forEach(m => { m.place.marking = m.marking; });
     }
     ClearMarkings() {
         this.places.forEach(p => { p.marking = 0; });
@@ -46,14 +46,31 @@ class PNet {
     }
     //#endregion
     toString() {
-        //todo: https://github.com/dsherret/ts-nameof
-        let ignore = [];
-        return JSON.stringify(this, (key, value) => { return ignore.indexOf(key) !== -1 ? undefined : value; });
+        // todo: https://github.com/dsherret/ts-nameof
+        // todo: změna id
+        // todo: možnost ukládat pouze name bez id pokud je name unikátní
+        // todo: kontrola že se name neukládá pokud je "" | null | undefined
+        const places = this.places.map(p => { return { name: p.name, id: p.id, position: p.position, marking: p.marking }; });
+        const savedMarkings = this.savedMarkings.map(m => { return { place_id: m.place.id, marking: m.marking }; });
+        const transitions = this.transitions.map(t => { return { position: t.position, arcs: t.arcs.map(a => { return { place_id: a.place.id, qty: a.qty }; }) }; });
+        const json = { places: places, savedMarkings: savedMarkings, transitions: transitions };
+        return JSON.stringify(json, null, 4);
     }
     static fromString(str) {
         const obj = JSON.parse(str);
-        const net = new PNet();
-        return Object.assign(net, obj);
+        // todo: validace
+        // todo: možnost používat name místo id
+        const places = obj.places.map(p => new Place(p.id, p.name, p.position, p.marking));
+        const transitions = obj.transitions.map(tj => {
+            const t = new Transition(tj.position);
+            t.arcs = tj.arcs.map(aj => { return { place: places.find(p => p.id === aj.place_id), qty: aj.qty }; });
+            return t;
+        });
+        const savedMarkings = obj.savedMarkings.map(smj => {
+            return { place: places.find(p => p.id === smj.place_id), marking: smj.marking };
+        });
+        const placeID = Math.max(-1, ...places.map(p => p.id)) + 1;
+        return Object.assign(new PNet(), { places: places, transitions: transitions, savedMarkings: savedMarkings, placeID: placeID });
     }
 }
 exports.PNet = PNet;

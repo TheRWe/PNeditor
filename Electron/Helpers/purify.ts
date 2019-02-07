@@ -1,5 +1,4 @@
 ﻿import * as file from 'fs';
-import { promises } from 'fs';
 
 type fncHelpSortKeySelector<T> = ((a: T, b: T) => number);
 export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSelected): fncHelpSortKeySelector<TIn>
@@ -48,31 +47,10 @@ export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { eleme
     return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
 }
 
-//todo: testování
-export function readObjectFromFileSync<T extends object>(path: string | number | Buffer | URL): T | null
-{
-    try {
-        let objString = file.readFileSync(path, { encoding: "utf8" });
-        const obj = JSON.parse(objString);
-        const typedObj: T = {} as T;
-        return Object.assign(typedObj, obj);
-    } catch{
-        return null;
-    }
-}
-//todo: testování
-export function writeObjectToFileSync<T>(path: string | number | Buffer | URL, obj: T): boolean
-{
-    try {
-        file.writeFileSync(path, JSON.stringify(obj), { encoding: "utf8" });
-    } catch{
-        return false;
-    }
-    return true;
-}
+/** type of class defining given type (typeof cls = Type<cls>) */
+export interface Type<T> extends Function { new(...args: any[]): T; }
 
 //todo: async
-
 export function fileExample()
 {
     const fileName = "settings.json";
