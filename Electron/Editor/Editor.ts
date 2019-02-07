@@ -40,6 +40,9 @@ export class PNEditor {
         } catch{
             return false;
         }
+        // todo: lepším způsobem zaručit animace(bez NewNet)
+        this.NewNet();
+
         this.net = PNet.fromString(objString);
         console.log("%c LOADED net", "color: rgb(0, 0, 255)");
         console.log(this.net);
@@ -103,9 +106,9 @@ export class PNEditor {
                     arrowTransitionEnd: "defs-arrow-t-end",
                     arrowPlaceEnd: "defs-arrow-p-end"
                 },
-                arc: "arc",
-                transition: "transition",
-                place: "place"
+                arc: { g: "arc" },
+                transition: { g: "transition" },
+                place: { g: "place", svgCircle: "placeSVGCircle" }
             }
         }
     }
@@ -142,13 +145,14 @@ export class PNEditor {
                 .each(fixNullPosition)
                 .append("g")
                 .on("click", this.mouse.place.onClick)
-                .classed(this.html.names.classes.place, true);
+                .classed(this.html.names.classes.place.g, true);
         const placesEnterCircle =
             placesEnterGroup.append("circle")
                 .style("fill", rgb(255, 255, 255).hex())
                 .style("stroke", "black")
                 .style("stroke-width", "2")
-                .attr("r", 10);
+                .attr("r", 10)
+                .classed(this.html.names.classes.place.svgCircle, true);
         //todo: kolečka pro nízké počty
         const placesEnterText =
             placesEnterGroup.append("text")
@@ -156,7 +160,8 @@ export class PNEditor {
                 .attr("text-anchor", "middle")
                 .attr("dy", ".3em")
                 .attr("font-size", 10)
-                .text(d => d.marking || "");
+                .text(d => d.marking || "")
+                .classed("txt", true);
 
         places()
             .attr("transform", (p: Place) => `translate(${p.position.x}, ${p.position.y})`)

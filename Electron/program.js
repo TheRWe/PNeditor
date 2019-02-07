@@ -68,7 +68,7 @@ function createWindow() {
                             ],
                         };
                         const dialoRes = electron_1.dialog.showSaveDialog(mainWindow, dialogOprions);
-                        mainWindow.webContents.send("save PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                        mainWindow.webContents.send("save PNet", { path: dialoRes });
                     }
                 },
                 { label: "close" },

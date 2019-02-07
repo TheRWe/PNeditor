@@ -6,26 +6,25 @@ body {
     /*background-color: rgb(10, 214, 255);*/
 }
 
-/*.SVGCircle {
-    animation: example 0.5s cubic-bezier(1,1.5,0.7,2);
+.placeSVGCircle {
+    animation: placeSVGCircleAnimation 0.4s cubic-bezier(1,1.5,0.7,2);
 }
 
-
-@keyframes example {
+@keyframes placeSVGCircleAnimation {
     0% {
         opacity: 0.1;
-        transform: scale(0);
-        transform-origin: center;
+        transform:scale(0);
     }
+
     50% {
         opacity: 0.3;
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
-        transform-origin: center;
     }
-}*/
+}
 
 .unselectable {
     -webkit-touch-callout: none;

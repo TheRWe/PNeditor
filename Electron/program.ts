@@ -81,7 +81,7 @@ function createWindow()
                         };
 
                         const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
-                        mainWindow.webContents.send("save PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                        mainWindow.webContents.send("save PNet", { path: dialoRes });
                     }
                 },
                 { label: "close" },
