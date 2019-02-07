@@ -13,6 +13,7 @@ export class PNEditor {
 
     //#region File
 
+    // todo: ukládat do app.getPath('userData')
     // todo: implicitní verzování ?
     public autoSavePath = "autoSavedNet.pnet.json";
 
@@ -44,6 +45,12 @@ export class PNEditor {
         console.log(this.net);
         this.update();
         return true;
+    }
+
+    // todo: záložky ?
+    public NewNet() {
+        this.net = new PNet();
+        this.update();
     }
 
 	//#endregion

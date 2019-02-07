@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const d3 = require("d3");
 const p = require("./Helpers/Purify");
 const Editor_1 = require("./Editor/Editor");
+const electron_1 = require("electron");
 window.addEventListener('load', main);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -18,6 +19,19 @@ function main() {
         let data = [10, 50, 100];
         let div = d3.select(".editor");
         const editor = new Editor_1.PNEditor(div);
+        electron_1.ipcRenderer.on('open PNet', (e, msg) => {
+            if (msg.path)
+                editor.Load(msg.path);
+        });
+        electron_1.ipcRenderer.on('save PNet', (e, msg) => {
+            if (msg)
+                editor.Save(msg.path);
+        });
+        electron_1.ipcRenderer.on("new PNet", (e, msg) => {
+            console.log("new net");
+            //todo: msg -> typ sítě atd...
+            editor.NewNet();
+        });
         /*
         function updateData(data: number[])
         {

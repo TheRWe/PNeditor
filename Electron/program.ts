@@ -1,10 +1,13 @@
-﻿import { app, BrowserWindow, Menu } from 'electron';
+﻿import { app, BrowserWindow, Menu, dialog } from 'electron';
+import * as fs from 'fs';
+import * as path from 'path';
 
 let mainWindow: BrowserWindow;
 const debug: boolean = true;
 
 function createWindow()
 {
+    //todo: může být frameless window
     mainWindow = new BrowserWindow({
         width: 1200, height: 900,
         title: 'PetriNetEdit'
@@ -21,13 +24,66 @@ function createWindow()
         app.quit();
     });
 
+    const userDefaultNetSavePath = path.join(app.getPath('userData'), 'User_saved_nets')
+    if (!fs.existsSync(userDefaultNetSavePath)) {
+        fs.mkdirSync(userDefaultNetSavePath);
+    }
 
     let mainMenuTemplate: Electron.MenuItemConstructorOptions[] =
         [{
             label: "File",
             submenu: [
-                { label: "open" },
-                { label: "save" },
+                {
+                    label: "new PNet",
+                    click: () => {
+                        // todo: confirmace, nabídnutí uložení
+                        mainWindow.webContents.send("new PNet");
+                    }
+                },
+                {
+                    label: "open PNet",
+                    click: () =>
+                    {
+                        const dialogOprions: Electron.OpenDialogOptions = {
+                            title: 'Select PNet to LOAD',
+                            // todo: více možností pro user data dle nastavení
+                            defaultPath: userDefaultNetSavePath,
+                            filters: [
+                                { name: 'PNet/JSON file', extensions: ['pnet', 'json'] },
+                                { name: 'PNet file', extensions: ['pnet'] },
+                                { name: 'JSON file', extensions: ['json'] },
+                                { name: 'All Files', extensions: ['*'] }
+                            ],
+                            // todo: možnost otevřených více sítí v různých 
+                            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
+                            properties: ['openFile' /*, 'multiSelections' */]
+                        };
+
+                        const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
+                        mainWindow.webContents.send("open PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                    }
+                },
+                {
+                    // todo: save as / save
+                    label: "save PNet",
+                    click: () => {
+                        const dialogOprions: Electron.SaveDialogOptions = {
+                            title: 'Save PNet to',
+                            // todo: více možností pro user data dle nastavení
+                            defaultPath: userDefaultNetSavePath,
+                            filters: [
+                                { name: 'PNet file', extensions: ['pnet'] },
+                                { name: 'JSON file', extensions: ['json'] },
+                                { name: 'All Files', extensions: ['*'] }
+                            ],
+                            // todo: možnost otevřených více sítí v různých 
+                            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
+                        };
+
+                        const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
+                        mainWindow.webContents.send("save PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                    }
+                },
                 { label: "close" },
                 { label: "recent" },
                 {

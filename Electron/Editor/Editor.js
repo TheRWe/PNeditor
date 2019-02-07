@@ -15,6 +15,7 @@ class PNEditor {
     //todo force for nearby objects(disablable in settings)
     constructor(divElement) {
         //#region File
+        // todo: ukládat do app.getPath('userData')
         // todo: implicitní verzování ?
         this.autoSavePath = "autoSavedNet.pnet.json";
         //#endregion
@@ -346,6 +347,11 @@ class PNEditor {
         console.log(this.net);
         this.update();
         return true;
+    }
+    // todo: záložky ?
+    NewNet() {
+        this.net = new PNet_1.PNet();
+        this.update();
     }
     //#endregion
     //#region Update
