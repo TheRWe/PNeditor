@@ -74,22 +74,37 @@ class PNEditor {
         /** mouse properties */
         this.mouse = {
             mode: new MouseModeCls(),
+            resetState: () => {
+                switch (this.mouse.mode.current) {
+                    case mouseModes.arcMake:
+                        this.mouseEndArc();
+                        this.mouse.mode.current = mouseModes.normal;
+                        break;
+                    case mouseModes.valueEdit:
+                        this.EndInputArc();
+                        this.EndInputMarking();
+                        this.mouse.mode.current = mouseModes.normal;
+                        break;
+                    default:
+                        break;
+                }
+            },
             svg: {
                 onClick: () => {
                     const mouse = this.mouse;
-                    switch (mouse.mode.main) {
-                        case mainMouseModes.normal:
+                    switch (mouse.mode.current) {
+                        case mouseModes.normal:
                             this.net.transitions.push(new PNet_1.Transition(mouse.svg.getPosition()));
                             this.update();
                             break;
-                        case mainMouseModes.arcMake:
+                        case mouseModes.arcMake:
                             this.mouseEndArc("new");
                             this.update();
                             break;
-                        case mainMouseModes.valueEdit:
+                        case mouseModes.valueEdit:
                             //todo: bude uloženo v settings
-                            this.EndInputMarking(false);
-                            this.EndInputArc(false);
+                            this.EndInputMarking();
+                            this.EndInputArc();
                             break;
                         default:
                     }
@@ -109,6 +124,7 @@ class PNEditor {
                             this.mouse.controlBar.main.runToggle.onCheckedChange(checked);
                         },
                         onCheckedChange: (checked) => {
+                            this.mouse.resetState();
                             const controlBarRun = this.html.selectors.controlBar.run.div
                                 .style("display", "none");
                             const controlBarEdit = this.html.selectors.controlBar.edit.div
@@ -116,10 +132,13 @@ class PNEditor {
                             if (checked) {
                                 controlBarRun
                                     .style("display", "inline-block");
+                                this.mouse.mode.current = mouseModes.run;
                             }
                             else {
                                 controlBarEdit
                                     .style("display", "inline-block");
+                                // todo: nahradit za edit
+                                this.mouse.mode.current = mouseModes.normal;
                             }
                         }
                     }
@@ -128,13 +147,18 @@ class PNEditor {
             transition: {
                 onClick: (t) => {
                     const mouse = this.mouse;
-                    switch (mouse.mode.main) {
-                        case mainMouseModes.normal:
+                    switch (mouse.mode.current) {
+                        case mouseModes.normal:
                             this.mouseStartArc(t);
                             d3.event.stopPropagation();
                             break;
-                        case mainMouseModes.arcMake:
+                        case mouseModes.arcMake:
                             this.mouseEndArc();
+                            d3.event.stopPropagation();
+                            break;
+                        case mouseModes.run:
+                            if (this.net.RunTransition(t))
+                                this.update();
                             d3.event.stopPropagation();
                             break;
                         default:
@@ -144,13 +168,13 @@ class PNEditor {
             place: {
                 onClick: (p) => {
                     const mouse = this.mouse;
-                    switch (mouse.mode.main) {
-                        case mainMouseModes.valueEdit:
-                        case mainMouseModes.normal:
+                    switch (mouse.mode.current) {
+                        case mouseModes.valueEdit:
+                        case mouseModes.normal:
                             if (p.marking == null)
                                 p.marking = 0;
-                            this.EndInputMarking(false);
-                            this.EndInputArc(false);
+                            this.EndInputMarking();
+                            this.EndInputArc();
                             this.StartInputMarking(p);
                             d3.event.stopPropagation();
                             break;
@@ -161,11 +185,11 @@ class PNEditor {
             arc: {
                 onClickHitbox: (a) => {
                     const mouse = this.mouse;
-                    switch (mouse.mode.main) {
-                        case mainMouseModes.valueEdit:
-                        case mainMouseModes.normal:
-                            this.EndInputMarking(false);
-                            this.EndInputArc(false);
+                    switch (mouse.mode.current) {
+                        case mouseModes.valueEdit:
+                        case mouseModes.normal:
+                            this.EndInputMarking();
+                            this.EndInputArc();
                             this.StartInputArc(a);
                             d3.event.stopPropagation();
                             break;
@@ -183,7 +207,7 @@ class PNEditor {
                     editedPlace: purify_1.typedNull(),
                     onKeyPress: () => {
                         if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
-                            this.EndInputMarking();
+                            this.EndInputMarking(true);
                             this.update();
                         }
                         d3.event.stopPropagation();
@@ -200,7 +224,7 @@ class PNEditor {
                     editedArc: purify_1.typedNull(),
                     onKeyPress: () => {
                         if (d3.event.keyCode == ts_keycode_enum_1.Key.Enter) {
-                            this.EndInputArc();
+                            this.EndInputArc(true);
                             this.update();
                         }
                         d3.event.stopPropagation();
@@ -209,7 +233,7 @@ class PNEditor {
                     selectors: {
                         foreign: purify_1.typedNull(),
                         input: purify_1.typedNull(),
-                        button: purify_1.typedNull()
+                        buttonOK: purify_1.typedNull()
                     },
                 }
             }
@@ -278,7 +302,7 @@ class PNEditor {
         const arcValueDiv = arcValueForeign.append("xhtml:div").style("height", "50");
         const inputArcValue = this.keyboard.inputs.arcValue.selectors;
         inputArcValue.input = arcValueDiv.append("xhtml:input");
-        inputArcValue.button = arcValueDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
+        inputArcValue.buttonOK = arcValueDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
         inputArcValue.foreign = arcValueForeign;
         inputArcValue.input
             .attr("type", "number")
@@ -444,12 +468,13 @@ class PNEditor {
             .attr("y1", a => a.line.from.y)
             .attr("x2", a => a.line.to.x)
             .attr("y2", a => a.line.to.y);
-        //todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
+        // todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
         arcs().select('text')
             .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
             .text(d => Math.abs(d.arc.qty.value) || "");
-        arcs().exit().call(x => { console.debug({ removing: x }); }).remove();
+        // todo: kontrola
+        arcs().exit().call(() => { }).remove();
         places().exit().remove();
         transitions().exit().remove();
     }
@@ -462,19 +487,19 @@ class PNEditor {
         inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
         inputMarking.buttonOK
-            .on("click", () => { this.EndInputMarking(); this.update(); d3.event.stopPropagation(); });
+            .on("click", () => { this.EndInputMarking(true); this.update(); d3.event.stopPropagation(); });
         const arcValueMarking = this.keyboard.inputs.arcValue.selectors;
         arcValueMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
-        arcValueMarking.button
-            .on("click", () => { this.EndInputArc(); this.update(); d3.event.stopPropagation(); });
+        arcValueMarking.buttonOK
+            .on("click", () => { this.EndInputArc(true); this.update(); d3.event.stopPropagation(); });
     }
     /**
      * start arc from given transition or place
      * @param tp transition or place
      */
     mouseStartArc(tp) {
-        this.mouse.mode.main = mainMouseModes.arcMake;
+        this.mouse.mode.current = mouseModes.arcMake;
         this.mouse.mode.arcMakeHolder = tp;
         const mousePos = this.mouse.svg.getPosition();
         this.html.selectors.arcDragLine
@@ -499,7 +524,7 @@ class PNEditor {
      *  "new" -> creates new Place | Transition to connect
      */
     mouseEndArc(ending = null) {
-        this.mouse.mode.main = this.mouse.mode.prev;
+        this.mouse.mode.current = this.mouse.mode.prev;
         //todo: nebezpečné, vymyslet alternativu
         this.html.selectors.svg.on("mousemove", null);
         this.html.selectors.arcDragLine
@@ -537,7 +562,7 @@ class PNEditor {
     }
     /** open marking edit window for given place*/
     StartInputArc(a) {
-        this.mouse.mode.main = mainMouseModes.valueEdit;
+        this.mouse.mode.current = mouseModes.valueEdit;
         this.keyboard.inputs.arcValue.editedArc = a;
         const inputArc = this.keyboard.inputs.arcValue.selectors;
         inputArc.foreign.attr("visibility", "visible");
@@ -551,7 +576,7 @@ class PNEditor {
      * end editing arc value and close window
      * @param save changes propagate to net ?
      */
-    EndInputArc(save = true) {
+    EndInputArc(save = false) {
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
@@ -564,11 +589,11 @@ class PNEditor {
             this.keyboard.inputs.arcValue.editedArc.qty.value = val;
         }
         this.keyboard.inputs.marking.editedPlace = null;
-        this.mouse.mode.main = this.mouse.mode.prev;
+        this.mouse.mode.current = this.mouse.mode.prev;
     }
     /** open marking edit window for given place*/
     StartInputMarking(p) {
-        this.mouse.mode.main = mainMouseModes.valueEdit;
+        this.mouse.mode.current = mouseModes.valueEdit;
         this.keyboard.inputs.marking.editedPlace = p;
         const inputMarking = this.keyboard.inputs.marking.selectors;
         inputMarking.foreign.attr("visibility", "visible");
@@ -581,7 +606,7 @@ class PNEditor {
      * end editing place marking and close window
      * @param save changes propagate to net ?
      */
-    EndInputMarking(save = true) {
+    EndInputMarking(save = false) {
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
@@ -594,30 +619,41 @@ class PNEditor {
             this.keyboard.inputs.marking.editedPlace.marking = val;
         }
         this.keyboard.inputs.marking.editedPlace = null;
-        this.mouse.mode.main = this.mouse.mode.prev;
+        this.mouse.mode.current = this.mouse.mode.prev;
     }
 }
 exports.PNEditor = PNEditor;
 //todo RUNMODES
-var mainMouseModes;
-(function (mainMouseModes) {
-    mainMouseModes["normal"] = "normal";
-    mainMouseModes["delete"] = "delete";
-    mainMouseModes["edit"] = "edit";
-    mainMouseModes["selection"] = "selection";
-    mainMouseModes["multiSelect"] = "multi-selection";
-    mainMouseModes["arcMake"] = "arc-make";
-    mainMouseModes["valueEdit"] = "value-edit";
-})(mainMouseModes || (mainMouseModes = {}));
+var mouseModes;
+(function (mouseModes) {
+    mouseModes["normal"] = "normal";
+    mouseModes["del"] = "del";
+    mouseModes["edit"] = "edit";
+    mouseModes["run"] = "run";
+    mouseModes["selection"] = "selection";
+    mouseModes["multiSelect"] = "multi-selection";
+    mouseModes["arcMake"] = "arc-make";
+    mouseModes["valueEdit"] = "value-edit";
+})(mouseModes || (mouseModes = {}));
 ;
 class MouseModeCls {
     constructor() {
         // todo: main properta a prev bude private, pokaždé když se změní main tak se nahraje do prev a bude existovat metoda co main a prev prohodí
-        this.main = mainMouseModes.normal;
-        this.prev = mainMouseModes.normal;
+        this._current = mouseModes.normal;
+        this._prev = mouseModes.normal;
         this.selectionHardToggle = false;
         /** holds object for creating arcs */
         this.arcMakeHolder = null;
+    }
+    get prev() {
+        return this._prev;
+    }
+    get current() {
+        return this._current;
+    }
+    set current(val) {
+        this._prev = this._current;
+        this._current = val;
     }
 }
 //# sourceMappingURL=Editor.js.map
