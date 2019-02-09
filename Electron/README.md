@@ -11,7 +11,6 @@
 
 ## TODO
 
-  - Odebrat vygenerované *.JS soubory jednotlivì z gitu
   - Taby pro jednotlivé sítì
   - Vytvoøit stavovı JSON kterı bude urèovat pøechody mezi módy a jejich chování(pro myš klávesnici atd.)
 bude uloenı pøímo v editoru jako default settings (definice enumù které budou dùleité pro fungování budou zvláš v ts nebo d.ts souboru)
@@ -78,6 +77,10 @@ Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/n
 
   - Propojování s I/O (klávesnice, displej pro vykreslování pixelù)
   - Generování kódu ze sítì - Vlastnosti sítí které se musí splnit aby šlo ze sítì generovat kód
+  
+### Ostatní
+
+  - Odebrat vygenerované *.JS soubory jednotlivì z gitu
 
 ### Poznámky k obhajobì
 
