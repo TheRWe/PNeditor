@@ -376,6 +376,12 @@ export class PNEditor {
                         this.StartInputMarking(p);
                         d3.event.stopPropagation();
                         break;
+                    case mouseModes.arcMake:
+                        this.mouseEndArc(p);
+
+                        d3.event.stopPropagation();
+                        this.update();
+                        break;
                     default:
                 }
             }
@@ -383,6 +389,8 @@ export class PNEditor {
         arc: {
             onClickHitbox: (a: Arc) =>
             {
+                console.debug("arc-hitbox clicked")
+
                 const mouse = this.mouse;
                 switch (mouse.mode.current) {
                     case mouseModes.valueEdit:
@@ -411,7 +419,7 @@ export class PNEditor {
 
         const mousePos = this.mouse.svg.getPosition();
         this.html.selectors.arcDragLine
-            .attr("visibility", null)
+            .style("display", null)
             .attr("x1", tp.position.x)
             .attr("y1", tp.position.y)
             .attr("x2", mousePos.x)
@@ -443,7 +451,7 @@ export class PNEditor {
         this.html.selectors.svg.on("mousemove", null);
 
         this.html.selectors.arcDragLine
-            .attr("visibility", "hidden")
+            .style("display", "none")
             .attr("x1", null)
             .attr("y1", null)
             .attr("x2", null)
@@ -461,7 +469,18 @@ export class PNEditor {
                 console.error("make transition");
             }
         }
-        else {
+        else if (ending instanceof Place)
+        {
+            if (this.mouse.mode.arcMakeHolder instanceof Transition) {
+                console.debug("connecting place")
+                this.net.AddArc(this.mouse.mode.arcMakeHolder as Transition, ending, 1);
+            } else {
+                //todo: hlaška nebo vyrvoření place mezi dvěma transitions
+                console.error("can't connect two transitions");
+            }
+        }
+        else
+        {
             //todo: propojování
             console.error("connect");
         }
@@ -531,10 +550,12 @@ export class PNEditor {
     /** open marking edit window for given place*/
     private StartInputArc(a: Arc)
     {
-        this.mouse.mode.current = mouseModes.valueEdit;
+        if (this.mouse.mode.current !== mouseModes.valueEdit)
+            this.mouse.mode.current = mouseModes.valueEdit;
+
         this.keyboard.inputs.arcValue.editedArc = a;
         const inputArc = this.keyboard.inputs.arcValue.selectors;
-        inputArc.foreign.attr("visibility", "visible");
+        inputArc.foreign.style("display", null);
         const mousePos = this.mouse.svg.getPosition();
         inputArc.foreign.attr("x", mousePos.x - 20);
         inputArc.foreign.attr("y", mousePos.y - 10);
@@ -549,11 +570,16 @@ export class PNEditor {
      */
     private EndInputArc(save: boolean = false)
     {
+        if (this.mouse.mode.current === mouseModes.valueEdit)
+            this.mouse.mode.current = this.mouse.mode.prev;
+        else
+            return;
+
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
         const inputArc = this.keyboard.inputs.arcValue.selectors;
-        inputArc.foreign.attr("visibility", "hidden");
+        inputArc.foreign.style("display", "none");
         inputArc.foreign.attr("x", null);
         inputArc.foreign.attr("y", null);
 
@@ -563,16 +589,17 @@ export class PNEditor {
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
-        this.mouse.mode.current = this.mouse.mode.prev;
     }
 
     /** open marking edit window for given place*/
     private StartInputMarking(p: Place)
     {
-        this.mouse.mode.current = mouseModes.valueEdit;
+        if (this.mouse.mode.current !== mouseModes.valueEdit)
+            this.mouse.mode.current = mouseModes.valueEdit;
+
         this.keyboard.inputs.marking.editedPlace = p;
         const inputMarking = this.keyboard.inputs.marking.selectors;
-        inputMarking.foreign.attr("visibility", "visible");
+        inputMarking.foreign.style("display", null);
         inputMarking.foreign.attr("x", p.position.x - 20);
         inputMarking.foreign.attr("y", p.position.y - 10);
 
@@ -586,11 +613,16 @@ export class PNEditor {
      */
     private EndInputMarking(save: boolean = false)
     {
+        if (this.mouse.mode.current === mouseModes.valueEdit)
+            this.mouse.mode.current = this.mouse.mode.prev;
+        else
+            return;
+
         //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
         //      zobrazený pouze zástupný znak a hodnota bude v seznamu
         //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
         const inputMarking = this.keyboard.inputs.marking.selectors;
-        inputMarking.foreign.attr("visibility", "hidden");
+        inputMarking.foreign.style("display", "none");
         inputMarking.foreign.attr("x", null);
         inputMarking.foreign.attr("y", null);
 
@@ -600,7 +632,6 @@ export class PNEditor {
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
-        this.mouse.mode.current = this.mouse.mode.prev;
     }
 
 	//#endregion
@@ -681,7 +712,7 @@ export class PNEditor {
 
 
         let markingForeign = G.append("foreignObject")
-            .attr("visibility", "hidden").attr("width", "100%");
+            .style("display", "none").attr("width", "100%");
         const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
 
         const inputMarking = this.keyboard.inputs.marking.selectors;
@@ -699,7 +730,7 @@ export class PNEditor {
 
 
         let arcValueForeign = G.append("foreignObject")
-            .attr("visibility", "hidden").attr("width", "100%");
+            .style("display", "none").attr("width", "100%");
         const arcValueDiv = arcValueForeign.append("xhtml:div").style("height", "50");
 
         const inputArcValue = this.keyboard.inputs.arcValue.selectors;
@@ -740,8 +771,8 @@ export class PNEditor {
         this.html.selectors.arcDragLine
             .style("stroke", "black")
             .style("stroke-width", 1.5)
-            .style("marker-mid", a => `url(#${defsNames.arrowTransitionEnd})`)
-            .attr("visibility", "hidden");
+            .style("display", "none")
+            .style("pointer-events", "none");
 
 	    //#endregion
 
@@ -785,6 +816,8 @@ class MouseModeCls
         return this._current;
     }
     public set current(val: mouseModes) {
+        // todo: mousemode zobrazovat v controltabu
+        console.debug({ mousemode: val });
         this._prev = this._current;
         this._current = val;
     }

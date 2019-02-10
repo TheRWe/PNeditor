@@ -12,8 +12,10 @@
 ## TODO
 
   - Taby pro jednotlivé sítì
+  - Tlaèítko(foreign) pro otoèení arc
   - Vytvoøit stavovı JSON kterı bude urèovat pøechody mezi módy a jejich chování(pro myš klávesnici atd.)
 bude uloenı pøímo v editoru jako default settings (definice enumù které budou dùleité pro fungování budou zvláš v ts nebo d.ts souboru)
+  - hitboxy pro elementy sítì (stejnì jako jsou pro arc)
   - Blackbox
     - Univerzal IN/OUT/SCAN(scan = pøeètení jestli hodnota splòuje poèet bez odebrání) (pro sítì které budou mít jen tyto transformace a ádné další speciální se bude dát pouít zobrazení podobné transformaci pokud bude mít speciální(pojmenované) pak budou vaznaèené labely nebo znaèkami)
     - Pravidla pro vytváøení subsítí, co musí subsítí splòovat
