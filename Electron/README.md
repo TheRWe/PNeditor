@@ -1,9 +1,9 @@
 # RW-PNet EDITOR
 
-### Priority
+## Priority
 
 **FUNKCIONALITA > VZHLED > OPTIMALIZACE**
-  - Pouívání a aktualizace poznámek
+  - Pouívání a aktualizace poznámek -> Pøed kadım commitem úpravy
   - Základní funkcionalita
   - Pøeètení kníky
   - Prùbìná dokumentace
@@ -11,53 +11,77 @@
 
 ## TODO
 
-  - Taby pro jednotlivé sítì
-  - Tlaèítko(foreign) pro otoèení arc
-  - Vytvoøit stavovı JSON kterı bude urèovat pøechody mezi módy a jejich chování(pro myš klávesnici atd.)
-bude uloenı pøímo v editoru jako default settings (definice enumù které budou dùleité pro fungování budou zvláš v ts nebo d.ts souboru)
-  - hitboxy pro elementy sítì (stejnì jako jsou pro arc)
-  - Blackbox
-    - Univerzal IN/OUT/SCAN(scan = pøeètení jestli hodnota splòuje poèet bez odebrání) (pro sítì které budou mít jen tyto transformace a ádné další speciální se bude dát pouít zobrazení podobné transformaci pokud bude mít speciální(pojmenované) pak budou vaznaèené labely nebo znaèkami)
-    - Pravidla pro vytváøení subsítí, co musí subsítí splòovat
-    - Pravidla pro vstupy a vıstupy(nemusí bıt vùbec sub-sí pouze má definované chovaní)
-  - Distributed run
+  - [ ] Property bar
+  - [ ] [Context menu](#Context-menu)
+  - [ ] Drag
+    - [x] Posouvání jednolivıch objektù
+    - [ ] Selekce v svg více objektù
+    - [ ] Posouvání více vybranıch objektù
+  - [ ] Multiple selection
+    - [ ] Integrace v property bar
+  - [ ] Taby pro jednotlivé sítì
+  - [ ] Tranformace featury
+    - [ ] Tlaèítko(foreign) pro otoèení arc
+    - [ ] Obojsmìrné transformace (GUI tlaèítko umonující zobrazit druhı textbox)
+    - [ ] Scan arcs
+  - [ ] Vytvoøit stavovı JSON kterı bude urèovat pøechody mezi módy 
+a jejich chování(pro myš klávesnici atd.)
+bude uloenı pøímo v editoru jako default settings 
+(definice enumù které budou dùleité pro fungování budou 
+zvláš v ts nebo d.ts souboru)
+      - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
+      - [ ] Implementace
+      - [ ] Pøidání monosti uivatelského nastavení 
+(skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
+      - [ ] monost uivatelského nastavení kde jsou 
+        uloené pouze diference s defaultním nastavením
+  - [ ] hitboxy pro elementy sítì (stejnì jako jsou pro arc), 
+kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kterı bude hitbox vdy bude navrchu a prùhlednı ale klikatelnı)
+  - [ ] Blackbox
+    - [ ] [Pravidla](#subsite-pravidla) pro vytváøení subsítí, co musí subsítí splòovat
+    - [ ] základní Implementace subsítí [IN/OUT/SCAN](#IOC) (funguje jako transformace - jeden vstup, jeden vıstup, jeden scan (scan = pøeètení jestli hodnota splòuje poèet bez odebrání)) 
+    - [ ] pokroèílé sítì - "pojmenované IOS+Combined transformace" pak budou vaznaèené labely nebo znaèkami(obojí?)
+    - [ ] Pravidla pro vstupy a vıstupy(nemusí bıt vùbec sub-sí pouze má definované chovaní)
+  - [ ] Distributed run
   - Rùzné monosti ukládání
     - Pouze pomocí transitions
     - Se subsítìmi ve stejném souboru/v rùznıch souborech
-  - Monost editování textovì (stromu/JSON/vlastní formát ...) bìhem zobrazovaní zmìn do editoru
+  - [ ] Monost editování textovì (stromu/JSON/vlastní formát ...) bìhem zobrazovaní zmìn do editoru
 
-##### Generování sítí
 
-  - Práce se sekvencemi(streamy)
-  - Definují se rùzné sekvence vstupù a vıstupù pøi zadanıch vstupech a automaticky se vygeneruje sí co splòuje tyto parametry
-  - Implementace a simulace turingova stroje pomocí Petri net
 
 ### Algoritmy
 
 **všechny algoritmy(analızy/úpravy/generování) budou funcionální** (pøedá se jim kopie sítì nebo èásti a vrátí hodnotu se kterou se pak dál pracuje)
 Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
-  - všechny algoritmy budou spouštì hlavní univerzální algoritmus kterı bude mít pøístup ke všem monostem úprav a analız sítì kterı následnì vybere podle definice algoritmu které data se mají pøedat algoritmu a jak se pak pracuje s vısledkem
-  - Jednoduché propojování více algoritmù dohromady(napø vytvoøení postupù )
-  - Rozdìlení algoritmù:
+  - [ ] všechny algoritmy budou spouštì hlavní univerzální algoritmus kterı bude mít pøístup ke všem monostem úprav a analız sítì kterı následnì vybere podle definice algoritmu které data se mají pøedat algoritmu a jak se pak pracuje s vısledkem
+  - [ ] Jednoduché propojování více algoritmù dohromady(napø vytvoøení postupù )
+  - [ ] Rozdìlení algoritmù:
     - Pouze Analitické(ne-editující)
     - Editující
-  - Monost vıpoètu CPU-synchronì/CPU-parallelnì/GPU-na GPU.js
+  - [ ] Monost vıpoètu CPU-synchronì/CPU-parallelnì/GPU-na GPU.js
     - Vıbìr GPU/CPU puštìním benchmarku
-  - Monost vykreslení vıstupu algoritmu pomocí [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
-  - Determinizace sítì - vynucení priority operací(uivatelské zadání priority jednotlivıch transition)
-  - Determinizace sítì - (analıza jetli je to moné) vytvoøení deterministické sítì která simuluje nedeterministickou (vyhledávání nìjakého cílového parametru / ohodnocení)
-  - Speciální reachibility (rozdìlení sítì na èásti, oznaèení stavu invariatních èástí, pøidání promìnnıch které umoní redukci nìkterıch nekoneènıch grafù)
-  - Koncepty síe pouívající logická a synchronizaèní primitiva(flip-flop,And,or ... Simulace logickıch obvodù?)
-  - Invalidace analız pøi zmìnì sítì (opìtovné pøepoèítání invariant)
-  - monost pracovat s rekurzivním algoritmem - vyhledávání idempotentní operace = konec rekurze
+  - [ ] Monost vykreslení vıstupu algoritmu pomocí [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
+  - [ ] Determinizace sítì - vynucení priority operací(uivatelské zadání priority jednotlivıch transition)
+  - [ ] Determinizace sítì - (analıza jetli je to moné) vytvoøení deterministické sítì která simuluje nedeterministickou (vyhledávání nìjakého cílového parametru / ohodnocení)
+  - [ ] Speciální reachibility (rozdìlení sítì na èásti, oznaèení stavu invariatních èástí, pøidání promìnnıch které umoní redukci nìkterıch nekoneènıch grafù)
+  - [ ] Koncepty síe pouívající logická a synchronizaèní primitiva(flip-flop,And,or ... Simulace logickıch obvodù?)
+  - [ ] Invalidace analız pøi zmìnì sítì (opìtovné pøepoèítání invariant)
+  - [ ] monost pracovat s rekurzivním algoritmem - vyhledávání idempotentní operace = konec rekurze
 
-#### Vıstupy
+#### Generování sítí
 
- - Tisk (png/html/svg/pdf ...) - rùzné nastavení (zobrazit vısledky analız / zvıraznit povolené transitions)
- - Do [Dot lang](http://thegarywilson.com/blog/2011/drawing-petri-nets/)
- - Do LateXu
+  - Práce se sekvencemi(streamy)
+  - Definují se rùzné sekvence vstupù a vıstupù pøi zadanıch vstupech a automaticky se vygeneruje sí co splòuje tyto parametry
+  - Implementace a simulace turingova stroje pomocí Petri net
 
-#### Ukázky
+### Vıstupy
+
+ - [ ] Tisk (png/html/svg/pdf ...) - rùzné nastavení (zobrazit vısledky analız / zvıraznit povolené transitions)
+ - [ ] Do [Dot lang](http://thegarywilson.com/blog/2011/drawing-petri-nets/)
+ - [ ] Do LateXu
+
+### Ukázky
 
   - [Oriented graph creator](https://bl.ocks.org/cjrd/6863459)
   - [Force graph](http://jsfiddle.net/689Qj/)
@@ -71,18 +95,19 @@ Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/n
 
 ### Vzhled
 
-  - Zobrazování pohybu sítì animace
+  - [ ] Zobrazování pohybu sítì animace
   - Featury pro GUI
-    - Stromové zobrazování subsítí
+    - [ ] Stromové zobrazování subsítí
+  - [ ] Context menu circle selector
 
 ### Vìci navíc
 
-  - Propojování s I/O (klávesnice, displej pro vykreslování pixelù)
-  - Generování kódu ze sítì - Vlastnosti sítí které se musí splnit aby šlo ze sítì generovat kód
+  - [ ] Propojování s I/O (klávesnice, displej pro vykreslování pixelù)
+  - [ ] Generování kódu ze sítì - Vlastnosti sítí které se musí splnit aby šlo ze sítì generovat kód
   
 ### Ostatní
 
-  - Odebrat vygenerované *.JS soubory jednotlivì z gitu
+  - [x] Odebrat vygenerované *.JS soubory jednotlivì z gitu
 
 ### Poznámky k obhajobì
 
@@ -93,3 +118,36 @@ Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/n
 
 [JS variable validator](https://mothereff.in/js-variables)
 New Features at [Keep](https://keep.google.com/).
+
+
+
+# Dokumentace
+
+## Definice
+
+### Transformace{#IOC}
+
+ - IN Transformace - Transformace která má externí vstup(mùe bıt implementovanı jako scan vstup)
+ - OUT Transformace - Transformace která má externí vıstup 
+
+### Arc
+
+ - IN - z place do Transformace (záporné èíslo)
+ - OUT - z Transformace do place (záporné èíslo)
+ - Combined - kombinace IN i OUT arc (obì mezi jednou transformací a jendím place)
+   - Scan - speciální combined která vrací stejnì kolik bere (vısledek neovlivní place)
+
+
+## Nastavení
+
+### Stavy{#nastaveni-stavy}
+
+
+## Subsítì
+
+### Pravidla{#subsite-pravidla}
+
+
+## Context menu
+
+  - Delete

@@ -146,6 +146,7 @@ export class PNEditor {
                 .append("g")
                 .on("click", this.mouse.place.onClick)
                 .classed(this.html.names.classes.place.g, true);
+        (placesEnterGroup as any).call(this.mouse.dragPositionMove);
         const placesEnterCircle =
             placesEnterGroup.append("circle")
                 .style("fill", rgb(255, 255, 255).hex())
@@ -170,17 +171,18 @@ export class PNEditor {
             .select("text")
             .text(d => d.marking || "");
 
-
-        transitions()
-           .enter()
-            .each(fixNullPosition)
-           .append("rect")
-            .on("click", this.mouse.transition.onClick)
-            .style("fill", rgb(0, 0, 0).hex())
-            .attr("width", 20)
-            .attr("height", 20)
-            .attr("x", -10)
-            .attr("y", -10);
+        const transitionEnterRect =
+            transitions()
+                .enter()
+                .each(fixNullPosition)
+               .append("rect")
+                .on("click", this.mouse.transition.onClick)
+                .style("fill", rgb(0, 0, 0).hex())
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("x", -10)
+                .attr("y", -10);
+        (transitionEnterRect as any).call(this.mouse.dragPositionMove);
         transitions()
             .attr("x", function (t: Transition) { return t.position.x-10; })
             .attr("y", function (t: Transition) { return t.position.y - 10; })
@@ -405,6 +407,18 @@ export class PNEditor {
                 }
             }
         },
+        dragPositionMove:
+            d3.drag()
+                .on("start", (d) => {
+                    console.debug({ startdrag: d });
+                })
+                .on("drag", (d: { position: Position }) => {
+                    const evPos = (d3.event as Position);
+                    d.position.x = evPos.x;
+                    d.position.y = evPos.y;
+                    this.update();
+                })
+                .on("end", () => { console.debug("enddrag") })
 
     }
 
