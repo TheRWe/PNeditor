@@ -11,6 +11,9 @@
 
 ## TODO
 
+  - [ ] Vykreslování abstrakce
+    - [ ] [Definice API](#vykreslovani-modelu)
+    - [ ] Implementace
   - [ ] Undo/Redo
     - [ ] Historie zmìn
     - [ ] Tlaèítka + Zkratky(controlbar-main)
@@ -21,8 +24,10 @@
     - [ ] Závislost dragování na mousemode
     - [ ] Selekce v svg více objektù
     - [ ] Posouvání více vybranıch objektù
-  - [ ] Multiple selection
+  - [ ] [Multiple selection](#Selections)
     - [ ] Integrace v property bar
+    - [ ] Kopírování vıbìru
+    - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
   - [ ] Taby pro jednotlivé sítì
   - [ ] Tranformace featury
     - [ ] Tlaèítko(foreign) pro otoèení arc
@@ -37,7 +42,8 @@ zvláš v ts nebo d.ts souboru)
       - [ ] Implementace
       - [ ] Pøidání monosti uivatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
-      - [ ] monost uivatelského nastavení kde jsou 
+      - [ ] Monost nevyuívat pouze pøepínaèe ale I jiné inputy(napø. vytváøení arc/place s danımi hodnotami)
+      - [ ] Monost uivatelského nastavení kde jsou 
         uloené pouze diference s defaultním nastavením
   - [ ] hitboxy pro elementy sítì (stejnì jako jsou pro arc), 
 kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kterı bude hitbox vdy bude navrchu a prùhlednı ale klikatelnı)
@@ -130,8 +136,15 @@ New Features at [Keep](https://keep.google.com/).
 
 
 # Dokumentace
+[Architektura editoru](https://codepen.io/TheRW/pen/GzxxYV) (a bude kompletní tak zkopírovat sem jako obrázek)
 
-## Definice
+## Ovládání
+
+### Vıbìry (Selections){#Selections}
+Elementy modelu mohou bıt vybrané buï v reimu single/multiple(/all)
+
+
+## Definice - PNet
 
 ### Transformace{#IOC}
 
@@ -148,13 +161,79 @@ New Features at [Keep](https://keep.google.com/).
 
 ## Nastavení
 
-### Stavy{#nastaveni-stavy}
+### Stavy (Modes){#nastaveni-stavy}
+Editor se nachází vdy v nìjaké mnoinì stavù která je sloena minímalnì z hlavního stavu.
+Mnoina stavù mùe obsahovat navíc pøepínací stavy. 
+Mezi stavy se pøechází událostmi nebo zmìnou pøepínaèù. 
+
+  - Hlavní stav
+    - Minimálnì default, monost pøecházení mezi stavy akcemi
+  - [Vıbìr - Selections](#Selections)
+  - Pøepínací stavy (øízené pøepínacími tlaèítky - pøepnutí tlaèítka taky bráno jako událost)
+
+### Události
+Události jsou vnìjší vlivy(uivatelskı vstup...) pùsobící na editor.
+Zpùsobují pøechody mezi stavy
+
+  - Click, RightClick, DoubleClick
+  - Drag
+  - Scroll
+  - Keyboard, KeyPressed, klávesové zkratky
+  - (Dropdown soubor/vloení ze schránky)
+
+### Akce
+Definují co se dìje pøi pøechody mezi stavy.
+Mùe se jednat o akce aplikované na jeden nebo vıbìr elementù.
+Monost jednotlivıch akcí omezena podle podle událostí? 
+(akce nemùe bıt pøiøazena událestem pro které nedává smysl)
+
+  - souvysející s elementy modelu
+    - Pøidání
+    - Odebrání
+    - Úprava
+      - Vyaduje definovat editovací okno s mnoinou monıch vstupù
+    - Pøesun
+      - Implementován pomocí spleci
+    - Akce na elementu
+
+### Definice vzhledu JSON-Nastavení
+```json
+{
+    modes: {
+        main: { default, ... }
+        toggles?: [toggleName1, toggleName2 ...]
+    },
+    actions: [{
+        on: {
+            event: eventName, 
+            selected?: [elm1, ...],
+            target?: elm
+        },
+        when?: { 
+            main?: mainModeName,
+            toggles?: [{name: toggleName1, state: true}, ...], ...
+        }
+        do: [{
+            type: add/remove/edit/move/do,
+            args?:???(josu potøeba argumenty navíc?)...
+        }, ...]
+        to: nextStateName | 
+           { mode: mainModeName, toggles:
+            [{name: toggleName, changeTo: true/false/switch}, ...]}
+    }, ...]
+}
+```
 
 
 ## Subsítì
 
 ### Pravidla{#subsite-pravidla}
 
+
+## Vykreslování{#vykreslovani-modelu}
+obsahuje definice jak se budou vykreslovat elementy daného modelu. pøedávání nastavení-reimù?
+sada funkcí do kterıch se pøedávají callbacky a element modelu a vrátí vykreslenı element(?)
+Definice tlaèítek v context menu v daném stavu(mode, selection...)
 
 ## Context menu
 
