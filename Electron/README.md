@@ -11,10 +11,14 @@
 
 ## TODO
 
+  - [ ] Undo/Redo
+    - [ ] Historie zmìn
+    - [ ] Tlaèítka + Zkratky(controlbar-main)
   - [ ] Property bar
   - [ ] [Context menu](#Context-menu)
   - [ ] Drag
     - [x] Posouvání jednolivých objektù
+    - [ ] Závislost dragování na mousemode
     - [ ] Selekce v svg více objektù
     - [ ] Posouvání více vybraných objektù
   - [ ] Multiple selection
@@ -46,7 +50,8 @@ každý element sítì tvoøený pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
   - Rùzné možnosti ukládání
     - Pouze pomocí transitions
     - Se subsítìmi ve stejném souboru/v rùzných souborech
-  - [ ] Možnost editování textovì (stromu/JSON/vlastní formát ...) bìhem zobrazovaní zmìn do editoru
+  - [ ] Možnost editování textovì (stromu/JSON/vlastní formát ...) 
+bìhem zobrazovaní zmìn do editoru(**vyžaduje [Automatické pozice](#autopos)**)
 
 
 
@@ -95,6 +100,9 @@ Použít javascript-workery/[node child process](https://medium.freecodecamp.org/n
 
 ### Vzhled
 
+  - [ ] [](#){#autopos} Automatické pozice elementù tak aby se nepøekrívali
+  - [ ] pøi vkládání možnost zapnout force která odtlaèí pøekrývající se elementy od sebe
+  - [ ] Opravit køížení arc(algoritmus rozplétání)
   - [ ] Zobrazování pohybu sítì animace
   - Featury pro GUI
     - [ ] Stromové zobrazování subsítí

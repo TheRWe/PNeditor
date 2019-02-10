@@ -5,9 +5,9 @@ import { GetArcEndpoints } from './EditorHelpers/ArrowEndpointCalculationHelper'
 import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
+import { setTimeout } from 'timers';
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
-// todo: invariant with force
 export class PNEditor {
     private net: PNet;
 
@@ -75,7 +75,8 @@ export class PNEditor {
                 baseDiv: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
                 /** always shown buttons */
                 main: {
-                 div: typedNull<d3.Selection< d3.BaseType, { }, HTMLElement, any >> (),
+                    mouseDebugState: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+                    div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
                 },
                 /** run dependent butons */
                 run: {
@@ -265,7 +266,9 @@ export class PNEditor {
 
     /** mouse properties */
     private readonly mouse = {
-        mode: new MouseModeCls(),
+        mode: (() => {
+            const mmcls = new MouseModeCls(); mmcls.currentChanged = s => { this.html.selectors.controlBar.main.mouseDebugState.text(s); }; setTimeout(() => { mmcls.current = mouseModes.normal; },0); return mmcls;
+        })(),
         resetState: () => {
             switch (this.mouse.mode.current) {
                 case mouseModes.arcMake:
@@ -329,11 +332,11 @@ export class PNEditor {
 
                         if (checked) {
                             controlBarRun
-                                .style("display", "inline-block");
+                                .style("display", "inline-flex");
                             this.mouse.mode.current = mouseModes.run;
                         } else {
                             controlBarEdit
-                                .style("display", "inline-block");
+                                .style("display", "inline-flex");
                             // todo: nahradit za edit
                             this.mouse.mode.current = mouseModes.normal;
                         }
@@ -411,6 +414,7 @@ export class PNEditor {
             d3.drag()
                 .on("start", (d) => {
                     console.debug({ startdrag: d });
+                    this.mouse.resetState();
                 })
                 .on("drag", (d: { position: Position }) => {
                     const evPos = (d3.event as Position);
@@ -668,30 +672,39 @@ export class PNEditor {
 
         const controlbarMain = this.html.selectors.controlBar.main.div = controlbarBase.append("div")
             //to show none -> inline-block
-            .style("display", "inline-block")
+            .style("display", "inline-flex")
             .style("margin", "5px 5px");
 
-        this.html.selectors.controlBar.edit.div = controlbarBase.append("div")
-            .style("margin", "5px 5px")
-            .style("display", "inline-block");
+        const controlbarEdit =
+            this.html.selectors.controlBar.edit.div = controlbarBase.append("div")
+                .style("margin", "5px 5px")
+                .style("display", "inline-flex");
 
         this.html.selectors.controlBar.run.div = controlbarBase.append("div")
             .style("margin", "5px 5px")
             .style("display", "none");
 
+        this.html.selectors.controlBar.main.mouseDebugState =
+            controlbarMain
+                .append("div")
+                .style("display", "inline-block")
+                .style("width", "80px")
+                .style("text-align", "center");
+
             //#region RunToggle
 
-        const controlbarMainRunToggle = controlbarMain.append("div")
-            .classed("onoffswitch", true);
-
-        controlbarMainRunToggle.append("input")
+        const controlbarMainRunToggleDiv = controlbarMain.append("div")
+            .classed("onoffswitch", true)
+            .style("display", "inline-block");
+        
+        controlbarMainRunToggleDiv.append("input")
             .attr("type", "checkbox")
             .attr("name", "onoffswitch")
             .classed("onoffswitch-checkbox", true)
             .attr("id", "myonoffswitch")
             .on("change", this.mouse.controlBar.main.runToggle.onChange);
 
-        const controlbarMainRunToggleLabel = controlbarMainRunToggle.append("label")
+        const controlbarMainRunToggleLabel = controlbarMainRunToggleDiv.append("label")
             .classed("onoffswitch-label", true)
             .attr("for", "myonoffswitch");
 
@@ -701,8 +714,7 @@ export class PNEditor {
         controlbarMainRunToggleLabel.append("span")
             .classed("onoffswitch-switch", true);
 
-            //#endregion
-
+            //#endregion
 	    //#endregion
 
 
@@ -830,13 +842,15 @@ class MouseModeCls
         return this._current;
     }
     public set current(val: mouseModes) {
-        // todo: mousemode zobrazovat v controltabu
-        console.debug({ mousemode: val });
+        if (this.currentChanged)
+            this.currentChanged(val);
         this._prev = this._current;
         this._current = val;
     }
 
     public selectionHardToggle: boolean = false;
+
+    public currentChanged: (newval: mouseModes) => void;
 
     /** holds object for creating arcs */
     public arcMakeHolder: Transition | Place | null = null;
