@@ -6,6 +6,7 @@ import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
 import { setTimeout } from 'timers';
+import { sett as Settings } from './settings';
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
@@ -71,21 +72,8 @@ export class PNEditor {
             svg: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
             /** control buttons - holders */
             controlBar: {
-                /** div */
-                baseDiv: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
-                /** always shown buttons */
-                main: {
-                    mouseDebugState: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
-                    div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
-                },
-                /** run dependent butons */
-                run: {
-                    div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
-                },
-                /** edit dependent butons */
-                edit: {
-                    div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
-                }
+                mouseDebugState: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
+                div: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
             },
             arcDragLine: typedNull<d3.Selection<d3.BaseType, {}, HTMLElement, any>>(),
         },
@@ -267,8 +255,13 @@ export class PNEditor {
     /** mouse properties */
     private readonly mouse = {
         mode: (() => {
-            const mmcls = new MouseModeCls(); mmcls.currentChanged = s => { this.html.selectors.controlBar.main.mouseDebugState.text(s); }; setTimeout(() => { mmcls.current = mouseModes.normal; },0); return mmcls;
+            const mmcls = new MouseModeCls(); mmcls.currentChanged = s => { this.html.selectors.controlBar.mouseDebugState.text(s); }; setTimeout(() => { mmcls.current = mouseModes.normal; }, 0); return mmcls;
         })(),
+        //todo: oddělat new_
+        new_mode: {
+            all: typedNull<string[]>(),
+            selected: typedNull<string>()
+        },
         resetState: () => {
             switch (this.mouse.mode.current) {
                 case mouseModes.arcMake:
@@ -316,6 +309,7 @@ export class PNEditor {
         controlBar: {
             main: {
                 runToggle: {
+                    //todo: smazat - pouze příklad pro práci s checkboxem
                     onChange: (_: any, i: number, nodes: d3.BaseType[] | d3.ArrayLike<d3.BaseType>) => {
                         const elm = d3.select(nodes[i]);
                         const checked = (elm.property("checked") as boolean);
@@ -323,23 +317,6 @@ export class PNEditor {
                     },
 
                     onCheckedChange: (checked: boolean) => {
-                        this.mouse.resetState();
-
-                        const controlBarRun = this.html.selectors.controlBar.run.div
-                            .style("display", "none");
-                        const controlBarEdit = this.html.selectors.controlBar.edit.div
-                            .style("display", "none");
-
-                        if (checked) {
-                            controlBarRun
-                                .style("display", "inline-flex");
-                            this.mouse.mode.current = mouseModes.run;
-                        } else {
-                            controlBarEdit
-                                .style("display", "inline-flex");
-                            // todo: nahradit za edit
-                            this.mouse.mode.current = mouseModes.normal;
-                        }
                     }
                 }
             }
@@ -665,34 +642,23 @@ export class PNEditor {
 
         //#region Controlbar
 
-        const controlbarBase = this.html.selectors.controlBar.baseDiv =
+        const controlbarBase = this.html.selectors.controlBar.div =
             divElement.append("div")
                 .style("height", "30px")
                 .style("background", rgb(223, 223, 223).hex());
 
-        const controlbarMain = this.html.selectors.controlBar.main.div = controlbarBase.append("div")
-            //to show none -> inline-block
-            .style("display", "inline-flex")
-            .style("margin", "5px 5px");
-
-        const controlbarEdit =
-            this.html.selectors.controlBar.edit.div = controlbarBase.append("div")
-                .style("margin", "5px 5px")
-                .style("display", "inline-flex");
-
-        this.html.selectors.controlBar.run.div = controlbarBase.append("div")
-            .style("margin", "5px 5px")
-            .style("display", "none");
-
-        this.html.selectors.controlBar.main.mouseDebugState =
-            controlbarMain
+        this.html.selectors.controlBar.mouseDebugState =
+            controlbarBase
                 .append("div")
                 .style("display", "inline-block")
                 .style("width", "80px")
                 .style("text-align", "center");
 
-            //#region RunToggle
 
+
+            //#region RunToggle
+        /*
+         
         const controlbarMainRunToggleDiv = controlbarMain.append("div")
             .classed("onoffswitch", true)
             .style("display", "inline-block");
@@ -713,9 +679,79 @@ export class PNEditor {
             
         controlbarMainRunToggleLabel.append("span")
             .classed("onoffswitch-switch", true);
-
+            
+        */
             //#endregion
 	    //#endregion
+
+
+        this.mouse.new_mode.all = [];
+        Settings.modes.main.forEach(m => this.mouse.new_mode.all.push(m));
+        this.mouse.new_mode.selected = this.mouse.new_mode.all[0];
+
+
+
+        //#region CreateToggle
+
+        if (Settings.modes.toggles) {
+            // todo: sor by dependencies
+            const toggles = Settings.modes.toggles;
+
+            const toggleHider = () => {
+                for (const tgl of toggles) {
+                    if (typeof tgl !== "string" && tgl.dependencies) {
+                        let shown = true;
+                        if (tgl.dependencies.main && tgl.dependencies.main !== this.mouse.new_mode.selected) {
+                            shown = false;
+                        } else for (const dep of tgl.dependencies.toggles) {
+                            if (controlbarBase.select(`[data-toggle-name='${dep.name}']`).select("input").property("checked") !== dep.value) {
+                                shown = false;
+                                break;
+                            }
+                        }
+
+                        // todo: vlastní funkce pro hledání toggles a skrývání/zobrazování 
+                        controlbarBase.select(`[data-toggle-name='${tgl.name}']`).style("display", (shown ? "inline-block" : "none"));
+                    }
+                }
+            }
+
+            for (const tgl of toggles) {
+                if (typeof tgl === "string") {
+
+                    const div =
+                        controlbarBase
+                            .append("div")
+                            .attr("data-toggle-name", tgl)
+                            .style("display", "inline-block");
+                    div
+                        .append("input")
+                        .attr("type", "checkbox")
+                        .on("change", toggleHider);
+                    div
+                        .append("text")
+                        .text(tgl);
+                } else {
+                    const div =
+                        controlbarBase
+                            .append("div")
+                            .attr("data-toggle-name", tgl.name)
+                            .style("display", "inline-block");
+                    div
+                        .append("input")
+                        .attr("type", "checkbox")
+                        .property("checked", tgl.defaultState || false)
+                        .on("change", toggleHider);
+                    div
+                        .append("text")
+                        .text(tgl.name);
+                }
+            }
+            toggleHider();
+        }
+	    //#endregion
+
+
 
 
         //#region Initialize SVG-HTML

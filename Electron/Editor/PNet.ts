@@ -1,5 +1,4 @@
-﻿import { map, transition } from "d3";
-import { flatten, Ref } from "../Helpers/purify";
+﻿import { flatten, Ref } from "../Helpers/purify";
 
 export class PNet
 {

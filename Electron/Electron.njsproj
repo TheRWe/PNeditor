@@ -38,6 +38,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="Editor\settings.ts">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="styles.css" />
     <Content Include="index.html" />
     <Content Include="package-lock.json" />
@@ -68,6 +71,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\PNet.ts" />
     <TypeScriptCompile Include="Editor\script.ts" />
+    <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Color.ts" />
     <TypeScriptCompile Include="main.ts">
       <SubType>Code</SubType>

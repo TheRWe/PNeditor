@@ -45,10 +45,12 @@ zvláš v ts nebo d.ts souboru)
       - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
       - [ ] Implementace
         - [ ] Nejdøíve pouze checkboxy
+        - [ ] Skrıvání pouze v závislosti na viditelnıch checkboxech (analıza øešení)
         - [ ] Toggles speciální (toggle button/switch CSS)
       - [ ] Validátor
         - [ ] Existence všech zmínìnıch toggle atd...
         - [ ] zakázat odkazování na skryté toggle
+      - [ ] Vytvoøení grafu z nastavení (pøechody mezi stavy - koneènı outomat)
       - [ ] Pøidání monosti uivatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
       - [ ] Monost nevyuívat pouze pøepínaèe ale I jiné inputy(napø. vytváøení arc/place s danımi hodnotami)
@@ -210,13 +212,16 @@ Monost jednotlivıch akcí omezena podle podle událostí?
     - Akce na elementu
 
 ### Definice vzhledu JSON-Nastavení
+JSON schema?
+**Aktualizovat podle implementace v SettingsInterface.ts**
 ```json
 {
     modes: {
-        main: { default, ... }
+        main: [ default, ... ]
         toggles?: [toggleName1 | 
                     {name: toggleName2, 
-                     dependencies [mode(main/toggle/...), ...]}, ...]
+                     dependencies [{type:"toggle", value:true},
+                                   {type:"main", value:"default"}, ...]}, ...]
     },
     actions: [{
         on: {
