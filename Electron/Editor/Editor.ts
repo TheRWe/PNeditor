@@ -1,5 +1,5 @@
 ﻿import * as d3 from 'd3';
-import { PNet, Place, Transition, Position, Arc } from './PNet';
+import { PNet, Place, Transition, Position, Arc } from './PNetDataModel';
 import { Key } from 'ts-keycode-enum';
 import { GetArcEndpoints } from './EditorHelpers/ArrowEndpointCalculationHelper';
 import { rgb } from 'd3';
@@ -24,9 +24,11 @@ export class PNEditor {
     /** Saves current net to given path */
     public Save(path: string | number | Buffer | URL): boolean {
         const stringJSON = this.net.toString();
+        console.debug(stringJSON);
         try {
             file.writeFileSync(path, stringJSON, { encoding: "utf8" });
-        } catch {
+        } catch (ex) {
+            console.error(ex)
             return false;
         }
         console.log("%c net SAVED", "color: rgb(0, 0, 255)");
@@ -38,16 +40,20 @@ export class PNEditor {
         let objString: string;
         try {
             objString  = file.readFileSync(path, { encoding: "utf8" });
-        } catch{
+            const net = PNet.fromString(objString);
+
+            // todo: lepším způsobem zaručit animace(bez NewNet)
+            this.NewNet();
+            this.net = net;
+
+            console.log("%c LOADED net", "color: rgb(0, 0, 255)");
+            console.log(this.net);
+            this.update();
+        } catch (ex){
+            console.error(ex)
             return false;
         }
-        // todo: lepším způsobem zaručit animace(bez NewNet)
-        this.NewNet();
 
-        this.net = PNet.fromString(objString);
-        console.log("%c LOADED net", "color: rgb(0, 0, 255)");
-        console.log(this.net);
-        this.update();
         return true;
     }
 
@@ -120,7 +126,7 @@ export class PNEditor {
         const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
         const arcs = () =>
             d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
-                .data(net.AllArces.map(x => { return { arc: x, line: GetArcEndpoints(x) }; }));
+                .data(net.arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }));
 
         const fixNullPosition = (item: Place | Transition): void =>
         {
@@ -221,7 +227,7 @@ export class PNEditor {
         arcs().select('text')
             .attr("x", a => Math.abs(a.line.to.x - a.line.from.x)/2 + Math.min(a.line.to.x, a.line.from.x)-5)
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
-            .text(d => Math.abs(d.arc.qty.value) || "");
+            .text(d => Math.abs(d.arc.qty) || "");
 
         // todo: kontrola
         arcs().exit().call(() => {}).remove();
@@ -555,7 +561,7 @@ export class PNEditor {
         inputArc.foreign.attr("x", mousePos.x - 20);
         inputArc.foreign.attr("y", mousePos.y - 10);
 
-        (inputArc.input.node() as any).value = a.qty.value;
+        (inputArc.input.node() as any).value = a.qty;
         (inputArc.input.node() as any).focus();
     }
 
@@ -580,7 +586,7 @@ export class PNEditor {
 
         if (save) {
             let val = +(inputArc.input.node() as any).value;
-            this.keyboard.inputs.arcValue.editedArc.qty.value = val;
+            this.keyboard.inputs.arcValue.editedArc.qty = val;
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
@@ -752,8 +758,9 @@ export class PNEditor {
 	    //#endregion
 
 
-
-
+        console.debug(new PNet().elements);
+        console.debug(Transition.name);
+        
         //#region Initialize SVG-HTML
 
         const svg = this.html.selectors.svg = divElement

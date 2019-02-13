@@ -1,17 +1,17 @@
-﻿import { Transition, Place, PNet, Position, Arc } from "../PNet";
+﻿import { Transition, Place, PNet, Position, Arc } from "../PNetDataModel";
 import { classify, SortKeySelector } from "../../Helpers/purify";
 
 //todo: casching
-export function GetArcEndpoints(arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
-    const tPos = arc.t.position;
+export function GetArcEndpoints(net: PNet, arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
+    const tPos = arc.transition.position;
 
     // get all arces of transition
-    const arcesT = arc.t.ArcesIndependent;
+    const arcesT = net.getArcesOfTransition(arc.transition);
     const arcesClassified = classify(arcesT,
         // main diag
-        (a) => { return a.p.position.y < (a.p.position.x - a.t.position.x + a.t.position.y); },
+        (a) => { return a.place.position.y < (a.place.position.x - a.transition.position.x + a.transition.position.y); },
         // scnd diag
-        (a) => { return a.p.position.y > (-a.p.position.x + a.t.position.x + a.t.position.y); })
+        (a) => { return a.place.position.y > (-a.place.position.x + a.transition.position.x + a.transition.position.y); })
 
     type side = "TOP" | "BOT" | "LEFT" | "RIGHT";
     const sides: side[] = ["TOP", "BOT", "LEFT", "RIGHT"];
@@ -35,7 +35,7 @@ export function GetArcEndpoints(arc: Arc): { from: Position, to: Position, endsI
     sides.forEach(s => {
         const sideDependentValue = (s === "BOT" || s === "TOP") ? "x" : "y";
         const selectorHelper =
-            SortKeySelector((x: any) => { return x.arc.p.position[sideDependentValue] as number; });
+            SortKeySelector((x: any) => { return x.arc.place.position[sideDependentValue] as number; });
 
         const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
         const len = arcsInThisSide.length;
@@ -54,18 +54,18 @@ export function GetArcEndpoints(arc: Arc): { from: Position, to: Position, endsI
 
     var transitionPos = arcWithTransitionPosition.find((ap) => {
         const a = ap.arc;
-        return arc.qty.value === a.qty.value && arc.p === a.p && arc.t === a.t;
+        return arc.qty === a.qty && arc.place === a.place && arc.transition === a.transition;
     }).pos;
 
-    if (arc.qty.value >= 0)
+    if (arc.qty >= 0)
         return {
             from: transitionPos,
-            to: arc.p.position,
+            to: arc.place.position,
             endsIn: "P"
         };
     else
         return {
-            from: arc.p.position,
+            from: arc.place.position,
             to: transitionPos,
             endsIn: "T"
         };

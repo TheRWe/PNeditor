@@ -41,7 +41,7 @@ function createWindow()
                     }
                 },
                 {
-                    label: "open PNet",
+                    label: "load PNet",
                     click: () =>
                     {
                         const dialogOprions: Electron.OpenDialogOptions = {
@@ -60,7 +60,7 @@ function createWindow()
                         };
 
                         const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
-                        mainWindow.webContents.send("open PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                        mainWindow.webContents.send("load PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
                     }
                 },
                 {
@@ -85,12 +85,27 @@ function createWindow()
                     }
                 },
                 { label: "close" },
-                { label: "recent" },
+                {
+                    label: "quick",
+                    submenu:
+                        [
+                            {
+                                label: "load",
+                                click: () => {
+                                    mainWindow.webContents.send("quick-load PNet");
+                                }
+                            },
+                            {
+                                label: "save",
+                                click: () => {
+                                    mainWindow.webContents.send("quick-save PNet");
+                                } }
+                        ]
+                },
                 {
                     label: "Quit",
                     accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-                    click: () =>
-                    {
+                    click: () => {
                         app.quit();
                     }
                 },

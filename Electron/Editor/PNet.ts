@@ -1,32 +1,27 @@
-﻿import { flatten, Ref } from "../Helpers/purify";
+﻿import { flatten, Ref, EnumValues, ClassNameOf } from "../Helpers/purify";
 
-export class PNet
-{
+export class PNet {
+
+
+
     public places: Place[];
     public transitions: Transition[];
-
-    public get AllArces(): Arc[]
-    {
-        return flatten(this.transitions.map(x => x.ArcesIndependent))
-    }
+    public arcs: Arc[];
 
 
     //#region Edit Modifications
 
-    private placeID = 0;
-    public AddPlace(pos: Position, name: string = null): Place
-    {
-        const place = new Place(this.placeID++, name, pos);
+    public AddPlace(pos: Position, name: string = null): Place {
+        const place = new Place(name, pos);
         this.places.push(place);
         return place;
     }
 
-    public AddArc(t: Transition, p: Place, qty: number)
-    {
-        t.arcs.push({ place: p, qty: qty});
+    public AddArc(t: Transition, p: Place, qty: number) {
+        this.arcs.push(new Arc(t, p, qty));
     }
 
-	//#endregion
+    //#endregion
 
 
     //#region Running methods
@@ -44,8 +39,12 @@ export class PNet
         this.places.forEach(p => { p.marking = 0; });
     }
 
+    public getArcesOfTransition(transition: Transition): Arc[] {
+        return this.arcs.filter(a => a.transition === transition);
+    }
+
     public IsTransitionEnabled(transition: Transition | null): boolean {
-        return transition != null && transition.arcs.every(v => (v.qty + v.place.marking) >= 0);
+        return transition != null && this.getArcesOfTransition(transition).every(v => (v.qty + v.place.marking) >= 0);
     }
     public get EnabledTransitions(): Transition[] {
         return this.transitions.filter(t => this.IsTransitionEnabled(t));
@@ -54,15 +53,14 @@ export class PNet
     public RunTransition(transition: Transition): boolean {
         if (!this.IsTransitionEnabled(transition))
             return false;
-        transition.arcs.forEach(a => { a.place.marking += a.qty });
+        this.getArcesOfTransition(transition).forEach(a => { a.place.marking += a.qty });
         return true;
     }
 
-	//#endregion
+    //#endregion
 
 
-    public toString(): string
-    {
+    public toString(): string {
         // todo: https://github.com/dsherret/ts-nameof
         // todo: změna id
         // todo: možnost ukládat pouze name bez id pokud je name unikátní
@@ -73,28 +71,30 @@ export class PNet
         const savedMarkings: { place_id: number, marking: number }[]
             = this.savedMarkings.map(m => { return { place_id: m.place.id, marking: m.marking }; });
 
-        const transitions: { arcs: { place_id: number, qty: number }[], position?: Position }[]
-            = this.transitions.map(t => { return { position: t.position, arcs: t.arcs.map(a => { return { place_id: a.place.id, qty: a.qty } }) } });
+        const transitions: { position?: Position, id: number }[]
+            = this.transitions.map(t => { return { position: t.position, id: t.id } });
 
+        const arcs: { place_id: number, transition_id: number, qty: number }[]
+            = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, qty: a.qty }; });
 
-        const json: JSONNet = { places: places, savedMarkings: savedMarkings, transitions: transitions };
+        const json: JSONNet = { places: places, savedMarkings: savedMarkings, transitions: transitions, arcs: arcs };
 
         return JSON.stringify(json, null, 4);
     }
 
-    public static fromString(str: string): PNet
-    {
+    public static fromString(str: string): PNet {
         const obj: JSONNet = JSON.parse(str);
 
         // todo: validace
         // todo: možnost používat name místo id
-        const places: Place[] = obj.places.map(p => new Place(p.id, p.name, p.position, p.marking))
+        const places: Place[] = obj.places.map(p => new Place(p.name, p.position, p.marking, p.id))
 
         const transitions: Transition[] = obj.transitions.map(tj => {
-            const t = new Transition(tj.position);
-            t.arcs = tj.arcs.map(aj => { return { place: places.find(p => p.id === aj.place_id), qty: aj.qty } })
+            const t = new Transition(tj.position, tj.id);
             return t;
         })
+
+        const arcs = obj.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.place_id), places.find(p => p.id === aj.place_id), aj.qty));
 
         const savedMarkings: { place: Place, marking: number }[] = obj.savedMarkings.map(smj => {
             return { place: places.find(p => p.id === smj.place_id), marking: smj.marking };
@@ -102,61 +102,86 @@ export class PNet
 
         const placeID: number = Math.max(-1, ...places.map(p => p.id)) + 1;
 
-        return Object.assign(new PNet(), { places: places, transitions: transitions, savedMarkings: savedMarkings, placeID: placeID });
+        return Object.assign(new PNet(), { places: places, transitions: transitions, savedMarkings: savedMarkings, placeID: placeID, arcs: arcs });
     }
 
-    constructor()
-    {
+    constructor() {
         this.places = [];
         this.transitions = [];
-    }
-}
-
-export class Transition
-{
-    public position: Position | null;
-    public arcs: { place: Place, qty: number }[];
-
-    /** returns arc with transaction to work independent on this object */
-    public get ArcesIndependent(): Arc[]
-    {
-        return this.arcs.map(x => ({ qty: new Ref<number>(() => x.qty, (v) => x.qty = v), t: this, p: x.place }));
-    }
-
-    constructor(position: Position | null = null)
-    {
         this.arcs = [];
-        this.position = position;
     }
 }
 
-export class Place
-{
+export class Transition {
+    public position: Position | null;
+
+    //todo: o id a odkazování se bude starat ukládání a načítání
+    public readonly id: number;
+    private static idMaker = 0;
+
+    constructor(position: Position | null = null, id?: number) {
+        this.position = position;
+        if (id)
+            this.id = id
+        else
+            this.id = Transition.idMaker++;
+    }
+}
+
+export class Place {
     public name: string | null;
-    public id: number | null;
     public position: Position | null;
     public marking: number | null;
 
-    constructor(id: number | null = null, name: string | null = null, position: Position | null = null, marking: number | null = null)
-    {
+    //todo: o id a odkazování se bude starat ukládání a načítání
+    public id: number | null;
+    private static idMaker = 0;
+
+    constructor(name: string | null = null, position: Position | null = null, marking: number | null = null, id?: number) {
         this.name = name;
-        this.id = id;
         this.position = position;
         this.marking = marking;
+
+        if (id)
+            this.id = id
+        else
+            this.id = Place.idMaker++;
     }
 }
 
 export type Position = { x: number, y: number }
-export type Arc = { t: Transition, p: Place, qty: Ref<number> }
+export class Arc {
+    transition: Transition;
+    place: Place;
+    qty: number;
+
+    constructor(transition: Transition, place: Place, qty: number) {
+        this.transition = transition;
+        this.place = place;
+        this.qty = qty;
+    }
+}
 
 type JSONNet = {
     savedMarkings:
-        { place_id: number, marking: number }[],
+    {
+        place_id: number,
+        marking: number
+    }[],
     places:
-        { name?: string, id: number, position?: Position, marking?: number }[],
+    {
+        name?: string,
+        id: number,
+        position?: Position,
+        marking?: number
+    }[],
     transitions: {
-            arcs:
-                { place_id: number, qty: number }[],
-            position?: Position
-        }[]
+        id: number,
+        position?: Position
+    }[],
+    arcs: {
+        transition_id: number,
+        place_id: number,
+        qty: number
+    }[],
 }

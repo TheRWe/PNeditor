@@ -1,5 +1,7 @@
 ﻿import * as file from 'fs';
 
+export type EnumType = { [id: number]: string };
+
 type fncHelpSortKeySelector<T> = ((a: T, b: T) => number);
 export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSelected): fncHelpSortKeySelector<TIn>
 {
@@ -10,6 +12,14 @@ export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSele
         return valA > valB ? 1 : valA === valB ? 0 : -1;
     }
     return f;
+}
+
+export function ClassNameOf(obj: any): string {
+    return obj.constructor.name;
+}
+
+export function EnumValues(obj: EnumType): string[]{
+    return (Object as any).values(obj).filter((x:any) => typeof x === 'string');
 }
 
 export class Ref<T>{
