@@ -14,8 +14,12 @@
   - [ ] Vykreslování abstrakce
     - [ ] [Definice API](#vykreslovani-modelu)
     - [ ] Implementace
-  - [ ] Undo/Redo
-    - [ ] Historie zmìn
+  - [ ] Historie zmìn
+    - [ ] PNet umožòuje serializaci a deserializaci
+      - [ ] univerzální api pro serializaci a deserializaci
+    - [ ] Undo/Redo
+    - [ ] Výpis všech zmìn
+      - [ ] Speciální výpis -> vyfiltruje postup tak že bude pouze pøidávání a názvy
     - [ ] Tlaèítka + Zkratky(controlbar-main)
   - [ ] Property bar
   - [ ] [Context menu](#Context-menu)
@@ -40,6 +44,11 @@ bude uložený pøímo v editoru jako default settings
 zvláš v ts nebo d.ts souboru)
       - [ ] [Analýza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
       - [ ] Implementace
+        - [ ] Nejdøíve pouze checkboxy
+        - [ ] Toggles speciální (toggle button/switch CSS)
+      - [ ] Validátor
+        - [ ] Existence všech zmínìných toggle atd...
+        - [ ] zakázat odkazování na skryté toggle
       - [ ] Pøidání možnosti uživatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uživatelskou editaci)
       - [ ] Možnost nevyužívat pouze pøepínaèe ale I jiné inputy(napø. vytváøení arc/place s danými hodnotami)
@@ -65,8 +74,12 @@ bìhem zobrazovaní zmìn do editoru(**vyžaduje [Automatické pozice](#autopos)**)
 
 **všechny algoritmy(analýzy/úpravy/generování) budou funcionální** (pøedá se jim kopie sítì nebo èásti a vrátí hodnotu se kterou se pak dál pracuje)
 Použít javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
+  - [ ] výsledky algoritmù budou ukládané do zmìn sítì(pøi návratu zpìt není potøeba algoritmus znova spouštìt)
+    - [ ] Algoritmy budou mít metadata výpoètu ... Napø. jak dlouho trval výpoèet(pro uvolnìní místa v pamìti v pøípadì potøeby, možné vybírat prioritnì výpoèty které byly rychlé ... Možné taky vytváøet statistiky výpoètu) atd... 
+    - [ ] Pokud dojde ke zmìnì algoritmu, smažou se všechny cache
   - [ ] všechny algoritmy budou spouštì hlavní univerzální algoritmus který bude mít pøístup ke všem možnostem úprav a analýz sítì který následnì vybere podle definice algoritmu které data se mají pøedat algoritmu a jak se pak pracuje s výsledkem
   - [ ] Jednoduché propojování více algoritmù dohromady(napø vytvoøení postupù )
+  - [ ] Algoritmus mùže být zapnutý - vypoèítává se s každou zmìnou sítì
   - [ ] Rozdìlení algoritmù:
     - Pouze Analitické(ne-editující)
     - Editující
@@ -99,6 +112,7 @@ Použít javascript-workery/[node child process](https://medium.freecodecamp.org/n
 
 ### Optimalizace
 
+  - [ ] dotahování sítí asynchronì (i subsítí?)
   - NATIVE (C++ dodatek pro javascript používá se pøes import)
   - Komunikace s jiným programem pøes stdin/stdout/stderr -> [node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
   - [SVG animace pomocí rAF](http://bl.ocks.org/pjanik/5169968)
@@ -160,9 +174,7 @@ Elementy modelu mohou být vybrané buï v režimu single/multiple(/all)
 
 
 ## Nastavení
-
-### Stavy (Modes){#nastaveni-stavy}
-Editor se nachází vždy v nìjaké množinì stavù která je složena minímalnì z hlavního stavu.
+tor se nachází vždy v nìjaké množinì stavù která je složena minímalnì z hlavního stavu.
 Množina stavù mùže obsahovat navíc pøepínací stavy. 
 Mezi stavy se pøechází událostmi nebo zmìnou pøepínaèù. 
 
@@ -170,6 +182,7 @@ Mezi stavy se pøechází událostmi nebo zmìnou pøepínaèù.
     - Minimálnì default, možnost pøecházení mezi stavy akcemi
   - [Výbìr - Selections](#Selections)
   - Pøepínací stavy (øízené pøepínacími tlaèítky - pøepnutí tlaèítka taky bráno jako událost)
+    - Toggle 
 
 ### Události
 Události jsou vnìjší vlivy(uživatelský vstup...) pùsobící na editor.
@@ -201,7 +214,9 @@ Možnost jednotlivých akcí omezena podle podle událostí?
 {
     modes: {
         main: { default, ... }
-        toggles?: [toggleName1, toggleName2 ...]
+        toggles?: [toggleName1 | 
+                    {name: toggleName2, 
+                     dependencies [mode(main/toggle/...), ...]}, ...]
     },
     actions: [{
         on: {
