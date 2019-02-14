@@ -1,5 +1,5 @@
 ﻿import * as d3 from 'd3';
-import { PNet, Place, Transition, Position, Arc } from './PNetDataModel';
+import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { GetArcEndpoints } from './EditorHelpers/ArrowEndpointCalculationHelper';
 import { rgb } from 'd3';
@@ -23,7 +23,7 @@ export class PNEditor {
 
     /** Saves current net to given path */
     public Save(path: string | number | Buffer | URL): boolean {
-        const stringJSON = this.net.toString();
+        const stringJSON = this.net.toJSON();
         console.debug(stringJSON);
         try {
             file.writeFileSync(path, stringJSON, { encoding: "utf8" });
@@ -39,8 +39,9 @@ export class PNEditor {
     public Load(path: string | number | Buffer | URL): boolean {
         let objString: string;
         try {
-            objString  = file.readFileSync(path, { encoding: "utf8" });
-            const net = PNet.fromString(objString);
+            objString = file.readFileSync(path, { encoding: "utf8" });
+            const jsonNet = JSON.parse(objString);
+            const net = (new PNet()).fromJSON(jsonNet);
 
             // todo: lepším způsobem zaručit animace(bez NewNet)
             this.NewNet();
@@ -758,9 +759,6 @@ export class PNEditor {
 	    //#endregion
 
 
-        console.debug(new PNet().elements);
-        console.debug(Transition.name);
-        
         //#region Initialize SVG-HTML
 
         const svg = this.html.selectors.svg = divElement

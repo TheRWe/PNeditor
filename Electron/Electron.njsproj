@@ -85,6 +85,9 @@
     <TypeScriptCompile Include="Helpers\purify.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SMAZAT\autoserialize.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Editor\" />

@@ -1,8 +1,6 @@
-﻿import { flatten, Ref, EnumValues, ClassNameOf } from "../Helpers/purify";
+﻿import { DataModel } from "./EditorHelpers/SettingsInterface";
 
-export class PNet {
-
-
+export class PNet implements DataModel<JSONNet> {
 
     public places: Place[];
     public transitions: Transition[];
@@ -60,7 +58,7 @@ export class PNet {
     //#endregion
 
 
-    public toString(): string {
+    public toJSON(): JSONNet {
         // todo: https://github.com/dsherret/ts-nameof
         // todo: změna id
         // todo: možnost ukládat pouze name bez id pokud je name unikátní
@@ -79,30 +77,28 @@ export class PNet {
 
         const json: JSONNet = { places: places, savedMarkings: savedMarkings, transitions: transitions, arcs: arcs };
 
-        return JSON.stringify(json, null, 4);
+        return json;
     }
 
-    public static fromString(str: string): PNet {
-        const obj: JSONNet = JSON.parse(str);
-
+    public fromJSON(json: JSONNet) {
         // todo: validace
         // todo: možnost používat name místo id
-        const places: Place[] = obj.places.map(p => new Place(p.name, p.position, p.marking, p.id))
+        const places: Place[] = json.places.map(p => new Place(p.name, p.position, p.marking, p.id))
 
-        const transitions: Transition[] = obj.transitions.map(tj => {
+        const transitions: Transition[] = json.transitions.map(tj => {
             const t = new Transition(tj.position, tj.id);
             return t;
         })
 
-        const arcs = obj.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.place_id), places.find(p => p.id === aj.place_id), aj.qty));
+        const arcs = json.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.place_id), places.find(p => p.id === aj.place_id), aj.qty));
 
-        const savedMarkings: { place: Place, marking: number }[] = obj.savedMarkings.map(smj => {
+        const savedMarkings: { place: Place, marking: number }[] = json.savedMarkings.map(smj => {
             return { place: places.find(p => p.id === smj.place_id), marking: smj.marking };
         });
 
         const placeID: number = Math.max(-1, ...places.map(p => p.id)) + 1;
 
-        return Object.assign(new PNet(), { places: places, transitions: transitions, savedMarkings: savedMarkings, placeID: placeID, arcs: arcs });
+        return Object.assign(this, { places: places, transitions: transitions, savedMarkings: savedMarkings, placeID: placeID, arcs: arcs });
     }
 
     constructor() {

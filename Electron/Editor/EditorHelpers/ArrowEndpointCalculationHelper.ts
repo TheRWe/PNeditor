@@ -1,4 +1,4 @@
-﻿import { Transition, Place, PNet, Position, Arc } from "../PNetDataModel";
+﻿import { Transition, Place, PNet, Position, Arc } from "../PNet";
 import { classify, SortKeySelector } from "../../Helpers/purify";
 
 //todo: casching

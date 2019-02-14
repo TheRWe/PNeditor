@@ -7,16 +7,9 @@ export type Dependencies = {
     toggles?: { name: string, value: boolean }[]
 }
 
-export interface Model {
-    elements: string[];
-    Serialize(): JSON;
-    Deserialize(input: JSON): void;
-
-    Add(elementName: string, args?: any): void;
-    Remove(elementName: string, args?: any): void;
-    Edit(elementName: string, args?: any): void;
-    Do(elementName: string, args?: any): void;
-    //Move(elementName: string, args?: any): void;
+export interface DataModel<JSONType extends {}> {
+    toJSON(): JSONType;
+    fromJSON(json: JSONType): void;
 }
 
 export interface Settings {
