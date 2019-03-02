@@ -7,10 +7,12 @@ import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
 import { setTimeout } from 'timers';
 import { sett as Settings } from './settings';
+import { PNetDraw } from './PNetDraw';
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
     private net: PNet;
+    private readonly netDraw: PNetDraw = new PNetDraw();
 
     //#region File
 

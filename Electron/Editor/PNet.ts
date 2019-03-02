@@ -58,6 +58,11 @@ export class PNet implements DataModel<JSONNet> {
     //#endregion
 
 
+    public elementNames(): string[] {
+        var elementNames: PNetElementNames[] = ["place", "transition", "arc"];
+        return elementNames;
+    }
+
     public toJSON(): JSONNet {
         // todo: https://github.com/dsherret/ts-nameof
         // todo: změna id
@@ -157,6 +162,8 @@ export class Arc {
         this.qty = qty;
     }
 }
+
+export type PNetElementNames = "place" | "transition" | "arc"
 
 type JSONNet = {
     savedMarkings:

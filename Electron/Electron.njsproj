@@ -70,6 +70,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\PNet.ts" />
+    <TypeScriptCompile Include="Editor\PNetDraw.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\script.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
