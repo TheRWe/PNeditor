@@ -49,7 +49,7 @@ export interface Settings {
         },
         do?: { type: Actions, element?: DoElementTarget | string, args?: any }[],
         to?: {
-            mode?: string,
+            main?: string,
             toggles?: [
                 {
                     name: string,

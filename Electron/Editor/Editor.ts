@@ -263,31 +263,27 @@ export class PNEditor {
 
     /** mouse properties */
     private readonly mouse = {
-        mode: (() => {
-            const mmcls = new MouseModeCls(); mmcls.currentChanged = s => { this.html.selectors.controlBar.mouseDebugState.text(s); }; setTimeout(() => { mmcls.current = mouseModes.normal; }, 0); return mmcls;
-        })(),
         //todo: oddělat new_
-        new_mode: {
-            all: typedNull<string[]>(),
-            selected: typedNull<string>()
-        },
-        resetState: () => {
-            switch (this.mouse.mode.current) {
-                case mouseModes.arcMake:
-                    this.mouseEndArc();
+        new_mode:
+            (() => {
+                const html = this.html;
+                return new class {
+                    public all: string[] = [];
+                    public default: string;
+                    private _last: string;
+                    private _selected: string;
 
-                    this.mouse.mode.current = mouseModes.normal;
-                    break;
-                case mouseModes.valueEdit:
-                    this.EndInputArc();
-                    this.EndInputMarking();
+                    public get selected(): string { return this._selected; }
+                    public set selected(v: string) {
+                        this._last = this._selected;
+                        this._selected = v;
+                        setTimeout(() => { html.selectors.controlBar.mouseDebugState.text(v); }, 0);
+                    }
 
-                    this.mouse.mode.current = mouseModes.normal;
-                    break;
-                default:
-                    break;
-            }
-        },
+                    public get last(): string { return this._last; }
+                    public swap(): void { this.selected = this.last; }
+                }
+            }),
         svg: {
             onClick: () =>
             {
@@ -857,44 +853,4 @@ export class PNEditor {
 
 	//#endregion
 
-}
-
-//todo RUNMODES
-enum mouseModes
-{
-    normal = "normal",
-    del = "del",
-    edit = "edit",
-    run = "run",
-    selection = "selection",
-    multiSelect = "multi-selection",
-    arcMake = "arc-make",
-    valueEdit = "value-edit"
-};
-class MouseModeCls
-{
-    // todo: main properta a prev bude private, pokaždé když se změní main tak se nahraje do prev a bude existovat metoda co main a prev prohodí
-    private _current: mouseModes = mouseModes.normal;
-    private _prev: mouseModes = mouseModes.normal;
-
-    public get prev(): mouseModes {
-        return this._prev;
-    }
-
-    public get current(): mouseModes{
-        return this._current;
-    }
-    public set current(val: mouseModes) {
-        if (this.currentChanged)
-            this.currentChanged(val);
-        this._prev = this._current;
-        this._current = val;
-    }
-
-    public selectionHardToggle: boolean = false;
-
-    public currentChanged: (newval: mouseModes) => void;
-
-    /** holds object for creating arcs */
-    public arcMakeHolder: Transition | Place | null = null;
 }
