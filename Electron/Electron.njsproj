@@ -38,9 +38,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="Editor\settings.ts">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="styles.css" />
     <Content Include="index.html" />
     <Content Include="package-lock.json" />

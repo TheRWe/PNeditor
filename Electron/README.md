@@ -37,23 +37,14 @@
     - [ ] Tlaèítko(foreign) pro otoèení arc
     - [ ] Obojsmìrné transformace (GUI tlaèítko umonující zobrazit druhı textbox)
     - [ ] Scan arcs
-  - [ ] Vytvoøit stavovı JSON kterı bude urèovat pøechody mezi módy 
-a jejich chování(pro myš klávesnici atd.)
-bude uloenı pøímo v editoru jako default settings 
-(definice enumù které budou dùleité pro fungování budou 
-zvláš v ts nebo d.ts souboru)
-      - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
-      - [ ] Implementace
-        - [ ] Nejdøíve pouze checkboxy
-        - [ ] Skrıvání pouze v závislosti na viditelnıch checkboxech (analıza øešení)
-        - [ ] Toggles speciální (toggle button/switch CSS)
-      - [ ] Validátor
-        - [ ] Existence všech zmínìnıch toggle atd...
-        - [ ] zakázat odkazování na skryté toggle
-      - [ ] Vytvoøení grafu z nastavení (pøechody mezi stavy - koneènı outomat)
+ 
+  - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
+    - [ ] Implementace
+      - [ ] Nejdøíve pouze checkboxy
+      - [ ] Toggles speciální (toggle button/switch CSS)
+      - [ ] zakázat odkazování na skryté toggle
       - [ ] Pøidání monosti uivatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
-      - [ ] Monost nevyuívat pouze pøepínaèe ale I jiné inputy(napø. vytváøení arc/place s danımi hodnotami)
       - [ ] Monost uivatelského nastavení kde jsou 
         uloené pouze diference s defaultním nastavením
   - [ ] hitboxy pro elementy sítì (stejnì jako jsou pro arc), 
@@ -210,40 +201,6 @@ Monost jednotlivıch akcí omezena podle podle událostí?
     - Pøesun
       - Implementován pomocí spleci
     - Akce na elementu
-
-### Definice vzhledu JSON-Nastavení
-JSON schema?
-**Aktualizovat podle implementace v SettingsInterface.ts**
-```json
-{
-    modes: {
-        main: [ default, ... ]
-        toggles?: [toggleName1 | 
-                    {name: toggleName2, 
-                     dependencies [{type:"toggle", value:true},
-                                   {type:"main", value:"default"}, ...]}, ...]
-    },
-    actions: [{
-        on: {
-            event: eventName, 
-            selected?: [elm1, ...],
-            target?: elm
-        },
-        when?: { 
-            main?: mainModeName,
-            toggles?: [{name: toggleName1, state: true}, ...], ...
-        }
-        do: [{
-            type: add/remove/edit/move/do,
-            args?:???(josu potøeba argumenty navíc?)...
-        }, ...]
-        to: nextStateName | 
-           { mode: mainModeName, toggles:
-            [{name: toggleName, changeTo: true/false/switch}, ...]}
-    }, ...]
-}
-```
-
 
 ## Subsítì
 
