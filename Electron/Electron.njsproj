@@ -60,6 +60,9 @@
     <Compile Include="SMAZAT\smazat3.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SMAZAT\toggleExample.js">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Editor\Editor.ts" />
@@ -67,9 +70,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\PNet.ts" />
-    <TypeScriptCompile Include="Editor\PNetDraw.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\script.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>

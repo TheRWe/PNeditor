@@ -6,14 +6,15 @@ import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
 import { setTimeout } from 'timers';
-import { PNetDraw } from './PNetDraw';
 
 type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+
+function notImplemented() { throw Error("not implemented"); }
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
     private net: PNet;
-    private readonly netDraw: PNetDraw = new PNetDraw();
+
 
     //#region File
 
@@ -241,6 +242,61 @@ export class PNEditor {
     //#endregion
 
 
+    //#region Mode
+
+    private readonly mode = (() => {
+        const editor = this;
+        const html = this.html;
+
+        setTimeout(() => {
+            const runtgl = new Toggle(this.html.selectors.controlBar.div, "Run");
+            runtgl.OnToggleChange((tlg) => {
+                const state = tlg.State;
+                if (state === ToggleState.on) {
+                    editor.mode.resetState();
+                    editor.mode.selected = modes.run;
+                } else {
+                    editor.mode.resetState();
+                    editor.mode.selected = modes.default;
+                }
+            });
+        }, 0);
+
+        return new class {
+            public readonly default: modes = modes.default;
+            private _last: modes = modes.default;
+            private _selected: modes = modes.default;
+
+            public get selected(): modes { return this._selected; }
+            public set selected(v: modes) {
+                this._last = this._selected;
+                this._selected = v;
+                html.selectors.controlBar.mouseDebugState.text(v);
+            }
+
+            public get last(): modes { return this._last; }
+            public swap(): void { this.selected = this.last; }
+
+            // used to cancel all undone actions
+            public resetState() {
+                if (this.selected === this.default)
+                    return;
+                switch (this.selected) {
+                    case modes.arcMake:
+                        editor.mouseEndArc();
+                        break;
+                    // todo: implement state reset
+                    default:
+                        console.warn("implement");
+                        break;
+                }
+            }
+        };
+    })()
+
+	//#endregion
+
+
     //#region Mouse
 
     /** initialize keyboard *on* handlers related to mouse */
@@ -262,31 +318,12 @@ export class PNEditor {
     /** mouse properties */
     private readonly mouse = {
         //todo: oddělat new_
-        new_mode:
-            (() => {
-                const html = this.html;
-                return new class {
-                    public readonly default: modes = modes.default;
-                    private _last: modes = modes.default;
-                    private _selected: modes = modes.default;
-
-                    public get selected(): modes { return this._selected; }
-                    public set selected(v: modes) {
-                        this._last = this._selected;
-                        this._selected = v;
-                        setTimeout(() => { html.selectors.controlBar.mouseDebugState.text(v); }, 0);
-                    }
-
-                    public get last(): modes { return this._last; }
-                    public swap(): void { this.selected = this.last; }
-                }
-            })(),
         svg: {
             onClick: () => {
                 const mouse = this.mouse;
-                switch (mouse.new_mode.selected) {
+                switch (this.mode.selected) {
                     case modes.default:
-                        this.net.transitions.push(new Transition(mouse.svg.getPosition()));
+                        this.net.transitions.push(new Transition(mouse.svg.getMousePosition()));
                         this.update();
                         break;
                     case modes.arcMake:
@@ -299,10 +336,11 @@ export class PNEditor {
                         this.EndInputArc();
                         break;
                     default:
+                        notImplemented();
                 }
             },
             /** returns PNet Position relative to main svg element */
-            getPosition: (): Position => {
+            getMousePosition: (): Position => {
                 const coords = d3.mouse(this.html.selectors.svg.node() as SVGSVGElement);
                 return { x: coords[0], y: coords[1] };
             }
@@ -325,7 +363,7 @@ export class PNEditor {
         transition: {
             onClick: (t: Transition) => {
                 const mouse = this.mouse;
-                switch (mouse.new_mode.selected) {
+                switch (this.mode.selected) {
                     case modes.default:
                         this.mouseStartArc(t);
                         d3.event.stopPropagation();
@@ -340,13 +378,14 @@ export class PNEditor {
                         d3.event.stopPropagation();
                         break;
                     default:
+                        notImplemented();
                 }
             }
         },
         place: {
             onClick: (p: Place) => {
                 const mouse = this.mouse;
-                switch (mouse.new_mode.selected) {
+                switch (this.mode.selected) {
                     case modes.valueEdit:
                     case modes.default:
                         if (p.marking == null) p.marking = 0;
@@ -358,12 +397,14 @@ export class PNEditor {
                         d3.event.stopPropagation();
                         break;
                     case modes.arcMake:
+                        // todo: kontrola na to jeslti už na daný place existuje arc a pokud jo ... (todo: analýza chování)
                         this.mouseEndArc(p);
 
                         d3.event.stopPropagation();
                         this.update();
                         break;
                     default:
+                        notImplemented();
                 }
             }
         },
@@ -372,7 +413,7 @@ export class PNEditor {
                 console.debug("arc-hitbox clicked")
 
                 const mouse = this.mouse;
-                switch (mouse.new_mode.selected) {
+                switch (this.mode.selected) {
                     case modes.valueEdit:
                     case modes.default:
                         this.EndInputMarking();
@@ -382,6 +423,7 @@ export class PNEditor {
                         d3.event.stopPropagation();
                         break;
                     default:
+                        notImplemented();
                 }
             }
         },
@@ -389,7 +431,7 @@ export class PNEditor {
             d3.drag()
                 .on("start", (d) => {
                     console.debug({ startdrag: d });
-                    this.mouse.resetState();
+                    this.mode.resetState();
                 })
                 .on("drag", (d: { position: Position }) => {
                     const evPos = (d3.event as Position);
@@ -400,17 +442,7 @@ export class PNEditor {
                 .on("end", () => { console.debug("enddrag") }),
         helpers: {
             arcMakeHolder: typedNull<Place | Transition>()
-        },
-        resetState: () => {
-            if (this.mouse.new_mode.selected === this.mouse.new_mode.default)
-                return;
-            switch (this.mouse.new_mode.selected) {
-                //todo:
-                default:
-                    break;
-            }
         }
-
     }
 
     /**
@@ -418,10 +450,10 @@ export class PNEditor {
      * @param tp transition or place
      */
     private mouseStartArc(tp: Transition | Place) {
-        this.mouse.new_mode.selected = modes.arcMake;
+        this.mode.selected = modes.arcMake;
         this.mouse.helpers.arcMakeHolder = tp;
 
-        const mousePos = this.mouse.svg.getPosition();
+        const mousePos = this.mouse.svg.getMousePosition();
         this.html.selectors.arcDragLine
             .style("display", null)
             .attr("x1", tp.position.x)
@@ -431,7 +463,7 @@ export class PNEditor {
 
         //todo metody start drag, stop drag
         this.html.selectors.svg.on("mousemove", e => {
-            const mousePos = this.mouse.svg.getPosition();
+            const mousePos = this.mouse.svg.getMousePosition();
             this.html.selectors.arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
@@ -447,7 +479,7 @@ export class PNEditor {
      *  "new" -> creates new Place | Transition to connect
      */
     private mouseEndArc(ending: null | Transition | Place | "new" = null) {
-        this.mouse.new_mode.swap();
+        this.mode.swap();
 
         //todo: nebezpečné, vymyslet alternativu
         this.html.selectors.svg.on("mousemove", null);
@@ -464,7 +496,7 @@ export class PNEditor {
 
         if (ending === "new") {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
-                const addedPlace = this.net.AddPlace(this.mouse.svg.getPosition());
+                const addedPlace = this.net.AddPlace(this.mouse.svg.getMousePosition());
                 this.net.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1);
             } else if (this.mouse.helpers.arcMakeHolder instanceof Place) {
                 //todo place making
@@ -546,13 +578,13 @@ export class PNEditor {
 
     /** open marking edit window for given place*/
     private StartInputArc(a: Arc) {
-        if (this.mouse.new_mode.selected !== modes.valueEdit)
-            this.mouse.new_mode.selected = modes.valueEdit;
+        if (this.mode.selected !== modes.valueEdit)
+            this.mode.selected = modes.valueEdit;
 
         this.keyboard.inputs.arcValue.editedArc = a;
         const inputArc = this.keyboard.inputs.arcValue.selectors;
         inputArc.foreign.style("display", null);
-        const mousePos = this.mouse.svg.getPosition();
+        const mousePos = this.mouse.svg.getMousePosition();
         inputArc.foreign.attr("x", mousePos.x - 20);
         inputArc.foreign.attr("y", mousePos.y - 10);
 
@@ -565,8 +597,8 @@ export class PNEditor {
      * @param save changes propagate to net ?
      */
     private EndInputArc(save: boolean = false) {
-        if (this.mouse.new_mode.selected === modes.valueEdit)
-            this.mouse.new_mode.swap();
+        if (this.mode.selected === modes.valueEdit)
+            this.mode.swap();
         else
             return;
 
@@ -588,8 +620,8 @@ export class PNEditor {
 
     /** open marking edit window for given place*/
     private StartInputMarking(p: Place) {
-        if (this.mouse.new_mode.selected !== modes.valueEdit)
-            this.mouse.new_mode.selected = modes.valueEdit;
+        if (this.mode.selected !== modes.valueEdit)
+            this.mode.selected = modes.valueEdit;
 
         this.keyboard.inputs.marking.editedPlace = p;
         const inputMarking = this.keyboard.inputs.marking.selectors;
@@ -606,8 +638,8 @@ export class PNEditor {
      * @param save changes propagate to net ?
      */
     private EndInputMarking(save: boolean = false) {
-        if (this.mouse.new_mode.selected === modes.valueEdit)
-            this.mouse.new_mode.swap();
+        if (this.mode.selected === modes.valueEdit)
+            this.mode.swap();
         else
             return;
 
@@ -649,44 +681,8 @@ export class PNEditor {
                 .append("div")
                 .style("display", "inline-block")
                 .style("width", "80px")
-                .style("text-align", "center");
-
-
-
-        //#region RunToggle
-        /*
-         
-        const controlbarMainRunToggleDiv = controlbarMain.append("div")
-            .classed("onoffswitch", true)
-            .style("display", "inline-block");
-        
-        controlbarMainRunToggleDiv.append("input")
-            .attr("type", "checkbox")
-            .attr("name", "onoffswitch")
-            .classed("onoffswitch-checkbox", true)
-            .attr("id", "myonoffswitch")
-            .on("change", this.mouse.controlBar.main.runToggle.onChange);
-
-        const controlbarMainRunToggleLabel = controlbarMainRunToggleDiv.append("label")
-            .classed("onoffswitch-label", true)
-            .attr("for", "myonoffswitch");
-
-        controlbarMainRunToggleLabel.append("span")
-            .classed("onoffswitch-inner", true);
-            
-        controlbarMainRunToggleLabel.append("span")
-            .classed("onoffswitch-switch", true);
-            
-        */
-        //#endregion
-        //#endregion
-
-
-        //#region CreateToggle
-
-        const tgl = new Toggle(controlbarBase, "Name");
-        tgl.State = ToggleState.on;
-        tgl.OnToggleChange((TGL) => { console.debug(TGL) });
+                .style("text-align", "center")
+                .text("default");
 
         //#endregion
 
@@ -797,24 +793,6 @@ enum modes {
     run = "run"
 }
 
-
-class test {
-    private _blah: boolean;
-    public get blah(): boolean {
-        console.debug("get");
-        return this._blah;
-    }
-    public set blah(val: boolean) {
-        console.debug("set");
-        this._blah = val;
-    }
-
-    constructor() {
-        const a = this.blah = true;
-        console.debug("end");
-    }
-}
-
 enum ToggleState { on = "on", off = "off", hidden = "hidden" }
 class Toggle {
 
@@ -879,9 +857,11 @@ class Toggle {
             .on("change", () => {
                 this.State = this.checkboxSelector.property("checked") === true ? ToggleState.on : ToggleState.off;
             })
-            .property("checked", false);;
+            .property("checked", false);
+
         baseSelector
             .append("text")
             .text(this.name);
+        this.State = ToggleState.off;
     }
 }

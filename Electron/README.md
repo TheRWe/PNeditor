@@ -11,6 +11,7 @@
 
 ## TODO
 
+  - [ ] show hitboxes
   - [ ] Vykreslování abstrakce
     - [ ] [Definice API](#vykreslovani-modelu)
     - [ ] Implementace
@@ -37,11 +38,10 @@
     - [ ] Tlaèítko(foreign) pro otoèení arc
     - [ ] Obojsmìrné transformace (GUI tlaèítko umožnující zobrazit druhý textbox)
     - [ ] Scan arcs
- 
   - [ ] [Analýza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
     - [ ] Implementace
       - [ ] Nejdøíve pouze checkboxy
-      - [ ] Toggles speciální (toggle button/switch CSS)
+      - [ ] Toggles [speciální](https://proto.io/freebies/onoff/) (toggle button/switch CSS)
       - [ ] zakázat odkazování na skryté toggle
       - [ ] Pøidání možnosti uživatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uživatelskou editaci)
@@ -58,8 +58,9 @@ každý element sítì tvoøený pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
   - Rùzné možnosti ukládání
     - Pouze pomocí transitions
     - Se subsítìmi ve stejném souboru/v rùzných souborech
-  - [ ] Možnost editování textovì (stromu/JSON/vlastní formát ...) 
+  - [ ] Možnost editování textovì (stromu/JSON/vlastní formát ...)
 bìhem zobrazovaní zmìn do editoru(**vyžaduje [Automatické pozice](#autopos)**)
+  - [ ] Spojování places/Transitions dragem
 
 
 
