@@ -54,6 +54,8 @@ kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
     - [ ] základní Implementace subsítí [IN/OUT/SCAN](#IOC) (funguje jako transformace - jeden vstup, jeden vıstup, jeden scan (scan = pøeètení jestli hodnota splòuje poèet bez odebrání)) 
     - [ ] pokroèílé sítì - "pojmenované IOS+Combined transformace" pak budou vaznaèené labely nebo znaèkami(obojí?)
     - [ ] Pravidla pro vstupy a vıstupy(nemusí bıt vùbec sub-sí pouze má definované chovaní)
+  - [ ] Scoping (promìnné pro transition... - rùzné reimy jedné sítì)
+    - [ ] Analıza
   - [ ] Distributed run
   - Rùzné monosti ukládání
     - Pouze pomocí transitions
@@ -61,6 +63,7 @@ kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
   - [ ] Monost editování textovì (stromu/JSON/vlastní formát ...)
 bìhem zobrazovaní zmìn do editoru(**vyaduje [Automatické pozice](#autopos)**)
   - [ ] Spojování places/Transitions dragem
+  - [ ] sníit citlivost dragu
 
 
 

@@ -175,6 +175,8 @@ export class PNEditor {
                 .each(fixNullPosition)
                 .append("rect")
                 .on("click", this.mouse.transition.onClick)
+                .on("contextmenu", this.mouse.transition.onRightClick)
+                .on("wheel", () => { console.debug(["wheel", d3.event.deltaY]); })
                 .style("fill", rgb(0, 0, 0).hex())
                 .attr("width", 20)
                 .attr("height", 20)
@@ -249,7 +251,7 @@ export class PNEditor {
         const html = this.html;
 
         setTimeout(() => {
-            const runtgl = new Toggle(this.html.selectors.controlBar.div, "Run");
+            const runtgl = this.mode.toggles.run = new Toggle(this.html.selectors.controlBar.div, "Run");
             runtgl.OnToggleChange((tlg) => {
                 const state = tlg.State;
                 if (state === ToggleState.on) {
@@ -277,10 +279,14 @@ export class PNEditor {
             public get last(): modes { return this._last; }
             public swap(): void { this.selected = this.last; }
 
+            public toggles = { run: typedNull<Toggle>() };
+
             // used to cancel all undone actions
             public resetState() {
+                // todo: toggles.run ? 
                 if (this.selected === this.default)
                     return;
+
                 switch (this.selected) {
                     case modes.arcMake:
                         editor.mouseEndArc();
@@ -290,6 +296,8 @@ export class PNEditor {
                         console.warn("implement");
                         break;
                 }
+                if (this.toggles.run.State == ToggleState.on)
+                    editor.mode.selected = modes.run;
             }
         };
     })()
@@ -320,6 +328,7 @@ export class PNEditor {
         //todo: oddělat new_
         svg: {
             onClick: () => {
+                console.debug("svg clicked");
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case modes.default:
@@ -362,6 +371,7 @@ export class PNEditor {
         },
         transition: {
             onClick: (t: Transition) => {
+                console.debug("transition clicked");
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case modes.default:
@@ -380,11 +390,18 @@ export class PNEditor {
                     default:
                         notImplemented();
                 }
+            },
+            onRightClick: (t: Transition) => {
+                console.debug("transition right click");
+                switch (this.mode.selected) {
+                    default:
+                        notImplemented();
+                }
             }
         },
         place: {
             onClick: (p: Place) => {
-                const mouse = this.mouse;
+                console.debug("place click");
                 switch (this.mode.selected) {
                     case modes.valueEdit:
                     case modes.default:
@@ -410,7 +427,7 @@ export class PNEditor {
         },
         arc: {
             onClickHitbox: (a: Arc) => {
-                console.debug("arc-hitbox clicked")
+                console.debug("arc clicked");
 
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
@@ -431,13 +448,18 @@ export class PNEditor {
             d3.drag()
                 .on("start", (d) => {
                     console.debug({ startdrag: d });
-                    this.mode.resetState();
                 })
                 .on("drag", (d: { position: Position }) => {
                     const evPos = (d3.event as Position);
-                    d.position.x = evPos.x;
-                    d.position.y = evPos.y;
-                    this.update();
+                    switch (this.mode.selected) {
+                        case modes.default:
+                            d.position.x = evPos.x;
+                            d.position.y = evPos.y;
+                            this.update();
+                            break;
+                        default:
+                            notImplemented();
+                    }
                 })
                 .on("end", () => { console.debug("enddrag") }),
         helpers: {
