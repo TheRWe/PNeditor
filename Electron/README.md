@@ -11,6 +11,7 @@
 
 ## TODO
 
+  - [ ] analýza rozdìlení kódu do souborù
   - [ ] show hitboxes
   - [ ] Vykreslování abstrakce
     - [ ] [Definice API](#vykreslovani-modelu)
@@ -26,7 +27,7 @@
   - [ ] [Context menu](#Context-menu)
   - [ ] Drag
     - [x] Posouvání jednolivých objektù
-    - [ ] Závislost dragování na mousemode
+    - [x] Závislost dragování na mousemode
     - [ ] Selekce v svg více objektù
     - [ ] Posouvání více vybraných objektù
   - [ ] [Multiple selection](#Selections)

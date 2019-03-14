@@ -118,9 +118,24 @@ export class PNEditor {
 
     //#region Update
 
-    // todo classed všechny možné definice budou v css
-    /** apply changes in data to DOM */
+    private updating = false;
+    /** schedule redraw function for next animation frame */
     private update() {
+        if (this.updating)
+            return;
+        this.updating = true;
+        requestAnimationFrame((() => {
+            try {
+                this._update();
+            } finally {
+                this.updating = false;
+            }
+        }).bind(this));
+    }
+
+    // todo classed všechny možné definice budou v css
+    /** immediately apply changes in data to DOM */
+    private _update() {
         const net = this.net;
 
         console.debug("%c update", "color: rgb(0, 160, 160)");
@@ -143,6 +158,8 @@ export class PNEditor {
                 .each(fixNullPosition)
                 .append("g")
                 .on("click", this.mouse.place.onClick)
+                .on("contextmenu", this.mouse.place.onRightClick)
+                .on("wheel", this.mouse.place.onWheel)
                 .classed(this.html.names.classes.place.g, true);
         (placesEnterGroup as any).call(this.mouse.dragPositionMove);
         const placesEnterCircle =
@@ -176,12 +193,13 @@ export class PNEditor {
                 .append("rect")
                 .on("click", this.mouse.transition.onClick)
                 .on("contextmenu", this.mouse.transition.onRightClick)
-                .on("wheel", () => { console.debug(["wheel", d3.event.deltaY]); })
+                .on("wheel", this.mouse.transition.onWheel)
                 .style("fill", rgb(0, 0, 0).hex())
                 .attr("width", 20)
                 .attr("height", 20)
                 .attr("x", -10)
                 .attr("y", -10);
+        // todo: any ?
         (transitionEnterRect as any).call(this.mouse.dragPositionMove);
         transitions()
             .attr("x", function (t: Transition) { return t.position.x - 10; })
@@ -203,7 +221,10 @@ export class PNEditor {
             .style("stroke", "black")
             .attr("opacity", "0")
             .style("stroke-width", 8)
-            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
+            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc))
+            .on("contextmenu", (x) => this.mouse.arc.onRightClick(x.arc))
+            .on("wheel", (x) => this.mouse.arc.onWheel(x.arc));
+
 
         enterArc
             .append("text")
@@ -291,6 +312,10 @@ export class PNEditor {
                     case modes.arcMake:
                         editor.mouseEndArc();
                         break;
+                    case modes.valueEdit:
+                        editor.EndInputArc(false);
+                        editor.EndInputMarking(false);
+                        break;
                     // todo: implement state reset
                     default:
                         console.warn("implement");
@@ -302,7 +327,7 @@ export class PNEditor {
         };
     })()
 
-	//#endregion
+    //#endregion
 
 
     //#region Mouse
@@ -340,9 +365,10 @@ export class PNEditor {
                         this.update();
                         break;
                     case modes.valueEdit:
-                        //todo: bude uloženo v settings
-                        this.EndInputMarking();
-                        this.EndInputArc();
+                        //todo: bude uloženo v settings jestli má dojít k uložení nebo resetu
+                        //this.EndInputMarking();
+                        //this.EndInputArc();
+                        this.mode.resetState();
                         break;
                     default:
                         notImplemented();
@@ -397,6 +423,15 @@ export class PNEditor {
                     default:
                         notImplemented();
                 }
+            },
+            onWheel: (t: Transition) => {
+                const e = d3.event;
+                //console.debug("transition wheel");
+                var deltaY = e.deltaY;
+                switch (this.mode.selected) {
+                    default:
+                        notImplemented();
+                }
             }
         },
         place: {
@@ -423,6 +458,32 @@ export class PNEditor {
                     default:
                         notImplemented();
                 }
+            },
+            onRightClick: (p: Place) => {
+                console.debug("place right click");
+                switch (this.mode.selected) {
+                    default:
+                        notImplemented();
+                }
+            },
+            onWheel: (p: Place) => {
+                const e = d3.event;
+                console.debug("place wheel");
+                var deltaY = e.deltaY;
+                switch (this.mode.selected) {
+                    case modes.default:
+                        if (deltaY < 0) {
+                            p.marking++;
+                            this.update();
+                        } else if (p.marking > 0) {
+                            p.marking--;
+                            this.update();
+                        }
+                        
+                        break;
+                    default:
+                        notImplemented();
+                }
             }
         },
         arc: {
@@ -442,6 +503,38 @@ export class PNEditor {
                     default:
                         notImplemented();
                 }
+            },
+            onRightClick: (a: Arc) => {
+                console.debug("arc right click");
+                switch (this.mode.selected) {
+                    default:
+                        notImplemented();
+                }
+            },
+            onWheel: (a: Arc) => {
+                const e = d3.event;
+                console.debug("arc wheel");
+                var deltaY = e.deltaY;
+                switch (this.mode.selected) {
+                    case modes.default:
+                        if (deltaY < 0) {
+                            a.qty++;
+                        } else {
+                            a.qty--;
+                        }
+
+                        if (a.qty === 0) {
+                            if (deltaY < 0) {
+                                a.qty++;
+                            } else {
+                                a.qty--;
+                            }
+                        }
+                        break;
+                    default:
+                        notImplemented();
+                }
+                this.update();
             }
         },
         dragPositionMove:
@@ -524,8 +617,7 @@ export class PNEditor {
                 //todo place making
                 console.error("make transition");
             }
-        }
-        else if (ending instanceof Place) {
+        } else if (ending instanceof Place) {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
                 console.debug("connecting place")
                 this.net.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1);
@@ -533,8 +625,7 @@ export class PNEditor {
                 //todo: hlaška nebo vyrvoření place mezi dvěma transitions
                 console.error("can't connect two transitions");
             }
-        }
-        else {
+        } else {
             //todo: propojování
             console.error("connect");
         }
@@ -847,7 +938,7 @@ class Toggle {
     }
 
     // todo: lepší řešení spojování funkcí
-    private _toggleChangedHandler = (obj: Toggle) => {};
+    private _toggleChangedHandler = (obj: Toggle) => { };
     public OnToggleChange(handler: (obj: Toggle) => void): void {
         const prevHandler = this._toggleChangedHandler;
         this._toggleChangedHandler = (obj: Toggle) => {
