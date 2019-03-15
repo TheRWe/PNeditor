@@ -6,17 +6,57 @@ export class PNet implements DataModel<JSONNet> {
     public transitions: Transition[];
     public arcs: Arc[];
 
+    //#region History
+
+    private netHistory: JSONNet[] = [];
+    private netHistoryIndex = -1;
+
+    private setHistory() {
+        console.debug({ a: this.netHistory, i: this.netHistoryIndex });
+        this.fromJSON(this.netHistory[this.netHistoryIndex]);
+    }
+
+    public AddHist() {
+        this.netHistoryIndex++;
+        this.netHistory[this.netHistoryIndex] = this.toJSON();
+        this.netHistory = this.netHistory.slice(0, this.netHistoryIndex + 1);
+    }
+
+    public Redo() {
+        if (!(this.netHistoryIndex + 1 < this.netHistory.length))
+            return;
+        this.netHistoryIndex++;
+        this.setHistory();
+    }
+
+    public Undo() {
+        if (this.netHistoryIndex <= 0)
+            return;
+        this.netHistoryIndex--;
+        this.setHistory();
+    }
+
+	//#endregion
+
 
     //#region Edit Modifications
 
     public AddPlace(pos: Position, name: string = null): Place {
         const place = new Place(name, pos);
         this.places.push(place);
+        this.AddHist();
         return place;
     }
 
     public AddArc(t: Transition, p: Place, qty: number) {
+        console.debug({ t, p });
         this.arcs.push(new Arc(t, p, qty));
+        this.AddHist();
+    }
+
+    public AddTransition(pos: Position) {
+        this.transitions.push(new Transition(pos));
+        this.AddHist();
     }
 
     //#endregion
@@ -69,13 +109,13 @@ export class PNet implements DataModel<JSONNet> {
         // todo: možnost ukládat pouze name bez id pokud je name unikátní
         // todo: kontrola že se name neukládá pokud je "" | null | undefined
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
-            = this.places.map(p => { return { name: p.name, id: p.id, position: p.position, marking: p.marking }; });
+            = this.places.map(p => { return { name: p.name, id: p.id, position: { ...p.position }, marking: p.marking }; });
 
         const savedMarkings: { place_id: number, marking: number }[]
             = this.savedMarkings.map(m => { return { place_id: m.place.id, marking: m.marking }; });
 
         const transitions: { position?: Position, id: number }[]
-            = this.transitions.map(t => { return { position: t.position, id: t.id } });
+            = this.transitions.map(t => { return { position: { ...t.position }, id: t.id } });
 
         const arcs: { place_id: number, transition_id: number, qty: number }[]
             = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, qty: a.qty }; });
@@ -95,7 +135,7 @@ export class PNet implements DataModel<JSONNet> {
             return t;
         })
 
-        const arcs = json.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.place_id), places.find(p => p.id === aj.place_id), aj.qty));
+        const arcs = json.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.transition_id), places.find(p => p.id === aj.place_id), aj.qty));
 
         const savedMarkings: { place: Place, marking: number }[] = json.savedMarkings.map(smj => {
             return { place: places.find(p => p.id === smj.place_id), marking: smj.marking };
@@ -122,8 +162,12 @@ export class Transition {
 
     constructor(position: Position | null = null, id?: number) {
         this.position = position;
-        if (id)
-            this.id = id
+
+        if (id) {
+            this.id = id;
+            if (id >= Transition.idMaker)
+                Transition.idMaker = id + 1;
+        }
         else
             this.id = Transition.idMaker++;
     }
@@ -143,8 +187,11 @@ export class Place {
         this.position = position;
         this.marking = marking;
 
-        if (id)
-            this.id = id
+        if (id) {
+            this.id = id;
+            if (id >= Place.idMaker)
+                Place.idMaker = id + 1;
+        }
         else
             this.id = Place.idMaker++;
     }

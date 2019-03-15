@@ -17,14 +17,20 @@
     - [ ] [Definice API](#vykreslovani-modelu)
     - [ ] Implementace
   - [ ] Historie zmìn
-    - [ ] PNet umoòuje serializaci a deserializaci
-      - [ ] univerzální api pro serializaci a deserializaci
-    - [ ] Undo/Redo
+    - [x] Undo/Redo
     - [ ] Vıpis všech zmìn
+      - [ ] Diference (zmìny v síti)
+      - [ ] PNet umoòuje serializaci a deserializaci diferencí
       - [ ] Speciální vıpis -> vyfiltruje postup tak e bude pouze pøidávání a názvy
+    - [ ] Koleèko grupování
     - [ ] Tlaèítka + Zkratky(controlbar-main)
+    - [ ] Monost uloit sí s historií zmìn
   - [ ] Property bar
   - [ ] [Context menu](#Context-menu)
+    - [ ] Analıza
+    - [ ] Round menu
+  - [ ] Grid
+    - [ ] Combobox (velikosti gridu/zapínání vypínání)
   - [ ] Drag
     - [x] Posouvání jednolivıch objektù
     - [x] Závislost dragování na mousemode
@@ -35,6 +41,7 @@
     - [ ] Kopírování vıbìru
     - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
   - [ ] Taby pro jednotlivé sítì
+    - [ ] zkratky (ctrl+tab/ctrl+shift+tab)
   - [ ] Tranformace featury
     - [ ] Tlaèítko(foreign) pro otoèení arc
     - [ ] Obojsmìrné transformace (GUI tlaèítko umonující zobrazit druhı textbox)
@@ -58,6 +65,9 @@ kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
   - [ ] Scoping (promìnné pro transition... - rùzné reimy jedné sítì)
     - [ ] Analıza
   - [ ] Distributed run
+  - [ ] Ovládání pouze klávesnicí
+    - [ ] Analıza
+    - [ ] Implementace zkratek / focus / add / move ...(rozepsat)
   - Rùzné monosti ukládání
     - Pouze pomocí transitions
     - Se subsítìmi ve stejném souboru/v rùznıch souborech
@@ -72,6 +82,8 @@ bìhem zobrazovaní zmìn do editoru(**vyaduje [Automatické pozice](#autopos)**)
 
 **všechny algoritmy(analızy/úpravy/generování) budou funcionální** (pøedá se jim kopie sítì nebo èásti a vrátí hodnotu se kterou se pak dál pracuje)
 Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
+  
+  - [ ] Zobrazovaní invariantu vybarvováním obvodu (place/transition/arc)
   - [ ] vısledky algoritmù budou ukládané do zmìn sítì(pøi návratu zpìt není potøeba algoritmus znova spouštìt)
     - [ ] Algoritmy budou mít metadata vıpoètu ... Napø. jak dlouho trval vıpoèet(pro uvolnìní místa v pamìti v pøípadì potøeby, moné vybírat prioritnì vıpoèty které byly rychlé ... Moné taky vytváøet statistiky vıpoètu) atd... 
     - [ ] Pokud dojde ke zmìnì algoritmu, smaou se všechny cache

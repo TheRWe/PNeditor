@@ -5,8 +5,7 @@ import * as path from 'path';
 let mainWindow: BrowserWindow;
 const debug: boolean = true;
 
-function createWindow()
-{
+function createWindow() {
     //todo: může být frameless window
     mainWindow = new BrowserWindow({
         width: 1200, height: 900,
@@ -16,8 +15,7 @@ function createWindow()
     mainWindow.loadFile('index.html');
 
 
-    mainWindow.on('closed', function ()
-    {
+    mainWindow.on('closed', function () {
         // delete reference for not used object
         mainWindow = null;
         // close app when mainWindow closes
@@ -42,8 +40,7 @@ function createWindow()
                 },
                 {
                     label: "load PNet",
-                    click: () =>
-                    {
+                    click: () => {
                         const dialogOprions: Electron.OpenDialogOptions = {
                             title: 'Select PNet to LOAD',
                             // todo: více možností pro user data dle nastavení
@@ -99,7 +96,8 @@ function createWindow()
                                 label: "save",
                                 click: () => {
                                     mainWindow.webContents.send("quick-save PNet");
-                                } }
+                                }
+                            }
                         ]
                 },
                 {
@@ -107,6 +105,25 @@ function createWindow()
                     accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                     click: () => {
                         app.quit();
+                    }
+                },
+            ]
+        },
+        {
+            label: "Net",
+            submenu: [
+                {
+                    label: "Undo",
+                    accelerator: 'Ctrl+Z',
+                    click: () => {
+                        mainWindow.webContents.send("undo Net", {});
+                    }
+                },
+                {
+                    label: "Redo",
+                    accelerator: 'Ctrl+Shift+Z',
+                    click: () => {
+                        mainWindow.webContents.send("redo Net", {});
                     }
                 },
             ]
@@ -122,8 +139,7 @@ function createWindow()
                 {
                     label: "DevTools",
                     accelerator: "F12",
-                    click: () =>
-                    {
+                    click: () => {
                         mainWindow.webContents.toggleDevTools();
                     }
                 }
@@ -138,15 +154,13 @@ function createWindow()
 
 app.on('ready', createWindow);
 
-app.on('window-all-closed', () =>
-{
+app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
-app.on('activate', () =>
-{
+app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
     }

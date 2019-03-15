@@ -161,7 +161,7 @@ export class PNEditor {
                 .on("contextmenu", this.mouse.place.onRightClick)
                 .on("wheel", this.mouse.place.onWheel)
                 .classed(this.html.names.classes.place.g, true);
-        (placesEnterGroup as any).call(this.mouse.dragPositionMove);
+        (placesEnterGroup as any).call(this.mouse.onDragPositionMove);
         const placesEnterCircle =
             placesEnterGroup.append("circle")
                 .style("fill", rgb(255, 255, 255).hex())
@@ -200,7 +200,7 @@ export class PNEditor {
                 .attr("x", -10)
                 .attr("y", -10);
         // todo: any ?
-        (transitionEnterRect as any).call(this.mouse.dragPositionMove);
+        (transitionEnterRect as any).call(this.mouse.onDragPositionMove);
         transitions()
             .attr("x", function (t: Transition) { return t.position.x - 10; })
             .attr("y", function (t: Transition) { return t.position.y - 10; })
@@ -357,7 +357,7 @@ export class PNEditor {
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case modes.default:
-                        this.net.transitions.push(new Transition(mouse.svg.getMousePosition()));
+                        this.net.AddTransition(mouse.svg.getMousePosition());
                         this.update();
                         break;
                     case modes.arcMake:
@@ -479,7 +479,7 @@ export class PNEditor {
                             p.marking--;
                             this.update();
                         }
-                        
+
                         break;
                     default:
                         notImplemented();
@@ -537,24 +537,45 @@ export class PNEditor {
                 this.update();
             }
         },
-        dragPositionMove:
-            d3.drag()
-                .on("start", (d) => {
-                    console.debug({ startdrag: d });
-                })
-                .on("drag", (d: { position: Position }) => {
-                    const evPos = (d3.event as Position);
-                    switch (this.mode.selected) {
-                        case modes.default:
-                            d.position.x = evPos.x;
-                            d.position.y = evPos.y;
+        onDragPositionMove:
+            (() => {
+                const distance = 8;
+
+                var posStart: Position = null;
+                return d3.drag()
+                    .clickDistance(distance)
+                    .on("start", (d: { position: Position }) => {
+                        console.debug({ startdrag: d });
+                        posStart = { ...d.position };
+                    })
+                    .on("drag", (d: { position: Position }) => {
+                        const evPos = (d3.event as Position);
+                        switch (this.mode.selected) {
+                            case modes.default:
+                                d.position.x = evPos.x;
+                                d.position.y = evPos.y;
+                                this.update();
+                                break;
+                            default:
+                                notImplemented();
+                        }
+                    })
+                    .on("end", (d: { position: Position }) => {
+                        const dx = d.position.x - posStart.x;
+                        const dy = d.position.y - posStart.y;
+
+                        if (dx * dx + dy * dy > distance * distance) {
+                            console.debug("enddrag");
+                            this.net.AddHist();
+                        } else {
+                            console.debug("canceldrag");
+                            d.position.x = posStart.x;
+                            d.position.y = posStart.y;
                             this.update();
-                            break;
-                        default:
-                            notImplemented();
-                    }
-                })
-                .on("end", () => { console.debug("enddrag") }),
+                        }
+                        posStart = null;
+                    })
+            })(),
         helpers: {
             arcMakeHolder: typedNull<Place | Transition>()
         }
@@ -689,6 +710,16 @@ export class PNEditor {
         }
     }
 
+    public Undo() {
+        this.net.Undo();
+        this.update();
+    }
+
+    public Redo() {
+        this.net.Redo();
+        this.update();
+    }
+
     /** open marking edit window for given place*/
     private StartInputArc(a: Arc) {
         if (this.mode.selected !== modes.valueEdit)
@@ -726,6 +757,7 @@ export class PNEditor {
         if (save) {
             let val = +(inputArc.input.node() as any).value;
             this.keyboard.inputs.arcValue.editedArc.qty = val;
+            this.net.AddHist();
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
@@ -756,10 +788,11 @@ export class PNEditor {
         else
             return;
 
-        //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
-        //      zobrazený pouze zástupný znak a hodnota bude v seznamu
-        //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
+        // todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
+        //       zobrazený pouze zástupný znak a hodnota bude v seznamu
+        // todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
         const inputMarking = this.keyboard.inputs.marking.selectors;
+
         inputMarking.foreign.style("display", "none");
         inputMarking.foreign.attr("x", null);
         inputMarking.foreign.attr("y", null);
@@ -767,6 +800,7 @@ export class PNEditor {
         if (save) {
             let val = +(inputMarking.input.node() as any).value;
             this.keyboard.inputs.marking.editedPlace.marking = val;
+            this.net.AddHist();
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
@@ -892,6 +926,8 @@ export class PNEditor {
             this.net = new PNet();
             this.update();
         }
+
+        console.debug(this);
     }
 
     //#endregion
