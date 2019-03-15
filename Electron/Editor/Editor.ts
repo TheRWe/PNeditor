@@ -324,21 +324,6 @@ export class PNEditor {
         const editor = this;
         const html = this.html;
 
-        setTimeout(() => {
-            console.debug(["runtglinit"]);
-            const runtgl = this.mode.toggles.run = new Toggle(this.html.selectors.controlBar.div, "Run");
-            runtgl.OnToggleChange((tlg) => {
-                const state = tlg.State;
-                if (state === ToggleState.on) {
-                    editor.mode.resetState();
-                    editor.mode.selected = modes.run;
-                } else {
-                    editor.mode.resetState();
-                    editor.mode.selected = modes.default;
-                }
-            });
-        }, 0);
-
         return new class {
             public readonly default: modes = modes.default;
             private _last: modes = modes.default;
@@ -885,6 +870,19 @@ export class PNEditor {
                 .style("text-align", "center")
                 .style("user-select", "none")
                 .text("default");
+
+        const runtgl = this.mode.toggles.run = new Toggle(this.html.selectors.controlBar.div, "Run");
+        runtgl.OnToggleChange((tlg) => {
+            const state = tlg.State;
+            if (state === ToggleState.on) {
+                this.mode.resetState();
+                // todo: ipmlementované v reset state a bude volat jen to
+                this.mode.selected = modes.run;
+            } else {
+                this.mode.resetState();
+                this.mode.selected = modes.default;
+            }
+        });
 
         //#endregion
 

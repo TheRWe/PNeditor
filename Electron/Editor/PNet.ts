@@ -92,6 +92,7 @@ export class PNet implements DataModel<JSONNet> {
         if (!this.IsTransitionEnabled(transition))
             return false;
         this.getArcesOfTransition(transition).forEach(a => { a.place.marking += a.qty });
+        this.AddHist();
         return true;
     }
 
