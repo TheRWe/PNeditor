@@ -41,11 +41,21 @@
     - [ ] Kopírování vıbìru
     - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
   - [ ] Taby pro jednotlivé sítì
-    - [ ] zkratky (ctrl+tab/ctrl+shift+tab)
+    - [x] Implementace
+    - [ ] Zkratky (ctrl+tab/ctrl+shift+tab)
+    - [ ] Scroll/zobrazení listu dolù tlaèítkem (pøi zaplnìní obrazovky)
+    - [ ] Prohazování tabù taením(drag)
+    - [ ] Køíek pro zavøení
+      - [ ] monost skrytí všech køíkù
+    - [ ] Delší najetí zobrazí property sítì
+    - [ ] Vloení sítì z tabu do aktuálnì otevøeného tabu jako subsí
   - [ ] Tranformace featury
     - [ ] Tlaèítko(foreign) pro otoèení arc
     - [ ] Obojsmìrné transformace (GUI tlaèítko umonující zobrazit druhı textbox)
     - [ ] Scan arcs
+  - [ ] Barevné schémata
+    - [ ] vybrat tøi rùzné barevné schémata
+    - [ ] nastavitelné barvy
   - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
     - [ ] Implementace
       - [ ] Nejdøíve pouze checkboxy
@@ -75,6 +85,8 @@ kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kte
 bìhem zobrazovaní zmìn do editoru(**vyaduje [Automatické pozice](#autopos)**)
   - [ ] Spojování places/Transitions dragem
   - [ ] sníit citlivost dragu
+  - [ ] multiwindow editor ?
+  - [ ] Projektové soubory
 
 
 

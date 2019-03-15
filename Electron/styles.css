@@ -30,3 +30,21 @@ body {
     -webkit-touch-callout: none;
     user-select: none;
 }
+
+
+/* tabs */
+
+.checkbox-tab-radio {
+    display: none;
+}
+/* label */
+.checkbox-tab-radio + label {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.checkbox-tab-radio:checked + label {
+    background-color: darkolivegreen;
+    color: white;
+}

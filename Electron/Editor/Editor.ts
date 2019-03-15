@@ -8,12 +8,16 @@ import * as file from 'fs';
 import { setTimeout } from 'timers';
 
 type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+type FilePath = string | number | Buffer | URL;
 
 function notImplemented() { throw Error("not implemented"); }
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
-    private net: PNet;
+    private get net(): PNet {
+        const tabs = this.tabs;
+        return tabs.nets[tabs.selected].net;
+    };
 
 
     //#region File
@@ -26,7 +30,7 @@ export class PNEditor {
     public AutoLoad(): boolean { return this.Load(this.autoSavePath); }
 
     /** Saves current net to given path */
-    public Save(path: string | number | Buffer | URL): boolean {
+    public Save(path: FilePath): boolean {
         const stringJSON = this.net.toJSON();
         console.debug(stringJSON);
         try {
@@ -40,7 +44,7 @@ export class PNEditor {
     }
 
     /** load net from given path */
-    public Load(path: string | number | Buffer | URL): boolean {
+    public Load(path: FilePath): boolean {
         let objString: string;
         try {
             objString = file.readFileSync(path, { encoding: "utf8" });
@@ -49,7 +53,8 @@ export class PNEditor {
 
             // todo: lepším způsobem zaručit animace(bez NewNet)
             this.NewNet();
-            this.net = net;
+            this.tabs.AddTab(net, "todo path");
+            //this.net = net;
 
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
             console.log(this.net);
@@ -64,7 +69,7 @@ export class PNEditor {
 
     // todo: záložky ?
     public NewNet() {
-        this.net = new PNet();
+        this.tabs.AddTab(new PNet(), "impl");
         this.update();
     }
 
@@ -79,6 +84,8 @@ export class PNEditor {
         selectors: {
             /** main div element */
             div: typedNull<d3BaseSelector>(),
+            /** tabs div element */
+            tabs: typedNull<d3BaseSelector>(),
             /** svg PN view */
             svg: typedNull<d3BaseSelector>(),
             /** control buttons - holders */
@@ -116,7 +123,7 @@ export class PNEditor {
     //#endregion
 
 
-    //#region Update
+    //#region Graphics
 
     private updating = false;
     /** schedule redraw function for next animation frame */
@@ -262,6 +269,52 @@ export class PNEditor {
         transitions().exit().remove();
     }
 
+    private readonly tabs = {
+        nets: [] as { net: PNet, file: string | null }[],
+        selected: -1,
+
+        AddTab: (net: PNet, file: string | null) => {
+            this.tabs.nets.push({ net, file });
+            this.tabs.selected = this.tabs.nets.length - 1;
+
+            const selector = () => {
+                return this.html.selectors.tabs
+                    .selectAll("li")
+                    .data(this.tabs.nets);
+            }
+
+            const liEnter = selector().enter().append("li")
+                .style("float", "left")
+                .style("list-style-type", "none");
+
+            const radioEnter = liEnter.append("input")
+                .attr("type", "radio")
+                .attr("name", "tab-net")
+                .attr("id", (d, i) => `tab-${i}`)
+                .classed("checkbox-tab-radio", true)
+                .style("margin", "0")
+                .on("change", (d, i) => {
+                    this.tabs.selected = i;
+                    this.update();
+                });
+
+            const labelEnter = liEnter.append("label")
+                .attr("for", (d, i) => `tab-${i}`)
+                .style("padding", "8px")
+                .style("user-select", "none")
+
+            const li = selector()
+                .select("label")
+                .text(x => x.file)
+
+            const radio = selector()
+                .select("input")
+                .property("checked", (x, i) => i === this.tabs.selected)
+
+            this.update();
+        }
+    }
+
     //#endregion
 
 
@@ -272,6 +325,7 @@ export class PNEditor {
         const html = this.html;
 
         setTimeout(() => {
+            console.debug(["runtglinit"]);
             const runtgl = this.mode.toggles.run = new Toggle(this.html.selectors.controlBar.div, "Run");
             runtgl.OnToggleChange((tlg) => {
                 const state = tlg.State;
@@ -829,10 +883,15 @@ export class PNEditor {
                 .style("display", "inline-block")
                 .style("width", "80px")
                 .style("text-align", "center")
+                .style("user-select", "none")
                 .text("default");
 
         //#endregion
 
+
+        this.html.selectors.tabs = divElement.append("ul").style("padding", 0);
+
+        // todo: load all nets
 
         //#region Initialize SVG-HTML
 
@@ -923,7 +982,7 @@ export class PNEditor {
 
 
         if (!this.AutoLoad()) {
-            this.net = new PNet();
+            this.tabs.AddTab(new PNet(), "implement - unnamed");
             this.update();
         }
 
