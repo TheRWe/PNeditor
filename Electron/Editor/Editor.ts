@@ -52,7 +52,6 @@ export class PNEditor {
             const net = (new PNet()).fromJSON(jsonNet);
 
             // todo: lepším způsobem zaručit animace(bez NewNet)
-            this.NewNet();
             this.tabs.AddTab(net, "todo path");
             //this.net = net;
 
@@ -277,6 +276,16 @@ export class PNEditor {
             this.tabs.nets.push({ net, file });
             this.tabs.selected = this.tabs.nets.length - 1;
 
+            this.tabs.Update();
+        },
+        CloseTab: (index: number) => {
+            this.tabs.nets.splice(index, 1);
+            if (this.tabs.selected > this.tabs.nets.length - 1)
+                this.tabs.selected = this.tabs.nets.length - 1;
+
+            this.tabs.Update();
+        },
+        Update: () => {
             const selector = () => {
                 return this.html.selectors.tabs
                     .selectAll("li")
@@ -286,7 +295,7 @@ export class PNEditor {
             const liEnter = selector().enter().append("li")
                 .style("float", "left")
                 .style("list-style-type", "none");
-
+            
             const radioEnter = liEnter.append("input")
                 .attr("type", "radio")
                 .attr("name", "tab-net")
@@ -302,14 +311,31 @@ export class PNEditor {
                 .attr("for", (d, i) => `tab-${i}`)
                 .style("padding", "8px")
                 .style("user-select", "none")
+                .style("display", "inline-block");
+
+            // todo: static length ?
+            const labelDivEnter = labelEnter.append("div")
+                .style("all", "unset");
+
+            const buttonEnter = labelEnter.append("button")
+                .attr("type", "button")
+                .on("click", (d, i) => { this.tabs.CloseTab(i); })
+                .style("border", "0")
+                .style("border-style", "none")
+                .style("background", "none")
+                .style("color", "white")
+                .text("X");
+
 
             const li = selector()
-                .select("label")
-                .text(x => x.file)
+                .select("label div")
+                .text(x => x.file);
 
             const radio = selector()
                 .select("input")
-                .property("checked", (x, i) => i === this.tabs.selected)
+                .property("checked", (x, i) => i === this.tabs.selected);
+
+            selector().exit().remove();
 
             this.update();
         }
@@ -887,9 +913,26 @@ export class PNEditor {
         //#endregion
 
 
-        this.html.selectors.tabs = divElement.append("ul").style("padding", 0);
+        const tabs = this.html.selectors.tabs = divElement.append("ul")
+            .style("padding", 0)
+            .style("clear", "both")
+            .style("display", "inline-block")
+            .style("background", "black")
+            .style("width", "100%")
+            .style("margin", "0");
 
-        // todo: load all nets
+        tabs.append("button")
+            .attr("type", "button")
+            .on("click", () => { this.NewNet(); })
+            .style("border", "0")
+            .style("border-style", "none")
+            .style("background", "none")
+            .style("float", "right")
+            .style("color", "white")
+            .style("font-size", "20px")
+            .style("padding", "5px 9px 5px 9px")
+            .text("+");
+
 
         //#region Initialize SVG-HTML
 
@@ -979,8 +1022,9 @@ export class PNEditor {
         this.InitKeyboardEvents();
 
 
+        // todo: load all nets
         if (!this.AutoLoad()) {
-            this.tabs.AddTab(new PNet(), "implement - unnamed");
+            this.NewNet();
             this.update();
         }
 

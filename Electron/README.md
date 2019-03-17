@@ -42,10 +42,12 @@
     - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
   - [ ] Taby pro jednotlivé sítì
     - [x] Implementace
-    - [ ] Zkratky (ctrl+tab/ctrl+shift+tab)
+    - [ ] Zavøení posledního tabu
+    - [ ] Modal s upozornìním na uloení zmìn
+    - [ ] Zkratky (ctrl+tab/ctrl+shift+tab/ctrl+n/ctrl+w...)
     - [ ] Scroll/zobrazení listu dolù tlaèítkem (pøi zaplnìní obrazovky)
     - [ ] Prohazování tabù taením(drag)
-    - [ ] Køíek pro zavøení
+    - [x] Køíek pro zavøení
       - [ ] monost skrytí všech køíkù
     - [ ] Delší najetí zobrazí property sítì
     - [ ] Vloení sítì z tabu do aktuálnì otevøeného tabu jako subsí
