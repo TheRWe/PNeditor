@@ -22,19 +22,14 @@ export class PNEditor {
 
     //#region File
 
-    // todo: ukládat do app.getPath('userData')
     // todo: implicitní verzování ?
-    public autoSavePath = "autoSavedNet.pnet.json";
-
-    public AutoSave(): boolean { return this.Save(this.autoSavePath); }
-    public AutoLoad(): boolean { return this.Load(this.autoSavePath); }
 
     /** Saves current net to given path */
     public Save(path: FilePath): boolean {
         const stringJSON = this.net.toJSON();
         console.debug(stringJSON);
         try {
-            file.writeFileSync(path, stringJSON, { encoding: "utf8" });
+            file.writeFileSync(path, JSON.stringify(stringJSON, null, 2), { encoding: "utf8" });
         } catch (ex) {
             console.error(ex)
             return false;
@@ -877,7 +872,7 @@ export class PNEditor {
     //#region Constructor
 
     //todo force for nearby objects(disablable in settings)
-    constructor(divElement: d3BaseSelector) {
+    constructor(divElement: d3BaseSelector, loadPath: string = null) {
         this.html.selectors.div = divElement;
 
 
@@ -931,6 +926,7 @@ export class PNEditor {
             .style("color", "white")
             .style("font-size", "20px")
             .style("padding", "5px 9px 5px 9px")
+            .style("user-select", "none")
             .text("+");
 
 
@@ -1023,12 +1019,14 @@ export class PNEditor {
 
 
         // todo: load all nets
-        if (!this.AutoLoad()) {
+        if (loadPath) {
+            this.Load(loadPath);
+        } else {
             this.NewNet();
-            this.update();
         }
 
         console.debug(this);
+        this.update();
     }
 
     //#endregion

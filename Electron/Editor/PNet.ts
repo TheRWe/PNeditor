@@ -161,10 +161,10 @@ export class Transition {
     public readonly id: number;
     private static idMaker = 0;
 
-    constructor(position: Position | null = null, id?: number) {
+    constructor(position: Position | null = null, id: number = -1) {
         this.position = position;
 
-        if (id) {
+        if (id >= 0) {
             this.id = id;
             if (id >= Transition.idMaker)
                 Transition.idMaker = id + 1;
@@ -183,12 +183,12 @@ export class Place {
     public id: number | null;
     private static idMaker = 0;
 
-    constructor(name: string | null = null, position: Position | null = null, marking: number | null = null, id?: number) {
+    constructor(name: string | null = null, position: Position | null = null, marking: number | null = null, id: number = -1) {
         this.name = name;
         this.position = position;
         this.marking = marking;
 
-        if (id) {
+        if (id >= 0) {
             this.id = id;
             if (id >= Place.idMaker)
                 Place.idMaker = id + 1;

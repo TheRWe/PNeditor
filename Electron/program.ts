@@ -1,6 +1,7 @@
 ﻿import { app, BrowserWindow, Menu, dialog } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
+import { messageType } from './Helpers/ProgramEventType';
 
 let mainWindow: BrowserWindow;
 const debug: boolean = true;
@@ -12,6 +13,15 @@ function createWindow() {
         title: 'PetriNetEdit'
     });
 
+    const userDefaultNetSavePath = path.join(app.getPath('userData'), 'User_saved_nets');
+    const userQuickNetSavePath = path.join(userDefaultNetSavePath, 'quicksave.pnet');
+
+    if (!fs.existsSync(userDefaultNetSavePath)) {
+        fs.mkdirSync(userDefaultNetSavePath);
+    }
+
+    (mainWindow as any).custom = { savePath: userQuickNetSavePath };
+
     mainWindow.loadFile('index.html');
 
 
@@ -22,10 +32,6 @@ function createWindow() {
         app.quit();
     });
 
-    const userDefaultNetSavePath = path.join(app.getPath('userData'), 'User_saved_nets')
-    if (!fs.existsSync(userDefaultNetSavePath)) {
-        fs.mkdirSync(userDefaultNetSavePath);
-    }
 
     let mainMenuTemplate: Electron.MenuItemConstructorOptions[] =
         [{
@@ -35,7 +41,7 @@ function createWindow() {
                     label: "new PNet",
                     click: () => {
                         // todo: confirmace, nabídnutí uložení
-                        mainWindow.webContents.send("new PNet");
+                        mainWindow.webContents.send("user-event", { type: messageType.PNetNew, args: {} });
                     }
                 },
                 {
@@ -57,7 +63,8 @@ function createWindow() {
                         };
 
                         const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
-                        mainWindow.webContents.send("load PNet", { path: (dialoRes ? dialoRes[0] : undefined) });
+                        if (dialoRes)
+                            mainWindow.webContents.send("user-event", { type: messageType.PNetLoad, args: { path: dialoRes[0] } });
                     }
                 },
                 {
@@ -78,7 +85,8 @@ function createWindow() {
                         };
 
                         const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
-                        mainWindow.webContents.send("save PNet", { path: dialoRes });
+                        if (dialoRes)
+                            mainWindow.webContents.send("user-event", { type: messageType.PNetSave, args: { path: dialoRes } });
                     }
                 },
                 { label: "close" },
@@ -89,13 +97,13 @@ function createWindow() {
                             {
                                 label: "load",
                                 click: () => {
-                                    mainWindow.webContents.send("quick-load PNet");
+                                    mainWindow.webContents.send("user-event", { type: messageType.PNetLoad, args: { path: userQuickNetSavePath } });
                                 }
                             },
                             {
                                 label: "save",
                                 click: () => {
-                                    mainWindow.webContents.send("quick-save PNet");
+                                    mainWindow.webContents.send("user-event", { type: messageType.PNetSave, args: { path: userQuickNetSavePath } });
                                 }
                             }
                         ]
@@ -116,14 +124,14 @@ function createWindow() {
                     label: "Undo",
                     accelerator: 'Ctrl+Z',
                     click: () => {
-                        mainWindow.webContents.send("undo Net", {});
+                        mainWindow.webContents.send("user-event", { type: messageType.Undo, args: {} });
                     }
                 },
                 {
                     label: "Redo",
                     accelerator: 'Ctrl+Shift+Z',
                     click: () => {
-                        mainWindow.webContents.send("redo Net", {});
+                        mainWindow.webContents.send("user-event", { type: messageType.Redo, args: {} });
                     }
                 },
             ]
