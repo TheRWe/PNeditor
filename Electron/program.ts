@@ -33,12 +33,13 @@ function createWindow() {
     });
 
 
-    let mainMenuTemplate: Electron.MenuItemConstructorOptions[] =
+    const mainMenuTemplate: Electron.MenuItemConstructorOptions[] =
         [{
             label: "File",
             submenu: [
                 {
                     label: "new PNet",
+                    accelerator: 'Ctrl+N',
                     click: () => {
                         // todo: confirmace, nabídnutí uložení
                         mainWindow.webContents.send("user-event", { type: messageType.PNetNew, args: {} });
@@ -46,6 +47,7 @@ function createWindow() {
                 },
                 {
                     label: "load PNet",
+                    accelerator: 'Ctrl+O',
                     click: () => {
                         const dialogOprions: Electron.OpenDialogOptions = {
                             title: 'Select PNet to LOAD',
@@ -70,6 +72,7 @@ function createWindow() {
                 {
                     // todo: save as / save
                     label: "save PNet",
+                    accelerator: 'Ctrl+S',
                     click: () => {
                         const dialogOprions: Electron.SaveDialogOptions = {
                             title: 'Save PNet to',
@@ -96,12 +99,14 @@ function createWindow() {
                         [
                             {
                                 label: "load",
+                                accelerator: 'Ctrl+Shift+O',
                                 click: () => {
                                     mainWindow.webContents.send("user-event", { type: messageType.PNetLoad, args: { path: userQuickNetSavePath } });
                                 }
                             },
                             {
                                 label: "save",
+                                accelerator: 'Ctrl+Shift+S',
                                 click: () => {
                                     mainWindow.webContents.send("user-event", { type: messageType.PNetSave, args: { path: userQuickNetSavePath } });
                                 }

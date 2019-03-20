@@ -289,6 +289,8 @@ export class PNEditor {
 
             const liEnter = selector().enter().append("li")
                 .style("float", "left")
+                .style("display", "inline-block")
+                .style("vertical-align", "top")
                 .style("list-style-type", "none");
             
             const radioEnter = liEnter.append("input")
@@ -534,9 +536,11 @@ export class PNEditor {
                     case modes.default:
                         if (deltaY < 0) {
                             p.marking++;
+                            this.net.AddHist();
                             this.update();
                         } else if (p.marking > 0) {
                             p.marking--;
+                            this.net.AddHist();
                             this.update();
                         }
 
@@ -590,6 +594,7 @@ export class PNEditor {
                                 a.qty--;
                             }
                         }
+                        this.net.AddHist();
                         break;
                     default:
                         notImplemented();
