@@ -18,6 +18,10 @@ export class PNEditor {
         const tabs = this.tabs;
         return tabs.nets[tabs.selected].net;
     };
+    private get currentTab() {
+        const tabs = this.tabs;
+        return tabs.nets[tabs.selected];
+    }
 
 
     //#region File
@@ -87,7 +91,17 @@ export class PNEditor {
                 mouseDebugState: typedNull<d3BaseSelector>(),
                 div: typedNull<d3BaseSelector>(),
             },
-            arcDragLine: typedNull<d3BaseSelector>(),
+            helpers: {
+                arcDragLine: typedNull<d3BaseSelector>(),
+                selectDragRect: typedNull<d3BaseSelector>(),
+            },
+            net: {
+                places: () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(this.net.places),
+                transitions: () => d3.select("#" + this.html.names.id.g.transitions).selectAll("g").data(this.net.transitions),
+                arcs: () =>
+                    d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
+                        .data(this.net.arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }))
+            }
         },
         /** names of html entities */
         names: {
@@ -106,6 +120,10 @@ export class PNEditor {
                 defs: {
                     arrowTransitionEnd: "defs-arrow-t-end",
                     arrowPlaceEnd: "defs-arrow-p-end"
+                },
+                multiSelection: {
+                    selectOutline: "select-outline",
+                    selected: "selected"
                 },
                 arc: { g: "arc" },
                 transition: { g: "transition" },
@@ -142,16 +160,19 @@ export class PNEditor {
         console.debug("%c update", "color: rgb(0, 160, 160)");
 
         const defsNames = this.html.names.classes.defs;
-        const places = () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(net.places);
-        const transitions = () => d3.select("#" + this.html.names.id.g.transitions).selectAll("rect").data(net.transitions);
-        const arcs = () =>
-            d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
-                .data(net.arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }));
+        const netSelectors = this.html.selectors.net;
+
+        const places = netSelectors.places;
+        const transitions = netSelectors.transitions;
+        const arcs = netSelectors.arcs;
 
         const fixNullPosition = (item: Place | Transition): void => {
             if (item.position == null)
                 item.position = { x: 0, y: 0 };
         }
+
+
+        //#region Place
 
         const placesEnterGroup =
             places()
@@ -162,6 +183,7 @@ export class PNEditor {
                 .on("contextmenu", this.mouse.place.onRightClick)
                 .on("wheel", this.mouse.place.onWheel)
                 .classed(this.html.names.classes.place.g, true);
+        // todo: any ? (taky u transition)
         (placesEnterGroup as any).call(this.mouse.onDragPositionMove);
         const placesEnterCircle =
             placesEnterGroup.append("circle")
@@ -170,7 +192,17 @@ export class PNEditor {
                 .style("stroke-width", "2")
                 .attr("r", 10)
                 .classed(this.html.names.classes.place.svgCircle, true);
-        //todo: kolečka pro nízké počty
+
+        const placeEnterSelect =
+            placesEnterGroup.append("circle")
+                .style("stroke", "black")
+                .style("fill", "none")
+                .style("stroke-width", "1.8")
+                .style("stroke-dasharray", "5")
+                .attr("r", 14.5)
+                .classed(this.html.names.classes.multiSelection.selectOutline, true);
+
+        //todo: kolečka/tečky pro nízké počty
         const placesEnterText =
             placesEnterGroup.append("text")
                 .classed("unselectable", true)
@@ -187,25 +219,56 @@ export class PNEditor {
             .select("text")
             .text(d => d.marking || "");
 
-        const transitionEnterRect =
+	    //#endregion
+
+
+        //#region Transitions
+
+        const transitionEnterGroup =
             transitions()
                 .enter()
                 .each(fixNullPosition)
-                .append("rect")
+                .append("g")
                 .on("click", this.mouse.transition.onClick)
                 .on("contextmenu", this.mouse.transition.onRightClick)
                 .on("wheel", this.mouse.transition.onWheel)
+                .classed(this.html.names.classes.transition.g, true);
+        (transitionEnterGroup as any).call(this.mouse.onDragPositionMove);
+
+        const transitionEnterRect =
+            transitionEnterGroup
+                .append("rect")
                 .style("fill", rgb(0, 0, 0).hex())
                 .attr("width", 20)
                 .attr("height", 20)
                 .attr("x", -10)
                 .attr("y", -10);
-        // todo: any ?
-        (transitionEnterRect as any).call(this.mouse.onDragPositionMove);
+
+
+        const transitionEnterSelect =
+            transitionEnterGroup.append("rect")
+                .attr("width", 29)
+                .attr("height", 29)
+                .attr("x", -14.5)
+                .attr("y", -14.5)
+                .style("fill", "none")
+                .style("stroke", "black")
+                .style("stroke-width", 1.5)
+                .style("stroke-dasharray", 4)
+                .style("stroke-opacity", 0.5)
+                .style("stroke-linecap", "round")
+                .classed(this.html.names.classes.multiSelection.selectOutline, true);
+        ;
         transitions()
-            .attr("x", function (t: Transition) { return t.position.x - 10; })
-            .attr("y", function (t: Transition) { return t.position.y - 10; })
+            .attr("transform", (t: Transition) => `translate(${t.position.x}, ${t.position.y})`)
+            //.attr("x", function (t: Transition) { return t.position.x - 10; })
+            //.attr("y", function (t: Transition) { return t.position.y - 10; })
             .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex());
+
+        //#endregion
+
+
+        //#region Arc
 
         const enterArc =
             arcs()
@@ -256,6 +319,9 @@ export class PNEditor {
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
             .text(d => Math.abs(d.arc.qty) || "");
 
+	    //#endregion
+
+
         // todo: kontrola
         arcs().exit().call(() => { }).remove();
 
@@ -264,11 +330,12 @@ export class PNEditor {
     }
 
     private readonly tabs = {
-        nets: [] as { net: PNet, file: string | null }[],
+        nets: [] as {
+            net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } }[],
         selected: -1,
 
         AddTab: (net: PNet, file: string | null) => {
-            this.tabs.nets.push({ net, file });
+            this.tabs.nets.push({ net, file, selected: { places: [], tranisitons: [] } });
             this.tabs.selected = this.tabs.nets.length - 1;
 
             this.tabs.Update();
@@ -292,7 +359,7 @@ export class PNEditor {
                 .style("display", "inline-block")
                 .style("vertical-align", "top")
                 .style("list-style-type", "none");
-            
+
             const radioEnter = liEnter.append("input")
                 .attr("type", "radio")
                 .attr("name", "tab-net")
@@ -432,10 +499,128 @@ export class PNEditor {
                         //this.EndInputArc();
                         this.mode.resetState();
                         break;
+                    case modes.multiSelect:
+                        const selected = this.currentTab.selected;
+                        const netSelectors = this.html.selectors.net;
+                        const selectedClassName = this.html.names.classes.multiSelection.selected;
+                        // todo: zaobalení
+                        selected.places = [];
+                        selected.tranisitons = [];
+                        netSelectors.places().classed(selectedClassName, false);
+                        netSelectors.transitions().classed(selectedClassName, false);
+
+                        this.mode.selected = modes.default;
+
+                        break;
                     default:
                         notImplemented();
                 }
             },
+            onDragMultiSelect: (() => {
+                //todo: globální dragdistance -> do configu
+                const distance = 8;
+                const helpers = this.html.selectors.helpers;
+                const netSelectors = this.html.selectors.net;
+
+                var selectionStart: Position = null;
+
+                const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
+                    return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
+                        && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
+                }
+
+                return d3.drag()
+                    .clickDistance(distance)
+                    .on("start", () => {
+                        //todo d3.event jako onDragPositionMove
+                        const pos = this.mouse.svg.getMousePosition();
+
+                        console.debug({ startdrag: this.html.selectors.svg });
+                        selectionStart = this.mouse.svg.getMousePosition();
+
+                        helpers.selectDragRect
+                            .style("display", "inline")
+                            .attr("x", pos.x)
+                            .attr("y", pos.y)
+                    })
+                    .on("drag", () => {
+                        const pos = this.mouse.svg.getMousePosition();
+
+                        switch (this.mode.selected) {
+                            case modes.default:
+                            case modes.multiSelect:
+                                const dx = pos.x - selectionStart.x;
+                                if (dx > 0)
+                                    helpers.selectDragRect
+                                        .attr("width", dx)
+                                        .attr("x", selectionStart.x)
+                                else
+                                    helpers.selectDragRect
+                                        .attr("width", -dx)
+                                        .attr("x", pos.x)
+
+                                const dy = pos.y - selectionStart.y;
+                                if (dy > 0)
+                                    helpers.selectDragRect
+                                        .attr("height", dy)
+                                        .attr("y", selectionStart.y)
+                                else
+                                    helpers.selectDragRect
+                                        .attr("height", -dy)
+                                        .attr("y", pos.y)
+
+                                netSelectors.places()
+                                    .classed("selected", elm => isSelected(selectionStart, pos, elm.position))
+                                netSelectors.transitions()
+                                    .classed("selected", elm => isSelected(selectionStart, pos, elm.position))
+
+                                //d.position.x = evPos.x;
+                                //d.position.y = evPos.y;
+                                //this.update();
+                                break;
+                            default:
+                                notImplemented();
+                        }
+                    })
+                    .on("end", () => {
+                        const pos = this.mouse.svg.getMousePosition();
+
+                        helpers.selectDragRect
+                            .style("display", "none")
+                            .attr("x", 0)
+                            .attr("y", 0)
+                            .attr("width", 0)
+                            .attr("height", 0)
+
+                        const places = this.net.places.filter(elm => isSelected(selectionStart, pos, elm.position))
+                        const transitions = this.net.transitions.filter(elm => isSelected(selectionStart, pos, elm.position))
+
+                        const tab = this.currentTab.selected;
+
+                        tab.places = places;
+                        tab.tranisitons = transitions;
+
+                        console.debug({ endDrag: [...places, ...transitions] });
+
+                        if (places.length + transitions.length > 0) {
+                            this.mode.selected = modes.multiSelect;
+                        }
+
+                        //const dx = d.position.x - selectionStart.x;
+                        //const dy = d.position.y - selectionStart.y;
+
+                        //if (dx * dx + dy * dy > distance * distance) {
+                        //    console.debug("enddrag");
+                        //    this.net.AddHist();
+                        //} else {
+                        //    console.debug("canceldrag");
+                        //    //d.position.x = selectionStart.x;
+                        //    //d.position.y = selectionStart.y;
+                        //    this.update();
+                        //}
+                        //selectionStart = null;
+                    })
+            })(),
             /** returns PNet Position relative to main svg element */
             getMousePosition: (): Position => {
                 const coords = d3.mouse(this.html.selectors.svg.node() as SVGSVGElement);
@@ -607,38 +792,99 @@ export class PNEditor {
                 const distance = 8;
 
                 var posStart: Position = null;
+                var objsPos: { obj: { position: Position }, defaultPos: Position }[] = [];
+
                 return d3.drag()
                     .clickDistance(distance)
                     .on("start", (d: { position: Position }) => {
-                        console.debug({ startdrag: d });
                         posStart = { ...d.position };
+
+                        switch (this.mode.selected) {
+                            case modes.multiSelect:
+                                const selectedClassName = this.html.names.classes.multiSelection.selected;
+
+                                const objs: { position: Position }[] = [
+                                    ...this.html.selectors.net.places()
+                                        .filter(`.${selectedClassName}`)
+                                        .data(),
+                                    ...this.html.selectors.net.transitions()
+                                        .filter(`.${selectedClassName}`)
+                                        .data()
+                                ]
+                                objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
+                                break;
+
+                            case modes.default:
+                                break;
+
+                            default:
+                                notImplemented();
+                        }
+                        console.debug({ startdrag: d });
                     })
                     .on("drag", (d: { position: Position }) => {
                         const evPos = (d3.event as Position);
+
+                        const dx = evPos.x - posStart.x;
+                        const dy = evPos.y - posStart.y;
+
                         switch (this.mode.selected) {
                             case modes.default:
                                 d.position.x = evPos.x;
                                 d.position.y = evPos.y;
                                 this.update();
                                 break;
+
+                            case modes.multiSelect:
+                                objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
+                                    obj.position.x = dx + defaultX;
+                                    obj.position.y = dy + defaultY;
+                                })
+                                this.update();
+                                break;
+
                             default:
                                 notImplemented();
                         }
                     })
                     .on("end", (d: { position: Position }) => {
-                        const dx = d.position.x - posStart.x;
-                        const dy = d.position.y - posStart.y;
+                        const evPos = (d3.event as Position);
 
-                        if (dx * dx + dy * dy > distance * distance) {
-                            console.debug("enddrag");
-                            this.net.AddHist();
-                        } else {
-                            console.debug("canceldrag");
-                            d.position.x = posStart.x;
-                            d.position.y = posStart.y;
-                            this.update();
+                        const dx = evPos.x - posStart.x;
+                        const dy = evPos.y - posStart.y;
+                        var successfull = false;
+
+                        switch (this.mode.selected) {
+                            case modes.default:
+                            case modes.multiSelect:
+                                successfull = (dx * dx + dy * dy > distance * distance);
+
+                                if (successfull) {
+                                    console.debug("enddrag");
+                                    this.net.AddHist();
+                                } else {
+                                    console.debug("canceldrag");
+                                    d.position.x = posStart.x;
+                                    d.position.y = posStart.y;
+                                    this.update();
+                                }
+                                posStart = null;
+
+                                if (!successfull) {
+                                    objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
+                                        obj.position.x = defaultX;
+                                        obj.position.y = defaultY;
+                                    });
+                                    this.update();
+                                }
+                                objsPos = [];
+                                break;
+
+                            default:
+                                notImplemented();
                         }
-                        posStart = null;
+
+                        
                     })
             })(),
         helpers: {
@@ -654,8 +900,12 @@ export class PNEditor {
         this.mode.selected = modes.arcMake;
         this.mouse.helpers.arcMakeHolder = tp;
 
-        const mousePos = this.mouse.svg.getMousePosition();
-        this.html.selectors.arcDragLine
+        const arcDragLine = this.html.selectors.helpers.arcDragLine;
+        const getMousePosition = this.mouse.svg.getMousePosition;
+
+        const mousePos = getMousePosition();
+
+        arcDragLine
             .style("display", null)
             .attr("x1", tp.position.x)
             .attr("y1", tp.position.y)
@@ -664,8 +914,8 @@ export class PNEditor {
 
         //todo metody start drag, stop drag
         this.html.selectors.svg.on("mousemove", e => {
-            const mousePos = this.mouse.svg.getMousePosition();
-            this.html.selectors.arcDragLine
+            const mousePos = getMousePosition();
+            arcDragLine
                 .attr("x2", mousePos.x)
                 .attr("y2", mousePos.y);
         })
@@ -682,10 +932,12 @@ export class PNEditor {
     private mouseEndArc(ending: null | Transition | Place | "new" = null) {
         this.mode.swap();
 
+        const arcDragLine = this.html.selectors.helpers.arcDragLine;
+
         //todo: nebezpečné, vymyslet alternativu
         this.html.selectors.svg.on("mousemove", null);
 
-        this.html.selectors.arcDragLine
+        arcDragLine
             .style("display", "none")
             .attr("x1", null)
             .attr("y1", null)
@@ -878,17 +1130,19 @@ export class PNEditor {
 
     //todo force for nearby objects(disablable in settings)
     constructor(divElement: d3BaseSelector, loadPath: string = null) {
-        this.html.selectors.div = divElement;
+        const selectors = this.html.selectors;
+
+        selectors.div = divElement;
 
 
         //#region Controlbar
 
-        const controlbarBase = this.html.selectors.controlBar.div =
+        const controlbarBase = selectors.controlBar.div =
             divElement.append("div")
                 .style("height", "30px")
                 .style("background", rgb(223, 223, 223).hex());
 
-        this.html.selectors.controlBar.mouseDebugState =
+        selectors.controlBar.mouseDebugState =
             controlbarBase
                 .append("div")
                 .style("display", "inline-block")
@@ -897,7 +1151,7 @@ export class PNEditor {
                 .style("user-select", "none")
                 .text("default");
 
-        const runtgl = this.mode.toggles.run = new Toggle(this.html.selectors.controlBar.div, "Run");
+        const runtgl = this.mode.toggles.run = new Toggle(selectors.controlBar.div, "Run");
         runtgl.OnToggleChange((tlg) => {
             const state = tlg.State;
             if (state === ToggleState.on) {
@@ -913,7 +1167,7 @@ export class PNEditor {
         //#endregion
 
 
-        const tabs = this.html.selectors.tabs = divElement.append("ul")
+        const tabs = selectors.tabs = divElement.append("ul")
             .style("padding", 0)
             .style("clear", "both")
             .style("display", "inline-block")
@@ -937,7 +1191,7 @@ export class PNEditor {
 
         //#region Initialize SVG-HTML
 
-        const svg = this.html.selectors.svg = divElement
+        const svg = selectors.svg = divElement
             .append("svg")
             .attr("width", "100%")
             .attr("height", 600);
@@ -951,19 +1205,19 @@ export class PNEditor {
         G.append("g").attr("id", this.html.names.id.g.arcs);
         G.append("g").attr("id", this.html.names.id.g.places);
         G.append("g").attr("id", this.html.names.id.g.transitions);
-        this.html.selectors.arcDragLine = G.append("line");
+        selectors.helpers.arcDragLine = G.append("line");
 
 
         let markingForeign = G.append("foreignObject")
             .style("display", "none").attr("width", "100%");
         const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
 
-        const inputMarking = this.keyboard.inputs.marking.selectors;
-        inputMarking.input = markingDiv.append("xhtml:input");
-        inputMarking.buttonOK = markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
-        inputMarking.foreign = markingForeign;
+        const inputMarkingSelectors = this.keyboard.inputs.marking.selectors;
+        inputMarkingSelectors.input = markingDiv.append("xhtml:input");
+        inputMarkingSelectors.buttonOK = markingDiv.append("xhtml:input").attr("type", "button").attr("value", "OK").style("width", "35px");
+        inputMarkingSelectors.foreign = markingForeign;
 
-        inputMarking.input
+        inputMarkingSelectors.input
             .attr("type", "number")
             .attr("min", 0)
             .attr("max", 999)
@@ -1011,11 +1265,26 @@ export class PNEditor {
             .append('svg:path')
             .attr('d', 'M0,-5L10,0L0,5');
 
-        this.html.selectors.arcDragLine
+        selectors.helpers.arcDragLine
             .style("stroke", "black")
             .style("stroke-width", 1.5)
             .style("display", "none")
             .style("pointer-events", "none");
+
+        selectors.helpers.selectDragRect = G.append("rect")
+            .attr("width", 0)
+            .attr("height", 0)
+            .attr("x", 0)
+            .attr("y", 0)
+            .style("display", "none")
+            .style("stroke-width", 2)
+            .style("stroke", "black")
+            .style("stroke-dasharray", 15)
+            .style("stroke-opacity", 0.5)
+            .style("stroke-linecap", "round")
+            .style("fill", "none");
+
+        (svg as any).call(this.mouse.svg.onDragMultiSelect);
 
         //#endregion
 
@@ -1043,7 +1312,8 @@ enum modes {
     default = "default",
     arcMake = "arc-make",
     valueEdit = "edit",
-    run = "run"
+    run = "run",
+    multiSelect = "multi-select",
 }
 
 enum ToggleState { on = "on", off = "off", hidden = "hidden" }

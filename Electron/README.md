@@ -36,7 +36,7 @@
     - [x] Závislost dragování na mousemode
     - [ ] Selekce v svg více objektù
     - [ ] Posouvání více vybranıch objektù
-  - [ ] [Multiple selection](#Selections)
+  - [x] [Multiple selection](#Selections)
     - [ ] Integrace v property bar
     - [ ] Kopírování vıbìru
     - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
@@ -60,9 +60,8 @@
     - [ ] nastavitelné barvy
   - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
     - [ ] Implementace
-      - [ ] Nejdøíve pouze checkboxy
+      - [X] Nejdøíve pouze checkboxy
       - [ ] Toggles [speciální](https://proto.io/freebies/onoff/) (toggle button/switch CSS)
-      - [ ] zakázat odkazování na skryté toggle
       - [ ] Pøidání monosti uivatelského nastavení 
 (skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
       - [ ] Monost uivatelského nastavení kde jsou 

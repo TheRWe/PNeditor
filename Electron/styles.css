@@ -48,3 +48,12 @@ body {
     background-color: darkolivegreen;
     color: white;
 }
+
+
+.select-outline {
+    display: none;
+}
+
+.selected > .select-outline{
+    display: inline;
+}
