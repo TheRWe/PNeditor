@@ -6,6 +6,7 @@ import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
 import { setTimeout } from 'timers';
+import { TabControl } from './Tab';
 
 type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 type FilePath = string | number | Buffer | URL;
@@ -14,15 +15,13 @@ function notImplemented() { throw Error("not implemented"); }
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
-    private get net(): PNet {
-        const tabs = this.tabs;
-        return tabs.nets[tabs.selected].net;
-    };
-    private get currentTab() {
-        const tabs = this.tabs;
-        return tabs.nets[tabs.selected];
-    }
 
+    private tabs: TabControl<{ net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } }>;
+
+    private get net(): PNet | null {
+        const currentTab = this.tabs.CurrentTab;
+        return currentTab == null ? null : currentTab.net;
+    }
 
     //#region File
 
@@ -43,15 +42,14 @@ export class PNEditor {
     }
 
     /** load net from given path */
-    public Load(path: FilePath): boolean {
+    public Load(path: string): boolean {
         let objString: string;
         try {
             objString = file.readFileSync(path, { encoding: "utf8" });
             const jsonNet = JSON.parse(objString);
             const net = (new PNet()).fromJSON(jsonNet);
 
-            // todo: lepším způsobem zaručit animace(bez NewNet)
-            this.tabs.AddTab(net, "todo path");
+            this.tabs.AddTab({ net: net, file: path, selected: null }, "todo path");
             //this.net = net;
 
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
@@ -67,7 +65,7 @@ export class PNEditor {
 
     // todo: záložky ?
     public NewNet() {
-        this.tabs.AddTab(new PNet(), "impl");
+        this.tabs.AddTab({ net: new PNet(), file: null, selected: null });
         this.update();
     }
 
@@ -96,11 +94,11 @@ export class PNEditor {
                 selectDragRect: typedNull<d3BaseSelector>(),
             },
             net: {
-                places: () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data(this.net.places),
-                transitions: () => d3.select("#" + this.html.names.id.g.transitions).selectAll("g").data(this.net.transitions),
+                places: () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data((this.net || { places: [] as Place[] }).places),
+                transitions: () => d3.select("#" + this.html.names.id.g.transitions).selectAll("g").data((this.net || { transitions: [] as Transition[] }).transitions),
                 arcs: () =>
                     d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
-                        .data(this.net.arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }))
+                        .data((this.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }))
             }
         },
         /** names of html entities */
@@ -322,88 +320,23 @@ export class PNEditor {
 	    //#endregion
 
 
-        // todo: kontrola
-        arcs().exit().call(() => { }).remove();
+        if (this.tabs.CurrentTab.selected) {
+            netSelectors.places()
+                .classed("selected", elm => (this.tabs.CurrentTab.selected.places as any).includes(elm))
+            netSelectors.transitions()
+                .classed("selected", elm => (this.tabs.CurrentTab.selected.tranisitons as any).includes(elm))
+        } else {
+            netSelectors.places().classed("selected", false)
+            netSelectors.transitions().classed("selected", false)
+        }
 
+
+        // todo: kontrola
+        arcs().exit().remove();
         places().exit().remove();
         transitions().exit().remove();
     }
 
-    private readonly tabs = {
-        nets: [] as {
-            net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } }[],
-        selected: -1,
-
-        AddTab: (net: PNet, file: string | null) => {
-            this.tabs.nets.push({ net, file, selected: { places: [], tranisitons: [] } });
-            this.tabs.selected = this.tabs.nets.length - 1;
-
-            this.tabs.Update();
-        },
-        CloseTab: (index: number) => {
-            this.tabs.nets.splice(index, 1);
-            if (this.tabs.selected > this.tabs.nets.length - 1)
-                this.tabs.selected = this.tabs.nets.length - 1;
-
-            this.tabs.Update();
-        },
-        Update: () => {
-            const selector = () => {
-                return this.html.selectors.tabs
-                    .selectAll("li")
-                    .data(this.tabs.nets);
-            }
-
-            const liEnter = selector().enter().append("li")
-                .style("float", "left")
-                .style("display", "inline-block")
-                .style("vertical-align", "top")
-                .style("list-style-type", "none");
-
-            const radioEnter = liEnter.append("input")
-                .attr("type", "radio")
-                .attr("name", "tab-net")
-                .attr("id", (d, i) => `tab-${i}`)
-                .classed("checkbox-tab-radio", true)
-                .style("margin", "0")
-                .on("change", (d, i) => {
-                    this.tabs.selected = i;
-                    this.update();
-                });
-
-            const labelEnter = liEnter.append("label")
-                .attr("for", (d, i) => `tab-${i}`)
-                .style("padding", "8px")
-                .style("user-select", "none")
-                .style("display", "inline-block");
-
-            // todo: static length ?
-            const labelDivEnter = labelEnter.append("div")
-                .style("all", "unset");
-
-            const buttonEnter = labelEnter.append("button")
-                .attr("type", "button")
-                .on("click", (d, i) => { this.tabs.CloseTab(i); })
-                .style("border", "0")
-                .style("border-style", "none")
-                .style("background", "none")
-                .style("color", "white")
-                .text("X");
-
-
-            const li = selector()
-                .select("label div")
-                .text(x => x.file);
-
-            const radio = selector()
-                .select("input")
-                .property("checked", (x, i) => i === this.tabs.selected);
-
-            selector().exit().remove();
-
-            this.update();
-        }
-    }
 
     //#endregion
 
@@ -500,7 +433,7 @@ export class PNEditor {
                         this.mode.resetState();
                         break;
                     case modes.multiSelect:
-                        const selected = this.currentTab.selected;
+                        const selected = this.tabs.CurrentTab.selected;
                         const netSelectors = this.html.selectors.net;
                         const selectedClassName = this.html.names.classes.multiSelection.selected;
                         // todo: zaobalení
@@ -532,6 +465,10 @@ export class PNEditor {
                 return d3.drag()
                     .clickDistance(distance)
                     .on("start", () => {
+                        const currentTab = this.tabs.CurrentTab;
+                        currentTab.selected = currentTab.selected || { places: [], tranisitons: [] };
+
+
                         //todo d3.event jako onDragPositionMove
                         const pos = this.mouse.svg.getMousePosition();
 
@@ -595,10 +532,10 @@ export class PNEditor {
                         const places = this.net.places.filter(elm => isSelected(selectionStart, pos, elm.position))
                         const transitions = this.net.transitions.filter(elm => isSelected(selectionStart, pos, elm.position))
 
-                        const tab = this.currentTab.selected;
+                        const tabSelected = this.tabs.CurrentTab.selected;
 
-                        tab.places = places;
-                        tab.tranisitons = transitions;
+                        tabSelected.places = places;
+                        tabSelected.tranisitons = transitions;
 
                         console.debug({ endDrag: [...places, ...transitions] });
 
@@ -1166,28 +1103,9 @@ export class PNEditor {
 
         //#endregion
 
-
-        const tabs = selectors.tabs = divElement.append("ul")
-            .style("padding", 0)
-            .style("clear", "both")
-            .style("display", "inline-block")
-            .style("background", "black")
-            .style("width", "100%")
-            .style("margin", "0");
-
-        tabs.append("button")
-            .attr("type", "button")
-            .on("click", () => { this.NewNet(); })
-            .style("border", "0")
-            .style("border-style", "none")
-            .style("background", "none")
-            .style("float", "right")
-            .style("color", "white")
-            .style("font-size", "20px")
-            .style("padding", "5px 9px 5px 9px")
-            .style("user-select", "none")
-            .text("+");
-
+        const tabs = this.tabs = new TabControl(divElement.append("div"));
+        tabs.OnSelectionChanged(() => { this.update(); })
+        tabs.OnTabAddButton(() => { this.NewNet(); })
 
         //#region Initialize SVG-HTML
 
@@ -1293,9 +1211,7 @@ export class PNEditor {
 
 
         // todo: load all nets
-        if (loadPath) {
-            this.Load(loadPath);
-        } else {
+        if (!(loadPath && this.Load(loadPath))) {
             this.NewNet();
         }
 

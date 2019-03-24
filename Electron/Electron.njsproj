@@ -44,7 +44,6 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="renderer.js" />
-    <Content Include="settings.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pkg\gpu.js" />
@@ -65,6 +64,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Editor\Draw.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Editor.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\ArrowEndpointCalculationHelper.ts">
       <SubType>Code</SubType>
@@ -72,6 +74,9 @@
     <TypeScriptCompile Include="Editor\PNet.ts" />
     <TypeScriptCompile Include="Editor\script.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Tab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Color.ts" />
