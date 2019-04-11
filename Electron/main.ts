@@ -7,6 +7,7 @@ import { messageType } from './Helpers/ProgramEventType';
 window.addEventListener('load', main);
 
 async function main() {
+
     const custom = (remote.getCurrentWindow() as any).custom;
 
     const div = d3.select(".editor");

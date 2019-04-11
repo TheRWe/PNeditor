@@ -31,11 +31,11 @@
     - [ ] Round menu
   - [ ] Grid
     - [ ] Combobox (velikosti gridu/zapínání vypínání)
-  - [ ] Drag
+  - [x] Drag
     - [x] Posouvání jednolivých objektù
     - [x] Závislost dragování na mousemode
-    - [ ] Selekce v svg více objektù
-    - [ ] Posouvání více vybraných objektù
+    - [x] Selekce v svg více objektù
+    - [x] Posouvání více vybraných objektù
   - [x] [Multiple selection](#Selections)
     - [ ] Integrace v property bar
     - [ ] Kopírování výbìru

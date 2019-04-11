@@ -1,14 +1,15 @@
 ﻿import * as d3 from 'd3';
 import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
-import { GetArcEndpoints } from './EditorHelpers/ArrowEndpointCalculationHelper';
 import { rgb } from 'd3';
 import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
-import { setTimeout } from 'timers';
+import { EditorMode, editorMode } from './EditorMode';
+import { html, d3BaseSelector } from './Constants';
+import { DrawModel } from './Draw';
 import { TabControl } from './Tab';
+import { Toggle, ToggleState } from './../Helpers/Toggle';
 
-type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 type FilePath = string | number | Buffer | URL;
 
 function notImplemented() { throw Error("not implemented"); }
@@ -17,6 +18,11 @@ function notImplemented() { throw Error("not implemented"); }
 export class PNEditor {
 
     private tabs: TabControl<{ net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } }>;
+
+    private toggles = { run: typedNull<Toggle>() };
+
+    private draw = new DrawModel();
+
 
     private get net(): PNet | null {
         const currentTab = this.tabs.CurrentTab;
@@ -54,7 +60,7 @@ export class PNEditor {
 
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
             console.log(this.net);
-            this.update();
+            this.draw.update();
         } catch (ex) {
             console.error(ex)
             return false;
@@ -66,7 +72,7 @@ export class PNEditor {
     // todo: záložky ?
     public NewNet() {
         this.tabs.AddTab({ net: new PNet(), file: null, selected: null });
-        this.update();
+        this.draw.update();
     }
 
     //#endregion
@@ -94,300 +100,47 @@ export class PNEditor {
                 selectDragRect: typedNull<d3BaseSelector>(),
             },
             net: {
-                places: () => d3.select("#" + this.html.names.id.g.places).selectAll("g").data((this.net || { places: [] as Place[] }).places),
-                transitions: () => d3.select("#" + this.html.names.id.g.transitions).selectAll("g").data((this.net || { transitions: [] as Transition[] }).transitions),
+                /*
+                places: () => d3.select("#" + html.id.g.places).selectAll("g").data((this.net || { places: [] as Place[] }).places),
+                transitions: () => d3.select("#" + html.id.g.transitions).selectAll("g").data((this.net || { transitions: [] as Transition[] }).transitions),
                 arcs: () =>
-                    d3.select("#" + this.html.names.id.g.arcs).selectAll("g")
+                    d3.select("#" + html.id.g.arcs).selectAll("g")
                         .data((this.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.net, x) }; }))
+                */
             }
         },
         /** names of html entities */
-        names: {
-            id: {
-                g: {
-                    arcs: "type-arcs",
-                    places: "type-places",
-                    transitions: "type-transitions"
-                }
-            },
-            classes: {
-                helper: {
-                    arcVisibleLine: "arc-visible-line",
-                    arcHitboxLine: "arc-hitbox-line",
-                },
-                defs: {
-                    arrowTransitionEnd: "defs-arrow-t-end",
-                    arrowPlaceEnd: "defs-arrow-p-end"
-                },
-                multiSelection: {
-                    selectOutline: "select-outline",
-                    selected: "selected"
-                },
-                arc: { g: "arc" },
-                transition: { g: "transition" },
-                place: { g: "place", svgCircle: "placeSVGCircle" }
-            }
-        }
     }
-
-    //#endregion
-
-
-    //#region Graphics
-
-    private updating = false;
-    /** schedule redraw function for next animation frame */
-    private update() {
-        if (this.updating)
-            return;
-        this.updating = true;
-        requestAnimationFrame((() => {
-            try {
-                this._update();
-            } finally {
-                this.updating = false;
-            }
-        }).bind(this));
-    }
-
-    // todo classed všechny možné definice budou v css
-    /** immediately apply changes in data to DOM */
-    private _update() {
-        const net = this.net;
-
-        console.debug("%c update", "color: rgb(0, 160, 160)");
-
-        const defsNames = this.html.names.classes.defs;
-        const netSelectors = this.html.selectors.net;
-
-        const places = netSelectors.places;
-        const transitions = netSelectors.transitions;
-        const arcs = netSelectors.arcs;
-
-        const fixNullPosition = (item: Place | Transition): void => {
-            if (item.position == null)
-                item.position = { x: 0, y: 0 };
-        }
-
-
-        //#region Place
-
-        const placesEnterGroup =
-            places()
-                .enter()
-                .each(fixNullPosition)
-                .append("g")
-                .on("click", this.mouse.place.onClick)
-                .on("contextmenu", this.mouse.place.onRightClick)
-                .on("wheel", this.mouse.place.onWheel)
-                .classed(this.html.names.classes.place.g, true);
-        // todo: any ? (taky u transition)
-        (placesEnterGroup as any).call(this.mouse.onDragPositionMove);
-        const placesEnterCircle =
-            placesEnterGroup.append("circle")
-                .style("fill", rgb(255, 255, 255).hex())
-                .style("stroke", "black")
-                .style("stroke-width", "2")
-                .attr("r", 10)
-                .classed(this.html.names.classes.place.svgCircle, true);
-
-        const placeEnterSelect =
-            placesEnterGroup.append("circle")
-                .style("stroke", "black")
-                .style("fill", "none")
-                .style("stroke-width", "1.8")
-                .style("stroke-dasharray", "5")
-                .attr("r", 14.5)
-                .classed(this.html.names.classes.multiSelection.selectOutline, true);
-
-        //todo: kolečka/tečky pro nízké počty
-        const placesEnterText =
-            placesEnterGroup.append("text")
-                .classed("unselectable", true)
-                .attr("text-anchor", "middle")
-                .attr("dy", ".3em")
-                .attr("font-size", 10)
-                .text(d => d.marking || "")
-                .classed("txt", true);
-
-        places()
-            .attr("transform", (p: Place) => `translate(${p.position.x}, ${p.position.y})`)
-        places()
-            //todo: scaling
-            .select("text")
-            .text(d => d.marking || "");
-
-	    //#endregion
-
-
-        //#region Transitions
-
-        const transitionEnterGroup =
-            transitions()
-                .enter()
-                .each(fixNullPosition)
-                .append("g")
-                .on("click", this.mouse.transition.onClick)
-                .on("contextmenu", this.mouse.transition.onRightClick)
-                .on("wheel", this.mouse.transition.onWheel)
-                .classed(this.html.names.classes.transition.g, true);
-        (transitionEnterGroup as any).call(this.mouse.onDragPositionMove);
-
-        const transitionEnterRect =
-            transitionEnterGroup
-                .append("rect")
-                .style("fill", rgb(0, 0, 0).hex())
-                .attr("width", 20)
-                .attr("height", 20)
-                .attr("x", -10)
-                .attr("y", -10);
-
-
-        const transitionEnterSelect =
-            transitionEnterGroup.append("rect")
-                .attr("width", 29)
-                .attr("height", 29)
-                .attr("x", -14.5)
-                .attr("y", -14.5)
-                .style("fill", "none")
-                .style("stroke", "black")
-                .style("stroke-width", 1.5)
-                .style("stroke-dasharray", 4)
-                .style("stroke-opacity", 0.5)
-                .style("stroke-linecap", "round")
-                .classed(this.html.names.classes.multiSelection.selectOutline, true);
-        ;
-        transitions()
-            .attr("transform", (t: Transition) => `translate(${t.position.x}, ${t.position.y})`)
-            //.attr("x", function (t: Transition) { return t.position.x - 10; })
-            //.attr("y", function (t: Transition) { return t.position.y - 10; })
-            .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex());
-
-        //#endregion
-
-
-        //#region Arc
-
-        const enterArc =
-            arcs()
-                .enter()
-                .append("g");
-        enterArc
-            .append("line")
-            .classed(this.html.names.classes.helper.arcVisibleLine, true)
-            .style("stroke", "black")
-            .style("stroke-width", 1.5);
-        enterArc
-            .append("line")
-            .classed(this.html.names.classes.helper.arcHitboxLine, true)
-            .style("stroke", "black")
-            .attr("opacity", "0")
-            .style("stroke-width", 8)
-            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc))
-            .on("contextmenu", (x) => this.mouse.arc.onRightClick(x.arc))
-            .on("wheel", (x) => this.mouse.arc.onWheel(x.arc));
-
-
-        enterArc
-            .append("text")
-            .classed("unselectable", true)
-            .attr("text-anchor", "middle")
-            .attr("dy", ".3em")
-            .attr("font-size", 10)
-            .on("click", (x) => this.mouse.arc.onClickHitbox(x.arc));
-
-
-
-        arcs().select(`.${this.html.names.classes.helper.arcVisibleLine}`)
-            .style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
-            .attr("x1", a => a.line.from.x)
-            .attr("y1", a => a.line.from.y)
-            .attr("x2", a => a.line.to.x)
-            .attr("y2", a => a.line.to.y);
-
-        arcs().select(`.${this.html.names.classes.helper.arcHitboxLine}`)
-            .attr("x1", a => a.line.from.x)
-            .attr("y1", a => a.line.from.y)
-            .attr("x2", a => a.line.to.x)
-            .attr("y2", a => a.line.to.y);
-
-        // todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
-        arcs().select('text')
-            .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
-            .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
-            .text(d => Math.abs(d.arc.qty) || "");
-
-	    //#endregion
-
-
-        if (this.tabs.CurrentTab.selected) {
-            netSelectors.places()
-                .classed("selected", elm => (this.tabs.CurrentTab.selected.places as any).includes(elm))
-            netSelectors.transitions()
-                .classed("selected", elm => (this.tabs.CurrentTab.selected.tranisitons as any).includes(elm))
-        } else {
-            netSelectors.places().classed("selected", false)
-            netSelectors.transitions().classed("selected", false)
-        }
-
-
-        // todo: kontrola
-        arcs().exit().remove();
-        places().exit().remove();
-        transitions().exit().remove();
-    }
-
 
     //#endregion
 
 
     //#region Mode
 
-    private readonly mode = (() => {
-        const editor = this;
-        const html = this.html;
+    private mode: EditorMode = new EditorMode();
 
-        return new class {
-            public readonly default: modes = modes.default;
-            private _last: modes = modes.default;
-            private _selected: modes = modes.default;
+    // used to cancel all undone actions
+    public resetState() {
+        // todo: toggles.run ? 
+        if (this.mode.selected === this.mode.default)
+            return;
 
-            public get selected(): modes { return this._selected; }
-            public set selected(v: modes) {
-                this._last = this._selected;
-                this._selected = v;
-                html.selectors.controlBar.mouseDebugState.text(v);
-            }
-
-            public get last(): modes { return this._last; }
-            public swap(): void { this.selected = this.last; }
-
-            public toggles = { run: typedNull<Toggle>() };
-
-            // used to cancel all undone actions
-            public resetState() {
-                // todo: toggles.run ? 
-                if (this.selected === this.default)
-                    return;
-
-                switch (this.selected) {
-                    case modes.arcMake:
-                        editor.mouseEndArc();
-                        break;
-                    case modes.valueEdit:
-                        editor.EndInputArc(false);
-                        editor.EndInputMarking(false);
-                        break;
-                    // todo: implement state reset
-                    default:
-                        console.warn("implement");
-                        break;
-                }
-                if (this.toggles.run.State == ToggleState.on)
-                    editor.mode.selected = modes.run;
-            }
-        };
-    })()
+        switch (this.mode.selected) {
+            case editorMode.arcMake:
+                this.mouseEndArc();
+                break;
+            case editorMode.valueEdit:
+                this.EndInputArc(false);
+                this.EndInputMarking(false);
+                break;
+            // todo: implement state reset
+            default:
+                console.warn("implement");
+                break;
+        }
+        if (this.toggles.run.State == ToggleState.on)
+            this.mode.selected = editorMode.run;
+    }
 
     //#endregion
 
@@ -401,13 +154,13 @@ export class PNEditor {
         inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
         inputMarking.buttonOK
-            .on("click", () => { this.EndInputMarking(true); this.update(); d3.event.stopPropagation(); });
+            .on("click", () => { this.EndInputMarking(true); this.draw.update(); d3.event.stopPropagation(); });
 
         const arcValueMarking = this.keyboard.inputs.arcValue.selectors;
         arcValueMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
         arcValueMarking.buttonOK
-            .on("click", () => { this.EndInputArc(true); this.update(); d3.event.stopPropagation(); });
+            .on("click", () => { this.EndInputArc(true); this.draw.update(); d3.event.stopPropagation(); });
     }
 
     /** mouse properties */
@@ -418,31 +171,31 @@ export class PNEditor {
                 console.debug("svg clicked");
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
-                    case modes.default:
+                    case editorMode.default:
                         this.net.AddTransition(mouse.svg.getMousePosition());
-                        this.update();
+                        this.draw.update();
                         break;
-                    case modes.arcMake:
+                    case editorMode.arcMake:
                         this.mouseEndArc("new");
-                        this.update();
+                        this.draw.update();
                         break;
-                    case modes.valueEdit:
+                    case editorMode.valueEdit:
                         //todo: bude uloženo v settings jestli má dojít k uložení nebo resetu
                         //this.EndInputMarking();
                         //this.EndInputArc();
-                        this.mode.resetState();
+                        this.resetState();
                         break;
-                    case modes.multiSelect:
+                    case editorMode.multiSelect:
                         const selected = this.tabs.CurrentTab.selected;
                         const netSelectors = this.html.selectors.net;
-                        const selectedClassName = this.html.names.classes.multiSelection.selected;
+                        const selectedClassName = html.classes.multiSelection.selected;
                         // todo: zaobalení
                         selected.places = [];
                         selected.tranisitons = [];
-                        netSelectors.places().classed(selectedClassName, false);
-                        netSelectors.transitions().classed(selectedClassName, false);
 
-                        this.mode.selected = modes.default;
+
+
+                        this.mode.selected = editorMode.default;
 
                         break;
                     default:
@@ -484,8 +237,8 @@ export class PNEditor {
                         const pos = this.mouse.svg.getMousePosition();
 
                         switch (this.mode.selected) {
-                            case modes.default:
-                            case modes.multiSelect:
+                            case editorMode.default:
+                            case editorMode.multiSelect:
                                 const dx = pos.x - selectionStart.x;
                                 if (dx > 0)
                                     helpers.selectDragRect
@@ -506,14 +259,11 @@ export class PNEditor {
                                         .attr("height", -dy)
                                         .attr("y", pos.y)
 
-                                netSelectors.places()
-                                    .classed("selected", elm => isSelected(selectionStart, pos, elm.position))
-                                netSelectors.transitions()
-                                    .classed("selected", elm => isSelected(selectionStart, pos, elm.position))
+
 
                                 //d.position.x = evPos.x;
                                 //d.position.y = evPos.y;
-                                //this.update();
+                                //this.draw.update();
                                 break;
                             default:
                                 notImplemented();
@@ -540,7 +290,7 @@ export class PNEditor {
                         console.debug({ endDrag: [...places, ...transitions] });
 
                         if (places.length + transitions.length > 0) {
-                            this.mode.selected = modes.multiSelect;
+                            this.mode.selected = editorMode.multiSelect;
                         }
 
                         //const dx = d.position.x - selectionStart.x;
@@ -553,7 +303,7 @@ export class PNEditor {
                         //    console.debug("canceldrag");
                         //    //d.position.x = selectionStart.x;
                         //    //d.position.y = selectionStart.y;
-                        //    this.update();
+                        //    this.draw.update();
                         //}
                         //selectionStart = null;
                     })
@@ -584,17 +334,17 @@ export class PNEditor {
                 console.debug("transition clicked");
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
-                    case modes.default:
+                    case editorMode.default:
                         this.mouseStartArc(t);
                         d3.event.stopPropagation();
                         break;
-                    case modes.arcMake:
+                    case editorMode.arcMake:
                         this.mouseEndArc();
                         d3.event.stopPropagation();
                         break;
-                    case modes.run:
+                    case editorMode.run:
                         if (this.net.RunTransition(t))
-                            this.update();
+                            this.draw.update();
                         d3.event.stopPropagation();
                         break;
                     default:
@@ -622,8 +372,8 @@ export class PNEditor {
             onClick: (p: Place) => {
                 console.debug("place click");
                 switch (this.mode.selected) {
-                    case modes.valueEdit:
-                    case modes.default:
+                    case editorMode.valueEdit:
+                    case editorMode.default:
                         if (p.marking == null) p.marking = 0;
 
                         this.EndInputMarking();
@@ -632,12 +382,12 @@ export class PNEditor {
                         this.StartInputMarking(p);
                         d3.event.stopPropagation();
                         break;
-                    case modes.arcMake:
+                    case editorMode.arcMake:
                         // todo: kontrola na to jeslti už na daný place existuje arc a pokud jo ... (todo: analýza chování)
                         this.mouseEndArc(p);
 
                         d3.event.stopPropagation();
-                        this.update();
+                        this.draw.update();
                         break;
                     default:
                         notImplemented();
@@ -655,15 +405,15 @@ export class PNEditor {
                 console.debug("place wheel");
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
-                    case modes.default:
+                    case editorMode.default:
                         if (deltaY < 0) {
                             p.marking++;
                             this.net.AddHist();
-                            this.update();
+                            this.draw.update();
                         } else if (p.marking > 0) {
                             p.marking--;
                             this.net.AddHist();
-                            this.update();
+                            this.draw.update();
                         }
 
                         break;
@@ -678,8 +428,8 @@ export class PNEditor {
 
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
-                    case modes.valueEdit:
-                    case modes.default:
+                    case editorMode.valueEdit:
+                    case editorMode.default:
                         this.EndInputMarking();
                         this.EndInputArc();
 
@@ -702,7 +452,7 @@ export class PNEditor {
                 console.debug("arc wheel");
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
-                    case modes.default:
+                    case editorMode.default:
                         if (deltaY < 0) {
                             a.qty++;
                         } else {
@@ -721,7 +471,7 @@ export class PNEditor {
                     default:
                         notImplemented();
                 }
-                this.update();
+                this.draw.update();
             }
         },
         onDragPositionMove:
@@ -737,9 +487,9 @@ export class PNEditor {
                         posStart = { ...d.position };
 
                         switch (this.mode.selected) {
-                            case modes.multiSelect:
-                                const selectedClassName = this.html.names.classes.multiSelection.selected;
-
+                            case editorMode.multiSelect:
+                                const selectedClassName = html.classes.multiSelection.selected;
+                                /*
                                 const objs: { position: Position }[] = [
                                     ...this.html.selectors.net.places()
                                         .filter(`.${selectedClassName}`)
@@ -749,9 +499,10 @@ export class PNEditor {
                                         .data()
                                 ]
                                 objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
+                                */
                                 break;
 
-                            case modes.default:
+                            case editorMode.default:
                                 break;
 
                             default:
@@ -766,18 +517,18 @@ export class PNEditor {
                         const dy = evPos.y - posStart.y;
 
                         switch (this.mode.selected) {
-                            case modes.default:
+                            case editorMode.default:
                                 d.position.x = evPos.x;
                                 d.position.y = evPos.y;
-                                this.update();
+                                this.draw.update();
                                 break;
 
-                            case modes.multiSelect:
+                            case editorMode.multiSelect:
                                 objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
                                     obj.position.x = dx + defaultX;
                                     obj.position.y = dy + defaultY;
                                 })
-                                this.update();
+                                this.draw.update();
                                 break;
 
                             default:
@@ -790,11 +541,11 @@ export class PNEditor {
                         const dx = evPos.x - posStart.x;
                         const dy = evPos.y - posStart.y;
                         var successfull = false;
+                        successfull = (dx * dx + dy * dy > distance * distance);
 
                         switch (this.mode.selected) {
-                            case modes.default:
-                            case modes.multiSelect:
-                                successfull = (dx * dx + dy * dy > distance * distance);
+                            case editorMode.default:
+                            case editorMode.multiSelect:
 
                                 if (successfull) {
                                     console.debug("enddrag");
@@ -803,7 +554,7 @@ export class PNEditor {
                                     console.debug("canceldrag");
                                     d.position.x = posStart.x;
                                     d.position.y = posStart.y;
-                                    this.update();
+                                    this.draw.update();
                                 }
                                 posStart = null;
 
@@ -812,7 +563,7 @@ export class PNEditor {
                                         obj.position.x = defaultX;
                                         obj.position.y = defaultY;
                                     });
-                                    this.update();
+                                    this.draw.update();
                                 }
                                 objsPos = [];
                                 break;
@@ -834,7 +585,7 @@ export class PNEditor {
      * @param tp transition or place
      */
     private mouseStartArc(tp: Transition | Place) {
-        this.mode.selected = modes.arcMake;
+        this.mode.selected = editorMode.arcMake;
         this.mouse.helpers.arcMakeHolder = tp;
 
         const arcDragLine = this.html.selectors.helpers.arcDragLine;
@@ -931,7 +682,7 @@ export class PNEditor {
                 onKeyPress: () => {
                     if (d3.event.keyCode == Key.Enter) {
                         this.EndInputMarking(true);
-                        this.update();
+                        this.draw.update();
                     }
 
                     d3.event.stopPropagation();
@@ -949,7 +700,7 @@ export class PNEditor {
                 onKeyPress: () => {
                     if (d3.event.keyCode == Key.Enter) {
                         this.EndInputArc(true);
-                        this.update();
+                        this.draw.update();
                     }
 
                     d3.event.stopPropagation();
@@ -966,18 +717,18 @@ export class PNEditor {
 
     public Undo() {
         this.net.Undo();
-        this.update();
+        this.draw.update();
     }
 
     public Redo() {
         this.net.Redo();
-        this.update();
+        this.draw.update();
     }
 
     /** open marking edit window for given place*/
     private StartInputArc(a: Arc) {
-        if (this.mode.selected !== modes.valueEdit)
-            this.mode.selected = modes.valueEdit;
+        if (this.mode.selected !== editorMode.valueEdit)
+            this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.arcValue.editedArc = a;
         const inputArc = this.keyboard.inputs.arcValue.selectors;
@@ -995,7 +746,7 @@ export class PNEditor {
      * @param save changes propagate to net ?
      */
     private EndInputArc(save: boolean = false) {
-        if (this.mode.selected === modes.valueEdit)
+        if (this.mode.selected === editorMode.valueEdit)
             this.mode.swap();
         else
             return;
@@ -1019,8 +770,8 @@ export class PNEditor {
 
     /** open marking edit window for given place*/
     private StartInputMarking(p: Place) {
-        if (this.mode.selected !== modes.valueEdit)
-            this.mode.selected = modes.valueEdit;
+        if (this.mode.selected !== editorMode.valueEdit)
+            this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.marking.editedPlace = p;
         const inputMarking = this.keyboard.inputs.marking.selectors;
@@ -1037,7 +788,7 @@ export class PNEditor {
      * @param save changes propagate to net ?
      */
     private EndInputMarking(save: boolean = false) {
-        if (this.mode.selected === modes.valueEdit)
+        if (this.mode.selected === editorMode.valueEdit)
             this.mode.swap();
         else
             return;
@@ -1088,24 +839,27 @@ export class PNEditor {
                 .style("user-select", "none")
                 .text("default");
 
-        const runtgl = this.mode.toggles.run = new Toggle(selectors.controlBar.div, "Run");
-        runtgl.OnToggleChange((tlg) => {
+        const runtgl = this.toggles.run = new Toggle(selectors.controlBar.div, "Run");
+        runtgl.AddOnToggleChange((tlg) => {
             const state = tlg.State;
             if (state === ToggleState.on) {
-                this.mode.resetState();
+                this.resetState();
                 // todo: ipmlementované v reset state a bude volat jen to
-                this.mode.selected = modes.run;
+                this.mode.selected = editorMode.run;
             } else {
-                this.mode.resetState();
-                this.mode.selected = modes.default;
+                this.resetState();
+                this.mode.selected = editorMode.default;
             }
         });
 
         //#endregion
 
         const tabs = this.tabs = new TabControl(divElement.append("div"));
-        tabs.OnSelectionChanged(() => { this.update(); })
-        tabs.OnTabAddButton(() => { this.NewNet(); })
+        tabs.AddOnSelectionChanged(() => {
+            this.draw.data = this.tabs.CurrentTab;
+            this.draw.update();
+        })
+        tabs.AddOnTabAddButton(() => { this.NewNet(); })
 
         //#region Initialize SVG-HTML
 
@@ -1116,13 +870,13 @@ export class PNEditor {
 
 
         const defs = svg.append('svg:defs');
-        const defsNames = this.html.names.classes.defs;
+        const defsNames = html.classes.defs;
 
         const G = svg.append("g");
 
-        G.append("g").attr("id", this.html.names.id.g.arcs);
-        G.append("g").attr("id", this.html.names.id.g.places);
-        G.append("g").attr("id", this.html.names.id.g.transitions);
+        G.append("g").attr("id", html.id.g.arcs);
+        G.append("g").attr("id", html.id.g.places);
+        G.append("g").attr("id", html.id.g.transitions);
         selectors.helpers.arcDragLine = G.append("line");
 
 
@@ -1216,7 +970,7 @@ export class PNEditor {
         }
 
         console.debug(this);
-        this.update();
+        this.draw.update();
     }
 
     //#endregion
@@ -1224,83 +978,3 @@ export class PNEditor {
 }
 
 
-enum modes {
-    default = "default",
-    arcMake = "arc-make",
-    valueEdit = "edit",
-    run = "run",
-    multiSelect = "multi-select",
-}
-
-enum ToggleState { on = "on", off = "off", hidden = "hidden" }
-class Toggle {
-
-    private _state: ToggleState;
-    public get State(): ToggleState {
-        return this._state;
-    }
-    public set State(state: ToggleState) {
-        this._changeState(state);
-        this.ToggleChanged();
-    }
-
-    private _changeState(state: ToggleState) {
-        if (this._state === state)
-            return;
-
-        this._state = state;
-        if (state === ToggleState.hidden) {
-            this.baseSelector.style("display", "none");
-        }
-        else {
-            this.baseSelector.style("display", "inline-block");
-            if (state === ToggleState.on) {
-                this.checkboxSelector.property("checked", true);
-            }
-            else if (state === ToggleState.off) {
-                this.checkboxSelector.property("checked", false);
-            }
-        }
-    }
-
-    // todo: lepší řešení spojování funkcí
-    private _toggleChangedHandler = (obj: Toggle) => { };
-    public OnToggleChange(handler: (obj: Toggle) => void): void {
-        const prevHandler = this._toggleChangedHandler;
-        this._toggleChangedHandler = (obj: Toggle) => {
-            prevHandler(obj);
-            handler(obj);
-        }
-    }
-
-    private ToggleChanged() {
-        this._toggleChangedHandler(this);
-    }
-
-    private readonly baseSelector: d3BaseSelector;
-    private readonly checkboxSelector: d3BaseSelector;
-    public readonly name: string;
-
-    constructor(containerSelector: d3BaseSelector, name: string) {
-        this.name = name;
-
-        const baseSelector = this.baseSelector = containerSelector
-            .append("div")
-            .style("display", "inline-block");
-
-        this._state = ToggleState.off;
-
-        this.checkboxSelector = baseSelector
-            .append("input")
-            .attr("type", "checkbox")
-            .on("change", () => {
-                this.State = this.checkboxSelector.property("checked") === true ? ToggleState.on : ToggleState.off;
-            })
-            .property("checked", false);
-
-        baseSelector
-            .append("text")
-            .text(this.name);
-        this.State = ToggleState.off;
-    }
-}

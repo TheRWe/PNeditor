@@ -64,6 +64,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Editor\Constants.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Draw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -72,7 +75,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\PNet.ts" />
-    <TypeScriptCompile Include="Editor\script.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -81,6 +83,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Color.ts" />
     <TypeScriptCompile Include="Helpers\ProgramEventType.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Helpers\Toggle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="main.ts">

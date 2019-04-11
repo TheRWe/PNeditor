@@ -1,7 +1,7 @@
 ﻿import { PNet, Place, Transition } from "./PNet";
 import { typedNull } from "../Helpers/purify";
+import { d3BaseSelector } from "./Constants";
 
-type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 
 // todo: generika
 
@@ -20,10 +20,10 @@ export class TabControl<TabDataType> {
         return tab === undefined ? null : tab.data;
     }
 
-    public get Selected(): number {
+    public get SelectedIndex(): number {
         return this.selected;
     }
-    public set Selected(tabIndex: number) {
+    public set SelectedIndex(tabIndex: number) {
         if (this.selected === tabIndex)
             return;
 
@@ -41,7 +41,7 @@ export class TabControl<TabDataType> {
 
     // todo: custom eventy
     private onSelectionChanged = () => { }
-    public OnSelectionChanged(listener: () => void) {
+    public AddOnSelectionChanged(listener: () => void) {
         const onSelectionChanged = this.onSelectionChanged;
         this.onSelectionChanged = () => {
             onSelectionChanged();
@@ -50,7 +50,7 @@ export class TabControl<TabDataType> {
     }
 
     private onTabAddButton = () => { }
-    public OnTabAddButton(listener: () => void) {
+    public AddOnTabAddButton(listener: () => void) {
         const onTabAddButton = this.onTabAddButton;
         this.onTabAddButton = () => {
             onTabAddButton();
@@ -62,7 +62,7 @@ export class TabControl<TabDataType> {
         this.tabs.push({ data: tabData, name });
 
         if (selectAddedTab)
-            this.Selected = this.tabs.length - 1;
+            this.SelectedIndex = this.tabs.length - 1;
         console.debug({ indx: this.selected, tab: this.CurrentTab });
 
     }
@@ -70,7 +70,7 @@ export class TabControl<TabDataType> {
     public CloseTabAtIndex(index: number) {
         this.tabs.splice(index, 1);
         // ensuring deleted tab isn't selected
-        this.Selected = this.Selected;
+        this.SelectedIndex = this.SelectedIndex;
     }
 
     public CloseTab(tabData: TabDataType) {
@@ -98,7 +98,7 @@ export class TabControl<TabDataType> {
             .classed("checkbox-tab-radio", true)
             .style("margin", "0")
             .on("change", (d, i) => {
-                this.Selected = i;
+                this.SelectedIndex = i;
             });
 
         const labelEnter = liEnter.append("label")
@@ -127,7 +127,7 @@ export class TabControl<TabDataType> {
 
         const radio = selector()
             .select("input")
-            .property("checked", (x, i) => i === this.Selected);
+            .property("checked", (x, i) => i === this.SelectedIndex);
 
         selector().exit().remove();
     }
