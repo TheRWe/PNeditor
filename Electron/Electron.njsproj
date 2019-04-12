@@ -74,6 +74,7 @@
     <TypeScriptCompile Include="Editor\EditorHelpers\ArrowEndpointCalculationHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\EditorMode.ts" />
     <TypeScriptCompile Include="Editor\PNet.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
