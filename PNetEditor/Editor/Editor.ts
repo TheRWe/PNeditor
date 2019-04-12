@@ -6,13 +6,17 @@ import { typedNull } from '../Helpers/purify';
 import * as file from 'fs';
 import { EditorMode, editorMode } from './EditorMode';
 import { html, d3BaseSelector } from './Constants';
-import { DrawModel } from './Draw';
+import { DrawModel, CallbackType } from './Draw';
 import { TabControl } from './Tab';
 import { Toggle, ToggleState } from './../Helpers/Toggle';
 
 type FilePath = string | number | Buffer | URL;
 
-function notImplemented() { throw Error("not implemented"); }
+function notImplemented() {
+    console.groupCollapsed("%cnot implemented", "background: yellow");
+    console.trace(); 
+    console.groupEnd();
+}
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
@@ -21,7 +25,7 @@ export class PNEditor {
 
     private toggles = { run: typedNull<Toggle>() };
 
-    private draw = new DrawModel();
+    private readonly draw: DrawModel;
 
 
     private get net(): PNet | null {
@@ -150,7 +154,28 @@ export class PNEditor {
 
     /** initialize keyboard *on* handlers related to mouse */
     private InitMouseEvents() {
-        this.html.selectors.svg.on("click", this.mouse.svg.onClick);
+        const callbacks = this.draw.callbacks;
+        callbacks.place.AddCallback(CallbackType.letfClick, this.mouse.place.onClick);
+        callbacks.place.AddCallback(CallbackType.rightClick, this.mouse.place.onRightClick);
+        callbacks.place.AddCallback(CallbackType.wheel, this.mouse.place.onWheel);
+
+        callbacks.place.AddCallback(CallbackType.dragStart, this.mouse.onDragPositionMove.start);
+        callbacks.place.AddCallback(CallbackType.drag, this.mouse.onDragPositionMove.drag);
+        callbacks.place.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
+        callbacks.place.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
+
+        callbacks.transition.AddCallback(CallbackType.letfClick, this.mouse.transition.onClick);
+
+
+        callbacks.transition.AddCallback(CallbackType.dragStart, this.mouse.onDragPositionMove.start);
+        callbacks.transition.AddCallback(CallbackType.drag, this.mouse.onDragPositionMove.drag);
+        callbacks.transition.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
+        callbacks.transition.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
+
+        //this.html.selectors.svg.on("click", this.mouse.svg.onClick);
+        callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
+
+
         const inputMarking = this.keyboard.inputs.marking.selectors;
         inputMarking.input
             .on("click", () => { d3.event.stopPropagation(); });
@@ -370,7 +395,7 @@ export class PNEditor {
             }
         },
         place: {
-            onClick: (p: Place) => {
+            onClick: (p: Place, pos: Position) => {
                 console.debug("place click");
                 switch (this.mode.selected) {
                     case editorMode.valueEdit:
@@ -475,107 +500,195 @@ export class PNEditor {
                 this.draw.update();
             }
         },
-        onDragPositionMove:
-            (() => {
-                const distance = 8;
 
-                var posStart: Position = null;
-                var objsPos: { obj: { position: Position }, defaultPos: Position }[] = [];
 
-                return d3.drag()
-                    .clickDistance(distance)
-                    .on("start", (d: { position: Position }) => {
-                        posStart = { ...d.position };
+        onDragPositionMove: {
+            start: (d: { position: Position }) => {
 
-                        switch (this.mode.selected) {
-                            case editorMode.multiSelect:
-                                const selectedClassName = html.classes.multiSelection.selected;
-                                /*
-                                const objs: { position: Position }[] = [
-                                    ...this.html.selectors.net.places()
-                                        .filter(`.${selectedClassName}`)
-                                        .data(),
-                                    ...this.html.selectors.net.transitions()
-                                        .filter(`.${selectedClassName}`)
-                                        .data()
-                                ]
-                                objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
-                                */
-                                break;
+                switch (this.mode.selected) {
+                    case editorMode.multiSelect:
+                        const selectedClassName = html.classes.multiSelection.selected;
+                        /*
+                        const objs: { position: Position }[] = [
+                            ...this.html.selectors.net.places()
+                                .filter(`.${selectedClassName}`)
+                                .data(),
+                            ...this.html.selectors.net.transitions()
+                                .filter(`.${selectedClassName}`)
+                                .data()
+                        ]
+                        objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
+                        */
+                        break;
 
-                            case editorMode.default:
-                                break;
+                    case editorMode.default:
+                        break;
 
-                            default:
-                                notImplemented();
-                        }
-                        console.debug({ startdrag: d });
-                    })
-                    .on("drag", (d: { position: Position }) => {
-                        const evPos = (d3.event as Position);
+                    default:
+                        notImplemented();
+                }
+                console.debug({ startdrag: d });
+            },
+            drag: (d: { position: Position }, evPos: Position, posStart: Position) => {
+                const dx = evPos.x - posStart.x;
+                const dy = evPos.y - posStart.y;
 
-                        const dx = evPos.x - posStart.x;
-                        const dy = evPos.y - posStart.y;
+                switch (this.mode.selected) {
+                    case editorMode.default:
+                        d.position.x = evPos.x;
+                        d.position.y = evPos.y;
+                        this.draw.update();
+                        break;
 
-                        switch (this.mode.selected) {
-                            case editorMode.default:
-                                d.position.x = evPos.x;
-                                d.position.y = evPos.y;
-                                this.draw.update();
-                                break;
+                    //case editorMode.multiSelect:
+                    //    objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
+                    //        obj.position.x = dx + defaultX;
+                    //        obj.position.y = dy + defaultY;
+                    //    })
+                    //    this.draw.update();
+                    //    break;
 
-                            case editorMode.multiSelect:
-                                objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                                    obj.position.x = dx + defaultX;
-                                    obj.position.y = dy + defaultY;
-                                })
-                                this.draw.update();
-                                break;
+                    default:
+                        notImplemented();
+                }
+            },
+            end: (d: { position: Position }, evPos: Position, posStart: Position) => {
 
-                            default:
-                                notImplemented();
-                        }
-                    })
-                    .on("end", (d: { position: Position }) => {
-                        const evPos = (d3.event as Position);
+                switch (this.mode.selected) {
+                    case editorMode.default:
+                    case editorMode.multiSelect:
+                        this.net.AddHist();
 
-                        const dx = evPos.x - posStart.x;
-                        const dy = evPos.y - posStart.y;
-                        var successfull = false;
-                        successfull = (dx * dx + dy * dy > distance * distance);
+                        //objsPos = [];
+                        break;
 
-                        switch (this.mode.selected) {
-                            case editorMode.default:
-                            case editorMode.multiSelect:
+                    default:
+                        notImplemented();
+                }
+            },
+            revert: (d: { position: Position }, evPos: Position, posStart: Position) => {
+                switch (this.mode.selected) {
+                    case editorMode.default:
+                    case editorMode.multiSelect:
+                        d.position.x = posStart.x;
+                        d.position.y = posStart.y;
+                        this.draw.update();
 
-                                if (successfull) {
-                                    console.debug("enddrag");
-                                    this.net.AddHist();
-                                } else {
-                                    console.debug("canceldrag");
-                                    d.position.x = posStart.x;
-                                    d.position.y = posStart.y;
+                        //objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
+                        //    obj.position.x = defaultX;
+                        //    obj.position.y = defaultY;
+                        //});
+                        //this.draw.update();
+                        //objsPos = [];
+                        break;
+
+                    default:
+                        notImplemented();
+                }
+            },
+
+            old:
+                (() => {
+                    const distance = 8;
+
+                    var posStart: Position = null;
+                    var objsPos: { obj: { position: Position }, defaultPos: Position }[] = [];
+
+                    return d3.drag()
+                        .clickDistance(distance)
+                        .on("start", (d: { position: Position }) => {
+                            posStart = { ...d.position };
+
+                            switch (this.mode.selected) {
+                                case editorMode.multiSelect:
+                                    const selectedClassName = html.classes.multiSelection.selected;
+                                    /*
+                                    const objs: { position: Position }[] = [
+                                        ...this.html.selectors.net.places()
+                                            .filter(`.${selectedClassName}`)
+                                            .data(),
+                                        ...this.html.selectors.net.transitions()
+                                            .filter(`.${selectedClassName}`)
+                                            .data()
+                                    ]
+                                    objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
+                                    */
+                                    break;
+
+                                case editorMode.default:
+                                    break;
+
+                                default:
+                                    notImplemented();
+                            }
+                            console.debug({ startdrag: d });
+                        })
+                        .on("drag", (d: { position: Position }) => {
+                            const evPos = (d3.event as Position);
+
+                            const dx = evPos.x - posStart.x;
+                            const dy = evPos.y - posStart.y;
+
+                            switch (this.mode.selected) {
+                                case editorMode.default:
+                                    d.position.x = evPos.x;
+                                    d.position.y = evPos.y;
                                     this.draw.update();
-                                }
-                                posStart = null;
+                                    break;
 
-                                if (!successfull) {
+                                case editorMode.multiSelect:
                                     objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                                        obj.position.x = defaultX;
-                                        obj.position.y = defaultY;
-                                    });
+                                        obj.position.x = dx + defaultX;
+                                        obj.position.y = dy + defaultY;
+                                    })
                                     this.draw.update();
-                                }
-                                objsPos = [];
-                                break;
+                                    break;
 
-                            default:
-                                notImplemented();
-                        }
+                                default:
+                                    notImplemented();
+                            }
+                        })
+                        .on("end", (d: { position: Position }) => {
+                            const evPos = (d3.event as Position);
+
+                            const dx = evPos.x - posStart.x;
+                            const dy = evPos.y - posStart.y;
+                            var successfull = false;
+                            successfull = (dx * dx + dy * dy > distance * distance);
+
+                            switch (this.mode.selected) {
+                                case editorMode.default:
+                                case editorMode.multiSelect:
+
+                                    if (successfull) {
+                                        console.debug("enddrag");
+                                        this.net.AddHist();
+                                    } else {
+                                        console.debug("canceldrag");
+                                        d.position.x = posStart.x;
+                                        d.position.y = posStart.y;
+                                        this.draw.update();
+                                    }
+                                    posStart = null;
+
+                                    if (!successfull) {
+                                        objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
+                                            obj.position.x = defaultX;
+                                            obj.position.y = defaultY;
+                                        });
+                                        this.draw.update();
+                                    }
+                                    objsPos = [];
+                                    break;
+
+                                default:
+                                    notImplemented();
+                            }
 
 
-                    })
-            })(),
+                        })
+                })(),
+        },
         helpers: {
             arcMakeHolder: typedNull<Place | Transition>()
         }
@@ -960,6 +1073,9 @@ export class PNEditor {
         (svg as any).call(this.mouse.svg.onDragMultiSelect);
 
         //#endregion
+
+
+        this.draw = new DrawModel(svg);
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();

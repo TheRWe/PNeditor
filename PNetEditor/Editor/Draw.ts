@@ -1,8 +1,8 @@
 ﻿import "./PNet";
 import { Place, Arc, Transition, Position, PNet } from "./PNet";
 import * as d3 from 'd3';
-import { rgb } from "d3";
-import { html } from "./Constants";
+import { rgb, BaseType } from "d3";
+import { html, d3BaseSelector } from "./Constants";
 import { GetArcEndpoints } from "./EditorHelpers/ArrowEndpointCalculationHelper";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
@@ -12,11 +12,12 @@ export class DrawModel {
 
     public data: { net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } } = null;
 
+    public readonly svg: d3BaseSelector;
     private readonly selector = {
-        places: () => d3.select("#" + html.id.g.places).selectAll("g").data((this.data.net || { places: [] as Place[] }).places),
-        transitions: () => d3.select("#" + html.id.g.transitions).selectAll("g").data((this.data.net || { transitions: [] as Transition[] }).transitions),
+        places: () => this.svg.select("#" + html.id.g.places).selectAll("g").data((this.data.net || { places: [] as Place[] }).places),
+        transitions: () => this.svg.select("#" + html.id.g.transitions).selectAll("g").data((this.data.net || { transitions: [] as Transition[] }).transitions),
         arcs: () =>
-            d3.select("#" + html.id.g.arcs).selectAll("g")
+            this.svg.select("#" + html.id.g.arcs).selectAll("g")
                 .data((this.data.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data.net, x) }; }))
     }
 
@@ -39,7 +40,22 @@ export class DrawModel {
         transition: new Callbacks<Transition>(),
         arc: new Callbacks<Arc>(),
         place: new Callbacks<Place>(),
-        svg: new Callbacks<SVGSVGElement>()
+        svg: new Callbacks<void>()
+    }
+
+
+    private getPos(): Position {
+        const svg = this.svg;
+        const coords = d3.mouse(svg.node() as SVGSVGElement);
+        const pos = { x: coords[0], y: coords[1] };
+        return pos;
+    }
+
+    private getWheelDeltaY(): number {
+        const e = d3.event;
+        console.debug("wheel");
+        const deltaY = e.deltaY;
+        return deltaY;
     }
 
     // todo classed všechny možné definice budou v css
@@ -49,12 +65,17 @@ export class DrawModel {
             return;
 
         const data = this.data;
+        const netSelectors = this.selector;
+        const svg = this.svg;
+        const callbacks = this.callbacks;
+        const getPos = this.getPos.bind(this);
+        const getWheelDeltaY = this.getWheelDeltaY;
+
         const net = data.net;
 
         console.debug("%c update", "color: rgb(0, 160, 160)");
 
         const defsNames = html.classes.defs;
-        const netSelectors = this.selector;
 
         const places = netSelectors.places;
         const transitions = netSelectors.transitions;
@@ -73,12 +94,12 @@ export class DrawModel {
                 .enter()
                 .each(fixNullPosition)
                 .append("g")
-                .on("click", this.callbacks.place.onClick)
-                .on("contextmenu", this.callbacks.place.onContextMenu)
-                .on("wheel", this.callbacks.place.onWheel)
+                .on("click", (elm) => { callbacks.place.onClick(elm, getPos()); })
+                .on("contextmenu", (elm) => { callbacks.place.onContextMenu(elm, getPos()); })
+                .on("wheel", (elm) => { callbacks.place.onWheel(elm, getWheelDeltaY()); })
                 .classed(html.classes.place.g, true);
         // todo: any ? (taky u transition)
-        (placesEnterGroup as any).call(this.callbacks.place.onDrag);
+        (placesEnterGroup as any).call(callbacks.place.onDrag);
         const placesEnterCircle =
             placesEnterGroup.append("circle")
                 .style("fill", rgb(255, 255, 255).hex())
@@ -123,11 +144,11 @@ export class DrawModel {
                 .enter()
                 .each(fixNullPosition)
                 .append("g")
-                .on("click", this.callbacks.transition.onClick)
-                .on("contextmenu", this.callbacks.transition.onContextMenu)
-                .on("wheel", this.callbacks.transition.onWheel)
+                .on("click", (elm) => { callbacks.transition.onClick(elm, getPos()); })
+                .on("contextmenu", (elm) => { callbacks.transition.onContextMenu(elm, getPos()); })
+                .on("wheel", (elm) => { callbacks.transition.onWheel(elm, getWheelDeltaY()); })
                 .classed(html.classes.transition.g, true);
-        (transitionEnterGroup as any).call(this.callbacks.transition.onDrag);
+        (transitionEnterGroup as any).call(callbacks.transition.onDrag);
 
         const transitionEnterRect =
             transitionEnterGroup
@@ -180,9 +201,9 @@ export class DrawModel {
             .attr("opacity", "0")
             .style("stroke-width", 8)
             .datum((x) => { return x.arc; })
-            .on("click", this.callbacks.arc.onClick)
-            .on("contextmenu", this.callbacks.arc.onContextMenu)
-            .on("wheel", this.callbacks.arc.onWheel);
+            .on("click", (elm) => { callbacks.arc.onClick(elm, getPos()); })
+            .on("contextmenu", (elm) => { callbacks.arc.onContextMenu(elm, getPos()); })
+            .on("wheel", (elm) => { callbacks.arc.onWheel(elm, getWheelDeltaY()); });
 
 
         enterArc
@@ -192,8 +213,7 @@ export class DrawModel {
             .attr("dy", ".3em")
             .attr("font-size", 10)
             .datum(x => x.arc)
-            .on("click", this.callbacks.arc.onClick);
-
+            .on("click", (elm) => { callbacks.arc.onClick(elm, getPos()); });
 
 
         arcs().select(`.${html.classes.helper.arcVisibleLine}`)
@@ -232,60 +252,64 @@ export class DrawModel {
             netSelectors.transitions().classed("selected", false)
         }
 
-
         // todo: kontrola
         arcs().exit().remove();
         places().exit().remove();
         transitions().exit().remove();
     }
+
+    constructor(svg: d3BaseSelector) {
+        this.svg = svg;
+
+        const svgcallbacks = this.callbacks.svg;
+        const getPos = this.getPos.bind(this);
+        const getWheelDeltaY = this.getWheelDeltaY;
+        svg.on("click", () => { svgcallbacks.onClick(null, getPos()); })
+            .on("contextmenu", () => { svgcallbacks.onContextMenu(null, getPos()); })
+            .on("wheel", () => { svgcallbacks.onWheel(null, getWheelDeltaY()); });
+
+
+        console.debug(this);
+    }
 }
 
-export enum CallbackTypes { 'letfClick', 'rightClick', 'wheel' }
-export enum CallbackDragTypes { 'start', 'drag', 'end', 'revert' }
+export enum CallbackType { 'letfClick', 'rightClick', 'wheel', 'dragStart', 'drag', 'dragEnd', 'dragRevert' }
 export class Callbacks<type> {
     static readonly distanceDeadzone = 8;
 
-    public AddCallback(type: CallbackTypes.wheel, callback: (obj: type, wheelDeltaY: number) => {}): void;
-    public AddCallback(type: CallbackTypes.letfClick, callback: (obj: type, pos: Position) => {}): void;
-    public AddCallback(type: CallbackTypes.rightClick, callback: (obj: type, pos: Position) => {}): void;
-    public AddCallback(type: CallbackTypes, callback: any)
-    {
-        let old: (obj: type) => void;
+    public AddCallback(type: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;
+    public AddCallback(type: CallbackType.letfClick, callback: (obj: type, pos: Position) => void): void;
+    public AddCallback(type: CallbackType.rightClick, callback: (obj: type, pos: Position) => void): void;
+    public AddCallback(type: CallbackType.dragStart | CallbackType.drag | CallbackType.dragEnd | CallbackType.dragRevert
+        , callback: (obj: type, pos: Position, startPos?: Position) => void): void;
+    public AddCallback(type: CallbackType, callback: any) {
+        let old: any;
         switch (type) {
-            case CallbackTypes.letfClick:
+            case CallbackType.letfClick:
                 old = this.onClick;
                 this.onClick = (...args) => { old(...args); callback(...args); };
                 break;
-            case CallbackTypes.rightClick:
+            case CallbackType.rightClick:
                 old = this.onContextMenu;
                 this.onContextMenu = (...args) => { old(...args); callback(...args); };
                 break;
-            case CallbackTypes.wheel:
+            case CallbackType.wheel:
                 old = this.onWheel;
                 this.onWheel = (...args) => { old(...args); callback(...args); };
                 break;
-
-            default:
-        }
-    }
-
-
-    public AddDragCallback(type: CallbackDragTypes, callback: (obj: type, position: Position) => {}) {
-        let old: (obj: type, position: Position) => void;
-        switch (type) {
-            case CallbackDragTypes.start:
+            case CallbackType.dragStart:
                 old = this.onDragStart;
-                this.onDragStart = (...args) => {old(...args); callback(...args); };
+                this.onDragStart = (...args) => { old(...args); callback(...args); };
                 break;
-            case CallbackDragTypes.drag:
+            case CallbackType.drag:
                 old = this.onDragDrag;
                 this.onDragDrag = (...args) => { old(...args); callback(...args); };
                 break;
-            case CallbackDragTypes.end:
+            case CallbackType.dragEnd:
                 old = this.onDragEnd;
                 this.onDragEnd = (...args) => { old(...args); callback(...args); };
                 break;
-            case CallbackDragTypes.revert:
+            case CallbackType.dragRevert:
                 old = this.onDragDeadzoneRevert;
                 this.onDragDeadzoneRevert = (...args) => { old(...args); callback(...args); };
                 break;
@@ -293,15 +317,14 @@ export class Callbacks<type> {
         }
     }
 
-    public onClick = (_obj: type) =>{};
-    public onContextMenu = (_obj: type) => { };
-    public onWheel = (_obj: type) => { };
+    public onClick = (_obj: type, pos: Position) => { };
+    public onContextMenu = (_obj: type, pos: Position) => { };
+    public onWheel = (_obj: type, wheelDeltaY: number) => { };
 
-
-    private onDragStart = (_obj: type, _position: Position) => { };
-    private onDragDrag = (_obj: type, _position: Position) => { };
-    private onDragEnd = (_obj: type, _position: Position) => { };
-    private onDragDeadzoneRevert = (_obj: type, _position: Position) => { };
+    private onDragStart = (_obj: type, _position: Position, _startPosition: Position) => { };
+    private onDragDrag = (_obj: type, _position: Position, _startPosition: Position) => { };
+    private onDragEnd = (_obj: type, _position: Position, _startPosition: Position) => { };
+    private onDragDeadzoneRevert = (_obj: type, _position: Position, _startPosition: Position) => { };
 
 
     private positionStartDrag: Position;
@@ -312,13 +335,14 @@ export class Callbacks<type> {
             const evPos = { x, y };
             this.positionStartDrag = evPos;
 
-            this.onDragStart(obj, evPos);
+            console.debug({ startDrag: obj, pos: evPos });
+            this.onDragStart(obj, evPos, { ...this.positionStartDrag });
         })
         .on("drag", (obj: type) => {
             const { x, y } = (d3.event as Position);
             const evPos = { x, y };
 
-            this.onDragDrag(obj, evPos);
+            this.onDragDrag(obj, evPos, { ...this.positionStartDrag });
         })
         .on("end", (obj: type) => {
             const { x, y } = (d3.event as Position);
@@ -327,10 +351,14 @@ export class Callbacks<type> {
             const dx = x - this.positionStartDrag.x;
             const dy = y - this.positionStartDrag.y;
             const successfull = (dx * dx + dy * dy > Callbacks.distanceDeadzone * Callbacks.distanceDeadzone);
-            if (successfull)
-                this.onDragEnd(obj, evPos);
-            else
-                this.onDragDeadzoneRevert(obj, this.positionStartDrag);
+            if (successfull) {
+                console.debug({ endDrag: obj, pos: evPos });
+                this.onDragEnd(obj, evPos, { ...this.positionStartDrag });
+            }
+            else {
+                console.debug({ revertDrag: obj, pos: evPos });
+                this.onDragDeadzoneRevert(obj, evPos, { ...this.positionStartDrag });
+            }
 
             this.positionStartDrag = null;
         });
