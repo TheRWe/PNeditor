@@ -2,7 +2,7 @@
 import { PNet, Place, Transition, Position, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { rgb } from 'd3';
-import { typedNull } from '../Helpers/purify';
+import { typedNull, notImplemented } from '../Helpers/purify';
 import * as file from 'fs';
 import { EditorMode, editorMode } from './EditorMode';
 import { html, d3BaseSelector } from './Constants';
@@ -12,11 +12,6 @@ import { Toggle, ToggleState } from './../Helpers/Toggle';
 
 type FilePath = string | number | Buffer | URL;
 
-function notImplemented() {
-    console.groupCollapsed("%cnot implemented", "background: yellow");
-    console.trace(); 
-    console.groupEnd();
-}
 
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
@@ -27,11 +22,21 @@ export class PNEditor {
 
     private readonly draw: DrawModel;
 
-
     private get net(): PNet | null {
         const currentTab = this.tabs.CurrentTab;
         return currentTab == null ? null : currentTab.net;
     }
+
+    public Undo() {
+        this.net.Undo();
+        this.draw.update();
+    }
+
+    public Redo() {
+        this.net.Redo();
+        this.draw.update();
+    }
+
 
     //#region File
 
@@ -102,7 +107,6 @@ export class PNEditor {
             },
             helpers: {
                 arcDragLine: typedNull<d3BaseSelector>(),
-                selectDragRect: typedNull<d3BaseSelector>(),
             },
             net: {
                 /*
@@ -126,6 +130,7 @@ export class PNEditor {
 
     // used to cancel all undone actions
     public resetState() {
+        // todo: Draw IsSelectionEnabled
         // todo: toggles.run ? 
         if (this.mode.selected === this.mode.default)
             return;
@@ -165,12 +170,18 @@ export class PNEditor {
         callbacks.place.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
 
         callbacks.transition.AddCallback(CallbackType.letfClick, this.mouse.transition.onClick);
-
+        callbacks.transition.AddCallback(CallbackType.rightClick, this.mouse.transition.onRightClick);
+        callbacks.transition.AddCallback(CallbackType.wheel, this.mouse.transition.onWheel);
 
         callbacks.transition.AddCallback(CallbackType.dragStart, this.mouse.onDragPositionMove.start);
         callbacks.transition.AddCallback(CallbackType.drag, this.mouse.onDragPositionMove.drag);
         callbacks.transition.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
         callbacks.transition.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
+
+
+        callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
+        callbacks.svg.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
+        callbacks.svg.AddCallback(CallbackType.wheel, this.mouse.svg.onWheel);
 
         //this.html.selectors.svg.on("click", this.mouse.svg.onClick);
         callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
@@ -193,12 +204,20 @@ export class PNEditor {
     private readonly mouse = {
         //todo: oddělat new_
         svg: {
-            onClick: () => {
+            //todo: redundantní kód s gePos na draw
+            getMousePosition(): Position {
+                const svg = this.svg;
+                const coords = d3.mouse(svg.node() as SVGSVGElement);
+                const pos = { x: coords[0], y: coords[1] };
+                return pos;
+            },
+
+            onClick: (_: null, pos: Position) => {
                 console.debug("svg clicked");
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case editorMode.default:
-                        this.net.AddTransition(mouse.svg.getMousePosition());
+                        this.net.AddTransition(pos);
                         this.draw.update();
                         break;
                     case editorMode.arcMake:
@@ -228,132 +247,8 @@ export class PNEditor {
                         notImplemented();
                 }
             },
-            onDragMultiSelect: (() => {
-                //todo: globální dragdistance -> do configu
-                const distance = 8;
-                const helpers = this.html.selectors.helpers;
-                const netSelectors = this.html.selectors.net;
-
-                var selectionStart: Position = null;
-
-                const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
-                    return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
-                        && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
-                }
-
-                return d3.drag()
-                    .clickDistance(distance)
-                    .on("start", () => {
-                        const currentTab = this.tabs.CurrentTab;
-                        currentTab.selected = currentTab.selected || { places: [], tranisitons: [] };
-
-
-                        //todo d3.event jako onDragPositionMove
-                        const pos = this.mouse.svg.getMousePosition();
-
-                        console.debug({ startdrag: this.html.selectors.svg });
-                        selectionStart = this.mouse.svg.getMousePosition();
-
-                        helpers.selectDragRect
-                            .style("display", "inline")
-                            .attr("x", pos.x)
-                            .attr("y", pos.y)
-                    })
-                    .on("drag", () => {
-                        const pos = this.mouse.svg.getMousePosition();
-
-                        switch (this.mode.selected) {
-                            case editorMode.default:
-                            case editorMode.multiSelect:
-                                const dx = pos.x - selectionStart.x;
-                                if (dx > 0)
-                                    helpers.selectDragRect
-                                        .attr("width", dx)
-                                        .attr("x", selectionStart.x)
-                                else
-                                    helpers.selectDragRect
-                                        .attr("width", -dx)
-                                        .attr("x", pos.x)
-
-                                const dy = pos.y - selectionStart.y;
-                                if (dy > 0)
-                                    helpers.selectDragRect
-                                        .attr("height", dy)
-                                        .attr("y", selectionStart.y)
-                                else
-                                    helpers.selectDragRect
-                                        .attr("height", -dy)
-                                        .attr("y", pos.y)
-
-
-
-                                //d.position.x = evPos.x;
-                                //d.position.y = evPos.y;
-                                //this.draw.update();
-                                break;
-                            default:
-                                notImplemented();
-                        }
-                    })
-                    .on("end", () => {
-                        const pos = this.mouse.svg.getMousePosition();
-
-                        helpers.selectDragRect
-                            .style("display", "none")
-                            .attr("x", 0)
-                            .attr("y", 0)
-                            .attr("width", 0)
-                            .attr("height", 0)
-
-                        const places = this.net.places.filter(elm => isSelected(selectionStart, pos, elm.position))
-                        const transitions = this.net.transitions.filter(elm => isSelected(selectionStart, pos, elm.position))
-
-                        const tabSelected = this.tabs.CurrentTab.selected;
-
-                        tabSelected.places = places;
-                        tabSelected.tranisitons = transitions;
-
-                        console.debug({ endDrag: [...places, ...transitions] });
-
-                        if (places.length + transitions.length > 0) {
-                            this.mode.selected = editorMode.multiSelect;
-                        }
-
-                        //const dx = d.position.x - selectionStart.x;
-                        //const dy = d.position.y - selectionStart.y;
-
-                        //if (dx * dx + dy * dy > distance * distance) {
-                        //    console.debug("enddrag");
-                        //    this.net.AddHist();
-                        //} else {
-                        //    console.debug("canceldrag");
-                        //    //d.position.x = selectionStart.x;
-                        //    //d.position.y = selectionStart.y;
-                        //    this.draw.update();
-                        //}
-                        //selectionStart = null;
-                    })
-            })(),
-            /** returns PNet Position relative to main svg element */
-            getMousePosition: (): Position => {
-                const coords = d3.mouse(this.html.selectors.svg.node() as SVGSVGElement);
-                return { x: coords[0], y: coords[1] };
-            }
-        },
-        controlBar: {
-            main: {
-                runToggle: {
-                    //todo: smazat - pouze příklad pro práci s checkboxem
-                    onChange: (_: any, i: number, nodes: d3.BaseType[] | d3.ArrayLike<d3.BaseType>) => {
-                        const elm = d3.select(nodes[i]);
-                        const checked = (elm.property("checked") as boolean);
-                        this.mouse.controlBar.main.runToggle.onCheckedChange(checked);
-                    },
-
-                    onCheckedChange: (checked: boolean) => {
-                    }
-                }
-            }
+            onRightClick: ( ) => {},
+            onWheel: ( )=>{ },
         },
         transition: {
             onClick: (t: Transition) => {
@@ -500,8 +395,6 @@ export class PNEditor {
                 this.draw.update();
             }
         },
-
-
         onDragPositionMove: {
             start: (d: { position: Position }) => {
 
@@ -586,108 +479,6 @@ export class PNEditor {
                         notImplemented();
                 }
             },
-
-            old:
-                (() => {
-                    const distance = 8;
-
-                    var posStart: Position = null;
-                    var objsPos: { obj: { position: Position }, defaultPos: Position }[] = [];
-
-                    return d3.drag()
-                        .clickDistance(distance)
-                        .on("start", (d: { position: Position }) => {
-                            posStart = { ...d.position };
-
-                            switch (this.mode.selected) {
-                                case editorMode.multiSelect:
-                                    const selectedClassName = html.classes.multiSelection.selected;
-                                    /*
-                                    const objs: { position: Position }[] = [
-                                        ...this.html.selectors.net.places()
-                                            .filter(`.${selectedClassName}`)
-                                            .data(),
-                                        ...this.html.selectors.net.transitions()
-                                            .filter(`.${selectedClassName}`)
-                                            .data()
-                                    ]
-                                    objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
-                                    */
-                                    break;
-
-                                case editorMode.default:
-                                    break;
-
-                                default:
-                                    notImplemented();
-                            }
-                            console.debug({ startdrag: d });
-                        })
-                        .on("drag", (d: { position: Position }) => {
-                            const evPos = (d3.event as Position);
-
-                            const dx = evPos.x - posStart.x;
-                            const dy = evPos.y - posStart.y;
-
-                            switch (this.mode.selected) {
-                                case editorMode.default:
-                                    d.position.x = evPos.x;
-                                    d.position.y = evPos.y;
-                                    this.draw.update();
-                                    break;
-
-                                case editorMode.multiSelect:
-                                    objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                                        obj.position.x = dx + defaultX;
-                                        obj.position.y = dy + defaultY;
-                                    })
-                                    this.draw.update();
-                                    break;
-
-                                default:
-                                    notImplemented();
-                            }
-                        })
-                        .on("end", (d: { position: Position }) => {
-                            const evPos = (d3.event as Position);
-
-                            const dx = evPos.x - posStart.x;
-                            const dy = evPos.y - posStart.y;
-                            var successfull = false;
-                            successfull = (dx * dx + dy * dy > distance * distance);
-
-                            switch (this.mode.selected) {
-                                case editorMode.default:
-                                case editorMode.multiSelect:
-
-                                    if (successfull) {
-                                        console.debug("enddrag");
-                                        this.net.AddHist();
-                                    } else {
-                                        console.debug("canceldrag");
-                                        d.position.x = posStart.x;
-                                        d.position.y = posStart.y;
-                                        this.draw.update();
-                                    }
-                                    posStart = null;
-
-                                    if (!successfull) {
-                                        objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                                            obj.position.x = defaultX;
-                                            obj.position.y = defaultY;
-                                        });
-                                        this.draw.update();
-                                    }
-                                    objsPos = [];
-                                    break;
-
-                                default:
-                                    notImplemented();
-                            }
-
-
-                        })
-                })(),
         },
         helpers: {
             arcMakeHolder: typedNull<Place | Transition>()
@@ -829,15 +620,6 @@ export class PNEditor {
         }
     }
 
-    public Undo() {
-        this.net.Undo();
-        this.draw.update();
-    }
-
-    public Redo() {
-        this.net.Redo();
-        this.draw.update();
-    }
 
     /** open marking edit window for given place*/
     private StartInputArc(a: Arc) {
@@ -928,8 +710,6 @@ export class PNEditor {
     //#endregion
 
 
-    //#region Constructor
-
     //todo force for nearby objects(disablable in settings)
     constructor(divElement: d3BaseSelector, loadPath: string = null) {
         const selectors = this.html.selectors;
@@ -968,6 +748,7 @@ export class PNEditor {
 
         //#endregion
 
+
         const tabs = this.tabs = new TabControl(divElement.append("div"));
         tabs.AddOnSelectionChanged(() => {
             this.draw.data = this.tabs.CurrentTab;
@@ -975,13 +756,13 @@ export class PNEditor {
         })
         tabs.AddOnTabAddButton(() => { this.NewNet(); })
 
+
         //#region Initialize SVG-HTML
 
         const svg = selectors.svg = divElement
             .append("svg")
             .attr("width", "100%")
             .attr("height", 600);
-
 
         const defs = svg.append('svg:defs');
         const defsNames = html.classes.defs;
@@ -1057,21 +838,6 @@ export class PNEditor {
             .style("display", "none")
             .style("pointer-events", "none");
 
-        selectors.helpers.selectDragRect = G.append("rect")
-            .attr("width", 0)
-            .attr("height", 0)
-            .attr("x", 0)
-            .attr("y", 0)
-            .style("display", "none")
-            .style("stroke-width", 2)
-            .style("stroke", "black")
-            .style("stroke-dasharray", 15)
-            .style("stroke-opacity", 0.5)
-            .style("stroke-linecap", "round")
-            .style("fill", "none");
-
-        (svg as any).call(this.mouse.svg.onDragMultiSelect);
-
         //#endregion
 
 
@@ -1089,9 +855,6 @@ export class PNEditor {
         console.debug(this);
         this.draw.update();
     }
-
-    //#endregion
-
 }
 
 

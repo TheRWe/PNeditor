@@ -1,5 +1,12 @@
 ﻿import * as file from 'fs';
 
+
+export function notImplemented() {
+    console.groupCollapsed("%cnot implemented", "background: yellow");
+    console.trace();
+    console.groupEnd();
+}
+
 export type EnumType = { [id: number]: string };
 
 type fncHelpSortKeySelector<T> = ((a: T, b: T) => number);
@@ -12,6 +19,20 @@ export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSele
         return valA > valB ? 1 : valA === valB ? 0 : -1;
     }
     return f;
+}
+
+export function arraysDifferences<T>(arr1: T[], arr2: T[]): {added: T[], removed: T[]} {
+    const added = [...arr2];
+    const removed = arr1.filter((elm) => {
+        const i = added.findIndex((x) => { return elm === x; });
+        if (i >= 0) {
+            added.splice(i, 1);
+            return false;
+        }
+        return true;
+    });
+
+    return { added, removed };
 }
 
 export function ClassNameOf(obj: any): string {

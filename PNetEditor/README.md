@@ -138,7 +138,7 @@ Použít javascript-workery/[node child process](https://medium.freecodecamp.org/n
   - [ ] dotahování sítí asynchronì (i subsítí?)
   - NATIVE (C++ dodatek pro javascript používá se pøes import)
   - Komunikace s jiným programem pøes stdin/stdout/stderr -> [node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
-  - [SVG animace pomocí rAF](http://bl.ocks.org/pjanik/5169968)
+  - [x] [SVG animace pomocí rAF](http://bl.ocks.org/pjanik/5169968)
   - -trace-opt -trace-deopt
 
 ### Vzhled

@@ -1,24 +1,28 @@
 ﻿import "./PNet";
 import { Place, Arc, Transition, Position, PNet } from "./PNet";
 import * as d3 from 'd3';
-import { rgb, BaseType } from "d3";
+import { rgb, BaseType, transition } from "d3";
 import { html, d3BaseSelector } from "./Constants";
 import { GetArcEndpoints } from "./EditorHelpers/ArrowEndpointCalculationHelper";
+import { arraysDifferences } from "../Helpers/purify";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
+export type selected = { places: Place[], transitions: Transition[] };
 
 export class DrawModel {
 
     public data: { net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } } = null;
 
     public readonly svg: d3BaseSelector;
-    private readonly selector = {
-        places: () => this.svg.select("#" + html.id.g.places).selectAll("g").data((this.data.net || { places: [] as Place[] }).places),
-        transitions: () => this.svg.select("#" + html.id.g.transitions).selectAll("g").data((this.data.net || { transitions: [] as Transition[] }).transitions),
-        arcs: () =>
-            this.svg.select("#" + html.id.g.arcs).selectAll("g")
-                .data((this.data.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data.net, x) }; }))
+
+    public IsSelectionEnabled = true;
+
+    public callbacks = {
+        transition: new Callbacks<Transition>(),
+        arc: new Callbacks<Arc>(),
+        place: new Callbacks<Place>(),
+        svg: new Callbacks<void>()
     }
 
     private updating = false;
@@ -36,12 +40,10 @@ export class DrawModel {
         }).bind(this));
     }
 
-    public callbacks = {
-        transition: new Callbacks<Transition>(),
-        arc: new Callbacks<Arc>(),
-        place: new Callbacks<Place>(),
-        svg: new Callbacks<void>()
+    public AddOnSelectionChanged(callback: (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => void) {
+        const old = this.onSelectionChanged; this.onSelectionChanged = (...args) => { old(...args); callback(...args); }
     }
+    private onSelectionChanged = (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => { };
 
 
     private getPos(): Position {
@@ -56,6 +58,121 @@ export class DrawModel {
         console.debug("wheel");
         const deltaY = e.deltaY;
         return deltaY;
+    }
+
+    constructor(svg: d3BaseSelector) {
+        this.svg = svg;
+
+        const svgcallbacks = this.callbacks.svg;
+        const getPos = this.getPos.bind(this);
+        const getWheelDeltaY = this.getWheelDeltaY;
+        svg.on("click", () => { svgcallbacks.onClick(null, getPos()); })
+            .on("contextmenu", () => { svgcallbacks.onContextMenu(null, getPos()); })
+            .on("wheel", () => { svgcallbacks.onWheel(null, getWheelDeltaY()); });
+
+        this.InitMultiSelect();
+    }
+
+    private InitMultiSelect() {
+        const selectDragRect = this.svg.select("g").append("rect")
+            .attr("width", 0)
+            .attr("height", 0)
+            .attr("x", 0)
+            .attr("y", 0)
+            .style("display", "none")
+            .style("stroke-width", 2)
+            .style("stroke", "black")
+            .style("stroke-dasharray", 15)
+            .style("stroke-opacity", 0.5)
+            .style("stroke-linecap", "round")
+            .style("fill", "none");
+
+        const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
+            return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
+                && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
+        }
+
+        const callback = new Callbacks<null>();
+
+        //todo: set ?
+        let sel: selected = { places: [], transitions: [] };
+        let selecting = false;
+
+        const updateSelection = ((pos1: Position, pos2: Position) => {
+            const net = this.data.net;
+            const places = this.data.net.places.filter(elm => isSelected(pos1, pos2, elm.position));
+            const transitions = this.data.net.transitions.filter(elm => isSelected(pos1, pos2, elm.position));
+
+            const placesDifs = arraysDifferences(sel.places, places);
+            const transitionsDifs = arraysDifferences(sel.transitions, transitions);
+            if (placesDifs.added.length === 0 && placesDifs.removed.length === 0 &&
+                transitionsDifs.added.length === 0 && transitionsDifs.removed.length === 0)
+                return;
+
+            sel = { places, transitions };
+            this.onSelectionChanged(
+                { places: [...places], transitions: [...transitions] },
+                { places: [...placesDifs.added], transitions: [...transitionsDifs.added] },
+                { places: [...placesDifs.removed], transitions: [...transitionsDifs.removed] })
+        }).bind(this);
+
+        callback.AddCallback(CallbackType.dragStart, (_: null, __: Position, start: Position) => {
+            if (!this.IsSelectionEnabled) {
+                selecting = false;
+                return;
+            }
+
+            selecting = true;
+
+            if (!d3.event.shiftKey) {
+                const unselected = sel;
+                sel = { places: [], transitions: [] };
+                this.onSelectionChanged(sel, unselected);
+            }
+
+            selectDragRect.style("display", "inline")
+        });
+
+        callback.AddCallback(CallbackType.drag, (_: null, pos: Position, start: Position) => {
+            if (!selecting)
+                return;
+
+            const dx = pos.x - start.x;
+            if (dx > 0) selectDragRect.attr("width", dx).attr("x", start.x)
+            else selectDragRect.attr("width", -dx).attr("x", pos.x)
+
+            const dy = pos.y - start.y;
+            if (dy > 0) selectDragRect.attr("height", dy).attr("y", start.y)
+            else selectDragRect.attr("height", -dy).attr("y", pos.y)
+
+            updateSelection(pos, start);
+        });
+        callback.AddCallback(CallbackType.dragEnd, (_: null, pos: Position, start: Position) => {
+            if (!selecting)
+                return;
+            selecting = false;
+
+            selectDragRect
+                .style("display", "none")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", 0)
+                .attr("height", 0)
+
+            updateSelection(pos, start);
+        });
+
+        (this.svg as any).call(callback.onDrag);
+
+
+    }
+
+    private readonly selector = {
+        places: () => this.svg.select("#" + html.id.g.places).selectAll("g").data((this.data.net || { places: [] as Place[] }).places),
+        transitions: () => this.svg.select("#" + html.id.g.transitions).selectAll("g").data((this.data.net || { transitions: [] as Transition[] }).transitions),
+        arcs: () =>
+            this.svg.select("#" + html.id.g.arcs).selectAll("g")
+                .data((this.data.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data.net, x) }; }))
     }
 
     // todo classed všechny možné definice budou v css
@@ -257,24 +374,11 @@ export class DrawModel {
         places().exit().remove();
         transitions().exit().remove();
     }
-
-    constructor(svg: d3BaseSelector) {
-        this.svg = svg;
-
-        const svgcallbacks = this.callbacks.svg;
-        const getPos = this.getPos.bind(this);
-        const getWheelDeltaY = this.getWheelDeltaY;
-        svg.on("click", () => { svgcallbacks.onClick(null, getPos()); })
-            .on("contextmenu", () => { svgcallbacks.onContextMenu(null, getPos()); })
-            .on("wheel", () => { svgcallbacks.onWheel(null, getWheelDeltaY()); });
-
-
-        console.debug(this);
-    }
 }
 
 export enum CallbackType { 'letfClick', 'rightClick', 'wheel', 'dragStart', 'drag', 'dragEnd', 'dragRevert' }
 export class Callbacks<type> {
+    //todo: globální dragdistance -> do configu
     static readonly distanceDeadzone = 8;
 
     public AddCallback(type: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;
@@ -286,32 +390,25 @@ export class Callbacks<type> {
         let old: any;
         switch (type) {
             case CallbackType.letfClick:
-                old = this.onClick;
-                this.onClick = (...args) => { old(...args); callback(...args); };
+                old = this.onClick; this.onClick = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.rightClick:
-                old = this.onContextMenu;
-                this.onContextMenu = (...args) => { old(...args); callback(...args); };
+                old = this.onContextMenu; this.onContextMenu = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.wheel:
-                old = this.onWheel;
-                this.onWheel = (...args) => { old(...args); callback(...args); };
+                old = this.onWheel; this.onWheel = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.dragStart:
-                old = this.onDragStart;
-                this.onDragStart = (...args) => { old(...args); callback(...args); };
+                old = this.onDragStart; this.onDragStart = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.drag:
-                old = this.onDragDrag;
-                this.onDragDrag = (...args) => { old(...args); callback(...args); };
+                old = this.onDragDrag; this.onDragDrag = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.dragEnd:
-                old = this.onDragEnd;
-                this.onDragEnd = (...args) => { old(...args); callback(...args); };
+                old = this.onDragEnd; this.onDragEnd = (...args) => { old(...args); callback(...args); };
                 break;
             case CallbackType.dragRevert:
-                old = this.onDragDeadzoneRevert;
-                this.onDragDeadzoneRevert = (...args) => { old(...args); callback(...args); };
+                old = this.onDragDeadzoneRevert; this.onDragDeadzoneRevert = (...args) => { old(...args); callback(...args); };
                 break;
             default:
         }
