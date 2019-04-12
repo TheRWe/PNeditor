@@ -45,10 +45,12 @@
     <Content Include="index.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="renderer.js" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="pkg\gpu.js" />
+    <Compile Include="pkg\JS\gpu.js" />
+    <TypeScriptCompile Include="renderer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <Compile Include="SMAZAT\Run.js">
       <SubType>Code</SubType>
     </Compile>
@@ -94,7 +96,7 @@
     <TypeScriptCompile Include="main.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="pkg\gpu.d.ts" />
+    <TypeScriptCompile Include="pkg\JS\gpu.d.ts" />
     <TypeScriptCompile Include="program.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -109,6 +111,7 @@
     <Folder Include="Editor\" />
     <Folder Include="Editor\EditorHelpers\" />
     <Folder Include="Helpers\" />
+    <Folder Include="pkg\JS\" />
     <Folder Include="SMAZAT\" />
     <Folder Include="pkg\" />
   </ItemGroup>
