@@ -1,7 +1,8 @@
 {
   "name": "pnet_editor",
+  "productName": "pnet_editor",
   "version": "1.0.0",
-  "description": "PNET Electron application",
+  "description": "Electron.PNetEditor",
   "main": "program.js",
   "scripts": {
     "start": "electron ."

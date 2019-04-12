@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Electron", "Electron\Electron.njsproj", "{5ACA0FF8-A10F-4728-9FE6-9730D04A7C19}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "PNetEditor", "PNetEditor\PNetEditor.njsproj", "{5ACA0FF8-A10F-4728-9FE6-9730D04A7C19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

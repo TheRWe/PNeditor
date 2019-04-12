@@ -22,7 +22,7 @@ function createWindow() {
 
     (mainWindow as any).custom = { savePath: userQuickNetSavePath };
 
-    mainWindow.loadFile('index.html');
+    mainWindow.loadURL(`file://${__dirname}/index.html`);
 
 
     mainWindow.on('closed', function () {
