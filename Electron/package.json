@@ -12,10 +12,10 @@
     "editor"
   ],
   "author": "Wehmhoner Roman",
-  "devDependencies": {
-    "electron": "^4.0.0"
-  },
   "dependencies": {
-    "ts-keycode-enum": "^1.0.6"
+    "d3": "5.7.0",
+    "npm": "6.4.1",
+    "ts-keycode-enum": "^1.0.6",
+    "electron": "^4.0.0"
   }
 }
