@@ -205,8 +205,8 @@ export class PNEditor {
         //todo: oddělat new_
         svg: {
             //todo: redundantní kód s gePos na draw
-            getMousePosition(): Position {
-                const svg = this.svg;
+            getMousePosition: (): Position => {
+                const svg = this.html.selectors.svg;
                 const coords = d3.mouse(svg.node() as SVGSVGElement);
                 const pos = { x: coords[0], y: coords[1] };
                 return pos;
