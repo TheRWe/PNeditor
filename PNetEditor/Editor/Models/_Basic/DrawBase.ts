@@ -1,20 +1,16 @@
 ﻿import "./PNet";
-import { Place, Transition, Position } from "./../PNet";
 import * as d3 from 'd3';
 import { Selection } from "d3";
-import { d3BaseSelector } from "./../Constants";
+import { d3BaseSelector, Position } from "./../../Constants";
 import { ModelBase } from "./ModelBase";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
-export type selected = { places: Place[], transitions: Transition[] };
-
-
 export abstract class DrawBase<Model extends ModelBase<any>> {
-    public readonly svg: d3BaseSelector;
+    public readonly container: d3BaseSelector;
     public readonly data: Model;
 
-    public abstract get Callbacks(): { svg: Callbacks<{}>, [key: string]: Callbacks<any> };
+    public abstract get Callbacks(): { container: Callbacks<{}>, [key: string]: Callbacks<any> };
 
     protected abstract get Selectors(): { [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any> };
 
@@ -33,13 +29,15 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
         }).bind(this));
     }
 
+    /** Get mouse position relative to current svg element */
     protected getPos(): Position {
-        const svg = this.svg;
+        const svg = this.container;
         const coords = d3.mouse(svg.node() as SVGSVGElement);
         const pos = { x: coords[0], y: coords[1] };
         return pos;
     }
 
+    /** returns wheel delta y */
     protected getWheelDeltaY(): number {
         const e = d3.event;
         console.debug("wheel");
@@ -47,17 +45,19 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
         return deltaY;
     }
 
+    /** redraws svg elements - called on rAF */
     protected abstract _update(): void;
 
+    /** connects svg callbacks */
     protected initializeSVGCallback() {
         const getPos = this.getPos.bind(this);
         const getWheelDeltaY = this.getWheelDeltaY;
 
-        this.Callbacks.svg.ConnectToElement(this.svg, getPos, getWheelDeltaY);
+        this.Callbacks.container.ConnectToElement(this.container, getPos, getWheelDeltaY);
     }
 
-    constructor(svg: d3BaseSelector, data: Model) {
-        this.svg = svg;
+    constructor(container: d3BaseSelector, data: Model) {
+        this.container = container;
         this.data = data;
 
         this.initializeSVGCallback();

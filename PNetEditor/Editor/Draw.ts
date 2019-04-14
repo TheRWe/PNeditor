@@ -1,8 +1,7 @@
-﻿import "./PNet";
-import { Place, Arc, Transition, Position, PNet } from "./PNet";
+﻿import { Place, Arc, Transition, PNet } from "./PNet";
 import * as d3 from 'd3';
-import { rgb, BaseType, transition, Selection } from "d3";
-import { html, d3BaseSelector } from "./Constants";
+import { rgb, Selection } from "d3";
+import { html, d3BaseSelector, Position } from "./Constants";
 import { GetArcEndpoints } from "./EditorHelpers/ArrowEndpointCalculationHelper";
 import { arraysDifferences } from "../Helpers/purify";
 

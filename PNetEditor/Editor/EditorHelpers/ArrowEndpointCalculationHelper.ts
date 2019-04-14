@@ -1,4 +1,5 @@
-﻿import { Transition, Place, PNet, Position, Arc } from "../PNet";
+﻿import { Transition, Place, PNet, Arc } from "../PNet";
+import { Position } from "./../Constants";
 import { classify, SortKeySelector } from "../../Helpers/purify";
 
 //todo: casching

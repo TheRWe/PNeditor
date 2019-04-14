@@ -1,5 +1,5 @@
 ﻿export type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
-
+export type Position = { x: number, y: number }
 
 export const html = {
     id: {

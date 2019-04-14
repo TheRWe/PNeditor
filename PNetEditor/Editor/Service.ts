@@ -247,8 +247,8 @@ export class PNEditor {
                         notImplemented();
                 }
             },
-            onRightClick: ( ) => {},
-            onWheel: ( )=>{ },
+            onRightClick: () => { },
+            onWheel: () => { },
         },
         transition: {
             onClick: (t: Transition) => {
@@ -757,7 +757,6 @@ export class PNEditor {
         tabs.AddOnTabAddButton(() => { this.NewNet(); })
 
 
-        //#region Initialize SVG-HTML
 
         const svg = selectors.svg = divElement
             .append("svg")
@@ -837,8 +836,6 @@ export class PNEditor {
             .style("stroke-width", 1.5)
             .style("display", "none")
             .style("pointer-events", "none");
-
-        //#endregion
 
 
         this.draw = new DrawModel(svg);

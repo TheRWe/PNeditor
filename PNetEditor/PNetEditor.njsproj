@@ -48,9 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pkg\JS\gpu.js" />
-    <TypeScriptCompile Include="Editor\Basic\ActionsBase.ts" />
-    <TypeScriptCompile Include="Editor\Basic\DrawBase.ts" />
-    <TypeScriptCompile Include="Editor\Basic\ModelBase.ts">
+    <TypeScriptCompile Include="Editor\Models\_Basic\ActionBase.ts" />
+    <TypeScriptCompile Include="Editor\Models\_Basic\CompoundBase.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Models\_Basic\DrawBase.ts" />
+    <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Service.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="renderer.ts">
@@ -115,7 +121,9 @@
   <ItemGroup>
     <Folder Include="Editor\" />
     <Folder Include="Editor\EditorHelpers\" />
-    <Folder Include="Editor\Basic\" />
+    <Folder Include="Editor\Models\_Basic\" />
+    <Folder Include="Editor\Models\" />
+    <Folder Include="Editor\Models\PNet\" />
     <Folder Include="Helpers\" />
     <Folder Include="pkg\JS\" />
     <Folder Include="SMAZAT\" />

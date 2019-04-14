@@ -1,4 +1,5 @@
 ﻿import { DataModel } from "./EditorHelpers/SettingsInterface";
+import { Position } from "./Constants";
 
 export class PNet implements DataModel<JSONNet> {
 
@@ -200,7 +201,6 @@ export class Place {
     }
 }
 
-export type Position = { x: number, y: number }
 export class Arc {
     transition: Transition;
     place: Place;

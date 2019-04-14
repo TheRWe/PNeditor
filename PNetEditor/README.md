@@ -24,7 +24,7 @@
     - DRAW
       - vykresluje model v svg
     - Control
-      - zpracovává uživatelský vstup
+      - zpracovává uživatelský vstup -> propojuje pomocí callbackù draw->actions
     - Service
       - obsluhuje Taby
       - ukládá/naèítá modely

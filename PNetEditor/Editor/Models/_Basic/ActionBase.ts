@@ -1,9 +1,10 @@
 ﻿import { ModelBase } from "./ModelBase";
 
 
-class ActionBase<modelType extends ModelBase<any>>{
+export abstract class ActionBase<modelType extends ModelBase<any>>{
     public readonly model: modelType;
 
+    /** callback called when model is changed */
     public AddOnModelChange(callback: () => void): void {
         const old = this.onModelChange;
         this.onModelChange = (...args) => { old(...args); callback(...args); }
