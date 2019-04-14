@@ -11,6 +11,25 @@
 
 ## TODO
 
+
+  - [ ] cílová architktura editoru
+    - Model
+      - obsahuje data
+      - stará se o serializaci
+      - modely na sebe mùžou navzájem odkazovat a mìnit se podle Action
+      - model obsahuje VŠECHNY data
+    - Actions 
+      - obslužná tøída pro modely
+      - umožòuje spouštìní analýz a všechny editace modelù
+    - DRAW
+      - vykresluje model v svg
+    - Control
+      - zpracovává uživatelský vstup
+    - Service
+      - obsluhuje Taby
+      - ukládá/naèítá modely
+      - zpracovává vzájemné referencování modelù
+
   - [ ] analýza rozdìlení kódu do souborù
   - [ ] show hitboxes
   - [ ] Vykreslování abstrakce
@@ -31,6 +50,8 @@
     - [ ] Round menu
   - [ ] Grid
     - [ ] Combobox (velikosti gridu/zapínání vypínání)
+  - [ ] Labeled places (zobrazování písmen v places místo poètu a vedle zobrazení markings)
+  - [ ] 
   - [x] Drag
     - [x] Posouvání jednolivých objektù
     - [x] Závislost dragování na mousemode
@@ -115,6 +136,10 @@ Použít javascript-workery/[node child process](https://medium.freecodecamp.org/n
   - [ ] Koncepty síe používající logická a synchronizaèní primitiva(flip-flop,And,or ... Simulace logických obvodù?)
   - [ ] Invalidace analýz pøi zmìnì sítì (opìtovné pøepoèítání invariant)
   - [ ] možnost pracovat s rekurzivním algoritmem - vyhledávání idempotentní operace = konec rekurze
+    
+  - [ ] Reachability graf
+  - [ ] 1-bounded net
+  - [ ] pokud sí 1-bounded -> umožnit reachability aby byl formou zápisu názvù places
 
 #### Generování sítí
 

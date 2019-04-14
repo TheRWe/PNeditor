@@ -156,6 +156,8 @@ export class PNet implements DataModel<JSONNet> {
 
 export class Transition {
     public position: Position | null;
+    // todo: implementovat cold transitions
+    public isCold: boolean = false;
 
     //todo: o id a odkazování se bude starat ukládání a načítání
     public readonly id: number;
@@ -217,22 +219,23 @@ type JSONNet = {
     savedMarkings:
     {
         place_id: number,
-        marking: number
+        marking: number,
     }[],
     places:
     {
         name?: string,
         id: number,
         position?: Position,
-        marking?: number
+        marking?: number,
     }[],
     transitions: {
         id: number,
-        position?: Position
+        position?: Position,
+        isCold?: boolean,
     }[],
     arcs: {
         transition_id: number,
         place_id: number,
-        qty: number
+        qty: number,
     }[],
 }
