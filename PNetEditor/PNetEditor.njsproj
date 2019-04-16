@@ -48,6 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pkg\JS\gpu.js" />
+    <TypeScriptCompile Include="Editor\Models\PNet\PNetAction.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Models\PNet\PNetCompound.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Models\PNet\PNetDraw.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Models\PNet\PNetModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\_Basic\ActionBase.ts" />
     <TypeScriptCompile Include="Editor\Models\_Basic\CompoundBase.ts">
       <SubType>Code</SubType>
@@ -86,7 +98,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Editor.ts" />
-    <TypeScriptCompile Include="Editor\EditorHelpers\ArrowEndpointCalculationHelper.ts">
+    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\EditorMode.ts" />
@@ -121,6 +133,7 @@
   <ItemGroup>
     <Folder Include="Editor\" />
     <Folder Include="Editor\EditorHelpers\" />
+    <Folder Include="Editor\Models\PNet\Helpers\" />
     <Folder Include="Editor\Models\_Basic\" />
     <Folder Include="Editor\Models\" />
     <Folder Include="Editor\Models\PNet\" />

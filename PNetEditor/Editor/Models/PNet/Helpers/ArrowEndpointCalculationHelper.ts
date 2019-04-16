@@ -1,6 +1,6 @@
-﻿import { Transition, Place, PNet, Arc } from "../PNet";
-import { Position } from "./../Constants";
-import { classify, SortKeySelector } from "../../Helpers/purify";
+﻿import { Transition, Place, PNet, Arc } from "../../../PNet";
+import { Position } from "../../../Constants";
+import { classify, SortKeySelector } from "../../../../Helpers/purify";
 
 //todo: casching
 export function GetArcEndpoints(net: PNet, arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
