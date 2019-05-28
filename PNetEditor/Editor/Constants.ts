@@ -1,4 +1,5 @@
-﻿export type d3BaseSelector = d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+﻿export type d3BaseSelector = d3.Selection<d3.BaseType, any, HTMLElement, any>;
+export type d3BaseNoDataSelector = d3.Selection<d3.BaseType, null, d3.BaseType, any>;
 export type Position = { x: number, y: number }
 
 export const html = {

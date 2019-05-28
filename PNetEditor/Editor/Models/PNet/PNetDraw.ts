@@ -4,7 +4,9 @@ import { rgb, Selection } from "d3";
 import { html, d3BaseSelector, Position } from "./../../Constants";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
 import { arraysDifferences } from "./../../../Helpers/purify";
-import { DrawBase, Callbacks } from "../_Basic/DrawBase";
+import { DrawBase, Callbacks, CallbackType } from "../_Basic/DrawBase";
+import { PNet } from "../../PNet";
+import { selected } from "../../Draw";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
@@ -87,14 +89,7 @@ export class DrawModel {
             .attr("width", 0)
             .attr("height", 0)
             .attr("x", 0)
-            .attr("y", 0)
-            .style("display", "none")
-            .style("stroke-width", 2)
-            .style("stroke", "black")
-            .style("stroke-dasharray", 15)
-            .style("stroke-opacity", 0.5)
-            .style("stroke-linecap", "round")
-            .style("fill", "none");
+            .attr("y", 0);
 
         const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
             return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
@@ -228,9 +223,6 @@ export class DrawModel {
         // todo: any ? (taky u transition)
         const placesEnterCircle =
             placesEnterGroup.append("circle")
-                .style("fill", rgb(255, 255, 255).hex())
-                .style("stroke", "black")
-                .style("stroke-width", "2")
                 .attr("r", 10)
                 .classed(html.classes.place.svgCircle, true);
 

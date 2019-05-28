@@ -17,13 +17,13 @@
       - obsahuje data
       - stará se o serializaci
       - modely na sebe mùžou navzájem odkazovat a mìnit se podle Action
-      - model obsahuje VŠECHNY data
+      - model obsahuje VŠECHNY data(vè. vybraných objektù)
     - Actions 
       - obslužná tøída pro modely
       - umožòuje spouštìní analýz a všechny editace modelù
     - DRAW
       - vykresluje model v svg
-    - Control
+    - Compound
       - zpracovává uživatelský vstup -> propojuje pomocí callbackù draw->actions
     - Service
       - obsluhuje Taby

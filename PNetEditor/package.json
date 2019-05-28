@@ -7,6 +7,9 @@
   "scripts": {
     "start": "electron ."
   },
+  "build": {
+
+  },
   "keywords": [
     "Electron",
     "Pnet",

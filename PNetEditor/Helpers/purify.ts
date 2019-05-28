@@ -1,5 +1,11 @@
 ﻿import * as file from 'fs';
+type Position = { x: number, y: number };
 
+
+export function IsInPosition(pos1: Position, pos2: Position, elmPos: Position) {
+    return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
+        && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
+}
 
 export function notImplemented() {
     console.groupCollapsed("%cnot implemented", "background: yellow");

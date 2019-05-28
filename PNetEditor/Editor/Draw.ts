@@ -217,18 +217,11 @@ export class DrawModel {
         // todo: any ? (taky u transition)
         const placesEnterCircle =
             placesEnterGroup.append("circle")
-                .style("fill", rgb(255, 255, 255).hex())
-                .style("stroke", "black")
-                .style("stroke-width", "2")
                 .attr("r", 10)
                 .classed(html.classes.place.svgCircle, true);
 
         const placeEnterSelect =
             placesEnterGroup.append("circle")
-                .style("stroke", "black")
-                .style("fill", "none")
-                .style("stroke-width", "1.8")
-                .style("stroke-dasharray", "5")
                 .attr("r", 14.5)
                 .classed(html.classes.multiSelection.selectOutline, true);
 
@@ -279,12 +272,6 @@ export class DrawModel {
                 .attr("height", 29)
                 .attr("x", -14.5)
                 .attr("y", -14.5)
-                .style("fill", "none")
-                .style("stroke", "black")
-                .style("stroke-width", 1.5)
-                .style("stroke-dasharray", 4)
-                .style("stroke-opacity", 0.5)
-                .style("stroke-linecap", "round")
                 .classed(html.classes.multiSelection.selectOutline, true);
         ;
         transitions()
