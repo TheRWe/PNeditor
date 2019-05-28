@@ -135,7 +135,7 @@ export class PNEditor {
     private mode: EditorMode = new EditorMode();
 
     // used to cancel all undone actions
-    public resetState() {
+    private resetState() {
         // todo: Draw IsSelectionEnabled
         // todo: toggles.run ? 
         if (this.mode.selected === this.mode.default)
@@ -249,8 +249,8 @@ export class PNEditor {
                         notImplemented();
                 }
             },
-            onRightClick: ( ) => {},
-            onWheel: ( )=>{ },
+            onRightClick: () => { },
+            onWheel: () => { },
         },
         transition: {
             onClick: (t: Transition) => {
