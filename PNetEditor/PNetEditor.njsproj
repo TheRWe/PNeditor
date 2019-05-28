@@ -68,6 +68,9 @@
     <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\PNTab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="renderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -103,7 +106,7 @@
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Tab.ts">
+    <TypeScriptCompile Include="Editor\TabControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Color.ts" />

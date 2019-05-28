@@ -11,7 +11,8 @@ async function main() {
     const custom = (remote.getCurrentWindow() as any).custom;
 
     const div = d3.select(".editor");
-    const editor = new PNE(div, custom.savePath);
+    const editor = new PNE(div);
+    editor.Load(custom.savePath);
 
     ipcRenderer.on("user-event", (e: any, msg: { type: messageType, args: any }) => {
         const { type: msgType, args: msgArgs } = msg;

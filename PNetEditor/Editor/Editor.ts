@@ -7,8 +7,9 @@ import * as file from 'fs';
 import { EditorMode, editorMode } from './EditorMode';
 import { html, d3BaseSelector, Position } from './Constants';
 import { DrawModel, CallbackType } from './Draw';
-import { TabControl } from './Tab';
+import { TabControl } from './TabControl';
 import { Toggle, ToggleState } from './../Helpers/Toggle';
+import { PNTab } from './PNTab';
 
 type FilePath = string | number | Buffer | URL;
 
@@ -16,7 +17,7 @@ type FilePath = string | number | Buffer | URL;
 // todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
 export class PNEditor {
 
-    private tabs: TabControl<{ net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } }>;
+    private tabs: TabControl<PNTab>;
 
     private toggles = { run: typedNull<Toggle>() };
 
@@ -64,7 +65,10 @@ export class PNEditor {
             const jsonNet = JSON.parse(objString);
             const net = (new PNet()).fromJSON(jsonNet);
 
-            this.tabs.AddTab({ net: net, file: path, selected: null }, "todo path");
+            const tab = new PNTab();
+            tab.net = net; tab.file = path;
+
+            this.tabs.AddTab(tab);
             //this.net = net;
 
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
@@ -81,7 +85,9 @@ export class PNEditor {
 
     // todo: záložky ?
     public NewNet() {
-        this.tabs.AddTab({ net: new PNet(), file: null, selected: null });
+        const tab = new PNTab();
+        tab.net = new PNet();
+        this.tabs.AddTab(tab);
         this.draw.update();
     }
 
@@ -177,7 +183,6 @@ export class PNEditor {
         callbacks.transition.AddCallback(CallbackType.drag, this.mouse.onDragPositionMove.drag);
         callbacks.transition.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
         callbacks.transition.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
-
 
         callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
         callbacks.svg.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
@@ -708,7 +713,7 @@ export class PNEditor {
 
 
     //todo force for nearby objects(disablable in settings)
-    constructor(divElement: d3BaseSelector, loadPath: string = null) {
+    constructor(divElement: d3BaseSelector) {
         const selectors = this.html.selectors;
 
         selectors.div = divElement;
@@ -729,6 +734,11 @@ export class PNEditor {
                 .style("text-align", "center")
                 .style("user-select", "none")
                 .text("default");
+
+        const mode = this.mode;
+        mode.AddOnChange(() => {
+            selectors.controlBar.mouseDebugState.text(mode.selected);
+        });
 
         const runtgl = this.toggles.run = new Toggle(selectors.controlBar.div, "Run");
         runtgl.AddOnToggleChange((tlg) => {
@@ -842,14 +852,6 @@ export class PNEditor {
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();
-
-
-        // todo: load all nets
-        if (!(loadPath && this.Load(loadPath))) {
-            this.NewNet();
-        }
-
-        console.debug(this);
         this.draw.update();
     }
 }

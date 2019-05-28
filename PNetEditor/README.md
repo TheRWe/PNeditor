@@ -2,9 +2,10 @@
 
 ## Priority
 
-  - zaèít znova
   - každý objekt vlasní soubor
-
+  - každá záložka bude mít vlastní stav 
+  - (nìkteré stavy budou reagovat na pøechod na jinou záložku nìkteré ne)
+  - dokumentovat hotové vìci
 
 **FUNKCIONALITA > VZHLED > OPTIMALIZACE**
   - Používání a aktualizace poznámek -> Pøed každým commitem úpravy

@@ -1,11 +1,10 @@
-﻿import { PNet, Place, Transition } from "./PNet";
-import { typedNull } from "../Helpers/purify";
+﻿import { typedNull } from "../Helpers/purify";
 import { d3BaseSelector } from "./Constants";
 
-
-// todo: generika
-
-export class TabControl<TabDataType> {
+export interface IHeadingProvider {
+    heading: string;
+}
+export class TabControl<TabDataType extends IHeadingProvider> {
     private readonly html = {
         selectors: {
             tabs: typedNull<d3BaseSelector>(),
@@ -13,13 +12,15 @@ export class TabControl<TabDataType> {
         }
     }
 
-    private tabs = [] as { data: TabDataType, name: string }[]
+    private tabs = [] as { data: TabDataType }[]
 
+    /** returns currently openned tab */
     public get CurrentTab(): TabDataType {
         const tab = this.tabs[this.selected]
         return tab === undefined ? null : tab.data;
     }
 
+    /** returns index of selected tab */
     public get SelectedIndex(): number {
         return this.selected;
     }
@@ -58,8 +59,8 @@ export class TabControl<TabDataType> {
         }
     }
 
-    public AddTab(tabData: TabDataType, name: string = "unnamed", selectAddedTab = true) {
-        this.tabs.push({ data: tabData, name });
+    public AddTab(tabData: TabDataType, selectAddedTab: boolean = true) {
+        this.tabs.push({ data: tabData });
 
         if (selectAddedTab)
             this.SelectedIndex = this.tabs.length - 1;
@@ -123,7 +124,7 @@ export class TabControl<TabDataType> {
 
         const li = selector()
             .select("label div")
-            .text(x => x.name);
+            .text(x => x.data.heading);
 
         const radio = selector()
             .select("input")

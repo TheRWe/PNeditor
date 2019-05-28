@@ -7,7 +7,7 @@ export class EditorMode {
 
     public get selected(): editorMode { return this._selected; }
     public set selected(v: editorMode) {
-        const changed = v === this._selected;
+        const changed = v !== this._selected;
         this._last = this._selected;
         this._selected = v;
         if (changed)
@@ -16,7 +16,7 @@ export class EditorMode {
 
     private onChanged = () => { };
 
-    public AddOnChange(callback: () => {}) {
+    public AddOnChange(callback: () => void) {
         const onChanged = this.onChanged;
 
         this.onChanged = () => {
@@ -27,9 +27,6 @@ export class EditorMode {
 
     public get last(): editorMode { return this._last; }
     public swap(): void { this.selected = this.last; }
-
-
-
 }
 
 export enum editorMode {
