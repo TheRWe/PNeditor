@@ -2,12 +2,17 @@
 
 ## Priority
 
+  - zaèít znova
+  - každý objekt vlasní soubor
+
+
 **FUNKCIONALITA > VZHLED > OPTIMALIZACE**
   - Používání a aktualizace poznámek -> Pøed každým commitem úpravy
   - Základní funkcionalita
   - Pøeètení knížky
   - Prùbìžná dokumentace
   - Text obhajoba
+  - Buildování pomocí "build" v cmd
 
 ## TODO
 

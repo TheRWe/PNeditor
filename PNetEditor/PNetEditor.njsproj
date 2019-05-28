@@ -68,9 +68,6 @@
     <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Service.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="renderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

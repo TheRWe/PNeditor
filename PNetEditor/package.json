@@ -5,10 +5,8 @@
   "description": "Electron.PNetEditor",
   "main": "program.js",
   "scripts": {
-    "start": "electron ."
-  },
-  "build": {
-
+    "start": "electron .",
+    "pack": "build --dir"
   },
   "keywords": [
     "Electron",
@@ -20,7 +18,9 @@
     "d3": "5.7.0",
     "@types/d3": "5.7.0",
     "npm": "6.4.1",
-    "ts-keycode-enum": "1.0.6",
+    "ts-keycode-enum": "1.0.6"
+  },
+  "devDependencies": {
     "electron": "4.0.0"
   }
 }

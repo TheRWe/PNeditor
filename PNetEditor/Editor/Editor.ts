@@ -183,9 +183,6 @@ export class PNEditor {
         callbacks.svg.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
         callbacks.svg.AddCallback(CallbackType.wheel, this.mouse.svg.onWheel);
 
-        //this.html.selectors.svg.on("click", this.mouse.svg.onClick);
-        callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
-
 
         const inputMarking = this.keyboard.inputs.marking.selectors;
         inputMarking.input

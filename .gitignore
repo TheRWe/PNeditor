@@ -263,3 +263,4 @@ __pycache__/
 /**/*.js
 /**/*.js.map
 /**/*.d.ts
+/PNetEditor/dist
