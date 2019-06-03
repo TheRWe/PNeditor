@@ -6,35 +6,40 @@ import { typedNull, notImplemented } from '../Helpers/purify';
 import * as file from 'fs';
 import { EditorMode, editorMode } from './EditorMode';
 import { html, d3BaseSelector, Position } from './Constants';
-import { DrawModel, CallbackType } from './Draw';
+import { CallbackType } from './Draw';
 import { TabControl } from './TabControl';
 import { Toggle, ToggleState } from './../Helpers/Toggle';
 import { PNTab } from './PNTab';
+import { PNDraw } from './Models/PNet/PNetDraw';
+import { PNModel } from './Models/PNet/PNetModel';
 
 type FilePath = string | number | Buffer | URL;
 
 
-// todo: definice rozdělit do souborů (class extend/ definice metod bokem pomocí (this: cls))
+// todo: definice rozdělit do souborů (class extend / definice metod bokem pomocí (this: cls))
 export class PNEditor {
 
     private tabs: TabControl<PNTab>;
 
     private toggles = { run: typedNull<Toggle>() };
 
-    private readonly draw: DrawModel;
+    private readonly draw: PNDraw;
 
-    private get net(): PNet | null {
-        const currentTab = this.tabs.CurrentTab;
-        return currentTab == null ? null : currentTab.net;
+    private get currentTab(): PNTab { return this.tabs.CurrentTab; }
+
+    private get net(): PNModel | null {
+        return this.currentTab == null ? null : this.currentTab.net;
     }
 
     public Undo() {
-        this.net.Undo();
+        if (this.currentTab == null) return;
+        this.currentTab.action.Undo();
         this.draw.update();
     }
 
     public Redo() {
-        this.net.Redo();
+        if (this.currentTab == null) return;
+        this.currentTab.action.Redo();
         this.draw.update();
     }
 
@@ -63,7 +68,10 @@ export class PNEditor {
         try {
             objString = file.readFileSync(path, { encoding: "utf8" });
             const jsonNet = JSON.parse(objString);
-            const net = (new PNet()).fromJSON(jsonNet);
+            const net = (new PNModel());
+
+            // todo: eskalace
+            if (net.fromJSON(jsonNet)) { }
 
             const tab = new PNTab();
             tab.net = net; tab.file = path;
@@ -86,7 +94,7 @@ export class PNEditor {
     // todo: záložky ?
     public NewNet() {
         const tab = new PNTab();
-        tab.net = new PNet();
+        tab.net = new PNModel();
         this.tabs.AddTab(tab);
         this.draw.update();
     }
@@ -165,7 +173,7 @@ export class PNEditor {
 
     /** initialize keyboard *on* handlers related to mouse */
     private InitMouseEvents() {
-        const callbacks = this.draw.callbacks;
+        const callbacks = this.draw.Callbacks;
         callbacks.place.AddCallback(CallbackType.letfClick, this.mouse.place.onClick);
         callbacks.place.AddCallback(CallbackType.rightClick, this.mouse.place.onRightClick);
         callbacks.place.AddCallback(CallbackType.wheel, this.mouse.place.onWheel);
@@ -184,9 +192,9 @@ export class PNEditor {
         callbacks.transition.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
         callbacks.transition.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
 
-        callbacks.svg.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
-        callbacks.svg.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
-        callbacks.svg.AddCallback(CallbackType.wheel, this.mouse.svg.onWheel);
+        callbacks.container.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
+        callbacks.container.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
+        callbacks.container.AddCallback(CallbackType.wheel, this.mouse.svg.onWheel);
 
 
         const inputMarking = this.keyboard.inputs.marking.selectors;
@@ -219,7 +227,7 @@ export class PNEditor {
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case editorMode.default:
-                        this.net.AddTransition(pos);
+                        this.currentTab.action.AddTransition(pos);
                         this.draw.update();
                         break;
                     case editorMode.arcMake:
@@ -266,7 +274,7 @@ export class PNEditor {
                         d3.event.stopPropagation();
                         break;
                     case editorMode.run:
-                        if (this.net.RunTransition(t))
+                        if (this.currentTab.action.RunTransition(t))
                             this.draw.update();
                         d3.event.stopPropagation();
                         break;
@@ -331,11 +339,11 @@ export class PNEditor {
                     case editorMode.default:
                         if (deltaY < 0) {
                             p.marking++;
-                            this.net.AddHist();
+                            this.currentTab.action.AddHist();
                             this.draw.update();
                         } else if (p.marking > 0) {
                             p.marking--;
-                            this.net.AddHist();
+                            this.currentTab.action.AddHist();
                             this.draw.update();
                         }
 
@@ -389,7 +397,7 @@ export class PNEditor {
                                 a.qty--;
                             }
                         }
-                        this.net.AddHist();
+                        this.currentTab.action.AddHist();
                         break;
                     default:
                         notImplemented();
@@ -452,7 +460,7 @@ export class PNEditor {
                 switch (this.mode.selected) {
                     case editorMode.default:
                     case editorMode.multiSelect:
-                        this.net.AddHist();
+                        this.currentTab.action.AddHist();
 
                         //objsPos = [];
                         break;
@@ -544,8 +552,8 @@ export class PNEditor {
 
         if (ending === "new") {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
-                const addedPlace = this.net.AddPlace(this.mouse.svg.getMousePosition());
-                this.net.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1);
+                const addedPlace = this.currentTab.action.AddPlace(this.mouse.svg.getMousePosition());
+                this.currentTab.action.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1);
             } else if (this.mouse.helpers.arcMakeHolder instanceof Place) {
                 //todo place making
                 console.error("make transition");
@@ -553,7 +561,7 @@ export class PNEditor {
         } else if (ending instanceof Place) {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
                 console.debug("connecting place")
-                this.net.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1);
+                this.currentTab.action.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1);
             } else {
                 //todo: hlaška nebo vyrvoření place mezi dvěma transitions
                 console.error("can't connect two transitions");
@@ -660,7 +668,7 @@ export class PNEditor {
         if (save) {
             let val = +(inputArc.input.node() as any).value;
             this.keyboard.inputs.arcValue.editedArc.qty = val;
-            this.net.AddHist();
+            this.currentTab.action.AddHist();
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
@@ -703,7 +711,7 @@ export class PNEditor {
         if (save) {
             let val = +(inputMarking.input.node() as any).value;
             this.keyboard.inputs.marking.editedPlace.marking = val;
-            this.net.AddHist();
+            this.currentTab.action.AddHist();
         }
 
         this.keyboard.inputs.marking.editedPlace = null;
@@ -755,14 +763,12 @@ export class PNEditor {
 
         //#endregion
 
-
         const tabs = this.tabs = new TabControl(divElement.append("div"));
         tabs.AddOnSelectionChanged(() => {
-            this.draw.data = this.tabs.CurrentTab;
+            this.draw.data = this.tabs.CurrentTab.net;
             this.draw.update();
         })
         tabs.AddOnTabAddButton(() => { this.NewNet(); })
-
 
         //#region Initialize SVG-HTML
 
@@ -847,8 +853,7 @@ export class PNEditor {
 
         //#endregion
 
-
-        this.draw = new DrawModel(svg);
+        this.draw = new PNDraw(svg);
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();

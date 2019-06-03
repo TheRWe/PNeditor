@@ -1,4 +1,4 @@
-﻿import { Place, Arc, Transition, PNetModel } from "./PNetModel";
+﻿import { Place, Arc, Transition, PNModel } from "./PNetModel";
 import * as d3 from 'd3';
 import { rgb, Selection } from "d3";
 import { html, d3BaseSelector, Position } from "./../../Constants";
@@ -10,191 +10,38 @@ import { selected } from "../../Draw";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
-export class PNetDraw extends DrawBase<PNetModel>{
-    public Callbacks: {
-        [key: string]: Callbacks<any>;
-        container: Callbacks<{}>;
-    };
-    protected Selectors: { [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any>; };
-    protected _update(): void {
-        throw new Error("Method not implemented.");
-    }
-}
-
-
-export class DrawModel {
-
-    public data: { net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } } = null;
-
-    public readonly svg: d3BaseSelector;
-
-    public IsSelectionEnabled = true;
-
-    public callbacks = {
+export class PNDraw extends DrawBase<PNModel>{
+    public Callbacks = {
+        container: new Callbacks<{}>(),
         transition: new Callbacks<Transition>(),
         arc: new Callbacks<Arc>(),
         place: new Callbacks<Place>(),
-        svg: new Callbacks<{}>()
-    }
+    };
+    protected Selectors = {
+        places: () => this.container.select("#" + html.id.g.places).selectAll("g").data((this.data || { places: [] as Place[] }).places),
+        transitions: () => this.container.select("#" + html.id.g.transitions).selectAll("g").data((this.data || { transitions: [] as Transition[] }).transitions),
+        arcs: () =>
+            this.container.select("#" + html.id.g.arcs).selectAll("g")
+                .data((this.data || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data, x) }; }))
+    };
 
-    private updating = false;
-    /** schedule redraw function for next animation frame */
-    public update() {
-        if (this.updating)
-            return;
-        this.updating = true;
-        requestAnimationFrame((() => {
-            try {
-                this._update();
-            } finally {
-                this.updating = false;
-            }
-        }).bind(this));
-    }
+    constructor(container: d3BaseSelector) {
+        super(container);
 
-    public AddOnSelectionChanged(callback: (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => void) {
-        const old = this.onSelectionChanged; this.onSelectionChanged = (...args) => { old(...args); callback(...args); }
-    }
-    private onSelectionChanged = (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => { };
-
-
-    private getPos(): Position {
-        const svg = this.svg;
-        const coords = d3.mouse(svg.node() as SVGSVGElement);
-        const pos = { x: coords[0], y: coords[1] };
-        return pos;
-    }
-
-    private getWheelDeltaY(): number {
-        const e = d3.event;
-        console.debug("wheel");
-        const deltaY = e.deltaY;
-        return deltaY;
-    }
-
-    constructor(svg: d3BaseSelector) {
-        this.svg = svg;
-
-        const svgcallbacks = this.callbacks.svg;
-        const getPos = this.getPos.bind(this);
-        const getWheelDeltaY = this.getWheelDeltaY;
-
-        this.callbacks.svg.ConnectToElement(svg, getPos, getWheelDeltaY);
-
+        this.initializeContainerCallback();
         this.InitMultiSelect();
     }
 
-    private InitMultiSelect() {
-        const selectDragRect = this.svg.select("g").append("rect")
-            .attr("width", 0)
-            .attr("height", 0)
-            .attr("x", 0)
-            .attr("y", 0);
-
-        const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
-            return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
-                && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
-        }
-
-        const callback = new Callbacks<null>();
-        callback.DragOverridePositionFunction = (() => {
-            return this.getPos();
-        }).bind(this);
-        //todo: set ?
-        let sel: selected = { places: [], transitions: [] };
-        let selecting = false;
-
-        const updateSelection = ((pos1: Position, pos2: Position) => {
-            const net = this.data.net;
-            const places = this.data.net.places.filter(elm => isSelected(pos1, pos2, elm.position));
-            const transitions = this.data.net.transitions.filter(elm => isSelected(pos1, pos2, elm.position));
-
-            const placesDifs = arraysDifferences(sel.places, places);
-            const transitionsDifs = arraysDifferences(sel.transitions, transitions);
-            if (placesDifs.added.length === 0 && placesDifs.removed.length === 0 &&
-                transitionsDifs.added.length === 0 && transitionsDifs.removed.length === 0)
-                return;
-
-            sel = { places, transitions };
-
-            this.onSelectionChanged(
-                { places: [...places], transitions: [...transitions] },
-                { places: [...placesDifs.added], transitions: [...transitionsDifs.added] },
-                { places: [...placesDifs.removed], transitions: [...transitionsDifs.removed] })
-        }).bind(this);
-
-        callback.AddCallback(CallbackType.dragStart, (_: null, __: Position, start: Position) => {
-            if (!this.IsSelectionEnabled) {
-                selecting = false;
-                return;
-            }
-
-            selecting = true;
-
-            //todo: more work needed
-            if (d3.event.shiftKey) { ; }
-
-            const unselected = sel;
-            sel = { places: [], transitions: [] };
-            this.onSelectionChanged(sel, { places: [], transitions: [] }, unselected);
-
-            selectDragRect.style("display", "inline")
-        });
-
-        callback.AddCallback(CallbackType.drag, (_: null, pos: Position, start: Position) => {
-            if (!selecting)
-                return;
-
-            const dx = pos.x - start.x;
-            if (dx > 0) selectDragRect.attr("width", dx).attr("x", start.x)
-            else selectDragRect.attr("width", -dx).attr("x", pos.x)
-
-            const dy = pos.y - start.y;
-            if (dy > 0) selectDragRect.attr("height", dy).attr("y", start.y)
-            else selectDragRect.attr("height", -dy).attr("y", pos.y)
-
-            updateSelection(pos, start);
-        });
-        callback.AddCallback(CallbackType.dragEnd, (_: null, pos: Position, start: Position) => {
-            if (!selecting)
-                return;
-            selecting = false;
-
-            selectDragRect
-                .style("display", "none")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", 0)
-                .attr("height", 0)
-
-            updateSelection(pos, start);
-        });
-
-        (this.svg as any).call(callback.onDrag);
-    }
-
-    private readonly selector = {
-        places: () => this.svg.select("#" + html.id.g.places).selectAll("g").data((this.data.net || { places: [] as Place[] }).places),
-        transitions: () => this.svg.select("#" + html.id.g.transitions).selectAll("g").data((this.data.net || { transitions: [] as Transition[] }).transitions),
-        arcs: () =>
-            this.svg.select("#" + html.id.g.arcs).selectAll("g")
-                .data((this.data.net || { arcs: [] as Arc[] }).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data.net, x) }; }))
-    }
-
-    // todo classed všechny možné definice budou v css
-    /** immediately apply changes in data to DOM */
-    private _update() {
+    protected _update(): void {
         if (!this.data)
             return;
 
-        const data = this.data;
-        const netSelectors = this.selector;
-        const svg = this.svg;
-        const callbacks = this.callbacks;
+        const net = this.data;
+        const netSelectors = this.Selectors;
+        const container = this.container;
+        const callbacks = this.Callbacks;
         const getPos = this.getPos.bind(this);
         const getWheelDeltaY = this.getWheelDeltaY;
-
-        const net = data.net;
 
         console.debug("%c update", "color: rgb(0, 160, 160)");
 
@@ -356,7 +203,7 @@ export class DrawModel {
         netSelectors.places().classed(html.classes.multiSelection.selected, false);
         netSelectors.transitions().classed(html.classes.multiSelection.selected, false);
 
-        const selected = data.selected;
+        const selected = net.selected;
         if (selected) {
             netSelectors.places()
                 .classed("selected", elm => (selected.places as any).includes(elm))
@@ -372,4 +219,109 @@ export class DrawModel {
         places().exit().remove();
         transitions().exit().remove();
     }
+
+
+    //#region Multiselect
+
+    public IsSelectionEnabled: boolean = true;
+
+    public AddOnSelectionChanged(callback: (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => void) {
+        const old = this.onSelectionChanged; this.onSelectionChanged = (...args) => { old(...args); callback(...args); }
+    }
+    private onSelectionChanged = (_allSelected: selected, _justSelected?: selected, _unSelected?: selected) => { };
+
+    private InitMultiSelect() {
+        const container = this.container;
+
+        const selectDragRect = container.select("g").append("rect")
+            .attr("width", 0)
+            .attr("height", 0)
+            .attr("x", 0)
+            .attr("y", 0)
+            .classed("select-outline", true);
+
+        const isSelected = (pos1: Position, pos2: Position, elmPos: Position) => {
+            return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
+                && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
+        }
+
+        const callback = new Callbacks<null>();
+        callback.DragOverridePositionFunction = (() => {
+            return this.getPos();
+        }).bind(this);
+        //todo: set ?
+        let sel: selected = { places: [], transitions: [] };
+        let selecting = false;
+
+        const updateSelection = ((pos1: Position, pos2: Position) => {
+            const net = this.data;
+            const places = this.data.places.filter(elm => isSelected(pos1, pos2, elm.position));
+            const transitions = this.data.transitions.filter(elm => isSelected(pos1, pos2, elm.position));
+
+            const placesDifs = arraysDifferences(sel.places, places);
+            const transitionsDifs = arraysDifferences(sel.transitions, transitions);
+            if (placesDifs.added.length === 0 && placesDifs.removed.length === 0 &&
+                transitionsDifs.added.length === 0 && transitionsDifs.removed.length === 0)
+                return;
+
+            sel = { places, transitions };
+
+            this.onSelectionChanged(
+                { places: [...places], transitions: [...transitions] },
+                { places: [...placesDifs.added], transitions: [...transitionsDifs.added] },
+                { places: [...placesDifs.removed], transitions: [...transitionsDifs.removed] })
+        }).bind(this);
+
+        callback.AddCallback(CallbackType.dragStart, (_: null, __: Position, start: Position) => {
+            if (!this.IsSelectionEnabled) {
+                selecting = false;
+                return;
+            }
+
+            selecting = true;
+
+            //todo: more work needed
+            if (d3.event.shiftKey) { ; }
+
+            const unselected = sel;
+            sel = { places: [], transitions: [] };
+            this.onSelectionChanged(sel, { places: [], transitions: [] }, unselected);
+
+            selectDragRect.style("display", "inline")
+        });
+
+        callback.AddCallback(CallbackType.drag, (_: null, pos: Position, start: Position) => {
+            if (!selecting)
+                return;
+
+            const dx = pos.x - start.x;
+            if (dx > 0) selectDragRect.attr("width", dx).attr("x", start.x)
+            else selectDragRect.attr("width", -dx).attr("x", pos.x)
+
+            const dy = pos.y - start.y;
+            if (dy > 0) selectDragRect.attr("height", dy).attr("y", start.y)
+            else selectDragRect.attr("height", -dy).attr("y", pos.y)
+
+            updateSelection(pos, start);
+        });
+        callback.AddCallback(CallbackType.dragEnd, (_: null, pos: Position, start: Position) => {
+            if (!selecting)
+                return;
+            selecting = false;
+
+            selectDragRect
+                .style("display", "none")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", 0)
+                .attr("height", 0)
+
+            updateSelection(pos, start);
+        });
+
+        (container as any).call(callback.onDrag);
+    }
+
+
+	//#endregion
 }

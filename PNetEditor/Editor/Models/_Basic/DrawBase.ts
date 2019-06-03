@@ -1,5 +1,4 @@
-﻿import "./PNet";
-import * as d3 from 'd3';
+﻿import * as d3 from 'd3';
 import { Selection } from "d3";
 import { d3BaseSelector, Position } from "./../../Constants";
 import { ModelBase } from "./ModelBase";
@@ -8,11 +7,11 @@ type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
 export abstract class DrawBase<Model extends ModelBase<any>> {
     public readonly container: d3BaseSelector;
-    public readonly data: Model;
+    public data: Model;
 
     public abstract get Callbacks(): { container: Callbacks<{}>, [key: string]: Callbacks<any> };
 
-    protected abstract get Selectors(): { [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any> };
+    protected abstract get Selectors(): any/*{ [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any> }*/;
 
     private updating = false;
     /** schedule redraw function for next animation frame */
@@ -49,22 +48,20 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
     protected abstract _update(): void;
 
     /** connects svg callbacks */
-    protected initializeSVGCallback() {
+    protected initializeContainerCallback() {
         const getPos = this.getPos.bind(this);
         const getWheelDeltaY = this.getWheelDeltaY;
 
         this.Callbacks.container.ConnectToElement(this.container, getPos, getWheelDeltaY);
     }
 
-    constructor(container: d3BaseSelector, data: Model) {
+    constructor(container: d3BaseSelector) {
         this.container = container;
-        this.data = data;
-
-        this.initializeSVGCallback();
     }
 }
 
 export enum CallbackType { 'letfClick', 'rightClick', 'wheel', 'dragStart', 'drag', 'dragEnd', 'dragRevert' }
+/** class for holding mouse callbacks for drawmodels */
 export class Callbacks<type> {
     //todo: globální dragdistance -> do configu
     static readonly distanceDeadzone = 8;

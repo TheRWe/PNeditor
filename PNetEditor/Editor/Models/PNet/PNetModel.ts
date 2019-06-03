@@ -1,7 +1,9 @@
 ﻿import { ModelBase, ModelJSONType } from "../_Basic/ModelBase";
 import { Position } from "./../../Constants";
 
-export class PNetModel extends ModelBase<JSONNet>{
+export class PNModel extends ModelBase<JSONNet>{
+    public selected: { places: Place[], tranisitons: Transition[] } = null;
+
     public places: Place[];
     public transitions: Transition[];
     public arcs: Arc[];

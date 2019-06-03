@@ -9,7 +9,9 @@ export abstract class ActionBase<modelType extends ModelBase<any>>{
         const old = this.onModelChange;
         this.onModelChange = (...args) => { old(...args); callback(...args); }
     }
+
     protected onModelChange = (model: modelType) => { };
+    /** must be called everytime model changes */
     protected CallOnModelChange() {
         this.onModelChange(this.model);
     }

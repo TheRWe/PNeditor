@@ -2,14 +2,14 @@
 import * as d3 from 'd3';
 import { rgb, Selection } from "d3";
 import { html, d3BaseSelector, Position } from "./Constants";
-import { GetArcEndpoints } from "./EditorHelpers/ArrowEndpointCalculationHelper";
 import { arraysDifferences } from "../Helpers/purify";
+import { GetArcEndpoints } from "./Models/PNet/Helpers/ArrowEndpointCalculationHelper";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
 export type selected = { places: Place[], transitions: Transition[] };
 
-export class DrawModel {
+export class _DrawModel {
 
     public data: { net: PNet, file: string | null, selected: { places: Place[], tranisitons: Transition[] } } = null;
 

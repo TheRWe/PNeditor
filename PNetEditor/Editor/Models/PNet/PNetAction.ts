@@ -1,11 +1,10 @@
 ﻿import { ActionBase } from "../_Basic/ActionBase";
-import { PNetModel, JSONNet, Place, Arc, Transition } from "./PNetModel";
+import { PNModel, JSONNet, Place, Arc, Transition } from "./PNetModel";
 import { Position } from "./../../Constants";
 
 export type SelectedElementsPNet = { transitions?: Transition[], places?: Place[] };
 
-export class PNetAction extends ActionBase<PNetModel>{
-
+export class PNAction extends ActionBase<PNModel>{
 
     //#region MultipleSelection
 
@@ -168,10 +167,9 @@ export class PNetAction extends ActionBase<PNetModel>{
         return true;
     }
 
-    constructor(model: PNetModel) {
+    constructor(model: PNModel) {
         super(model);
 
-        const self = this;
         this.AddOnModelChange((model) => {
             this.AddHist();
         });
