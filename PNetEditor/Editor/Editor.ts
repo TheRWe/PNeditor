@@ -1,17 +1,16 @@
 ﻿import * as d3 from 'd3';
-import { PNet, Place, Transition, Arc } from './PNet';
 import { Key } from 'ts-keycode-enum';
 import { rgb } from 'd3';
 import { typedNull, notImplemented } from '../Helpers/purify';
 import * as file from 'fs';
 import { EditorMode, editorMode } from './EditorMode';
 import { html, d3BaseSelector, Position } from './Constants';
-import { CallbackType } from './Draw';
 import { TabControl } from './TabControl';
 import { Toggle, ToggleState } from './../Helpers/Toggle';
 import { PNTab } from './PNTab';
 import { PNDraw } from './Models/PNet/PNetDraw';
-import { PNModel } from './Models/PNet/PNetModel';
+import { PNModel, Place, Transition, Arc } from './Models/PNet/PNetModel';
+import { CallbackType } from './Models/_Basic/DrawBase';
 
 type FilePath = string | number | Buffer | URL;
 
@@ -240,19 +239,6 @@ export class PNEditor {
                         //this.EndInputArc();
                         this.resetState();
                         break;
-                    case editorMode.multiSelect:
-                        const selected = this.tabs.CurrentTab.selected;
-                        const netSelectors = this.html.selectors.net;
-                        const selectedClassName = html.classes.multiSelection.selected;
-                        // todo: zaobalení
-                        selected.places = [];
-                        selected.tranisitons = [];
-
-
-
-                        this.mode.selected = editorMode.default;
-
-                        break;
                     default:
                         notImplemented();
                 }
@@ -409,21 +395,6 @@ export class PNEditor {
             start: (d: { position: Position }) => {
 
                 switch (this.mode.selected) {
-                    case editorMode.multiSelect:
-                        const selectedClassName = html.classes.multiSelection.selected;
-                        /*
-                        const objs: { position: Position }[] = [
-                            ...this.html.selectors.net.places()
-                                .filter(`.${selectedClassName}`)
-                                .data(),
-                            ...this.html.selectors.net.transitions()
-                                .filter(`.${selectedClassName}`)
-                                .data()
-                        ]
-                        objsPos = objs.map(obj => { return { obj, defaultPos: { ...obj.position } } });
-                        */
-                        break;
-
                     case editorMode.default:
                         break;
 
@@ -459,7 +430,6 @@ export class PNEditor {
 
                 switch (this.mode.selected) {
                     case editorMode.default:
-                    case editorMode.multiSelect:
                         this.currentTab.action.AddHist();
 
                         //objsPos = [];
@@ -472,19 +442,10 @@ export class PNEditor {
             revert: (d: { position: Position }, evPos: Position, posStart: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
-                    case editorMode.multiSelect:
                         d.position.x = posStart.x;
                         d.position.y = posStart.y;
                         this.draw.update();
-
-                        //objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                        //    obj.position.x = defaultX;
-                        //    obj.position.y = defaultY;
-                        //});
-                        //this.draw.update();
-                        //objsPos = [];
                         break;
-
                     default:
                         notImplemented();
                 }

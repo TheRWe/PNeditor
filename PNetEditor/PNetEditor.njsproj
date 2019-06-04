@@ -88,15 +88,11 @@
     <TypeScriptCompile Include="Editor\Constants.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Draw.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Editor.ts" />
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\EditorMode.ts" />
-    <TypeScriptCompile Include="Editor\PNet.ts" />
     <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -1,5 +1,4 @@
-﻿import { PNet, Place, Transition } from "./PNet";
-import { PNModel } from "./Models/PNet/PNetModel";
+﻿import { PNModel, Place, Transition } from "./Models/PNet/PNetModel";
 import { PNAction } from "./Models/PNet/PNetAction";
 
 

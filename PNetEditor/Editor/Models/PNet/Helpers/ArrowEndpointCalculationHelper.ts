@@ -1,7 +1,6 @@
-﻿import { Transition, Place, PNet, Arc } from "../../../PNet";
-import { Position } from "../../../Constants";
+﻿import { Position } from "../../../Constants";
 import { classify, SortKeySelector } from "../../../../Helpers/purify";
-import { PNModel } from "../PNetModel";
+import { PNModel, Arc } from "../PNetModel";
 
 //todo: casching
 /**
@@ -9,7 +8,7 @@ import { PNModel } from "../PNetModel";
  * @param net whole net
  * @param arc arc currently calculated arc
  */
-export function GetArcEndpoints(net: PNet | PNModel, arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
+export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
     const tPos = arc.transition.position;
 
     // get all arces of transition

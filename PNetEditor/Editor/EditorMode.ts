@@ -34,5 +34,4 @@ export enum editorMode {
     arcMake = "arc-make",
     valueEdit = "edit",
     run = "run",
-    multiSelect = "multi-select",
 }

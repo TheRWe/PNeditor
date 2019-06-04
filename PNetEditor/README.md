@@ -63,7 +63,7 @@
     - [x] Závislost dragování na mousemode
     - [x] Selekce v svg více objektù
     - [x] Posouvání více vybranıch objektù
-  - [x] [Multiple selection](#Selections)
+  - [ ] [Multiple selection](#Selections)
     - [ ] Integrace v property bar
     - [ ] Kopírování vıbìru
     - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
