@@ -146,6 +146,7 @@ Použít javascript-workery/[node child process](https://medium.freecodecamp.org/n
   - [ ] Reachability graf
   - [ ] 1-bounded net
   - [ ] pokud sí 1-bounded -> umožnit reachability aby byl formou zápisu názvù places
+  - [ ] scenario-based
 
 #### Generování sítí
 
