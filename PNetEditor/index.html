@@ -7,15 +7,42 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-<!--
-<script>document.write(process.versions.node)</script>,
-<script>document.write(process.versions.chrome)</script>,
-<script>document.write(process.versions.electron)</script>.
--->
+    <!--
+    <script>document.write(process.versions.node)</script>,
+    <script>document.write(process.versions.chrome)</script>,
+    <script>document.write(process.versions.electron)</script>.
+    -->
 
-<div class="editor" />
+    <div class="page page-left">
+        <div class="control-panel-file">
+            <div class="control-panel-file-label">
+                FILE
+            </div>
+            <div class="control-panel-file-buttons">
+                <button id="buttonNew" class="button button-menu">New</button>
+                <button id="buttonLoad" class="button button-menu">Load</button>
+                <button id="buttonSave" class="button button-menu">Save</button>
+                <button id="buttonClose" class="button button-menu">Close</button>
+            </div>
+        </div>
+        <div class="control-panel-pn-tools">
+            <div class="control-panel-pn-tools-label">
+                PN-Tools
+            </div>
+            <div class="button button-menu">UNDO</div>
+            <div class="button button-menu">REDO</div>
+            <div class="button button-menu">Running</div>
+        </div>
+        <div>Tabs</div>
+        <div class="control-panel-tabs">
+            <!--<div class="control-panel-tab">
+                <div class="button control-panel-tab-sub control-panel-tab-sub-selected">SubTab1</div>
+            </div>-->
+        </div>
+    </div>
+    <div id="content" class="fill-content page page-content"></div>
 
-<script>
+    <script>
         // You can also require other files to run in this process
         require('./renderer.js')
     </script>

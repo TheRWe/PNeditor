@@ -9,7 +9,7 @@ const debug: boolean = true;
 function createWindow() {
     //todo: může být frameless window
     mainWindow = new BrowserWindow({
-        width: 1200, height: 900,
+        width: 1600, height: 900,
         title: 'PetriNetEdit'
     });
 

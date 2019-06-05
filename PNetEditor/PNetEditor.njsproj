@@ -41,28 +41,56 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="styles.css" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <SubType>Content</SubType>
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
+    <Content Include="styles.css">
+      <SubType>Content</SubType>
+      <DependentUpon>styles.scss</DependentUpon>
+    </Content>
+    <Content Include="styles.min.css">
+      <SubType>Content</SubType>
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
+    <Content Include="styles.scss" />
     <Content Include="index.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pkg\JS\gpu.js" />
-    <TypeScriptCompile Include="Editor\Models\PNet\PNetAction.ts">
+    <TypeScriptCompile Include="CORE\MainWindow.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\PNetDraw.ts">
+    <TypeScriptCompile Include="CORE\TabControl\TabControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\PNetModel.ts">
+    <TypeScriptCompile Include="CORE\TabControl\TabGroup.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\_Basic\ActionBase.ts" />
-    <TypeScriptCompile Include="Editor\Models\_Basic\DrawBase.ts" />
-    <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts">
+    <TypeScriptCompile Include="CORE\TabControl\Tab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\PNTab.ts">
+    <TypeScriptCompile Include="Editor\PNEditor.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_Editor\Models\PNet\PNetAction.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_Editor\Models\PNet\PNetDraw.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_Editor\Models\PNet\PNetModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_Editor\Models\_Basic\ActionBase.ts" />
+    <TypeScriptCompile Include="_Editor\Models\_Basic\DrawBase.ts" />
+    <TypeScriptCompile Include="_Editor\Models\_Basic\ModelBase.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_Editor\PNTab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="renderer.ts">
@@ -85,18 +113,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Editor\Constants.ts">
+    <TypeScriptCompile Include="_Editor\Constants.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Editor.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts">
+    <TypeScriptCompile Include="_Editor\Editor.ts" />
+    <TypeScriptCompile Include="_Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\EditorMode.ts" />
-    <TypeScriptCompile Include="Editor\EditorHelpers\SettingsInterface.ts">
+    <TypeScriptCompile Include="_Editor\EditorMode.ts" />
+    <TypeScriptCompile Include="_Editor\EditorHelpers\SettingsInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\TabControl.ts">
+    <TypeScriptCompile Include="_Editor\TabControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Color.ts" />
@@ -121,13 +149,16 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CORE\TabControl\" />
     <Folder Include="Editor\" />
-    <Folder Include="Editor\EditorHelpers\" />
-    <Folder Include="Editor\Models\PNet\Helpers\" />
-    <Folder Include="Editor\Models\_Basic\" />
-    <Folder Include="Editor\Models\" />
-    <Folder Include="Editor\Models\PNet\" />
+    <Folder Include="_Editor\" />
+    <Folder Include="_Editor\EditorHelpers\" />
+    <Folder Include="_Editor\Models\PNet\Helpers\" />
+    <Folder Include="_Editor\Models\_Basic\" />
+    <Folder Include="_Editor\Models\" />
+    <Folder Include="_Editor\Models\PNet\" />
     <Folder Include="Helpers\" />
+    <Folder Include="CORE\" />
     <Folder Include="pkg\JS\" />
     <Folder Include="SMAZAT\" />
     <Folder Include="pkg\" />

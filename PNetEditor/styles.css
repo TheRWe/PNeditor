@@ -1,68 +1,118 @@
-﻿
+﻿* {
+  box-sizing: inherit;
+  margin: 0; }
+
+html {
+  box-sizing: border-box; }
 
 body {
-    width: auto;
-    height: auto;
-    /*background-color: rgb(10, 214, 255);*/
-}
+  width: 100vw;
+  height: 100vh;
+  /*background-color: rgb(10, 214, 255);*/ }
+
+button, .button {
+  display: inline-block;
+  margin: 0;
+  text-decoration: none;
+  background: inherit;
+  color: inherit;
+  font-family: sans-serif;
+  font-size: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: none;
+  user-select: none;
+  padding: .2em;
+  border: 0.4px solid lightgray; }
+
+button:focus {
+  outline: none; }
+
+.button:focus {
+  outline: none; }
 
 .placeSVGCircle {
-    animation: placeSVGCircleAnimation 0.4s cubic-bezier(1,1.5,0.7,2);
-    fill: white;
-    stroke: black;
-    stroke-width: 2px;
-}
+  animation: placeSVGCircleAnimation 0.4s cubic-bezier(1, 1.5, 0.7, 2);
+  fill: white;
+  stroke: black;
+  stroke-width: 2px; }
 
 @keyframes placeSVGCircleAnimation {
-    0% {
-        opacity: 0.1;
-        transform: scale(0);
-    }
-
-    50% {
-        opacity: 0.3;
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+  0% {
+    opacity: 0.1;
+    transform: scale(0); }
+  50% {
+    opacity: 0.3; }
+  100% {
+    opacity: 1;
+    transform: scale(1); } }
 
 .unselectable {
-    -webkit-touch-callout: none;
-    user-select: none;
-}
-
+  -webkit-touch-callout: none;
+  user-select: none; }
 
 /* tabs */
-
 .checkbox-tab-radio {
-    display: none;
-}
-    /* label */
-    .checkbox-tab-radio + label {
-        background-color: black;
-        color: white;
-        cursor: pointer;
-    }
+  display: none;
+  /* label */ }
+  .checkbox-tab-radio + label {
+    background-color: black;
+    color: white;
+    cursor: pointer; }
 
-    .checkbox-tab-radio:checked + label {
-        background-color: darkolivegreen;
-        color: white;
-    }
-
+.checkbox-tab-radio:checked + label {
+  background-color: darkolivegreen;
+  color: white; }
 
 .select-outline {
-    display: none;
-    stroke: black;
-    fill: none;
-    stroke-width: 1.8px;
-    stroke-dasharray: 4;
-    stroke-opacity: 0.5;
-    stroke-linecap: round;
-}
+  display: none;
+  stroke: black;
+  fill: none;
+  stroke-width: 1.8px;
+  stroke-dasharray: 4;
+  stroke-opacity: 0.5;
+  stroke-linecap: round; }
 
 .selected > .select-outline {
-    display: inline;
-}
+  display: inline; }
+
+body {
+  display: flex; }
+
+.page {
+  height: 100vh; }
+  .page-left {
+    flex-basis: 200px;
+    border-right: 1px gray solid;
+    padding: 5px;
+    /*background: rgb(255, 0, 0);*/
+    overflow-y: auto; }
+  .page-content {
+    flex: auto;
+    background: #4cff00; }
+
+.button-menu {
+  width: 100%;
+  /*background-color: black;*/
+  /*color: white;*/ }
+
+.control-panel-tab {
+  background-color: azure;
+  padding-left: 10px;
+  padding-top: 5px; }
+  .control-panel-tab:nth-child(5n + 1) {
+    background-color: #00ff00; }
+  .control-panel-tab:nth-child(5n + 2) {
+    background-color: #ff0000; }
+  .control-panel-tab:nth-child(5n + 3) {
+    background-color: #0000ff; }
+  .control-panel-tab:nth-child(5n + 4) {
+    background-color: #ff00ff; }
+  .control-panel-tab:nth-child(5n + 5) {
+    background-color: #ffff00; }
+  .control-panel-tab-sub {
+    background-color: white;
+    color: black;
+    width: 100%; }
+    .control-panel-tab-sub-selected {
+      background-color: lightgray; }
