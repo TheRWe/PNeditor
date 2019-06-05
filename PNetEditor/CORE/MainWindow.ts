@@ -1,13 +1,26 @@
-﻿import { TabControl } from "./TabControl/TabControl";
+﻿import { app, dialog, ipcRenderer } from 'electron';
+import { TabControl } from "./TabControl/TabControl";
 import d3 = require("d3");
+import { html } from "../Editor/Constants";
+import * as file from 'fs';
+import * as path from 'path';
+import { PNModel } from "../Editor/Models/PNet/PNModel";
+import { PNEditor } from '../Editor/PNEditor';
 
 export var tabControl: TabControl;
 
 
 
 export function InitWindow() {
+    InitSettings();
     InitTabControl();
     InitFileButtons();
+}
+
+
+export var userDefaultNetSavePath: string;
+export var userQuickNetSavePath: string;
+function InitSettings() {
 }
 
 function InitFileButtons() {
@@ -19,29 +32,47 @@ function InitFileButtons() {
     buttonNew.on("click", () => {
         tabControl.addTab();
     })
+
+    function load(path: string) {
+        try {
+            const objString = file.readFileSync(path, { encoding: "utf8" });
+            const jsonNet = JSON.parse(objString);
+            const net = (new PNModel());
+
+            // todo: eskalace
+            if (net.fromJSON(jsonNet)) { }
+
+            console.log("%c LOADED net", "color: rgb(0, 0, 255)");
+
+            const tab = tabControl.addTab();
+            new PNEditor(tab, net);
+        } catch (ex) {
+            console.error("cannot read file " + path);
+            console.error(ex)
+            return false;
+        }
+
+        return true;
+    };
+    ipcRenderer.on("load-dialog-response", (e: any, path: string) => {
+        console.debug(path);
+        load(path);
+    });
+    buttonLoad.on("click", () => {
+        let objString: string;
+        ipcRenderer.send('load-dialog');
+    });
+
+
 }
 
 
 function InitTabControl() {
-    const tabsButtons = d3.select(".control-panel-tabs");
+    const tabsButtons = d3.select("." + html.classes.page.controlPanelTabs);
     const content = d3.select("#content");
 
     tabControl = new TabControl(tabsButtons, content);
 
-    tabControl.addTab().label = "lab1";
-    const tabbb = tabControl.addTab();
-    tabControl.addTab(tabbb.parentTabGroup).label = "sss";
-    tabControl.addTab(tabbb.parentTabGroup).container.append("div").text("asddd");
-    tabControl.addTab(tabbb.parentTabGroup).container.append("div").text("sssasddd");
-    tabControl.addTab(tabbb.parentTabGroup).container.append("div").text("asdasdasdddddd");
-
-
-    tabControl.addTab().remove();
-    const aaa = tabControl.addTab();
-    aaa.label = "aaaaaa";
-    aaa.addOnBeforeRemove(e => {
-        console.debug(e);
-        e.cancelClose = true;
-    });
-    aaa.remove();
+    //const tabbb = tabControl.addTab();
+    //tabControl.addTab(tabbb.parentTabGroup);
 }

@@ -10,15 +10,9 @@ html {
     box-sizing: border-box;
 }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    /*background-color: rgb(10, 214, 255);*/
-}
-
 button, .button {
     display: inline-block;
-    margin: 0;
+    margin: 1px;
     text-decoration: none;
     background: inherit;
     color: inherit;
@@ -29,7 +23,7 @@ button, .button {
     transition: none;
     user-select: none;
     padding: .2em;
-    border: 0.4px solid lightgray;
+    border: 1px solid lightgray;
 }
 
 button:focus {
@@ -37,6 +31,10 @@ button:focus {
 }
 .button:focus {
     outline: none;
+}
+
+.no-border{
+    border:0;
 }
 
 
@@ -105,26 +103,23 @@ body {
     display: flex;
 }
 
+
+
+
 .page {
-    height: 100vh;
+    height: 99vh;
 
     &-left {
         flex-basis: 200px;
         border-right: 1px gray solid;
         padding: 5px;
-        /*background: rgb(255, 0, 0);*/
         overflow-y: auto;
     }
 
     &-content {
         flex: auto;
-        background: rgb(76, 255, 0);
     }
 }
-
-
-
-
 
 .button {
     &-menu {
@@ -140,8 +135,7 @@ body {
 
     &-tab {
         background-color: azure;
-        padding-left: 10px;
-        padding-top: 5px;
+        padding: 5px 10px;
 
         @each $color in $tabColors {
             $i: index($tabColors, $color);

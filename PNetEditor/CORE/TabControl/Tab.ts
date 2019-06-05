@@ -40,6 +40,7 @@ export class Tab {
         this.parentTabGroup = parentTabGroup;
         tabButton.classed("button", true);
         tabButton.classed("control-panel-tab-sub", true);
+        tabButton.classed("no-border", true);
 
         this.label = "unnamed";
 

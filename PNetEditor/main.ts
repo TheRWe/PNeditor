@@ -21,7 +21,6 @@ async function main() {
         console.debug(msg);
 
         switch (msgType) {
-
             case messageType.PNetNew:
                 //editor.NewNet();
                 break;

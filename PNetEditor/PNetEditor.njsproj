@@ -73,6 +73,14 @@
     <TypeScriptCompile Include="CORE\TabControl\Tab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Constants.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNet\PNAction.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNet\PNDraw.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNet\PNModel.ts" />
+    <TypeScriptCompile Include="Editor\Models\_Basic\ActionBase.ts" />
+    <TypeScriptCompile Include="Editor\Models\_Basic\DrawBase.ts" />
+    <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts" />
     <TypeScriptCompile Include="Editor\PNEditor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -151,6 +159,10 @@
   <ItemGroup>
     <Folder Include="CORE\TabControl\" />
     <Folder Include="Editor\" />
+    <Folder Include="Editor\Models\" />
+    <Folder Include="Editor\Models\PNet\" />
+    <Folder Include="Editor\Models\PNet\Helpers\" />
+    <Folder Include="Editor\Models\_Basic\" />
     <Folder Include="_Editor\" />
     <Folder Include="_Editor\EditorHelpers\" />
     <Folder Include="_Editor\Models\PNet\Helpers\" />

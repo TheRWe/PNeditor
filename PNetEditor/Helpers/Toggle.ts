@@ -3,7 +3,6 @@
 export enum ToggleState { on = "on", off = "off", hidden = "hidden" }
 
 export class Toggle {
-
     private _state: ToggleState;
     public get State(): ToggleState {
         return this._state;

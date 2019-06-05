@@ -1,4 +1,4 @@
-﻿import { app, BrowserWindow, Menu, dialog } from 'electron';
+﻿import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { messageType } from './Helpers/ProgramEventType';
@@ -30,6 +30,27 @@ function createWindow() {
         mainWindow = null;
         // close app when mainWindow closes
         app.quit();
+    });
+
+    ipcMain.on('load-dialog', (e:any,arg:any) => {
+        const dialogOprions: Electron.OpenDialogOptions = {
+            title: 'Select PNet to LOAD',
+            // todo: více možností pro user data dle nastavení
+            defaultPath: userDefaultNetSavePath,
+            filters: [
+                { name: 'PNet/JSON file', extensions: ['pnet', 'json'] },
+                { name: 'PNet file', extensions: ['pnet'] },
+                { name: 'JSON file', extensions: ['json'] },
+                { name: 'All Files', extensions: ['*'] }
+            ],
+            // todo: možnost otevřených více sítí v různých 
+            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
+            properties: ['openFile' /*, 'multiSelections' */]
+        };
+
+        const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
+        if (dialoRes)
+            e.sender.send('load-dialog-response', dialoRes[0]);
     });
 
 
@@ -160,9 +181,11 @@ function createWindow() {
         })
     }
 
-    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+    //const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
-    Menu.setApplicationMenu(mainMenu);
+    //Menu.setApplicationMenu(mainMenu);
+
+    Menu.setApplicationMenu(null);
 }
 
 app.on('ready', createWindow);
