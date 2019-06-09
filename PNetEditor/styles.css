@@ -111,3 +111,15 @@ body {
     width: 100%; }
     .control-panel-tab-sub-selected {
       background-color: lightgray; }
+
+/*#region switcher*/
+label.switcher {
+  user-select: none; }
+  label.switcher > input {
+    display: none; }
+  label.switcher > input[type=checkbox]:not(:checked) ~ .switcher-label-off {
+    display: none; }
+  label.switcher > input[type=checkbox]:checked ~ .switcher-label-on {
+    display: none; }
+
+/*#endregion*/

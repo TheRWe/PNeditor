@@ -28,7 +28,7 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
         }).bind(this));
     }
 
-    /** Get mouse position relative to current svg element */
+    /** Get mouse position relative to current container element */
     protected getPos(): Position {
         const svg = this.container;
         const coords = d3.mouse(svg.node() as SVGSVGElement);
@@ -69,8 +69,7 @@ export class Callbacks<type> {
     public AddCallback(type: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;
     public AddCallback(type: CallbackType.letfClick, callback: (obj: type, pos: Position) => void): void;
     public AddCallback(type: CallbackType.rightClick, callback: (obj: type, pos: Position) => void): void;
-    public AddCallback(type: CallbackType.dragStart | CallbackType.drag | CallbackType.dragEnd | CallbackType.dragRevert
-        , callback: (obj: type, pos: Position, startPos?: Position) => void): void;
+    public AddCallback(type: CallbackType.dragStart | CallbackType.drag | CallbackType.dragEnd | CallbackType.dragRevert, callback: (obj: type, pos: Position, startPos?: Position) => void): void;
     public AddCallback(type: CallbackType, callback: any) {
         let old: any;
         switch (type) {

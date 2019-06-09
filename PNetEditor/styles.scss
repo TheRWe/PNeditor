@@ -157,3 +157,25 @@ body {
         }
     }
 }
+
+
+
+/*#region switcher*/
+
+label.switcher {
+    user-select: none;
+
+    > input {
+        display: none;
+    }
+
+    > input[type=checkbox]:not(:checked) ~ .switcher-label-off {
+        display: none;
+    }
+
+    > input[type=checkbox]:checked ~ .switcher-label-on {
+        display: none;
+    }
+}
+
+/*#endregion*/

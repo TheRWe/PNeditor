@@ -25,6 +25,42 @@ export class PNDraw extends DrawBase<PNModel>{
         arcDragLine: typedNull<d3BaseSelector>(),
     };
 
+    public _isArcDragLineVisible = false;
+    public get isArcDragLineVisible() { return this._isArcDragLineVisible; };
+    public ShowArcDragLine(startingFrom: Position | null) {
+        const arcDragLine = this.Selectors.arcDragLine;
+
+        if (startingFrom == null) {
+            this._isArcDragLineVisible = false;
+            //todo: nebezpečné, vymyslet alternativu
+            this.container.on("mousemove", null);
+
+            arcDragLine
+                .style("display", "none")
+                .attr("x1", null)
+                .attr("y1", null)
+                .attr("x2", null)
+                .attr("y2", null);
+        } else {
+            this._isArcDragLineVisible = true;
+            const mousePos = this.getPos();
+
+            arcDragLine
+                .style("display", null)
+                .attr("x1", startingFrom.x)
+                .attr("y1", startingFrom.y)
+                .attr("x2", mousePos.x)
+                .attr("y2", mousePos.y);
+
+            this.container.on("mousemove", e => {
+                const mousePos = this.getPos();
+                arcDragLine
+                    .attr("x2", mousePos.x)
+                    .attr("y2", mousePos.y);
+            })
+        }
+    }
+
     constructor(container: d3BaseSelector) {
         super(container);
 

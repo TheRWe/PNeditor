@@ -45,7 +45,8 @@ function InitFileButtons() {
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
 
             const tab = tabControl.addTab();
-            new PNEditor(tab, net);
+            const editor = new PNEditor(tab, net);
+            console.log(editor);
         } catch (ex) {
             console.error("cannot read file " + path);
             console.error(ex)
