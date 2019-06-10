@@ -281,7 +281,6 @@ export class PNEditor {
         },
         onDragPositionMove: {
             start: (d: { position: Position }) => {
-
                 switch (this.mode.selected) {
                     case editorMode.default:
                         break;
@@ -292,9 +291,6 @@ export class PNEditor {
                 console.debug({ startdrag: d });
             },
             drag: (d: { position: Position }, evPos: Position, posStart: Position) => {
-                const dx = evPos.x - posStart.x;
-                const dy = evPos.y - posStart.y;
-
                 switch (this.mode.selected) {
                     case editorMode.default:
                         d.position.x = evPos.x;
@@ -302,20 +298,11 @@ export class PNEditor {
                         this.pnDraw.update();
                         break;
 
-                    //case editorMode.multiSelect:
-                    //    objsPos.forEach(({ obj, defaultPos: { x: defaultX, y: defaultY } }) => {
-                    //        obj.position.x = dx + defaultX;
-                    //        obj.position.y = dy + defaultY;
-                    //    })
-                    //    this.pnDraw.update();
-                    //    break;
-
                     default:
                         notImplemented();
                 }
             },
             end: (d: { position: Position }, evPos: Position, posStart: Position) => {
-
                 switch (this.mode.selected) {
                     case editorMode.default:
                         this.pnAction.AddHist();
@@ -551,6 +538,9 @@ export class PNEditor {
         this.pnDraw = new PNDraw(this.svg);
         this.pnDraw.data = pnmodel;
         this.pnDraw.update();
+
+
+        this.InitMouseEvents();
     }
 }
 

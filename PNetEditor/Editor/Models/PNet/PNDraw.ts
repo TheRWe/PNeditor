@@ -27,8 +27,13 @@ export class PNDraw extends DrawBase<PNModel>{
 
     public _isArcDragLineVisible = false;
     public get isArcDragLineVisible() { return this._isArcDragLineVisible; };
+    /**
+     * Show or hides ArcDragLine
+     * @param startingFrom
+     */
     public ShowArcDragLine(startingFrom: Position | null) {
         const arcDragLine = this.Selectors.arcDragLine;
+        const container = this.container;
 
         if (startingFrom == null) {
             this._isArcDragLineVisible = false;
@@ -43,20 +48,19 @@ export class PNDraw extends DrawBase<PNModel>{
                 .attr("y2", null);
         } else {
             this._isArcDragLineVisible = true;
-            const mousePos = this.getPos();
 
             arcDragLine
                 .style("display", null)
-                .attr("x1", startingFrom.x)
-                .attr("y1", startingFrom.y)
-                .attr("x2", mousePos.x)
-                .attr("y2", mousePos.y);
+                .attr("x1", startingFrom.x).attr("x2", startingFrom.x)
+                .attr("y1", startingFrom.y).attr("y2", startingFrom.y);
 
-            this.container.on("mousemove", e => {
-                const mousePos = this.getPos();
+            container.on("mousemove", () => {
+                const pos = this.getPos();
+                console.debug(pos);
+
                 arcDragLine
-                    .attr("x2", mousePos.x)
-                    .attr("y2", mousePos.y);
+                    .attr("x2", pos.x)
+                    .attr("y2", pos.y);
             })
         }
     }

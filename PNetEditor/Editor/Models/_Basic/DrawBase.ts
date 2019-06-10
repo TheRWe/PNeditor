@@ -30,8 +30,7 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
 
     /** Get mouse position relative to current container element */
     protected getPos(): Position {
-        const svg = this.container;
-        const coords = d3.mouse(svg.node() as SVGSVGElement);
+        const coords = d3.mouse(this.container.node() as SVGSVGElement);
         const pos = { x: coords[0], y: coords[1] };
         return pos;
     }
