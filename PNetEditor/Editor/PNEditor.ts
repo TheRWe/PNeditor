@@ -35,8 +35,9 @@ export class PNEditor {
                 this.mouseEndArc();
                 break;
             case editorMode.valueEdit:
-                this.EndInputArc(false);
-                this.EndInputMarking(false);
+                this.pnDraw.inputs.HideAllInputs();
+                this.keyboard.inputs.arcValue.editedArc = null;
+                this.keyboard.inputs.marking.editedPlace = null;
                 break;
             // todo: implement state reset
             default:
@@ -48,25 +49,6 @@ export class PNEditor {
     }
 
     //#endregion
-
-
-    //#region Inputs
-
-    InitInputEvenents() {
-        const inputMarking = this.keyboard.inputs.marking.selectors;
-        inputMarking.input
-            .on("click", () => { d3.event.stopPropagation(); });
-        inputMarking.buttonOK
-            .on("click", () => { this.EndInputMarking(true); this.pnDraw.update(); d3.event.stopPropagation(); });
-
-        const arcValueMarking = this.keyboard.inputs.arcValue.selectors;
-        arcValueMarking.input
-            .on("click", () => { d3.event.stopPropagation(); });
-        arcValueMarking.buttonOK
-            .on("click", () => { this.EndInputArc(true); this.pnDraw.update(); d3.event.stopPropagation(); });
-    }
-
-	//#endregion
 
 
     //#region Mouse
@@ -181,9 +163,6 @@ export class PNEditor {
                     case editorMode.default:
                         if (p.marking == null) p.marking = 0;
 
-                        this.EndInputMarking();
-                        this.EndInputArc();
-
                         this.StartInputMarking(p);
                         d3.event.stopPropagation();
                         break;
@@ -235,9 +214,6 @@ export class PNEditor {
                 switch (this.mode.selected) {
                     case editorMode.valueEdit:
                     case editorMode.default:
-                        this.EndInputMarking();
-                        this.EndInputArc();
-
                         this.StartInputArc(a);
                         d3.event.stopPropagation();
                         break;
@@ -342,7 +318,6 @@ export class PNEditor {
         this.pnDraw.ShowArcDragLine(tp.position);
     }
 
-    // todo: vracet propojitelnost se zadaným objektem ?
     /**
      * end creating arc with given ending
      *  null -> no changes
@@ -388,10 +363,10 @@ export class PNEditor {
 
     /** initialize keyboard *on* handlers related to keyboard */
     private InitKeyboardEvents() {
-        this.keyboard.inputs.marking.selectors.input
-            .on("keypress", this.keyboard.inputs.marking.onKeyPress);
-        this.keyboard.inputs.arcValue.selectors.input
-            .on("keypress", this.keyboard.inputs.arcValue.onKeyPress);
+        const inputs = this.pnDraw.inputs;
+
+        inputs.AddOnInputArc(this.keyboard.inputs.arcValue.onInputEnd);
+        inputs.AddOnInputMarking(this.keyboard.inputs.marking.onInputEnd);
     }
 
     /** keyboard properties */
@@ -401,37 +376,25 @@ export class PNEditor {
             marking: {
                 /** curently edited place with marking edit input */
                 editedPlace: typedNull<Place>(),
-                onKeyPress: () => {
-                    if (d3.event.keyCode == Key.Enter) {
-                        this.EndInputMarking(true);
+                onInputEnd: (val: number | null) => {
+                    if (val != null) {
+                        this.keyboard.inputs.marking.editedPlace.marking = val;
+                        this.pnAction.AddHist();
                         this.pnDraw.update();
                     }
-
-                    d3.event.stopPropagation();
-                },
-                /** marking editor input */
-                selectors: {
-                    foreign: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    input: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    buttonOK: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
+                    this.keyboard.inputs.marking.editedPlace = null;
                 },
             },
             arcValue: {
                 /** curently edited arc with value edit input */
                 editedArc: typedNull<Arc>(),
-                onKeyPress: () => {
-                    if (d3.event.keyCode == Key.Enter) {
-                        this.EndInputArc(true);
+                onInputEnd: (val: number | null) => {
+                    if (val != null) {
+                        this.keyboard.inputs.arcValue.editedArc.qty = val;
+                        this.pnAction.AddHist();
                         this.pnDraw.update();
                     }
-
-                    d3.event.stopPropagation();
-                },
-                /** marking editor input */
-                selectors: {
-                    foreign: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    input: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>(),
-                    buttonOK: typedNull<d3.Selection<d3.BaseType, {}, d3.BaseType, any>>()
+                    this.keyboard.inputs.arcValue.editedArc = null;
                 },
             }
         }
@@ -439,46 +402,12 @@ export class PNEditor {
 
 
     /** open marking edit window for given place*/
-    private StartInputArc(a: Arc) {
+    private StartInputArc(arc: Arc) {
         if (this.mode.selected !== editorMode.valueEdit)
             this.mode.selected = editorMode.valueEdit;
 
-        this.keyboard.inputs.arcValue.editedArc = a;
-        const inputArc = this.keyboard.inputs.arcValue.selectors;
-        inputArc.foreign.style("display", null);
-        const mousePos = this.mouse.svg.getMousePosition();
-        inputArc.foreign.attr("x", mousePos.x - 20);
-        inputArc.foreign.attr("y", mousePos.y - 10);
-
-        (inputArc.input.node() as any).value = a.qty;
-        (inputArc.input.node() as any).focus();
-    }
-
-    /**
-     * end editing arc value and close window
-     * @param save changes propagate to net ?
-     */
-    private EndInputArc(save: boolean = false) {
-        if (this.mode.selected === editorMode.valueEdit)
-            this.mode.swap();
-        else
-            return;
-
-        //todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
-        //      zobrazený pouze zástupný znak a hodnota bude v seznamu
-        //todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
-        const inputArc = this.keyboard.inputs.arcValue.selectors;
-        inputArc.foreign.style("display", "none");
-        inputArc.foreign.attr("x", null);
-        inputArc.foreign.attr("y", null);
-
-        if (save) {
-            let val = +(inputArc.input.node() as any).value;
-            this.keyboard.inputs.arcValue.editedArc.qty = val;
-            this.pnAction.AddHist();
-        }
-
-        this.keyboard.inputs.marking.editedPlace = null;
+        this.keyboard.inputs.arcValue.editedArc = arc;
+        this.pnDraw.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), arc.qty);
     }
 
     /** open marking edit window for given place*/
@@ -487,41 +416,7 @@ export class PNEditor {
             this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.marking.editedPlace = p;
-        const inputMarking = this.keyboard.inputs.marking.selectors;
-        inputMarking.foreign.style("display", null);
-        inputMarking.foreign.attr("x", p.position.x - 20);
-        inputMarking.foreign.attr("y", p.position.y - 10);
-
-        (inputMarking.input.node() as any).value = p.marking || null;
-        (inputMarking.input.node() as any).focus();
-    }
-
-    /**
-     * end editing place marking and close window
-     * @param save changes propagate to net ?
-     */
-    private EndInputMarking(save: boolean = false) {
-        if (this.mode.selected === editorMode.valueEdit)
-            this.mode.swap();
-        else
-            return;
-
-        // todo: misto max hodnoty 999 bude uložená v settings a bude možnost zobrazovat hodnoty place pomocí seznamu a v place bude
-        //       zobrazený pouze zástupný znak a hodnota bude v seznamu
-        // todo: validace -> pokud neprojde a číslo bude třeba větší než 999 tak nepustí dál a zčervená input
-        const inputMarking = this.keyboard.inputs.marking.selectors;
-
-        inputMarking.foreign.style("display", "none");
-        inputMarking.foreign.attr("x", null);
-        inputMarking.foreign.attr("y", null);
-
-        if (save) {
-            let val = +(inputMarking.input.node() as any).value;
-            this.keyboard.inputs.marking.editedPlace.marking = val;
-            this.pnAction.AddHist();
-        }
-
-        this.keyboard.inputs.marking.editedPlace = null;
+        this.pnDraw.inputs.ShowInputMarking(this.mouse.svg.getMousePosition(), p.marking);
     }
 
     //#endregion
@@ -541,6 +436,7 @@ export class PNEditor {
 
 
         this.InitMouseEvents();
+        this.InitKeyboardEvents();
     }
 }
 

@@ -5,6 +5,7 @@ import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
 import { arraysDifferences, typedNull } from "./../../../Helpers/purify";
 import { DrawBase, Callbacks, CallbackType } from "../_Basic/DrawBase";
 import { d3BaseSelector, html, Position } from "../../Constants";
+import { PNDrawInputs } from "./Helpers/PNDrawInputs";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
@@ -15,6 +16,8 @@ export class PNDraw extends DrawBase<PNModel>{
         arc: new Callbacks<Arc>(),
         place: new Callbacks<Place>(),
     };
+
+    public inputs: PNDrawInputs;
 
     protected Selectors = {
         places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.data).places),
@@ -70,6 +73,8 @@ export class PNDraw extends DrawBase<PNModel>{
 
         this.initializeContainer();
         this.initializeContainerCallback();
+
+        this.inputs = new PNDrawInputs(container);
     }
 
     private initializeContainer() {
