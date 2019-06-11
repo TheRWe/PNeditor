@@ -7,8 +7,7 @@ import { CallbackType } from "./Models/_Basic/DrawBase";
 import * as d3 from 'd3';
 import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
-import { Key } from "ts-keycode-enum";
-import { ToggleState } from "../Helpers/Toggle";
+import { PNControls } from "./Models/PNet/Helpers/PNControls";
 
 
 export class PNEditor {
@@ -18,6 +17,8 @@ export class PNEditor {
     public readonly pnModel: PNModel;
     public readonly pnDraw: PNDraw;
     public readonly pnAction: PNAction;
+
+    private readonly controls: PNControls;
 
     //#region Mode
 
@@ -44,8 +45,8 @@ export class PNEditor {
                 console.warn("implement");
                 break;
         }
-        //if (this.toggles.run.State == ToggleState.on)
-        //    this.mode.selected = editorMode.run;
+
+        this.mode.selected = editorMode.default;
     }
 
     //#endregion
@@ -105,8 +106,7 @@ export class PNEditor {
                         break;
                     case editorMode.valueEdit:
                         //todo: bude uloženo v settings jestli má dojít k uložení nebo resetu
-                        //this.EndInputMarking();
-                        //this.EndInputArc();
+                        console.debug("resetstate");
                         this.resetState();
                         break;
                     default:
@@ -282,10 +282,9 @@ export class PNEditor {
                 switch (this.mode.selected) {
                     case editorMode.default:
                         this.pnAction.AddHist();
+                        this.pnDraw.update();
 
-                        //objsPos = [];
                         break;
-
                     default:
                         notImplemented();
                 }
@@ -293,6 +292,7 @@ export class PNEditor {
             revert: (d: { position: Position }, evPos: Position, posStart: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
+                    case editorMode.valueEdit:
                         d.position.x = posStart.x;
                         d.position.y = posStart.y;
                         this.pnDraw.update();
@@ -383,6 +383,7 @@ export class PNEditor {
                         this.pnDraw.update();
                     }
                     this.keyboard.inputs.marking.editedPlace = null;
+                    this.mode.swap();
                 },
             },
             arcValue: {
@@ -395,6 +396,7 @@ export class PNEditor {
                         this.pnDraw.update();
                     }
                     this.keyboard.inputs.arcValue.editedArc = null;
+                    this.mode.swap();
                 },
             }
         }
@@ -425,12 +427,17 @@ export class PNEditor {
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
-        this.svg = tab.container.append("svg");
+        const controlDiv = tab.container.append("div");
+        const svg = this.svg = tab.container.append("svg");
+
         this.pnModel = pnmodel;
 
         this.pnAction = new PNAction(pnmodel);
+        this.pnAction.AddHist();
 
-        this.pnDraw = new PNDraw(this.svg);
+        this.controls = new PNControls(controlDiv, this);
+
+        this.pnDraw = new PNDraw(svg);
         this.pnDraw.data = pnmodel;
         this.pnDraw.update();
 

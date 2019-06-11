@@ -10,7 +10,7 @@ html {
     box-sizing: border-box;
 }
 
-button, .button {
+button, .button, input[type=button] {
     display: inline-block;
     margin: 1px;
     text-decoration: none;

@@ -75,6 +75,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Constants.ts" />
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNControls.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawInputs.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

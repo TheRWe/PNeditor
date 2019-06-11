@@ -92,13 +92,13 @@ export class PNDrawInputs {
             .attr("type", "number")
             .attr("min", 0)
             .attr("max", 999)
-            .style("width", "45px")
-            .style("height", "20px")
+            .style("width", "50px")
+            .style("height", "24px")
 
         const markingButtonOk = this.Selectors.marking.buttonOK = markingDiv.append("xhtml:input")
             .attr("type", "button")
-            .attr("value", "mOK")
-            .style("width", "35px")
+            .attr("value", "OK")
+            .style("width", "35px");
 
         const EndMarkingInput = (save: boolean) => {
             if (save) {
@@ -133,8 +133,8 @@ export class PNDrawInputs {
             .attr("type", "number")
             .attr("min", -999)
             .attr("max", 999)
-            .style("width", "45px")
-            .style("height", "20px")
+            .style("width", "50px")
+            .style("height", "24px")
 
         const arcButtonOk = this.Selectors.arcValue.buttonOK = arcDiv.append("xhtml:input")
             .attr("type", "button")
