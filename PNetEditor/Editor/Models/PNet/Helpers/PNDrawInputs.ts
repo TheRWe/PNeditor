@@ -14,7 +14,10 @@ export class PNDrawInputs {
         },
         arcValue: {
             div: typedNull<d3BaseSelector>(),
-            input: typedNull<d3BaseSelector>(),
+            inputs: {
+                toPlace: typedNull<d3BaseSelector>(),
+                toTransition: typedNull<d3BaseSelector>(),
+            },
             buttonOK: typedNull<d3BaseSelector>(),
         },
     };
@@ -51,15 +54,17 @@ export class PNDrawInputs {
         (input.node() as any).focus();
     }
 
-    public ShowInputArc(pos: Position, initialState: number = null) {
+    public ShowInputArc(pos: Position, initialState: { toPlace: number, toTransition: number } = null) {
         this.HideAllInputs();
         this.MoveForeign(pos);
 
         this.Selectors.arcValue.div.style("display", null);
-        const input = this.Selectors.arcValue.input;
+        const inputs = this.Selectors.arcValue.inputs;
 
-        (input.node() as any).value = initialState || null;
-        (input.node() as any).focus();
+        (inputs.toPlace.node() as any).value = initialState == null ? 0 : initialState.toPlace;
+        (inputs.toTransition.node() as any).value = initialState == null ? 0 : initialState.toTransition;
+
+        (inputs.toPlace.node() as any).focus();
     }
 
     private _onInputMarking = (input: number | null) => { }
@@ -68,8 +73,8 @@ export class PNDrawInputs {
         this._onInputMarking = (...args) => { old(...args); callback(...args); }
     }
 
-    private _onInputArc = (input: number | null) => { }
-    public AddOnInputArc(callback: (intput: number | null) => void) {
+    private _onInputArc = (input: { toPlace: number, toTransition: number } | null) => { }
+    public AddOnInputArc(callback: (intput: { toPlace: number, toTransition: number } | null) => void) {
         const old = this._onInputArc;
         this._onInputArc = (...args) => { old(...args); callback(...args); }
     }
@@ -129,12 +134,22 @@ export class PNDrawInputs {
             .style("height", "50")
             .style("display", "none");
 
-        const arcInput = this.Selectors.arcValue.input = arcDiv.append("xhtml:input")
+        const arcInputToPlace = this.Selectors.arcValue.inputs.toPlace = arcDiv.append("xhtml:input")
             .attr("type", "number")
             .attr("min", -999)
             .attr("max", 999)
             .style("width", "50px")
             .style("height", "24px")
+
+        arcDiv.append("span").text("°");
+
+        const arcInputToTranisiton = this.Selectors.arcValue.inputs.toTransition = arcDiv.append("xhtml:input")
+            .attr("type", "number")
+            .attr("min", 0)
+            .attr("max", 999)
+            .style("width", "50px")
+            .style("height", "24px")
+
 
         const arcButtonOk = this.Selectors.arcValue.buttonOK = arcDiv.append("xhtml:input")
             .attr("type", "button")
@@ -143,8 +158,9 @@ export class PNDrawInputs {
 
         const EndArcInput = (save: boolean) => {
             if (save) {
-                const value = +(arcInput.node() as any).value;
-                this._onInputArc(value);
+                const toPlace = +(arcInputToPlace.node() as any).value;
+                const toTransition = +(arcInputToTranisiton.node() as any).value;
+                this._onInputArc({ toPlace, toTransition });
             } else {
                 this._onInputArc(null);
             }
@@ -156,7 +172,7 @@ export class PNDrawInputs {
             d3.event.stopPropagation();
         })
 
-        arcInput.on("keypress", () => {
+        const arcInputOnKeypress = () => {
             if (d3.event.keyCode == Key.Enter) {
                 EndArcInput(true);
                 d3.event.stopPropagation();
@@ -164,7 +180,10 @@ export class PNDrawInputs {
                 EndArcInput(false);
                 d3.event.stopPropagation();
             }
-        });
+        }
+
+        arcInputToPlace.on("keypress", arcInputOnKeypress);
+        arcInputToTranisiton.on("keypress", arcInputOnKeypress);
     }
 }
 

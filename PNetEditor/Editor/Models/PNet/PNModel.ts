@@ -19,8 +19,8 @@ export class PNModel extends ModelBase<JSONNet>{
         const transitions: { position?: Position, id: number }[]
             = this.transitions.map(t => { return { position: { ...t.position }, id: t.id } });
 
-        const arcs: { place_id: number, transition_id: number, qty: number }[]
-            = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, qty: a.qty }; });
+        const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
+            = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
 
         const json: JSONNet = { places: places, transitions: transitions, arcs: arcs };
 
@@ -36,7 +36,8 @@ export class PNModel extends ModelBase<JSONNet>{
             return t;
         })
 
-        const arcs = json.arcs.map(aj => new Arc(transitions.find(t => t.id === aj.transition_id), places.find(p => p.id === aj.place_id), aj.qty));
+        const arcs = json.arcs.map(aj =>
+            new Arc(transitions.find(t => t.id === aj.transition_id), places.find(p => p.id === aj.place_id), aj.toPlace, aj.toTransition));
 
         const placeID: number = Math.max(-1, ...places.map(p => p.id)) + 1;
 
@@ -51,7 +52,8 @@ export class PNModel extends ModelBase<JSONNet>{
     }
 
     public IsTransitionEnabled(transition: Transition | null): boolean {
-        return transition != null && this.getArcesOfTransition(transition).every(v => (v.qty + v.place.marking) >= 0);
+        return transition != null &&
+            this.getArcesOfTransition(transition).every(v => (v.place.marking - v.toTransition) >= 0);
     }
 
     public get EnabledTransitions(): Transition[] {
@@ -115,12 +117,14 @@ export class Place {
 export class Arc {
     transition: Transition;
     place: Place;
-    qty: number;
+    toPlace: number;
+    toTransition: number;
 
-    constructor(transition: Transition, place: Place, qty: number) {
+    constructor(transition: Transition, place: Place, toPlace: number, toTransition: number) {
         this.transition = transition;
         this.place = place;
-        this.qty = qty;
+        this.toPlace = toPlace;
+        this.toTransition = toTransition;
     }
 }
 
@@ -140,6 +144,7 @@ export type JSONNet = ModelJSONType & {
     arcs: {
         transition_id: number,
         place_id: number,
-        qty: number,
+        toPlace: number,
+        toTransition: number,
     }[],
 }

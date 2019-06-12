@@ -278,7 +278,8 @@ export class PNDraw extends DrawBase<PNModel>{
 
 
         arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
-            .style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
+            // todo: markery
+            //.style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
             .attr("x1", a => a.line.from.x)
             .attr("y1", a => a.line.from.y)
             .attr("x2", a => a.line.to.x)
@@ -294,7 +295,15 @@ export class PNDraw extends DrawBase<PNModel>{
         arcs().select('text')
             .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
-            .text(d => Math.abs(d.arc.qty) || "");
+            .text(d => {
+                let toPlace: number | string = Math.abs(d.arc.toPlace);
+                let toTransition: number | string = Math.abs(d.arc.toTransition);
+
+                toPlace = isNaN(toPlace) || toPlace === 0 ? "" : toPlace;
+                toTransition = isNaN(toTransition) || toTransition === 0 ? "" : toTransition;
+                
+                return (toPlace + "°" + toTransition) || "";
+            });
 
         //#endregion
 

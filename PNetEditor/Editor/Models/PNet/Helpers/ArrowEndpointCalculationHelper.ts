@@ -8,7 +8,7 @@ import { PNModel, Arc } from "../PNModel";
  * @param net whole net
  * @param arc arc currently calculated arc
  */
-export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: Position, endsIn: "T" | "P" } {
+export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: Position } {
     const tPos = arc.transition.position;
 
     // get all arces of transition
@@ -60,19 +60,11 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
 
     var transitionPos = arcWithTransitionPosition.find((ap) => {
         const a = ap.arc;
-        return arc.qty === a.qty && arc.place === a.place && arc.transition === a.transition;
+        return arc == a;
     }).pos;
 
-    if (arc.qty >= 0)
-        return {
-            from: transitionPos,
-            to: arc.place.position,
-            endsIn: "P"
-        };
-    else
-        return {
-            from: arc.place.position,
-            to: transitionPos,
-            endsIn: "T"
-        };
+    return {
+        from: transitionPos,
+        to: arc.place.position
+    };
 } 

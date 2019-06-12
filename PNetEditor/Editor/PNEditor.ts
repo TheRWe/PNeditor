@@ -256,23 +256,12 @@ export class PNEditor implements TabInterface {
             },
             onWheel: (a: Arc) => {
                 const e = d3.event;
+                // todo: arc wheel
                 console.debug("arc wheel");
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
                     case editorMode.default:
-                        if (deltaY < 0) {
-                            a.qty++;
-                        } else {
-                            a.qty--;
-                        }
 
-                        if (a.qty === 0) {
-                            if (deltaY < 0) {
-                                a.qty++;
-                            } else {
-                                a.qty--;
-                            }
-                        }
                         this.pnAction.AddHist();
                         break;
                     default:
@@ -361,7 +350,7 @@ export class PNEditor implements TabInterface {
         if (ending === "new") {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
                 const addedPlace = this.pnAction.AddPlace(this.mouse.svg.getMousePosition());
-                this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1);
+                this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1, null);
             } else if (this.mouse.helpers.arcMakeHolder instanceof Place) {
                 //todo place making
                 console.error("make transition");
@@ -369,7 +358,7 @@ export class PNEditor implements TabInterface {
         } else if (ending instanceof Place) {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
                 console.debug("connecting place")
-                this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1);
+                this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1, null);
             } else {
                 //todo: hlaška nebo vyrvoření place mezi dvěma transitions
                 console.error("can't connect two transitions");
@@ -415,9 +404,10 @@ export class PNEditor implements TabInterface {
             arcValue: {
                 /** curently edited arc with value edit input */
                 editedArc: typedNull<Arc>(),
-                onInputEnd: (val: number | null) => {
+                onInputEnd: (val: { toPlace: number, toTransition: number } | null) => {
                     if (val != null) {
-                        this.keyboard.inputs.arcValue.editedArc.qty = val;
+                        this.keyboard.inputs.arcValue.editedArc.toPlace = val.toPlace;
+                        this.keyboard.inputs.arcValue.editedArc.toTransition = val.toTransition;
                         this.pnAction.AddHist();
                         this.pnDraw.update();
                     }
@@ -435,7 +425,7 @@ export class PNEditor implements TabInterface {
             this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.arcValue.editedArc = arc;
-        this.pnDraw.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), arc.qty);
+        this.pnDraw.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), { toPlace: arc.toPlace, toTransition: arc.toTransition });
     }
 
     /** open marking edit window for given place*/

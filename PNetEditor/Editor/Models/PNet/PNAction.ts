@@ -48,8 +48,8 @@ export class PNAction extends ActionBase<PNModel>{
         return place;
     }
 
-    public AddArc(t: Transition, p: Place, qty: number): Arc {
-        const arc = new Arc(t, p, qty);
+    public AddArc(t: Transition, p: Place, toPlace: number, toTransition: number): Arc {
+        const arc = new Arc(t, p, toPlace, toTransition);
         this.model.arcs.push(arc);
         this.CallOnModelChange();
         return arc;
@@ -91,7 +91,7 @@ export class PNAction extends ActionBase<PNModel>{
     public RunTransition(transition: Transition): boolean {
         if (!this.model.IsTransitionEnabled(transition))
             return false;
-        this.model.getArcesOfTransition(transition).forEach(a => { a.place.marking += a.qty });
+        this.model.getArcesOfTransition(transition).forEach(a => { a.place.marking += a.toPlace - a.toTransition; });
         this.CallOnModelChange();
         return true;
     }
