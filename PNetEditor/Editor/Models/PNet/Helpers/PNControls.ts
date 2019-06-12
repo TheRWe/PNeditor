@@ -29,6 +29,7 @@ export class PNControls {
             .attr("type", "button")
             .attr("value", "Analyze")
             .style("width", "95px")
+            .on("click", () => { editor.RunAnalysis(); })
 
 
     }

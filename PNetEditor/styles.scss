@@ -29,13 +29,20 @@ button, .button, input[type=button] {
 button:focus {
     outline: none;
 }
+
 .button:focus {
     outline: none;
 }
 
-.no-border{
-    border:0;
+.no-border {
+    border: 0;
 }
+
+.hidden {
+    display: none !important;
+}
+
+
 
 
 .placeSVGCircle {
@@ -111,6 +118,7 @@ body {
 
     &-left {
         flex-basis: 200px;
+        min-width: 200px;
         border-right: 1px gray solid;
         padding: 5px;
         overflow-y: auto;

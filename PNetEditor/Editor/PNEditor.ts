@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
 import { PNControls } from "./Models/PNet/Helpers/PNControls";
+import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
 
 
 export class PNEditor {
@@ -19,6 +20,21 @@ export class PNEditor {
     public readonly pnAction: PNAction;
 
     private readonly controls: PNControls;
+
+    private _analysis: PNAnalysisDraw = null;
+    public RunAnalysis() {
+        if (this._analysis == null) {
+            const tabGroup = this.tab.parentTabGroup;
+            const tab = tabGroup.parentTabControl.addTab(tabGroup);
+
+            tab.addOnBeforeRemove(() => {
+                this._analysis = null;
+            })
+            this._analysis = new PNAnalysisDraw(tab.container);
+            tab.label = "Analysis";
+        }
+    }
+
 
     //#region Mode
 
@@ -427,6 +443,9 @@ export class PNEditor {
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
+        this.tab.container.style("height", "99vh")
+            .style("display", "flex")
+            .style("flex-direction", "column");
         const controlDiv = tab.container.append("div");
         const svg = this.svg = tab.container.append("svg");
 

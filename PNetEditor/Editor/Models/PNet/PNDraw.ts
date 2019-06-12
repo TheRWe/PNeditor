@@ -81,7 +81,7 @@ export class PNDraw extends DrawBase<PNModel>{
 
         const svg = this.container
             .attr("width", "100%")
-            .attr("height", "99vh");
+            .style("flex", "auto");
 
         const defs = svg.append('svg:defs');
         const defsNames = html.classes.PNEditor.defs;

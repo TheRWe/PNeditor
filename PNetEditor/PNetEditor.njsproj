@@ -74,6 +74,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Constants.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNControls.ts">
       <SubType>Code</SubType>
@@ -166,6 +169,8 @@
     <Folder Include="CORE\TabControl\" />
     <Folder Include="Editor\" />
     <Folder Include="Editor\Models\" />
+    <Folder Include="Editor\Models\PNAnalysis\" />
+    <Folder Include="Editor\Models\PNAnalysis\Algorithms\" />
     <Folder Include="Editor\Models\PNet\" />
     <Folder Include="Editor\Models\PNet\Helpers\" />
     <Folder Include="Editor\Models\_Basic\" />

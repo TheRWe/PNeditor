@@ -29,6 +29,9 @@ button:focus {
 .no-border {
   border: 0; }
 
+.hidden {
+  display: none !important; }
+
 .placeSVGCircle {
   animation: placeSVGCircleAnimation 0.4s cubic-bezier(1, 1.5, 0.7, 2);
   fill: white;
@@ -81,6 +84,7 @@ body {
   height: 99vh; }
   .page-left {
     flex-basis: 200px;
+    min-width: 200px;
     border-right: 1px gray solid;
     padding: 5px;
     overflow-y: auto; }

@@ -12,12 +12,12 @@ export class Tab {
 
 
     public Hide() {
-        this.container.style("display", "none");
+        this.container.classed("hidden", true);
         this.tabButton.classed("control-panel-tab-sub-selected", false);
     }
 
     public Show() {
-        this.container.style("display", "block");
+        this.container.classed("hidden", false);
         this.tabButton.classed("control-panel-tab-sub-selected", true);
     }
 

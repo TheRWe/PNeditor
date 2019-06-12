@@ -124,29 +124,19 @@ bìhem zobrazovaní zmìn do editoru(**vyžaduje [Automatické pozice](#autopos)**)
 Použít javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
   
   - [ ] Zobrazovaní invariantu vybarvováním obvodu (place/transition/arc)
-  - [ ] výsledky algoritmù budou ukládané do zmìn sítì(pøi návratu zpìt není potøeba algoritmus znova spouštìt)
-    - [ ] Algoritmy budou mít metadata výpoètu ... Napø. jak dlouho trval výpoèet(pro uvolnìní místa v pamìti v pøípadì potøeby, možné vybírat prioritnì výpoèty které byly rychlé ... Možné taky vytváøet statistiky výpoètu) atd... 
-    - [ ] Pokud dojde ke zmìnì algoritmu, smažou se všechny cache
-  - [ ] všechny algoritmy budou spouštì hlavní univerzální algoritmus který bude mít pøístup ke všem možnostem úprav a analýz sítì který následnì vybere podle definice algoritmu které data se mají pøedat algoritmu a jak se pak pracuje s výsledkem
-  - [ ] Jednoduché propojování více algoritmù dohromady(napø vytvoøení postupù )
-  - [ ] Algoritmus mùže být zapnutý - vypoèítává se s každou zmìnou sítì
-  - [ ] Rozdìlení algoritmù:
-    - Pouze Analitické(ne-editující)
-    - Editující
-  - [ ] Možnost výpoètu CPU-synchronì/CPU-parallelnì/GPU-na GPU.js
-    - Výbìr GPU/CPU puštìním benchmarku
-  - [ ] Možnost vykreslení výstupu algoritmu pomocí [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
-  - [ ] Determinizace sítì - vynucení priority operací(uživatelské zadání priority jednotlivých transition)
-  - [ ] Determinizace sítì - (analýza jetli je to možné) vytvoøení deterministické sítì která simuluje nedeterministickou (vyhledávání nìjakého cílového parametru / ohodnocení)
-  - [ ] Speciální reachibility (rozdìlení sítì na èásti, oznaèení stavu invariatních èástí, pøidání promìnných které umožní redukci nìkterých nekoneèných grafù)
+  - [ ] Automatické pøepoèítávání algoritmù
+  
   - [ ] Koncepty síe používající logická a synchronizaèní primitiva(flip-flop,And,or ... Simulace logických obvodù?)
-  - [ ] Invalidace analýz pøi zmìnì sítì (opìtovné pøepoèítání invariant)
-  - [ ] možnost pracovat s rekurzivním algoritmem - vyhledávání idempotentní operace = konec rekurze
     
-  - [ ] Reachability graf
-  - [ ] 1-bounded net
-  - [ ] pokud sí 1-bounded -> umožnit reachability aby byl formou zápisu názvù places
-  - [ ] scenario-based
+  - [ ] v pøípadì dlouhého výpoètu algoritmu bude výpoèet lazy
+    - [ ] Invalidace analýz pøi zmìnì sítì (opìtovné pøepoèítání invariant)
+  - [ ] Algoritmy 
+    - [ ] Reachability graf (lazy vykreslování pro nekoneèné)
+    - [ ] 1-bounded net
+    - [ ] pokud sí 1-bounded -> umožnit reachability aby byl formou zápisu názvù places
+    - [ ] scenario-based
+
+  - [ ] Možnost vykreslení výstupu algoritmu pomocí [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
 
 #### Generování sítí
 
