@@ -22,9 +22,12 @@ export class TabControl {
         return tab;
     }
 
+    private _selectedTab: Tab;
+    public get SelectedTab() { return this._selectedTab; }
     public SelectTab(tab: Tab) {
         this.TabGroups.forEach(g => g.tabs.forEach(t => { t.Hide(); }));
         tab.Show();
+        this._selectedTab = tab;
     }
 
     public RemoveTabGroup(group: TabGroup) {

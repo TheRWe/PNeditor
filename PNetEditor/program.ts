@@ -53,6 +53,28 @@ function createWindow() {
             e.sender.send('load-dialog-response', dialoRes[0]);
     });
 
+    ipcMain.on('save-dialog', (e: any, arg: any) => {
+        const dialogOprions: Electron.SaveDialogOptions = {
+            title: 'Save PNet to',
+            // todo: více možností pro user data dle nastavení
+            defaultPath: userDefaultNetSavePath,
+            filters: [
+                { name: 'PNet file', extensions: ['pnet'] },
+                { name: 'JSON file', extensions: ['json'] },
+                { name: 'All Files', extensions: ['*'] }
+            ],
+            // todo: možnost otevřených více sítí v různých 
+            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
+        };
+
+        const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
+        if (dialoRes)
+            e.sender.send('save-dialog-response', dialoRes);
+    })
+
+
+
+
 
     const mainMenuTemplate: Electron.MenuItemConstructorOptions[] =
         [{

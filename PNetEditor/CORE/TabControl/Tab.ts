@@ -21,14 +21,14 @@ export class Tab {
         this.tabButton.classed("control-panel-tab-sub-selected", true);
     }
 
-    private onBeforeRemove: (event: { cancelClose: boolean }) => void = () => { };
-    public addOnBeforeRemove(callback: (event: { cancelClose: boolean }) => void) {
-        const old = this.onBeforeRemove; this.onBeforeRemove = (...args) => { old(...args); callback(...args); };
+    private _onBeforeRemove: (event: { cancelClose: boolean }) => void = () => { };
+    public AddOnBeforeRemove(callback: (event: { cancelClose: boolean }) => void) {
+        const old = this._onBeforeRemove; this._onBeforeRemove = (...args) => { old(...args); callback(...args); };
     }
 
     public remove() {
         const eventArgs = { cancelClose: false };
-        this.onBeforeRemove(eventArgs);
+        this._onBeforeRemove(eventArgs);
         if (!eventArgs.cancelClose)
             this.parentTabGroup.remove(this);
     }

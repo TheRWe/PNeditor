@@ -9,9 +9,11 @@ import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
 import { PNControls } from "./Models/PNet/Helpers/PNControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
+import { groupmap, TabInterface } from "../CORE/MainWindow";
 
 
-export class PNEditor {
+export class PNEditor implements TabInterface {
+
     public readonly tab: Tab;
     public readonly svg: d3BaseSelector
 
@@ -27,12 +29,20 @@ export class PNEditor {
             const tabGroup = this.tab.parentTabGroup;
             const tab = tabGroup.parentTabControl.addTab(tabGroup);
 
-            tab.addOnBeforeRemove(() => {
+            tab.AddOnBeforeRemove(() => {
                 this._analysis = null;
             })
             this._analysis = new PNAnalysisDraw(tab.container);
             tab.label = "Analysis";
         }
+    }
+
+    public IsSaveable(): boolean {
+        return true;
+    }
+
+    GetStringToSave(): string {
+        return JSON.stringify(this.pnModel.toJSON(), null, 2);
     }
 
 
@@ -463,6 +473,8 @@ export class PNEditor {
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();
+
+        groupmap.set(tab.parentTabGroup, this);
     }
 }
 
