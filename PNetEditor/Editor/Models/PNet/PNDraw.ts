@@ -8,12 +8,13 @@ import { d3BaseSelector, html, Position } from "../../Constants";
 import { PNDrawInputs } from "./Helpers/PNDrawInputs";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
+export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
 
 export class PNDraw extends DrawBase<PNModel>{
     public Callbacks = {
         container: new Callbacks<{}>(),
         transition: new Callbacks<Transition>(),
-        arc: new Callbacks<Arc>(),
+        arc: new Callbacks<arcWithLine>(),
         place: new Callbacks<Place>(),
     };
 
@@ -263,7 +264,6 @@ export class PNDraw extends DrawBase<PNModel>{
             .style("stroke", "black")
             .attr("opacity", "0")
             .style("stroke-width", 8)
-            .datum((x) => { return x.arc; })
 
         callbacks.arc.ConnectToElement(enterArcLine, getPos, getWheelDeltaY);
 
@@ -273,8 +273,7 @@ export class PNDraw extends DrawBase<PNModel>{
             .attr("text-anchor", "middle")
             .attr("dy", ".3em")
             .attr("font-size", 10)
-            .datum(x => x.arc)
-            .on("click", (elm) => { callbacks.arc.onClick(elm, getPos()); });
+            //.on("click", (elm) => { callbacks.arc.onClick(elm, getPos()); });
 
 
         arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
@@ -301,7 +300,7 @@ export class PNDraw extends DrawBase<PNModel>{
 
                 toPlace = isNaN(toPlace) || toPlace === 0 ? "" : toPlace;
                 toTransition = isNaN(toTransition) || toTransition === 0 ? "" : toTransition;
-                
+
                 return (toPlace + "°" + toTransition) || "";
             });
 

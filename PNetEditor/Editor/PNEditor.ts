@@ -1,7 +1,7 @@
 ﻿import { Tab } from "../CORE/TabControl/Tab";
 import { d3BaseSelector } from "../Editor/Constants";
 import { PNModel, Place, Arc, Transition } from "./Models/PNet/PNModel";
-import { PNDraw } from "./Models/PNet/PNDraw";
+import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
 import { CallbackType } from "./Models/_Basic/DrawBase";
 import * as d3 from 'd3';
@@ -100,6 +100,10 @@ export class PNEditor implements TabInterface {
         callbacks.transition.AddCallback(CallbackType.drag, this.mouse.onDragPositionMove.drag);
         callbacks.transition.AddCallback(CallbackType.dragEnd, this.mouse.onDragPositionMove.end);
         callbacks.transition.AddCallback(CallbackType.dragRevert, this.mouse.onDragPositionMove.revert);
+
+        callbacks.arc.AddCallback(CallbackType.letfClick, this.mouse.arc.onClick);
+        callbacks.arc.AddCallback(CallbackType.rightClick, this.mouse.arc.onRightClick);
+        callbacks.arc.AddCallback(CallbackType.wheel, this.mouse.arc.onWheel);
 
         callbacks.container.AddCallback(CallbackType.letfClick, this.mouse.svg.onClick);
         callbacks.container.AddCallback(CallbackType.rightClick, this.mouse.svg.onRightClick);
@@ -233,28 +237,29 @@ export class PNEditor implements TabInterface {
             }
         },
         arc: {
-            onClickHitbox: (a: Arc) => {
+            // todo: bude jen arc a ne arcWithLine
+            onClick: (a: arcWithLine) => {
                 console.debug("arc clicked");
 
                 const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case editorMode.valueEdit:
                     case editorMode.default:
-                        this.StartInputArc(a);
+                        this.StartInputArc(a.arc);
                         d3.event.stopPropagation();
                         break;
                     default:
                         notImplemented();
                 }
             },
-            onRightClick: (a: Arc) => {
+            onRightClick: (a: arcWithLine) => {
                 console.debug("arc right click");
                 switch (this.mode.selected) {
                     default:
                         notImplemented();
                 }
             },
-            onWheel: (a: Arc) => {
+            onWheel: (a: arcWithLine) => {
                 const e = d3.event;
                 // todo: arc wheel
                 console.debug("arc wheel");
