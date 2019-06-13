@@ -91,6 +91,8 @@ export class PNDrawInputs {
 
         const markingDiv = this.Selectors.marking.div = foreign.append("xhtml:div")
             .style("height", "50")
+            .style("width", "fit-content")
+            .style("background", "white")
             .style("display", "none");
 
         const markingInput = this.Selectors.marking.input = markingDiv.append("xhtml:input")
@@ -132,6 +134,8 @@ export class PNDrawInputs {
 
         const arcDiv = this.Selectors.arcValue.div = foreign.append("xhtml:div")
             .style("height", "50")
+            .style("width", "fit-content")
+            .style("background", "white")
             .style("display", "none");
 
         const arcInputToPlace = this.Selectors.arcValue.inputs.toPlace = arcDiv.append("xhtml:input")
@@ -181,6 +185,10 @@ export class PNDrawInputs {
                 d3.event.stopPropagation();
             }
         }
+
+                
+        arcDiv.on("click", () => { d3.event.stopPropagation(); })
+        markingDiv.on("click", () => { d3.event.stopPropagation(); })
 
         arcInputToPlace.on("keypress", arcInputOnKeypress);
         arcInputToTranisiton.on("keypress", arcInputOnKeypress);
