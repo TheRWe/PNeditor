@@ -53,7 +53,7 @@ export class PNModel extends ModelBase<JSONNet>{
 
     public IsTransitionEnabled(transition: Transition | null): boolean {
         return transition != null &&
-            this.getArcesOfTransition(transition).every(v => (v.place.marking - v.toTransition) >= 0);
+            this.getArcesOfTransition(transition).every(v => ((v.place.marking || 0) - (v.toTransition || 0)) >= 0);
     }
 
     public get EnabledTransitions(): Transition[] {

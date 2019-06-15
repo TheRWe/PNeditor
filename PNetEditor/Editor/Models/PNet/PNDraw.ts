@@ -159,68 +159,71 @@ export class PNDraw extends DrawBase<PNModel>{
 
         //#region Place
 
-        const placesEnterGroup =
-            places()
-                .enter()
-                .each(fixNullPosition)
-                .append("g")
-                .classed(html.classes.PNEditor.place.g, true);
+        const placesEnterGroup = places()
+            .enter()
+            .each(fixNullPosition)
+            .append("g")
+            .classed(html.classes.PNEditor.place.g, true)
+            ;
+
         callbacks.place.ConnectToElement(placesEnterGroup, getPos, getWheelDeltaY);
 
         // todo: any ? (taky u transition)
-        const placesEnterCircle =
-            placesEnterGroup.append("circle")
-                .attr("r", 10)
-                .classed(html.classes.PNEditor.place.svgCircle, true);
+        const placesEnterCircle = placesEnterGroup.append("circle")
+            .attr("r", 10)
+            .classed(html.classes.PNEditor.place.svgCircle, true)
+            ;
 
-        const placeEnterSelect =
-            placesEnterGroup.append("circle")
-                .style("stroke", "black")
-                .style("fill", "none")
-                .style("stroke-width", "1.8")
-                .style("stroke-dasharray", "5")
-                .attr("r", 14.5)
-                .classed(html.classes.PNEditor.multiSelection.selectOutline, true);
+        const placeEnterSelect = placesEnterGroup.append("circle")
+            .style("stroke", "black")
+            .style("fill", "none")
+            .style("stroke-width", "1.8")
+            .style("stroke-dasharray", "5")
+            .attr("r", 14.5)
+            .classed(html.classes.PNEditor.multiSelection.selectOutline, true)
+            ;
 
         //todo: kolečka/tečky pro nízké počty
-        const placesEnterText =
-            placesEnterGroup.append("text")
-                .classed("unselectable", true)
-                .attr("text-anchor", "middle")
-                .attr("dy", ".3em")
-                .attr("font-size", 10)
-                .text(d => d.marking || "")
-                .classed("txt", true);
+        const placesEnterText = placesEnterGroup.append("text")
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".3em")
+            .attr("font-size", 10)
+            .text(d => d.marking || "")
+            .classed("txt", true)
+            ;
 
         places()
             .attr("transform", (p: Place) => `translate(${p.position.x}, ${p.position.y})`)
+            ;
         places()
             //todo: scaling
             .select("text")
-            .text(d => d.marking || "");
+            .text(d => d.marking || "")
+            ;
 
         //#endregion
 
 
         //#region Transitions
 
-        const transitionEnterGroup =
-            transitions()
-                .enter()
+        const transitionEnterGroup = transitions().enter()
                 .each(fixNullPosition)
                 .append("g")
-                .classed(html.classes.PNEditor.transition.g, true);
+                .classed(html.classes.PNEditor.transition.g, true)
+            ;
 
-        callbacks.transition.ConnectToElement(transitionEnterGroup, getPos, getWheelDeltaY);
+        callbacks.transition.ConnectToElement(transitionEnterGroup, getPos, getWheelDeltaY)
+            ;
 
         const transitionEnterRect =
             transitionEnterGroup
                 .append("rect")
-                .style("fill", rgb(0, 0, 0).hex())
                 .attr("width", 20)
                 .attr("height", 20)
                 .attr("x", -10)
-                .attr("y", -10);
+                .attr("y", -10)
+            ;
 
 
         const transitionEnterSelect =
@@ -229,19 +232,19 @@ export class PNDraw extends DrawBase<PNModel>{
                 .attr("height", 29)
                 .attr("x", -14.5)
                 .attr("y", -14.5)
-                .style("fill", "none")
                 .style("stroke", "black")
                 .style("stroke-width", 1.5)
                 .style("stroke-dasharray", 4)
                 .style("stroke-opacity", 0.5)
                 .style("stroke-linecap", "round")
-                .classed(html.classes.PNEditor.multiSelection.selectOutline, true);
-        ;
+                .classed(html.classes.PNEditor.multiSelection.selectOutline, true)
+            ;
         transitions()
             .attr("transform", (t: Transition) => `translate(${t.position.x}, ${t.position.y})`)
             //.attr("x", function (t: Transition) { return t.position.x - 10; })
             //.attr("y", function (t: Transition) { return t.position.y - 10; })
-            .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex());
+            .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex())
+            ;
 
         //#endregion
 
@@ -258,23 +261,23 @@ export class PNDraw extends DrawBase<PNModel>{
             .style("stroke", "black")
             .style("stroke-width", 1.5);
 
-        const enterArcLine = enterArc
+        const enterArcHitboxLine = enterArc
             .append("line")
             .classed(html.classes.PNEditor.helper.arcHitboxLine, true)
             .style("stroke", "black")
             .attr("opacity", "0")
             .style("stroke-width", 8)
+            ;
+        callbacks.arc.ConnectToElement(enterArcHitboxLine, getPos, getWheelDeltaY);
 
-        callbacks.arc.ConnectToElement(enterArcLine, getPos, getWheelDeltaY);
-
-        enterArc
-            .append("text")
+        const enterArcText = enterArc.append("text")
             .classed("unselectable", true)
             .attr("text-anchor", "middle")
             .attr("dy", ".3em")
             .attr("font-size", 10)
-            //.on("click", (elm) => { callbacks.arc.onClick(elm, getPos()); });
+            ;
 
+        callbacks.arc.ConnectToElement(enterArcText, getPos, getWheelDeltaY);
 
         arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
             // todo: markery
