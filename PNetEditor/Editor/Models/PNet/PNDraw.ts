@@ -226,6 +226,14 @@ export class PNDraw extends DrawBase<PNModel>{
             ;
 
 
+        const transitionEnterEpsilon = transitionEnterGroup.append("text")
+            .classed(html.classes.PNEditor.transition.epsilon, true)
+            .style("fill", "white")
+            .style("user-select", "none")
+            .text("ε")
+            ;
+
+        /*
         const transitionEnterSelect =
             transitionEnterGroup.append("rect")
                 .attr("width", 29)
@@ -239,10 +247,16 @@ export class PNDraw extends DrawBase<PNModel>{
                 .style("stroke-linecap", "round")
                 .classed(html.classes.PNEditor.multiSelection.selectOutline, true)
             ;
+        */
         transitions()
             .attr("transform", (t: Transition) => `translate(${t.position.x}, ${t.position.y})`)
-            //.attr("x", function (t: Transition) { return t.position.x - 10; })
-            //.attr("y", function (t: Transition) { return t.position.y - 10; })
+            ;
+        transitions()
+            .select("." + html.classes.PNEditor.transition.epsilon)
+            .style("display", d => d.isCold ? null : "none")
+            ;
+        transitions()
+            .select("rect")
             .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex())
             ;
 

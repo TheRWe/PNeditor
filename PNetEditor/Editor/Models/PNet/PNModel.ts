@@ -16,8 +16,8 @@ export class PNModel extends ModelBase<JSONNet>{
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
             = this.places.map(p => { return { name: p.name, id: p.id, position: { ...p.position }, marking: p.marking }; });
 
-        const transitions: { position?: Position, id: number }[]
-            = this.transitions.map(t => { return { position: { ...t.position }, id: t.id } });
+        const transitions: { position?: Position, id: number, isCold?: boolean }[]
+            = this.transitions.map(t => { return { position: { ...t.position }, id: t.id, isCold: t.isCold } });
 
         const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
             = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
@@ -33,6 +33,7 @@ export class PNModel extends ModelBase<JSONNet>{
 
         const transitions: Transition[] = json.transitions.map(tj => {
             const t = new Transition(tj.position, tj.id);
+            t.isCold = tj.isCold;
             return t;
         })
 

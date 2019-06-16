@@ -184,6 +184,11 @@ export class PNEditor implements TabInterface {
                 //console.debug("transition wheel");
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
+                    case editorMode.default:
+                        t.isCold = !t.isCold;
+                        this.pnAction.AddHist();
+                        this.pnDraw.update();
+                        break;
                     default:
                         notImplemented();
                 }

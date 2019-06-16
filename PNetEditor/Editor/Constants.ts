@@ -16,20 +16,23 @@ export const html = {
             },
             defs: {
                 arrowTransitionEnd: "defs-arrow-t-end",
-                arrowPlaceEnd: "defs-arrow-p-end"
+                arrowPlaceEnd: "defs-arrow-p-end",
             },
             multiSelection: {
                 selectOutline: "select-outline",
-                selected: "selected"
+                selected: "selected",
             },
-            arc: { g: "arc" },
-            transition: { g: "transition" },
+            arc: { g: "arc", },
+            transition: {
+                g: "transition",
+                epsilon: "transition-epsilon-class",
+            },
             place: { g: "place", svgCircle: "placeSVGCircle" },
             g: {
                 arcs: "type-arcs",
                 places: "type-places",
-                transitions: "type-transitions"
+                transitions: "type-transitions",
             },
         },
-    }
+    },
 }
