@@ -105,7 +105,7 @@ export class PNAction extends ActionBase<PNModel>{
     public RunTransition(transition: Transition): boolean {
         if (!this.model.IsTransitionEnabled(transition))
             return false;
-        this.model.getArcesOfTransition(transition).forEach(a => { a.place.marking += a.toPlace - a.toTransition; });
+        this.model.getArcesOfTransition(transition).forEach(a => { a.place.marking += (a.toPlace || 0) - (a.toTransition || 0); });
         this.CallOnModelChange();
         return true;
     }

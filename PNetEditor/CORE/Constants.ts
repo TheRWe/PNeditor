@@ -34,5 +34,10 @@ export const html = {
                 transitions: "type-transitions",
             },
         },
+        ToggleSwitch: {
+            switcher: "switcher",
+            labelOff: "switcher-label-off",
+            labelOn: "switcher-label-on",
+        },
     },
 }

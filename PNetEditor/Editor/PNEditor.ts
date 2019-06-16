@@ -7,9 +7,10 @@ import { CallbackType } from "./Models/_Basic/DrawBase";
 import * as d3 from 'd3';
 import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
-import { PNControls } from "./Models/PNet/Helpers/PNControls";
+import { PNDrawControls } from "./Models/PNet/Helpers/PNControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
 import { groupmap, TabInterface } from "../CORE/MainWindow";
+import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
 
 
 export class PNEditor implements TabInterface {
@@ -21,7 +22,7 @@ export class PNEditor implements TabInterface {
     public readonly pnDraw: PNDraw;
     public readonly pnAction: PNAction;
 
-    private readonly controls: PNControls;
+    private readonly controls: PNDrawControls;
 
     private _analysis: PNAnalysisDraw = null;
     public RunAnalysis() {
@@ -73,6 +74,7 @@ export class PNEditor implements TabInterface {
         }
 
         this.mode.selected = editorMode.default;
+        this.controls.toggleSwitch.StateSuppressed = ToggleSwitchState.off;
     }
 
     //#endregion
@@ -476,7 +478,17 @@ export class PNEditor implements TabInterface {
         this.pnAction = new PNAction(pnmodel);
         this.pnAction.AddHist();
 
-        this.controls = new PNControls(controlDiv, this);
+        const controls = this.controls = new PNDrawControls(controlDiv, this);
+        controls.toggleSwitch.AddOnToggleChange(tgl => {
+            this.resetState();
+            switch (tgl.State) {
+                case ToggleSwitchState.on:
+                    this.mode.selected = editorMode.run;
+                    break;
+                default:
+                    break;
+            }
+        });
 
         this.pnDraw = new PNDraw(svg);
         this.pnDraw.data = pnmodel;

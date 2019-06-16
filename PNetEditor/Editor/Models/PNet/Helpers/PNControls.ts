@@ -1,10 +1,11 @@
-﻿import { d3BaseSelector } from "../../../Constants";
+﻿import { d3BaseSelector } from "../../../../CORE/Constants";
 import { PNEditor } from "../../../PNEditor";
+import { ToggleSwitch } from "../../../../CORE/ToggleSwitch";
 
 
-export class PNControls {
+export class PNDrawControls {
     private readonly container: d3BaseSelector;
-
+    public readonly toggleSwitch: ToggleSwitch;
 
     constructor(container: d3BaseSelector, editor: PNEditor) {
         this.container = container
@@ -32,5 +33,6 @@ export class PNControls {
             .on("click", () => { editor.RunAnalysis(); })
 
 
+        this.toggleSwitch = new ToggleSwitch(container, "Edit", "Run");
     }
 }

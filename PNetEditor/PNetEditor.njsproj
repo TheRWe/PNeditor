@@ -73,7 +73,10 @@
     <TypeScriptCompile Include="CORE\TabControl\Tab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Constants.ts" />
+    <TypeScriptCompile Include="CORE\ToggleSwitch.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="CORE\Constants.ts" />
     <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

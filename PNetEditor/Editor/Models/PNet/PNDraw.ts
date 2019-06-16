@@ -95,15 +95,6 @@ export class PNDraw extends DrawBase<PNModel>{
         this.Selectors.arcDragLine = G.append("line");
 
 
-        let markingForeign = G.append("foreignObject")
-            .style("display", "none").attr("width", "100%");
-        const markingDiv = markingForeign.append("xhtml:div").style("height", "50");
-
-
-        let arcValueForeign = G.append("foreignObject")
-            .style("display", "none").attr("width", "100%");
-        const arcValueDiv = arcValueForeign.append("xhtml:div").style("height", "50");
-
         // define arrow markers for leading arrow
         defs.append('svg:marker')
             .attr('id', defsNames.arrowTransitionEnd)
