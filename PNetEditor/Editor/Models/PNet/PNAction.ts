@@ -48,7 +48,10 @@ export class PNAction extends ActionBase<PNModel>{
         return place;
     }
 
-    public AddArc(t: Transition, p: Place, toPlace: number, toTransition: number): Arc {
+    public AddArc(t: Transition, p: Place, toPlace: number, toTransition: number): Arc | null {
+        if (this.model.arcs.findIndex(a => a.place === p && a.transition === t) !== -1)
+            return null;
+
         const arc = new Arc(t, p, toPlace, toTransition);
         this.model.arcs.push(arc);
         this.CallOnModelChange();
