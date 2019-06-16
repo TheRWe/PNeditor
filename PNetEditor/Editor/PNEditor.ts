@@ -171,6 +171,10 @@ export class PNEditor implements TabInterface {
             onRightClick: (t: Transition) => {
                 console.debug("transition right click");
                 switch (this.mode.selected) {
+                    case editorMode.default:
+                        this.pnAction.RemoveTransition(t);
+                        this.pnDraw.update();
+                        break;
                     default:
                         notImplemented();
                 }
@@ -210,6 +214,10 @@ export class PNEditor implements TabInterface {
             onRightClick: (p: Place) => {
                 console.debug("place right click");
                 switch (this.mode.selected) {
+                    case editorMode.default:
+                        this.pnAction.RemovePlace(p);
+                        this.pnDraw.update();
+                        break;
                     default:
                         notImplemented();
                 }
@@ -255,6 +263,10 @@ export class PNEditor implements TabInterface {
             onRightClick: (a: arcWithLine) => {
                 console.debug("arc right click");
                 switch (this.mode.selected) {
+                    case editorMode.default:
+                        this.pnAction.RemoveArc(a.arc);
+                        this.pnDraw.update();
+                        break;
                     default:
                         notImplemented();
                 }

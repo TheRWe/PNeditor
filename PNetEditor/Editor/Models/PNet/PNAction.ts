@@ -64,19 +64,33 @@ export class PNAction extends ActionBase<PNModel>{
 
     public RemovePlace(place: Place) {
         // ensure remove arc containing this place
+        this.model.arcs.filter(x => x.place === place).forEach(x => this.RemoveArcNoModelChangeCall(x));
+
+        const placeIndex = this.model.places.findIndex(x => x === place);
+        this.model.places.splice(placeIndex, 1);
+
         this.CallOnModelChange();
-        throw new Error("not implemented");
     }
 
     public RemoveTransition(transition: Transition) {
-        // ensure remove arc containing this transition
+        // ensure remove arc containing this place
+        this.model.arcs.filter(x => x.transition === transition).forEach(x => this.RemoveArcNoModelChangeCall(x));
+
+        const transitionIndex = this.model.transitions.findIndex(x => x === transition);
+        this.model.transitions.splice(transitionIndex, 1);
+
         this.CallOnModelChange();
-        throw new Error("not implemented");
+    }
+
+    /** internal removing arc without calling model change(will be called in other method) */
+    private RemoveArcNoModelChangeCall(arc: Arc) {
+        const arcIndex = this.model.arcs.findIndex(x => x === arc);
+        this.model.arcs.splice(arcIndex, 1);
     }
 
     public RemoveArc(arc: Arc) {
+        this.RemoveArcNoModelChangeCall(arc);
         this.CallOnModelChange();
-        throw new Error("not implemented");
     }
 
     //#endregion
