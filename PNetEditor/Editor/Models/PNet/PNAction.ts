@@ -57,7 +57,7 @@ export class PNAction extends ActionBase<PNModel>{
 
     public AddTransition(pos: Position): Transition {
         const transition = new Transition(pos);
-        this.model.transitions.push();
+        this.model.transitions.push(transition);
         this.CallOnModelChange();
         return transition;
     }
