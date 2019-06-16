@@ -11,6 +11,8 @@ import { PNDrawControls } from "./Models/PNet/Helpers/PNControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
 import { groupmap, TabInterface } from "../CORE/MainWindow";
 import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
+import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
+import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
 
 
 export class PNEditor implements TabInterface {
@@ -22,19 +24,13 @@ export class PNEditor implements TabInterface {
     public readonly pnDraw: PNDraw;
     public readonly pnAction: PNAction;
 
+    public readonly inputs: PNDrawInputs;
     private readonly controls: PNDrawControls;
 
-    private _analysis: PNAnalysisDraw = null;
+    private _analysis: PNAnalysis = null;
     public RunAnalysis() {
         if (this._analysis == null) {
-            const tabGroup = this.tab.parentTabGroup;
-            const tab = tabGroup.parentTabControl.addTab(tabGroup);
-
-            tab.AddOnBeforeRemove(() => {
-                this._analysis = null;
-            })
-            this._analysis = new PNAnalysisDraw(tab.container);
-            tab.label = "Analysis";
+            this._analysis = new PNAnalysis(this.tab, this.pnModel);
         }
     }
 
@@ -63,7 +59,7 @@ export class PNEditor implements TabInterface {
                 this.mouseEndArc();
                 break;
             case editorMode.valueEdit:
-                this.pnDraw.inputs.HideAllInputs();
+                this.inputs.HideAllInputs();
                 this.keyboard.inputs.arcValue.editedArc = null;
                 this.keyboard.inputs.marking.editedPlace = null;
                 break;
@@ -402,7 +398,7 @@ export class PNEditor implements TabInterface {
 
     /** initialize keyboard *on* handlers related to keyboard */
     private InitKeyboardEvents() {
-        const inputs = this.pnDraw.inputs;
+        const inputs = this.inputs;
 
         inputs.AddOnInputArc(this.keyboard.inputs.arcValue.onInputEnd);
         inputs.AddOnInputMarking(this.keyboard.inputs.marking.onInputEnd);
@@ -449,7 +445,7 @@ export class PNEditor implements TabInterface {
             this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.arcValue.editedArc = arc;
-        this.pnDraw.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), { toPlace: arc.toPlace, toTransition: arc.toTransition });
+        this.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), { toPlace: arc.toPlace, toTransition: arc.toTransition });
     }
 
     /** open marking edit window for given place*/
@@ -458,7 +454,7 @@ export class PNEditor implements TabInterface {
             this.mode.selected = editorMode.valueEdit;
 
         this.keyboard.inputs.marking.editedPlace = p;
-        this.pnDraw.inputs.ShowInputMarking(this.mouse.svg.getMousePosition(), p.marking);
+        this.inputs.ShowInputMarking(this.mouse.svg.getMousePosition(), p.marking);
     }
 
     //#endregion
@@ -490,10 +486,11 @@ export class PNEditor implements TabInterface {
             }
         });
 
-        this.pnDraw = new PNDraw(svg);
-        this.pnDraw.data = pnmodel;
-        this.pnDraw.update();
+        const pnDraw = this.pnDraw = new PNDraw(svg);
+        pnDraw.data = pnmodel;
+        pnDraw.update();
 
+        this.inputs = new PNDrawInputs(pnDraw);
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();

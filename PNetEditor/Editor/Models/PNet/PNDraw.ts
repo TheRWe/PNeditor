@@ -18,7 +18,6 @@ export class PNDraw extends DrawBase<PNModel>{
         place: new Callbacks<Place>(),
     };
 
-    public inputs: PNDrawInputs;
 
     protected Selectors = {
         places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.data).places),
@@ -74,8 +73,6 @@ export class PNDraw extends DrawBase<PNModel>{
 
         this.initializeContainer();
         this.initializeContainerCallback();
-
-        this.inputs = new PNDrawInputs(container);
     }
 
     private initializeContainer() {

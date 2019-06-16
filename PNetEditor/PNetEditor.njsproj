@@ -77,11 +77,14 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="CORE\Constants.ts" />
+    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysis.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNControls.ts">
+    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawControls.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawInputs.ts">

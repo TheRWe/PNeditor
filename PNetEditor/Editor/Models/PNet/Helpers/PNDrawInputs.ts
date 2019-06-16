@@ -2,6 +2,7 @@
 import { typedNull } from "../../../../Helpers/purify";
 import * as d3 from "d3";
 import { Key } from "ts-keycode-enum";
+import { PNDraw } from "./../PNDraw";
 
 export class PNDrawInputs {
     private readonly svgGContainer: d3BaseSelector;
@@ -80,7 +81,8 @@ export class PNDrawInputs {
     }
 
 
-    constructor(svgGContainer: d3BaseSelector) {
+    constructor(pndraw: PNDraw) {
+        const svgGContainer = pndraw.container;
         this.svgGContainer = svgGContainer;
 
         const foreign = this.Selectors.foreign = svgGContainer.append("foreignObject")
