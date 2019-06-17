@@ -16,6 +16,13 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         return true;
     }
 
+    public get isCalculatedAllMarking() {
+        return this.calculatedAll;
+    } 
+    public get numRechableMarkings() {
+        return this.markings ? this.markings.markings.length : 0;
+    }
+
     private markings: PNMarkingJSON = null;
 
     public async UpdateModel(net: PNModel) {
