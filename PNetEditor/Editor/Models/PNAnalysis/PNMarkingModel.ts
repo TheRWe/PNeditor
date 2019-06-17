@@ -17,15 +17,20 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
     }
 
     public get isCalculatedAllMarking() {
-        return this.calculatedAll;
-    } 
+        return this._calculatedAll;
+    }
     public get numRechableMarkings() {
         return this.markings ? this.markings.markings.length : 0;
+    }
+    public get stepsFromInitialMarkingCalculated() {
+        return this._stepsFromInitialMarkingCalculated;
     }
 
     private markings: PNMarkingJSON = null;
 
     public async UpdateModel(net: PNModel) {
+        this._calculatedAll = null;
+        this._stepsFromInitialMarkingCalculated = 0;
         const transitions = net.transitions
             .map(x => {
                 return {
@@ -50,8 +55,8 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
             .then(() => {
                 const t1 = performance.now();
 
-                console.debug({ reachibilityCalculationDone: this, possibleUniqueMarkings: this.markings.markings.length, time: (t1-t0) });
-                if (this.calculatedAll === null) this.calculatedAll = true;
+                console.debug({ reachibilityCalculationDone: this, possibleUniqueMarkings: this.markings.markings.length, time: (t1 - t0) });
+                if (this._calculatedAll === null) this._calculatedAll = true;
             });
     }
 
@@ -59,11 +64,20 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         return GetStringHash(JSON.stringify(mark.slice().sort()));
     }
 
-    private calculatedAll: boolean | null = null;
+    private _calculatedAll: boolean | null = null;
+    private currentCalculations = {} as { [key: number]: true };
+    private _stepsFromInitialMarkingCalculated: number = 0;
+
+    public StopCalculations() {
+        Object.keys(this.currentCalculations).forEach(k => {
+            clearTimeout(+k);
+            delete this.currentCalculations[k as any];
+        });
+    }
 
     private async RecursiveCalculateMarkings(markIndex: number, depth: number) {
         if (depth >= ReachabilitySettings.MarkingGraphDepth) {
-            this.calculatedAll = false;
+            this._calculatedAll = false;
             return;
         }
 
@@ -77,7 +91,8 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         await Promise.all(
             enabledTransitions.map(t => {
                 return new Promise((resolve) => {
-                    setTimeout(() => {
+                    const calcTimeoutIndx = setTimeout(() => {
+                        this._stepsFromInitialMarkingCalculated = depth + 1;
                         const newMark = mark.placeMarkings.map(p => {
                             const arc = t.arces.find(a => a.placeID == p.id);
                             if (arc === undefined)
@@ -102,15 +117,20 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                         if (existingMarkingIndex >= 0) {
                             mark.accessibleTargetMarkings.push({ index: existingMarkingIndex, transitionID: t.id });
                             this._onCalculationChange();
+                            delete this.currentCalculations[calcTimeoutIndx as any];
                             resolve();
                         } else {
                             const index = this.markings.markings.push({ hash, placeMarkings: newMark, accessibleTargetMarkings: [] }) - 1;
                             mark.accessibleTargetMarkings.push({ index, transitionID: t.id });
                             this._onCalculationChange();
                             this.RecursiveCalculateMarkings(index, depth + 1)
-                                .then(resolve as any);
+                                .then(() => {
+                                    delete this.currentCalculations[calcTimeoutIndx as any];
+                                    resolve();
+                                });
                         }
-                    }, 0);
+                    }, 10);
+                    this.currentCalculations[calcTimeoutIndx as any] = true;
                 });
             }));
     }

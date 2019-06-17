@@ -22,11 +22,18 @@ export class PNAction extends ActionBase<PNModel>{
         this.model.fromJSON(this.netHistory[this.netHistoryIndex]);
     }
 
+    private _suppressingAddHistOnChange = false;
     public Redo() {
         if (!(this.netHistoryIndex + 1 < this.netHistory.length))
             return;
+
+
         this.netHistoryIndex++;
         this.setHistory();
+
+        this._suppressingAddHistOnChange = true;
+        this.CallOnModelChange();
+        this._suppressingAddHistOnChange = false;
     }
 
     public Undo() {
@@ -34,6 +41,10 @@ export class PNAction extends ActionBase<PNModel>{
             return;
         this.netHistoryIndex--;
         this.setHistory();
+
+        this._suppressingAddHistOnChange = true;
+        this.CallOnModelChange();
+        this._suppressingAddHistOnChange = false;
     }
 
     //#endregion
@@ -117,7 +128,8 @@ export class PNAction extends ActionBase<PNModel>{
         super(model);
 
         this.AddOnModelChange((model) => {
-            this.AddHist();
+            if (!this._suppressingAddHistOnChange)
+                this.AddHist();
         });
     }
 }

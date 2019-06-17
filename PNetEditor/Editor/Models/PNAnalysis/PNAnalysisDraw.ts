@@ -14,6 +14,7 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
         const markingModel = this.models.markingModel;
         if (markingModel) {
             this.containers.reachableMarkings.value = markingModel.numRechableMarkings + (markingModel.isCalculatedAllMarking ? "" : "+");
+            this.containers.calculatedMarkingSteps.value = ""+markingModel.stepsFromInitialMarkingCalculated;
         } else {
             // todo: hide
         }
@@ -25,6 +26,7 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
 
     private containers = {
         reachableMarkings: typedNull<PNAnalysisContainer>(),
+        calculatedMarkingSteps: typedNull<PNAnalysisContainer>(),
     }
 
     public setMarkingModel(markingModel: PNMarkingModel) {
@@ -50,6 +52,9 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
 
         const reachableMarkings = this.containers.reachableMarkings = new PNAnalysisContainer(flex);
         reachableMarkings.label = "reachable markings";
+
+        const calculatedMarkingSteps = this.containers.calculatedMarkingSteps = new PNAnalysisContainer(flex);
+        calculatedMarkingSteps.label = "calculated steps";
     }
 
 

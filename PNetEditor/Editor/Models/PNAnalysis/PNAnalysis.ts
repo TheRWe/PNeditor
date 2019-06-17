@@ -3,22 +3,27 @@ import { Tab } from "../../../CORE/TabControl/Tab";
 import { typedNull } from "../../../Helpers/purify";
 import { PNMarkingModel } from "./PNMarkingModel";
 import { PNAnalysisDraw } from "./PNAnalysisDraw";
-import { TabGroup } from "../../../CORE/TabControl/TabGroup";
 
 export class PNAnalysis{
-    private readonly pnmodel: PNModel;
     private readonly tabs = {
         reachabilityGraph: typedNull<Tab>(),
         pnAnalysis: typedNull<Tab>(),
     };
 
-    private pnMarkingModel: PNMarkingModel;
-
+    private models = {
+        pnModel: typedNull<PNModel>(),
+        pnMarkingModel: typedNull<PNMarkingModel>(),
+    }
 
     private pnAnalysisDraw: PNAnalysisDraw;
 
+    public update() {
+        this.models.pnMarkingModel.StopCalculations();
+        this.models.pnMarkingModel.UpdateModel(this.models.pnModel);
+    }
+
     constructor(tab: Tab, pnmodel: PNModel) {
-        this.pnmodel = pnmodel;
+        this.models.pnModel = pnmodel;
 
         const tabGroup = tab.parentTabGroup;
 
@@ -36,14 +41,10 @@ export class PNAnalysis{
         pnAnalysisTab.label = "analysis";
         this.pnAnalysisDraw = new PNAnalysisDraw(pnAnalysisTab.container);
 
+        this.models.pnMarkingModel = new PNMarkingModel();
 
-        this.pnMarkingModel = new PNMarkingModel();
-        //this.pnMarkingModel.AddOnCalculationChange(() => { console.debug("graf calc") });
+        this.pnAnalysisDraw.setMarkingModel(this.models.pnMarkingModel);
 
-        this.pnMarkingModel.UpdateModel(pnmodel);
-
-        this.pnAnalysisDraw.setMarkingModel(this.pnMarkingModel);
-
-        console.debug(this.pnMarkingModel);
+        this.update();
     }
 }

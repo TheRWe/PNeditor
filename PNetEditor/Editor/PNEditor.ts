@@ -32,6 +32,10 @@ export class PNEditor implements TabInterface {
         if (this._analysis == null) {
             this._analysis = new PNAnalysis(this.tab, this.pnModel);
         }
+        this.pnAction.AddOnModelChange(() => {
+            this._analysis.update();
+        });
+
     }
 
     public IsSaveable(): boolean {
