@@ -31,7 +31,10 @@ function InitFileButtons() {
     const buttonClose = d3.select("#buttonClose");
 
     buttonNew.on("click", () => {
-        tabControl.addTab();
+        const tab = tabControl.addTab();
+
+        const net = new PNModel();
+        const editor = new PNEditor(tab, net);
     })
 
     function load(path: string) {
