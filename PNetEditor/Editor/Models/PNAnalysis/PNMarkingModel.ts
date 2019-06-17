@@ -16,6 +16,9 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         return true;
     }
 
+    public get isCalculating() {
+        return this._isCalculating;
+    }
     public get isCalculatedAllMarking() {
         return this._calculatedAll;
     }
@@ -25,12 +28,20 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
     public get stepsFromInitialMarkingCalculated() {
         return this._stepsFromInitialMarkingCalculated;
     }
+    public get maxMarking() {
+        return this._maxMarking;
+    }
 
     private markings: PNMarkingJSON = null;
 
+    private _isCalculating = false;
     public async UpdateModel(net: PNModel) {
+        this._isCalculating = true;
         this._calculatedAll = null;
         this._stepsFromInitialMarkingCalculated = 0;
+        this._containsCycles = null;
+        this._maxMarking = 0;
+
         const transitions = net.transitions
             .map(x => {
                 return {
@@ -47,6 +58,8 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         this.markings = { markings: [], transitions };
         const placeMarkings: placeMarking[] = net.places.map(x => { return { id: x.id, marking: x.marking }; });
         const hash = PNMarkingModel.getMarkingHash(placeMarkings);
+
+        this._maxMarking = Math.max(...placeMarkings.map(x => x.marking));
         this.markings.markings.push({ accessibleTargetMarkings: [], placeMarkings, hash });
 
         const t0 = performance.now();
@@ -56,7 +69,10 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                 const t1 = performance.now();
 
                 console.debug({ reachibilityCalculationDone: this, possibleUniqueMarkings: this.markings.markings.length, time: (t1 - t0) });
+
                 if (this._calculatedAll === null) this._calculatedAll = true;
+                if (this._containsCycles === null) this._containsCycles = false;
+                this._isCalculating = false;
             });
     }
 
@@ -67,6 +83,8 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
     private _calculatedAll: boolean | null = null;
     private currentCalculations = {} as { [key: number]: true };
     private _stepsFromInitialMarkingCalculated: number = 0;
+    private _containsCycles: boolean | null = null;
+    private _maxMarking: number;
 
     public StopCalculations() {
         Object.keys(this.currentCalculations).forEach(k => {
@@ -97,8 +115,12 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                             const arc = t.arces.find(a => a.placeID == p.id);
                             if (arc === undefined)
                                 return { id: p.id, marking: p.marking };
-                            else
-                                return { id: p.id, marking: p.marking + (arc.toPlace || 0) - (arc.toTransition || 0) };
+                            else {
+                                const marking = p.marking + (arc.toPlace || 0) - (arc.toTransition || 0);
+                                if (marking > this._maxMarking)
+                                    this._maxMarking = marking;
+                                return { id: p.id, marking };
+                            }
                         });
 
                         if (newMark.findIndex(x => x.marking > ReachabilitySettings.MaxMarking) >= 0) {
@@ -118,6 +140,7 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                             mark.accessibleTargetMarkings.push({ index: existingMarkingIndex, transitionID: t.id });
                             this._onCalculationChange();
                             delete this.currentCalculations[calcTimeoutIndx as any];
+                            this._containsCycles = true;
                             resolve();
                         } else {
                             const index = this.markings.markings.push({ hash, placeMarkings: newMark, accessibleTargetMarkings: [] }) - 1;
@@ -129,7 +152,7 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                                     resolve();
                                 });
                         }
-                    }, 10);
+                    });
                     this.currentCalculations[calcTimeoutIndx as any] = true;
                 });
             }));

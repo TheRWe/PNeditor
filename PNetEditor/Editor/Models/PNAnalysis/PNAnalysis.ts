@@ -46,5 +46,6 @@ export class PNAnalysis{
         this.pnAnalysisDraw.setMarkingModel(this.models.pnMarkingModel);
 
         this.update();
+        setTimeout(() => { this.pnAnalysisDraw.update(); });
     }
 }

@@ -188,7 +188,7 @@ export class PNEditor implements TabInterface {
                 switch (this.mode.selected) {
                     case editorMode.default:
                         t.isCold = !t.isCold;
-                        this.pnAction.AddHist();
+                        this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
                         break;
                     default:
@@ -237,11 +237,11 @@ export class PNEditor implements TabInterface {
                     case editorMode.default:
                         if (deltaY < 0) {
                             p.marking++;
-                            this.pnAction.AddHist();
+                        this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
                         } else if (p.marking > 0) {
                             p.marking--;
-                            this.pnAction.AddHist();
+                        this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
                         }
 
@@ -286,7 +286,7 @@ export class PNEditor implements TabInterface {
                 switch (this.mode.selected) {
                     case editorMode.default:
 
-                        this.pnAction.AddHist();
+                        //this.pnAction.CallOnModelChange();
                         break;
                     default:
                         notImplemented();
@@ -418,7 +418,7 @@ export class PNEditor implements TabInterface {
                 onInputEnd: (val: number | null) => {
                     if (val != null) {
                         this.keyboard.inputs.marking.editedPlace.marking = val;
-                        this.pnAction.AddHist();
+                        this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
                     }
                     this.keyboard.inputs.marking.editedPlace = null;
@@ -432,7 +432,7 @@ export class PNEditor implements TabInterface {
                     if (val != null) {
                         this.keyboard.inputs.arcValue.editedArc.toPlace = val.toPlace;
                         this.keyboard.inputs.arcValue.editedArc.toTransition = val.toTransition;
-                        this.pnAction.AddHist();
+                        this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
                     }
                     this.keyboard.inputs.arcValue.editedArc = null;

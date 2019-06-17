@@ -12,7 +12,7 @@ export abstract class ActionBase<modelType extends ModelBase<any>>{
 
     protected onModelChange = (model: modelType) => { };
     /** must be called everytime model changes */
-    protected CallOnModelChange() {
+    public CallOnModelChange() {
         this.onModelChange(this.model);
     }
 

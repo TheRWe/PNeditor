@@ -13,8 +13,10 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
     protected _update(): void {
         const markingModel = this.models.markingModel;
         if (markingModel) {
+            this.containers.calculationState.value = (markingModel.isCalculating ? "calculating" : "done")
             this.containers.reachableMarkings.value = markingModel.numRechableMarkings + (markingModel.isCalculatedAllMarking ? "" : "+");
-            this.containers.calculatedMarkingSteps.value = ""+markingModel.stepsFromInitialMarkingCalculated;
+            this.containers.calculatedMarkingSteps.value = "" + markingModel.stepsFromInitialMarkingCalculated;
+            this.containers.maxMarking.value = "" + markingModel.maxMarking + (markingModel.isCalculatedAllMarking ? "" : "?");
         } else {
             // todo: hide
         }
@@ -25,8 +27,10 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
     }
 
     private containers = {
+        calculationState: typedNull<PNAnalysisContainer>(),
         reachableMarkings: typedNull<PNAnalysisContainer>(),
         calculatedMarkingSteps: typedNull<PNAnalysisContainer>(),
+        maxMarking: typedNull<PNAnalysisContainer>(),
     }
 
     public setMarkingModel(markingModel: PNMarkingModel) {
@@ -50,11 +54,19 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
                 .text(x);
         })
 
+        const calculationState = this.containers.calculationState = new PNAnalysisContainer(flex);
+        calculationState.label = "state";
+
         const reachableMarkings = this.containers.reachableMarkings = new PNAnalysisContainer(flex);
         reachableMarkings.label = "reachable markings";
 
         const calculatedMarkingSteps = this.containers.calculatedMarkingSteps = new PNAnalysisContainer(flex);
         calculatedMarkingSteps.label = "calculated steps";
+
+        const maxMarking = this.containers.maxMarking = new PNAnalysisContainer(flex);
+        maxMarking.label = "max marking";
+
+        // shortest sequential run
     }
 
 
