@@ -1,4 +1,4 @@
-﻿import { ModelBase, ModelJSONType } from "../_Basic/ModelBase";
+﻿import { ModelBase } from "../_Basic/ModelBase";
 import { Position } from "./../../Constants";
 
 export class PNModel extends ModelBase<JSONNet>{
@@ -129,7 +129,7 @@ export class Arc {
     }
 }
 
-export type JSONNet = ModelJSONType & {
+export type JSONNet = {
     places:
     {
         name?: string,

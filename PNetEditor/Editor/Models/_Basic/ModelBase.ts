@@ -1,7 +1,4 @@
-﻿export type ModelJSONType = { referencedModels?: ModelBase<any>[] };
-
-
-export abstract class ModelBase<JSONType extends ModelJSONType>{
+﻿export abstract class ModelBase<JSONType>{
     /** serialize object to json */
     public abstract toJSON(): JSONType;
     /** try to deserialize object from json */
