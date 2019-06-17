@@ -237,11 +237,11 @@ export class PNEditor implements TabInterface {
                     case editorMode.default:
                         if (deltaY < 0) {
                             p.marking++;
-                        this.pnAction.CallOnModelChange();
+                            this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
                         } else if (p.marking > 0) {
                             p.marking--;
-                        this.pnAction.CallOnModelChange();
+                            this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
                         }
 
@@ -285,8 +285,12 @@ export class PNEditor implements TabInterface {
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
                     case editorMode.default:
+                        const toPlace = a.arc.toPlace;
+                        a.arc.toPlace = a.arc.toTransition;
+                        a.arc.toTransition = toPlace;
 
-                        //this.pnAction.CallOnModelChange();
+                        this.pnAction.CallOnModelChange();
+                        this.pnDraw.update();
                         break;
                     default:
                         notImplemented();
@@ -467,6 +471,7 @@ export class PNEditor implements TabInterface {
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
+        tab.label = "Net";
         this.tab.container.style("height", "99vh")
             .style("display", "flex")
             .style("flex-direction", "column");
