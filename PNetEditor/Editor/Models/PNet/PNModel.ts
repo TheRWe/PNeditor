@@ -1,5 +1,6 @@
 ﻿import { ModelBase } from "../_Basic/ModelBase";
 import { Position } from "./../../Constants";
+import { ForceNode } from "../_Basic/DrawBase";
 
 export class PNModel extends ModelBase<JSONNet>{
     public selected: { places: Place[], tranisitons: Transition[] } = null;
@@ -14,10 +15,10 @@ export class PNModel extends ModelBase<JSONNet>{
         // todo: možnost ukládat pouze name bez id pokud je name unikátní
         // todo: kontrola že se name neukládá pokud je "" | null | undefined
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
-            = this.places.map(p => { return { name: p.name, id: p.id, position: { ...p.position }, marking: p.marking }; });
+            = this.places.map(p => { return { name: p.name, id: p.id, position: ((p.fx !== undefined && p.fy !== undefined) ? { x: p.fx, y: p.fy } : undefined), marking: p.marking }; });
 
         const transitions: { position?: Position, id: number, isCold?: boolean }[]
-            = this.transitions.map(t => { return { position: { ...t.position }, id: t.id, isCold: t.isCold } });
+            = this.transitions.map(t => { return { position: (t.fx !== undefined && t.fy !== undefined) ? { x: t.fx, y: t.fy } : undefined, id: t.id, isCold: t.isCold } });
 
         const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
             = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
@@ -69,8 +70,7 @@ export class PNModel extends ModelBase<JSONNet>{
     }
 }
 
-export class Transition {
-    public position: Position | null;
+export class Transition implements ForceNode {
     // todo: implementovat cold transitions
     public isCold: boolean = false;
 
@@ -79,7 +79,13 @@ export class Transition {
     private static idMaker = 0;
 
     constructor(position: Position | null = null, id: number = -1) {
-        this.position = position;
+        if (position) {
+            this.x = position.x;
+            this.y = position.y;
+        } else {
+            this.x = 0;
+            this.y = 0;
+        }
 
         if (id >= 0) {
             this.id = id;
@@ -89,11 +95,22 @@ export class Transition {
         else
             this.id = Transition.idMaker++;
     }
+
+    //#region ForceNode
+
+    public index: number;
+    public vx: number;
+    public vy: number;
+    public x: number;
+    public y: number;
+    public fx: number;
+    public fy: number;
+
+    //#endregion
 }
 
-export class Place {
+export class Place implements ForceNode {
     public name: string | null;
-    public position: Position | null;
     public marking: number | null;
 
     //todo: o id a odkazování se bude starat ukládání a načítání
@@ -101,8 +118,14 @@ export class Place {
     private static idMaker = 0;
 
     constructor(name: string | null = null, position: Position | null = null, marking: number | null = null, id: number = -1) {
+        if (position) {
+            this.x = position.x;
+            this.y = position.y;
+        } else {
+            this.x = 0;
+            this.y = 0;
+        }
         this.name = name;
-        this.position = position;
         this.marking = marking;
 
         if (id >= 0) {
@@ -113,6 +136,18 @@ export class Place {
         else
             this.id = Place.idMaker++;
     }
+
+    //#region ForceNode
+
+    public index: number;
+    public vx: number;
+    public vy: number;
+    public x: number = 0;
+    public y: number = 0;
+    public fx: number;
+    public fy: number;
+
+    //#endregion
 }
 
 export class Arc {

@@ -67,6 +67,7 @@
     <TypeScriptCompile Include="CORE\MainWindow.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="CORE\SimulationNode.ts" />
     <TypeScriptCompile Include="CORE\TabControl\TabControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

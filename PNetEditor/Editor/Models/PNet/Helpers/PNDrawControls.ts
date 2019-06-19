@@ -5,7 +5,7 @@ import { ToggleSwitch } from "../../../../CORE/ToggleSwitch";
 
 export class PNDrawControls {
     private readonly container: d3BaseSelector;
-    public readonly toggleSwitch: ToggleSwitch;
+    public readonly toggleSwitchRunEdit: ToggleSwitch;
 
     constructor(container: d3BaseSelector, editor: PNEditor) {
         this.container = container
@@ -33,6 +33,6 @@ export class PNDrawControls {
             .on("click", () => { editor.RunAnalysis(); })
 
 
-        this.toggleSwitch = new ToggleSwitch(container, "Edit", "Run");
+        this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");
     }
 }

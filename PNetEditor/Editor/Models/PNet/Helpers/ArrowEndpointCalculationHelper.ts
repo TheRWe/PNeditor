@@ -9,15 +9,15 @@ import { PNModel, Arc } from "../PNModel";
  * @param arc arc currently calculated arc
  */
 export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: Position } {
-    const tPos = arc.transition.position;
+    const tPos = { x: arc.transition.x, y: arc.transition.y  };
 
     // get all arces of transition
     const arcesT = net.getArcesOfTransition(arc.transition);
     const arcesClassified = classify(arcesT,
         // main diag
-        (a) => { return a.place.position.y < (a.place.position.x - a.transition.position.x + a.transition.position.y); },
+        (a) => { return a.place.y < (a.place.x - a.transition.x + a.transition.y); },
         // scnd diag
-        (a) => { return a.place.position.y > (-a.place.position.x + a.transition.position.x + a.transition.position.y); })
+        (a) => { return a.place.y > (-a.place.x + a.transition.x + a.transition.y); })
 
     type side = "TOP" | "BOT" | "LEFT" | "RIGHT";
     const sides: side[] = ["TOP", "BOT", "LEFT", "RIGHT"];
@@ -41,7 +41,7 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
     sides.forEach(s => {
         const sideDependentValue = (s === "BOT" || s === "TOP") ? "x" : "y";
         const selectorHelper =
-            SortKeySelector((x: any) => { return x.arc.place.position[sideDependentValue] as number; });
+            SortKeySelector((x: any) => { return x.arc.place[sideDependentValue] as number; });
 
         const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
         const len = arcsInThisSide.length;
@@ -65,6 +65,6 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
 
     return {
         from: transitionPos,
-        to: arc.place.position
+        to: { x: arc.place.x, y: arc.place.y },
     };
 } 

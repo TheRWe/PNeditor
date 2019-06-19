@@ -104,8 +104,8 @@ function InitTabControl() {
 
     tabControl = new TabControl(tabsButtons, content);
 
-    //const tabbb = tabControl.addTab();
-    //tabControl.addTab(tabbb.parentTabGroup);
+    //const tab = tabControl.addTab();
+    //tabControl.addTab(tab.parentTabGroup);
 }
 
 export interface TabInterface {

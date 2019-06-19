@@ -3,11 +3,11 @@ import { d3BaseSelector } from "../Editor/Constants";
 import { PNModel, Place, Arc, Transition } from "./Models/PNet/PNModel";
 import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
-import { CallbackType } from "./Models/_Basic/DrawBase";
+import { CallbackType, ForceNode } from "./Models/_Basic/DrawBase";
 import * as d3 from 'd3';
 import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
-import { PNDrawControls } from "./Models/PNet/Helpers/PNControls";
+import { PNDrawControls } from "./Models/PNet/Helpers/PNDrawControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
 import { groupmap, TabInterface } from "../CORE/MainWindow";
 import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
@@ -74,7 +74,7 @@ export class PNEditor implements TabInterface {
         }
 
         this.mode.selected = editorMode.default;
-        this.controls.toggleSwitch.StateSuppressed = ToggleSwitchState.off;
+        this.controls.toggleSwitchRunEdit.StateSuppressed = ToggleSwitchState.off;
     }
 
     //#endregion
@@ -299,9 +299,12 @@ export class PNEditor implements TabInterface {
             }
         },
         onDragPositionMove: {
-            start: (d: { position: Position }) => {
+            start: (d: ForceNode, evPos: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
+                        this.pnDraw.simulation.alpha(0.7);
+                        d.fx = evPos.x;
+                        d.fy = evPos.y;
                         break;
 
                     default:
@@ -309,11 +312,12 @@ export class PNEditor implements TabInterface {
                 }
                 console.debug({ startdrag: d });
             },
-            drag: (d: { position: Position }, evPos: Position, posStart: Position) => {
+            drag: (d: ForceNode, evPos: Position, posStart: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
-                        d.position.x = evPos.x;
-                        d.position.y = evPos.y;
+                        this.pnDraw.simulation.alpha(0.7);
+                        d.fx = evPos.x;
+                        d.fy = evPos.y;
                         this.pnDraw.update();
                         break;
 
@@ -321,10 +325,13 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
             },
-            end: (d: { position: Position }, evPos: Position, posStart: Position) => {
+            end: (d: Transition | Place, evPos: Position, posStart: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
+                        delete d.fx;
+                        delete d.fy;
                         this.pnAction.AddHist();
+                        this.pnDraw.simulation.alpha(0.7).restart();
                         this.pnDraw.update();
 
                         break;
@@ -332,12 +339,13 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
             },
-            revert: (d: { position: Position }, evPos: Position, posStart: Position) => {
+            revert: (d: Transition | Place, evPos: Position, posStart: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
                     case editorMode.valueEdit:
-                        d.position.x = posStart.x;
-                        d.position.y = posStart.y;
+                        delete d.fx;
+                        delete d.fy;
+                        this.pnDraw.simulation.alpha(0.7).restart();
                         this.pnDraw.update();
                         break;
                     default:
@@ -358,7 +366,7 @@ export class PNEditor implements TabInterface {
         this.mode.selected = editorMode.arcMake;
         this.mouse.helpers.arcMakeHolder = tp;
 
-        this.pnDraw.ShowArcDragLine(tp.position);
+        this.pnDraw.ShowArcDragLine({ x: tp.x, y: tp.y });
     }
 
     /**
@@ -484,7 +492,7 @@ export class PNEditor implements TabInterface {
         this.pnAction.AddHist();
 
         const controls = this.controls = new PNDrawControls(controlDiv, this);
-        controls.toggleSwitch.AddOnToggleChange(tgl => {
+        controls.toggleSwitchRunEdit.AddOnToggleChange(tgl => {
             this.resetState();
             switch (tgl.State) {
                 case ToggleSwitchState.on:

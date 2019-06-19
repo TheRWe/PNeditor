@@ -5,6 +5,16 @@ import { ModelBase } from "./ModelBase";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
+export interface ForceNode {
+    index: number;
+    vx: number;
+    vy: number;
+    x: number;
+    y: number;
+    fx: number;
+    fy: number;
+}
+
 export abstract class DrawBase<Model extends ModelBase<any>> {
     public readonly container: d3BaseSelector;
     public data: Model;

@@ -1,9 +1,9 @@
 ﻿import { Place, Arc, Transition, PNModel } from "./PNModel";
 import * as d3 from 'd3';
-import { rgb, Selection } from "d3";
+import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
-import { arraysDifferences, typedNull } from "./../../../Helpers/purify";
-import { DrawBase, Callbacks, CallbackType } from "../_Basic/DrawBase";
+import { typedNull } from "./../../../Helpers/purify";
+import { DrawBase, Callbacks, CallbackType, ForceNode } from "../_Basic/DrawBase";
 import { d3BaseSelector, html, Position } from "../../Constants";
 import { PNDrawInputs } from "./Helpers/PNDrawInputs";
 
@@ -18,6 +18,7 @@ export class PNDraw extends DrawBase<PNModel>{
         place: new Callbacks<Place>(),
     };
 
+    public readonly simulation: d3.Simulation<{}, undefined>;
 
     protected Selectors = {
         places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.data).places),
@@ -68,11 +69,23 @@ export class PNDraw extends DrawBase<PNModel>{
         }
     }
 
+    private get width() { return (this.container.node() as HTMLElement).getBoundingClientRect().width; }
+    private get height() { return (this.container.node() as HTMLElement).getBoundingClientRect().height; }
+
     constructor(container: d3BaseSelector) {
         super(container);
 
         this.initializeContainer();
         this.initializeContainerCallback();
+
+        this.simulation =
+            d3.forceSimulation()
+                //.force("charge", d3.forceManyBody().strength(50))
+                //.force("center", d3.forceCenter((this.width / 2), (this.height / 2)))
+                .force("colide", d3.forceCollide().radius(25).iterations(5))
+                .on("tick", () => { this.update(); })
+            ;
+        window.addEventListener("resize", (e) => { this.simulation.alpha(0.2); });
     }
 
     private initializeContainer() {
@@ -139,17 +152,10 @@ export class PNDraw extends DrawBase<PNModel>{
         const transitions = netSelectors.transitions;
         const arcs = netSelectors.arcs;
 
-        const fixNullPosition = (item: Place | Transition): void => {
-            if (item.position == null)
-                item.position = { x: 0, y: 0 };
-        }
-
-
         //#region Place
 
         const placesEnterGroup = places()
             .enter()
-            .each(fixNullPosition)
             .append("g")
             .classed(html.classes.PNEditor.place.g, true)
             ;
@@ -182,7 +188,7 @@ export class PNDraw extends DrawBase<PNModel>{
             ;
 
         places()
-            .attr("transform", (p: Place) => `translate(${p.position.x}, ${p.position.y})`)
+            .attr("transform", (p: Place) => `translate(${p.x}, ${p.y})`)
             ;
         places()
             //todo: scaling
@@ -196,9 +202,8 @@ export class PNDraw extends DrawBase<PNModel>{
         //#region Transitions
 
         const transitionEnterGroup = transitions().enter()
-                .each(fixNullPosition)
-                .append("g")
-                .classed(html.classes.PNEditor.transition.g, true)
+            .append("g")
+            .classed(html.classes.PNEditor.transition.g, true)
             ;
 
         callbacks.transition.ConnectToElement(transitionEnterGroup, getPos, getWheelDeltaY)
@@ -237,7 +242,7 @@ export class PNDraw extends DrawBase<PNModel>{
             ;
         */
         transitions()
-            .attr("transform", (t: Transition) => `translate(${t.position.x}, ${t.position.y})`)
+            .attr("transform", (t: Transition) => `translate(${t.x}, ${t.y})`)
             ;
         transitions()
             .select("." + html.classes.PNEditor.transition.epsilon)
@@ -330,5 +335,22 @@ export class PNDraw extends DrawBase<PNModel>{
         arcs().exit().remove();
         places().exit().remove();
         transitions().exit().remove();
+
+
+        const simulationNodes = [...places().data(), ...transitions().data()];
+        this.simulation.nodes(simulationNodes);
+
+        const margin = 10;
+
+        const width = this.width;
+        const height = this.height;
+        if (width > 10 && height > 10)
+            this.simulation.nodes().forEach(((d) => {
+                //if (d.fx != null) d.fx = Math.max(margin, Math.min(width - margin, d.fx))
+                //if (d.fy != null) d.fy = Math.max(margin, Math.min(height - margin, d.fy))
+
+                d.x = Math.max(margin, Math.min(width - margin, d.x))
+                d.y = Math.max(margin, Math.min(height - margin, d.y))
+            }) as (d: ForceNode) => void);
     }
 }
