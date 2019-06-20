@@ -302,7 +302,7 @@ export class PNEditor implements TabInterface {
             start: (d: ForceNode, evPos: Position) => {
                 switch (this.mode.selected) {
                     case editorMode.default:
-                        this.pnDraw.simulation.alpha(0.7);
+                        this.pnDraw.simulation.alpha(0.7).restart();
                         d.fx = evPos.x;
                         d.fy = evPos.y;
                         break;
