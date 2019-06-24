@@ -1,4 +1,4 @@
-﻿import { d3BaseNoDataSelector, d3BaseSelector } from "../../_Editor/Constants";
+﻿import { d3BaseSelector } from "../../Editor/Constants";
 import { TabGroup } from "./TabGroup";
 
 

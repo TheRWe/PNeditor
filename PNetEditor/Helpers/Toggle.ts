@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../_Editor/Constants";
+﻿import { d3BaseSelector } from "../Editor/Constants";
 
 export enum ToggleState { on = "on", off = "off", hidden = "hidden" }
 
