@@ -15,10 +15,10 @@ export class PNModel extends ModelBase<JSONNet>{
         // todo: možnost ukládat pouze name bez id pokud je name unikátní
         // todo: kontrola že se name neukládá pokud je "" | null | undefined
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
-            = this.places.map(p => { return { name: p.name, id: p.id, position: ((p.fx !== undefined && p.fy !== undefined) ? { x: p.fx, y: p.fy } : undefined), marking: p.marking }; });
+            = this.places.map(p => { return { name: p.name, id: p.id, position: ((p.x !== undefined && p.y !== undefined) ? { x: p.x, y: p.y } : undefined), marking: p.marking }; });
 
         const transitions: { position?: Position, id: number, isCold?: boolean }[]
-            = this.transitions.map(t => { return { position: (t.fx !== undefined && t.fy !== undefined) ? { x: t.fx, y: t.fy } : undefined, id: t.id, isCold: t.isCold } });
+            = this.transitions.map(t => { return { position: (t.x !== undefined && t.y !== undefined) ? { x: t.x, y: t.y } : undefined, id: t.id, isCold: t.isCold } });
 
         const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
             = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
