@@ -5,6 +5,28 @@
 html {
   box-sizing: border-box; }
 
+@media print {
+  body::after {
+    content: "";
+    background: white;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999; }
+  .print {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: 100% !important;
+    height: 100% !important; } }
+
 button, .button, input[type=button] {
   display: inline-block;
   margin: 1px;
