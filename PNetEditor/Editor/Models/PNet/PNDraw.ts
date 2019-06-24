@@ -5,7 +5,6 @@ import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
 import { typedNull } from "./../../../Helpers/purify";
 import { DrawBase, Callbacks, CallbackType, ForceNode } from "../_Basic/DrawBase";
 import { d3BaseSelector, html, Position } from "../../Constants";
-import { PNDrawInputs } from "./Helpers/PNDrawInputs";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
@@ -69,8 +68,6 @@ export class PNDraw extends DrawBase<PNModel>{
         }
     }
 
-    private get width() { return (this.container.node() as HTMLElement).getBoundingClientRect().width; }
-    private get height() { return (this.container.node() as HTMLElement).getBoundingClientRect().height; }
 
     constructor(container: d3BaseSelector) {
         super(container);

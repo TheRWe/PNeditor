@@ -5,6 +5,7 @@ import { GetStringHash } from "../../../CORE/Hash";
 export var ReachabilitySettings = {
     MarkingGraphDepth: 100,
     MaxMarking: 999,
+    GraphNodesMax: 200,
 }
 
 export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
@@ -32,6 +33,25 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         return this._maxMarking;
     }
 
+    public getMarkingsModel() {
+        const marks = [] as MarkingsObject[];
+        for (var i = 0; i < this.markings.markings.length; i++) {
+            const mark = this.markings.markings[i];
+            marks.push(new MarkingsObject(i, mark.placeMarkings));
+        }
+
+        for (var i = 0; i < this.markings.markings.length; i++) {
+            const mark = this.markings.markings[i];
+            const markObj = marks.find(x => x.id == i);
+
+            mark.accessibleTargetMarkings.forEach(atm => {
+                markObj.accessibleTargetMarkings.push({ transitionID: atm.transitionID, target: marks.find(x => x.id === atm.index) });
+            });
+        }
+
+        return marks;
+    }
+
     private markings: PNMarkingJSON = null;
 
     private _isCalculating = false;
@@ -41,6 +61,7 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         this._stepsFromInitialMarkingCalculated = 0;
         this._containsCycles = null;
         this._maxMarking = 0;
+        this._previoslyCalculatedNodes = 0;
 
         const transitions = net.transitions
             .map(x => {
@@ -73,6 +94,7 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
                 if (this._calculatedAll === null) this._calculatedAll = true;
                 if (this._containsCycles === null) this._containsCycles = false;
                 this._isCalculating = false;
+                if (this._previoslyCalculatedNodes !== -1) this._onCalculatedNodesForGraph();
             });
     }
 
@@ -163,8 +185,31 @@ export class PNMarkingModel extends ModelBase<PNMarkingJSON> {
         const old = this._onCalculationChange; this._onCalculationChange = (...args) => { old(...args); callback(...args); };
     }
 
+    private _previoslyCalculatedNodes = -1;
+    private _onCalculatedNodesForGraph = () => { };
+    public AddOnCalculatedNodesForGraph(callback: () => void) {
+        const old = this._onCalculatedNodesForGraph; this._onCalculatedNodesForGraph = (...args) => { old(...args); callback(...args); };
+    }
+
     constructor() {
         super();
+
+
+        this.AddOnCalculationChange(() => {
+            const prev = this._previoslyCalculatedNodes
+            if (prev == -1)
+                return;
+            if (prev < ReachabilitySettings.GraphNodesMax) {
+                const current = this.numRechableMarkings;
+                if (current > ReachabilitySettings.GraphNodesMax) {
+                    this._onCalculatedNodesForGraph();
+                    this._previoslyCalculatedNodes = -1;
+                } else {
+                    this._previoslyCalculatedNodes = current;
+                }
+            }
+
+        })
     }
 }
 
@@ -177,4 +222,17 @@ export type PNMarkingJSON = {
         accessibleTargetMarkings: { index: number, transitionID: number }[],
         placeMarkings: placeMarking[],
     }[]
+}
+
+export class MarkingsObject {
+    public readonly id: number;
+
+    public markigns: placeMarking[];
+    public accessibleTargetMarkings: { target: MarkingsObject, transitionID: number }[] = [];
+
+
+    constructor(id: number, markigns: placeMarking[]) {
+        this.id = id;
+        this.markigns = markigns;
+    }
 }

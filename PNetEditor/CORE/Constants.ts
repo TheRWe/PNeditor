@@ -34,6 +34,10 @@ export const html = {
                 transitions: "type-transitions",
             },
         },
+        ReachabilityGraph: {
+            states: "g-states",
+            transitions: "g-reachability-transitions",
+        },
         ToggleSwitch: {
             switcher: "switcher",
             labelOff: "switcher-label-off",

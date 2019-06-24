@@ -23,6 +23,9 @@ export abstract class DrawBase<Model extends ModelBase<any>> {
 
     protected abstract get Selectors(): any/*{ [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any> }*/;
 
+    public get width() { return (this.container.node() as HTMLElement).getBoundingClientRect().width; }
+    public get height() { return (this.container.node() as HTMLElement).getBoundingClientRect().height; }
+
     private updating = false;
     /** schedule redraw function for next animation frame */
     public update() {
