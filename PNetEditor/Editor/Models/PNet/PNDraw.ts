@@ -274,7 +274,20 @@ export class PNDraw extends DrawBase<PNModel>{
             ;
         callbacks.arc.ConnectToElement(enterArcHitboxLine, getPos, getWheelDeltaY);
 
+        enterArc.append("text")
+            .classed("text-background", true)
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".3em")
+            .attr("font-size", 10)
+            // todo: class do constants
+            .style("stroke-width", ".3em")
+            .style("stroke", "white")
+            .style("stroke-linejoin", "round")
+            ;
+
         const enterArcText = enterArc.append("text")
+            .classed("text-foreground", true)
             .classed("unselectable", true)
             .attr("text-anchor", "middle")
             .attr("dy", ".3em")
@@ -298,7 +311,20 @@ export class PNDraw extends DrawBase<PNModel>{
             .attr("y2", a => a.line.to.y);
 
         // todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
-        arcs().select('text')
+        arcs().select('.text-foreground')
+            .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
+            .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
+            .text(d => {
+                let toPlace: number | string = Math.abs(d.arc.toPlace);
+                let toTransition: number | string = Math.abs(d.arc.toTransition);
+
+                toPlace = isNaN(toPlace) || toPlace === 0 ? "" : toPlace;
+                toTransition = isNaN(toTransition) || toTransition === 0 ? "" : toTransition;
+
+                return (toPlace + "°" + toTransition) || "";
+            });
+
+        arcs().select('.text-background')
             .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
             .text(d => {
