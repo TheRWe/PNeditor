@@ -1,6 +1,6 @@
 ﻿import { ModelBase } from "./../_Basic/ModelBase";
 import { PNModel } from "../../Models/PNet/PNModel";
-import { GetStringHash } from "../../../CORE/Hash";
+import { GetStringHash } from "../../../CORE/HashSet";
 
 export var ReachabilitySettings = {
     MarkingGraphDepth: 100,

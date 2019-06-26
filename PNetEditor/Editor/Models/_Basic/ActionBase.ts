@@ -4,6 +4,7 @@
 export abstract class ActionBase<modelType extends ModelBase<any>>{
     public readonly model: modelType;
 
+    // todo: on model ?
     /** callback called when model is changed */
     public AddOnModelChange(callback: (model: modelType) => void): void {
         const old = this.onModelChange;
