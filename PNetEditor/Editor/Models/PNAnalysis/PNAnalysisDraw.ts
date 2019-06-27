@@ -1,30 +1,28 @@
 ﻿import { DrawBase, Callbacks } from "../../Models/_Basic/DrawBase";
 import { PNModel } from "../PNet/PNModel";
-import { d3BaseSelector } from "../../Constants";
+import { d3BaseSelector } from "../../../CORE/Constants";
 import { typedNull } from "../../../Helpers/purify";
-import { PNMarkingModel } from "./PNMarkingModel";
+import { ReachabilityTree } from "./Reachability/ReachabilityTree";
+import { PNAnalysisModel } from "./PNAnalysisModel";
 
-export class PNAnalysisDraw extends DrawBase<PNModel>{
+export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
     public Callbacks = {
         container: new Callbacks<any>(),
     };
 
     protected Selectors: any;
     protected _update(): void {
-        const markingModel = this.models.markingModel;
-        if (markingModel) {
-            this.containers.calculationState.value = (markingModel.isCalculating ? "calculating" : "done")
-            this.containers.reachableMarkings.value = markingModel.numRechableMarkings + (markingModel.isCalculatedAllMarking ? "" : "+");
-            this.containers.calculatedMarkingSteps.value = "" + markingModel.stepsFromInitialMarkingCalculated;
-            this.containers.maxMarking.value = "" + markingModel.maxMarking + (markingModel.isCalculatedAllMarking ? "" : "?");
-        } else {
-            // todo: hide
-        }
+        const PNAnalysisModel = this.data;
+
+        this.containers.calculationState.value = (PNAnalysisModel.isCalculating ? "calculating" : "done")
+        this.containers.reachableMarkings.value = PNAnalysisModel.numRechableMarkings + (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");
+        this.containers.calculatedMarkingSteps.value = "" + PNAnalysisModel.stepsFromInitialMarkingCalculated;
+        this.containers.maxMarking.value = "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
     }
 
-    private models = {
-        markingModel: typedNull<PNMarkingModel>(),
-    }
+    //private models = {
+    //    markingModel: typedNull<PNMarkingModel>(),
+    //}
 
     private containers = {
         calculationState: typedNull<PNAnalysisContainer>(),
@@ -33,11 +31,9 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
         maxMarking: typedNull<PNAnalysisContainer>(),
     }
 
-    public setMarkingModel(markingModel: PNMarkingModel) {
-        this.models.markingModel = markingModel;
-        markingModel.AddOnCalculationChange(() => {
-            this.update();
-        });
+    public setReachabilityTree(markingModel: ReachabilityTree) {
+        this.data.tree = markingModel;
+        this.update();
     }
 
     constructor(container: d3BaseSelector) {
@@ -66,10 +62,8 @@ export class PNAnalysisDraw extends DrawBase<PNModel>{
         const maxMarking = this.containers.maxMarking = new PNAnalysisContainer(flex);
         maxMarking.label = "max marking";
 
-        // shortest sequential run
+        this.data = new PNAnalysisModel();
     }
-
-
 }
 
 class PNAnalysisContainer {
@@ -80,7 +74,7 @@ class PNAnalysisContainer {
         value: typedNull<d3BaseSelector>(),
     }
 
-    public get label(): string{
+    public get label(): string {
         return this.selectors.label.text();
     }
     public set label(lab: string) {

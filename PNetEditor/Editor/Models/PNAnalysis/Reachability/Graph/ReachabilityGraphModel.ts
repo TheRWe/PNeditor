@@ -1,5 +1,4 @@
 ﻿import { ModelBase } from "../../../_Basic/ModelBase";
-import { PNMarkingModel, ReachabilitySettings, MarkingsObject } from "../../PNMarkingModel";
 
 export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON> {
     private _transitions = [] as { from: number, to: number, transitionID: number }[];
@@ -8,20 +7,6 @@ export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON
 
     public get transitions() {
         return this._transitions.map(x => { return { from: this.states.find(s => s.id == x.from), to: this.states.find(s => s.id == x.to) } })
-    }
-
-    private markings: MarkingsObject[];
-
-    public SetMakringModel(model: PNMarkingModel) {
-        this.markings = model.getMarkingsModel();
-        const markings = this.markings.slice(0, ReachabilitySettings.GraphNodesMax)
-        markings.forEach(m => {
-            m.accessibleTargetMarkings.forEach(t => {
-                if (markings.findIndex(x => x.id === t.target.id) >= 0) {
-                    this.AddTransition(m.id, t.target.id, t.transitionID);
-                }
-            })
-        })
     }
 
     public AddTransition(from: number, to: number, transitionID: number) {

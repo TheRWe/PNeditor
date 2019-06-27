@@ -1,6 +1,12 @@
 ﻿import { JSONNet } from "../../PNet/PNModel";
-import { ReachabilitySettings } from "../PNMarkingModel";
 import { GetStringHash, HashSet } from "../../../../CORE/HashSet";
+
+export const ReachabilitySettings = {
+    defaultCalculationDepth: 100,
+    MaxMarking: 999,
+    GraphNodesMax: 200,
+    automaticalyStopCalculationAfterSeconds: 60,
+}
 
 // todo: jako model
 export class ReachabilityTree {
@@ -12,20 +18,17 @@ export class ReachabilityTree {
         return GetStringHash(JSON.stringify(mark.slice().sort()));
     }
 
-    private readonly allNodes: ReachabilityNode[] = [];
+    public readonly allNodes: ReachabilityNode[] = [];
     private readonly hashSetNodes: HashSet<ReachabilityNode>;
 
     private cacheIsAllPossibleNodesCalculated: "false" | "true" | "" = "";
-    public async isAllPossibleNodesCalculated() {
+    public isAllPossibleNodesCalculated() {
         if (this.cacheIsAllPossibleNodesCalculated === "") {
             for (const node of this.allNodes) {
                 if (!node.isReachableMarkingsCalculated) {
                     this.cacheIsAllPossibleNodesCalculated = "false";
                     break;
                 }
-
-                // todo: jinak ?
-                await new Promise(r => { setTimeout(() => { r(); }); });
             }
 
             if (this.cacheIsAllPossibleNodesCalculated === "")
@@ -77,25 +80,30 @@ export class ReachabilityTree {
             }));
         (node as any)._reachableMarkings = reachableMarkings;
 
-        if ((await node.reachableNonCyclicMarking()).length > 0) {
-            this.cacheIsAllPossibleNodesCalculated = "";
-        }
+        this.cacheIsAllPossibleNodesCalculated = "";
     }
 
     public calculatingToDepth = false;
     public async calculateToDepth(depth: number) {
         this.calculatingToDepth = true;
 
-        const nodes: ReachabilityNode[] = [this.root];
+        const hash: HashSet<ReachabilityNode> = new HashSet<ReachabilityNode>(
+            (x) => x.hash,
+            (o, o2) => o.compareTo(o2),
+        );
 
-        while (nodes.length > 0) {
+        const nodes: ReachabilityNode[] = [...this.allNodes.filter(n => (!n.isReachableMarkingsCalculated && n.index < depth))];
+        let i = 0;
+
+        if (ReachabilitySettings.automaticalyStopCalculationAfterSeconds > 0)
+            setTimeout(() => { this.calculatingToDepth = false }, ReachabilitySettings.automaticalyStopCalculationAfterSeconds * 1000);
+
+        while (nodes.length > 0 && this.calculatingToDepth) {
             const node = nodes.shift();
 
-            // depth
             if (node.index >= depth) continue;
 
-            if (this.calculatingToDepth)
-                nodes.push(...(await node.reachableMarkings()).map(x => x.node));
+            nodes.push(...(await node.reachableMarkingNonCyclic()).map(x => x.node).filter(n => hash.add(n)));
         }
 
         this.calculatingToDepth = false;
@@ -139,7 +147,7 @@ export class ReachabilityNode {
         return this._reachableMarkings;
     }
 
-    public async reachableNonCyclicMarking(): Promise<ReachableMarkings> {
+    public async reachableMarkingNonCyclic(): Promise<ReachableMarkings> {
         return (await this.reachableMarkings()).filter(n => n.node.index > this.index);
     }
 

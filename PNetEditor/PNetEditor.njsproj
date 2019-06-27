@@ -87,7 +87,7 @@
     <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNMarkingModel.ts">
+    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNAnalysis\Reachability\Graph\ReachabilityGraphDraw.ts">
