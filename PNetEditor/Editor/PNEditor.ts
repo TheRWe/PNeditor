@@ -129,10 +129,12 @@ export class PNEditor implements TabInterface {
                 switch (this.mode.selected) {
                     case editorMode.default:
                         this.pnAction.AddTransition(pos);
+                        this.pnDraw.simulation.alpha(0.3).restart();
                         this.pnDraw.update();
                         break;
                     case editorMode.arcMake:
                         this.mouseEndArc("new");
+                        this.pnDraw.simulation.alpha(0.3).restart();
                         this.pnDraw.update();
                         break;
                     case editorMode.valueEdit:
@@ -144,7 +146,15 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
             },
-            onRightClick: () => { },
+            onRightClick: () => {
+                switch (this.mode.selected) {
+                    case editorMode.arcMake:
+                        this.mouseEndArc();
+                        break;
+                    default:
+                        break;
+                }
+            },
             onWheel: () => { },
         },
         transition: {
