@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../Editor/Constants";
+﻿import { d3BaseSelector } from "../../CORE/Constants";
 import { TabControl } from "./TabControl";
 import { Tab } from "./Tab";
 

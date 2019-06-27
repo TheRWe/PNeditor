@@ -4,7 +4,7 @@ import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
 import { typedNull } from "./../../../Helpers/purify";
 import { DrawBase, Callbacks, CallbackType, ForceNode } from "../_Basic/DrawBase";
-import { d3BaseSelector, html, Position } from "../../Constants";
+import { d3BaseSelector, html, Position } from "../../../CORE/Constants";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };

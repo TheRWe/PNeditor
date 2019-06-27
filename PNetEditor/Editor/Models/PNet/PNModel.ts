@@ -1,5 +1,5 @@
 ﻿import { ModelBase } from "../_Basic/ModelBase";
-import { Position } from "./../../Constants";
+import { Position } from "./../../../CORE/Constants";
 import { ForceNode } from "../_Basic/DrawBase";
 
 export class PNModel extends ModelBase<JSONNet>{

@@ -1,11 +1,10 @@
 ﻿import { Tab } from "../CORE/TabControl/Tab";
-import { d3BaseSelector } from "../Editor/Constants";
+import { d3BaseSelector, Position } from "../CORE/Constants";
 import { PNModel, Place, Arc, Transition } from "./Models/PNet/PNModel";
 import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
 import { CallbackType, ForceNode } from "./Models/_Basic/DrawBase";
 import * as d3 from 'd3';
-import { Position } from './Constants';
 import { notImplemented, typedNull } from "../Helpers/purify";
 import { PNDrawControls } from "./Models/PNet/Helpers/PNDrawControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";

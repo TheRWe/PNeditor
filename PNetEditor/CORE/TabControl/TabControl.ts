@@ -1,5 +1,5 @@
 ﻿import { typedNull } from "../../Helpers/purify";
-import { d3BaseSelector } from "../../Editor/Constants";
+import { d3BaseSelector } from "../../CORE/Constants";
 import { Tab } from "./Tab";
 import { TabGroup } from "./TabGroup";
 

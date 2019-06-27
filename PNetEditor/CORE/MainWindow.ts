@@ -1,7 +1,7 @@
 ﻿import { app, dialog, ipcRenderer } from 'electron';
 import { TabControl } from "./TabControl/TabControl";
 import d3 = require("d3");
-import { html } from "../Editor/Constants";
+import { html } from "../CORE/Constants";
 import * as file from 'fs';
 import * as path from 'path';
 import { PNModel } from "../Editor/Models/PNet/PNModel";

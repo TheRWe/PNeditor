@@ -1,6 +1,6 @@
 ﻿import { ActionBase } from "../_Basic/ActionBase";
 import { PNModel, JSONNet, Place, Arc, Transition } from "./PNModel";
-import { Position } from "./../../Constants";
+import { Position } from "./../../../CORE/Constants";
 
 export type SelectedElementsPNet = { transitions?: Transition[], places?: Place[] };
 
