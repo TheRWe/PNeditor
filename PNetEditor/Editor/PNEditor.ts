@@ -12,6 +12,7 @@ import { groupmap, TabInterface } from "../CORE/MainWindow";
 import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
 import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
 import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
+import * as path from 'path';
 
 
 export class PNEditor implements TabInterface {
@@ -41,8 +42,24 @@ export class PNEditor implements TabInterface {
         return true;
     }
 
-    GetStringToSave(): string {
+    public GetStringToSave(): string {
         return JSON.stringify(this.pnModel.toJSON(), null, 2);
+    }
+
+    private _path: string = null;
+    public get Path(): string {
+        return this._path;
+    }
+    public set Path(val: string) {
+        this._path = val;
+
+        const fileWithExtension = path.basename(val);
+        const splited = fileWithExtension.split('.');
+        const withoutExtension = (splited.length > 1) ? splited.slice(0, -1).join('.') : fileWithExtension;
+
+        const maxlength = 20;
+
+        this.tab.label = (withoutExtension.length > maxlength) ? (withoutExtension.slice(0, maxlength-3) + '...') : withoutExtension;
     }
 
 
@@ -488,7 +505,7 @@ export class PNEditor implements TabInterface {
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
-        tab.label = "Net";
+        tab.label = "Unnamed Net";
         this.tab.container.style("height", "99vh")
             .style("display", "flex")
             .style("flex-direction", "column");

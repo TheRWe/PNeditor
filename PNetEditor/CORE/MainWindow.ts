@@ -51,6 +51,8 @@ function InitFileButtons() {
             const tab = tabControl.addTab();
             const editor = new PNEditor(tab, net);
             console.log(editor);
+
+            editor.Path = path;
         } catch (ex) {
             console.error("cannot read file " + path);
             console.error(ex)
@@ -76,6 +78,8 @@ function InitFileButtons() {
                 return;
 
             file.writeFileSync(path, obj.GetStringToSave(), { encoding: "utf8" });
+
+            obj.Path = path;
 
             console.log("%c Saved net", "color: rgb(0, 0, 255)");
         } catch (ex) {
@@ -111,5 +115,6 @@ function InitTabControl() {
 export interface TabInterface {
     IsSaveable(): boolean;
     GetStringToSave(): string;
+    Path: string;
 }
 export var groupmap: Map<TabGroup, TabInterface>;
