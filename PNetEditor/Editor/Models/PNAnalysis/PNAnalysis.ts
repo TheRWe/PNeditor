@@ -14,7 +14,6 @@ export class PNAnalysis {
 
     private models = {
         pnModel: typedNull<PNModel>(),
-        graphModel: typedNull<ReachabilityGraphModel>(),
         reachabilityTree: typedNull<ReachabilityTree>(),
     }
 
@@ -29,20 +28,47 @@ export class PNAnalysis {
             this.models.reachabilityTree.calculatingToDepth = false;
 
         this.draws.pnAnalysisDraw.data.tree = this.models.reachabilityTree = new ReachabilityTree(this.models.pnModel.toJSON());
+        this.draws.graphDraw.data = new ReachabilityGraphModel(this.models.reachabilityTree);
 
         const self = this;
         (async function () {
             let calculating = true;
 
+            let graphCalc = false;
+
+            function calc() {
+                if (graphCalc) return;
+                if (self.draws.pnAnalysisDraw.data.stepsFromInitialMarkingCalculated > ReachabilitySettings.GraphDepthDefault) {
+                    self.models.reachabilityTree.allNodes.filter(x => x.depth < ReachabilitySettings.GraphDepthDefault).forEach(x => {
+                        self.draws.graphDraw.data.ExpandState(x.id);
+                    })
+                    self.draws.graphDraw.update();
+                    graphCalc = true;
+                }
+            }
+
             function raf() {
                 self.draws.pnAnalysisDraw.update();
 
-                if (calculating)
+                calc();
+
+                if (calculating) {
                     requestAnimationFrame(raf);
+                }
             }
             raf();
 
             await self.models.reachabilityTree.calculateToDepth(ReachabilitySettings.defaultCalculationDepth);
+
+            if (!graphCalc) {
+                self.models.reachabilityTree.allNodes.filter(x => x.depth < ReachabilitySettings.GraphDepthDefault).forEach(x => {
+                    self.draws.graphDraw.data.ExpandState(x.id);
+                });
+
+                self.draws.graphDraw.update();
+            }
+
+            console.debug(self);
 
             console.debug("end calc");
             calculating = false;
@@ -90,7 +116,6 @@ export class PNAnalysis {
 
         const graphSvg = graphTab.container.append("svg").style("height", "100%");
         this.draws.graphDraw = new ReachabilityGraphDraw(graphSvg);
-        this.draws.graphDraw.data = this.models.graphModel = new ReachabilityGraphModel();
 
         this.update();
     }

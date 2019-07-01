@@ -4,7 +4,7 @@ import { GetStringHash, HashSet } from "../../../../CORE/HashSet";
 export const ReachabilitySettings = {
     defaultCalculationDepth: 100,
     MaxMarking: 999,
-    GraphNodesMax: 200,
+    GraphDepthDefault: 15,
     automaticalyStopCalculationAfterSeconds: 60,
 }
 
@@ -38,6 +38,7 @@ export class ReachabilityTree {
         return this.cacheIsAllPossibleNodesCalculated === "true";
     }
 
+    private idGen = 0;
     public async calculateReachableMarkingsForNode(node: ReachabilityNode): Promise<void> {
         if ((node as any)._reachableMarkings)
             return;
@@ -64,7 +65,7 @@ export class ReachabilityTree {
                         }
 
                         const hash = ReachabilityTree.getMarkingHash(newMark);
-                        const newMarkingNode = new ReachabilityNode(this, hash, newMark, node.index + 1);
+                        const newMarkingNode = new ReachabilityNode(this, hash, newMark, node.depth + 1, ++this.idGen);
 
                         if (this.hashSetNodes.add(newMarkingNode)) {
                             this.allNodes.push(newMarkingNode);
@@ -92,7 +93,7 @@ export class ReachabilityTree {
             (o, o2) => o.compareTo(o2),
         );
 
-        const nodes: ReachabilityNode[] = [...this.allNodes.filter(n => (!n.isReachableMarkingsCalculated && n.index < depth))];
+        const nodes: ReachabilityNode[] = [...this.allNodes.filter(n => (!n.isReachableMarkingsCalculated && n.depth < depth))];
         let i = 0;
 
         if (ReachabilitySettings.automaticalyStopCalculationAfterSeconds > 0)
@@ -101,7 +102,7 @@ export class ReachabilityTree {
         while (nodes.length > 0 && this.calculatingToDepth) {
             const node = nodes.shift();
 
-            if (node.index >= depth) continue;
+            if (node.depth >= depth) continue;
 
             nodes.push(...(await node.reachableMarkingNonCyclic()).map(x => x.node).filter(n => hash.add(n)));
         }
@@ -120,7 +121,7 @@ export class ReachabilityTree {
         const mark: placeMarking[] = this.net.places.map(x => { return { id: x.id, marking: x.marking } });
         const hash = ReachabilityTree.getMarkingHash(mark);
 
-        this.root = new ReachabilityNode(this, hash, mark, 0);
+        this.root = new ReachabilityNode(this, hash, mark, 0, ++this.idGen);
 
         this.allNodes = [this.root];
     }
@@ -130,7 +131,9 @@ export class ReachabilityNode {
     public readonly tree: ReachabilityTree;
 
     /** number of actions needed to get to this markings */
-    public readonly index: number;
+    public readonly depth: number;
+
+    public readonly id: number;
 
     public readonly hash: number;
     public readonly markings: placeMarking[];
@@ -148,18 +151,19 @@ export class ReachabilityNode {
     }
 
     public async reachableMarkingNonCyclic(): Promise<ReachableMarkings> {
-        return (await this.reachableMarkings()).filter(n => n.node.index > this.index);
+        return (await this.reachableMarkings()).filter(n => n.node.depth > this.depth);
     }
 
     public compareTo(other: ReachabilityNode): boolean {
         return this.markings.every(p => { return other.markings.find(x => x.id === p.id).marking === p.marking; });
     }
 
-    constructor(tree: ReachabilityTree, hash: number, markings: placeMarking[], index: number) {
+    constructor(tree: ReachabilityTree, hash: number, markings: placeMarking[], depth: number, id: number) {
         this.tree = tree;
         this.hash = hash;
         this.markings = markings;
-        this.index = index;
+        this.depth = depth;
+        this.id = id;
     }
 }
 

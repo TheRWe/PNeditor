@@ -19,7 +19,7 @@ export class PNAnalysisModel extends ModelBase<PNAnalysisModelJSON> {
         return this.tree.allNodes.length;
     };
     public get stepsFromInitialMarkingCalculated(): number {
-        return Math.max(...this.tree.allNodes.map(x => x.index));
+        return Math.max(...this.tree.allNodes.map(x => x.depth));
     };
     public get isCalculatedAllMarking(): boolean {
         return this.tree.isAllPossibleNodesCalculated();

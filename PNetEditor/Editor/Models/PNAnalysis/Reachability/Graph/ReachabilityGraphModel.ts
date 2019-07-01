@@ -1,22 +1,47 @@
 ﻿import { ModelBase } from "../../../_Basic/ModelBase";
+import { ReachabilityTree } from "../ReachabilityTree";
 
 export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON> {
-    private _transitions = [] as { from: number, to: number, transitionID: number }[];
+    private _transitions = [] as { source: number, target: number, transitionID: number }[];
 
     public states: ReachabilityState[] = [];
-
-    public get transitions() {
-        return this._transitions.map(x => { return { from: this.states.find(s => s.id == x.from), to: this.states.find(s => s.id == x.to) } })
+    private _treeModel: ReachabilityTree;
+    public set treeModel(val) {
+        this.states = [];
+        this._transitions = [];
+        this._treeModel = val;
+    }
+    public get treeModel() {
+        return this._treeModel;
     }
 
-    public AddTransition(from: number, to: number, transitionID: number) {
-        this._transitions.push({ from, to, transitionID });
-        if (this.states.findIndex(x => x.id === from) === -1) {
-            this.states.push({ id: from, x: undefined, y: undefined});
+    public get transitions() {
+        return this._transitions.map(x => { return { from: this.states.find(s => s.id == x.source), to: this.states.find(s => s.id == x.target) } })
+    }
+
+    /** show nodes from given state */
+    public async ExpandState(stateIndex: number) {
+        const indx = this.treeModel.allNodes.findIndex(x => x.id === stateIndex);
+        if (indx === -1) return;
+        const state = this.treeModel.allNodes[indx];
+        (await state.reachableMarkings()).forEach(x => this.AddTransition(stateIndex, x.node.id, x.transitionID));
+    }
+
+    private AddTransition(source: number, target: number, transitionID: number) {
+        this._transitions.push({ source, target, transitionID });
+        if (this.states.findIndex(x => x.id === source) === -1) {
+            const { id, depth } = this.treeModel.allNodes.find(x => x.id === source);
+            this.states.push({ id, x: undefined, y: undefined, depth });
         }
-        if (this.states.findIndex(x => x.id === to) === -1) {
-            this.states.push({ id: to, x: undefined, y: undefined });
+        if (this.states.findIndex(x => x.id === target) === -1) {
+            const { id, depth } = this.treeModel.allNodes.find(x => x.id === target);
+            this.states.push({ id, x: undefined, y: undefined, depth });
         }
+    }
+
+    constructor(tree: ReachabilityTree) {
+        super();
+        this.treeModel = tree;
     }
 
     public toJSON(): ReachabilityGraphModelJSON {
@@ -30,10 +55,12 @@ export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON
 
 export interface ReachabilityState {
     id: number;
+    depth: number;
     x: number;
     y: number;
 }
 
+export type ReachabilityGraphsTransition = { source: number, target: number, transitionID: number };
 type ReachabilityGraphModelJSON = {
-    transitions: { from: number, to: number, transitionID: number }[]
+    transitions: ReachabilityGraphsTransition[]
 }
