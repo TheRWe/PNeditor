@@ -10,6 +10,10 @@ export class Tab {
     public get label(): string { return this.tabButton.text(); }
     public set label(text: string) { this.tabButton.text(text); }
 
+    /** todo: test */
+    public get isVisible() {
+        return !this.container.classed("hidden");
+    }
 
     public Hide() {
         this.container.classed("hidden", true);
@@ -21,8 +25,13 @@ export class Tab {
         this.tabButton.classed("control-panel-tab-sub-selected", true);
     }
 
-    private _onBeforeRemove: (event: { cancelClose: boolean }) => void = () => { };
-    public AddOnBeforeRemove(callback: (event: { cancelClose: boolean }) => void) {
+    private _onKeyDownWhenOpened: (e: TabKeyDownEvent) => void = () => { };
+    public AddOnKeyDownWhenOpened(callback: (e: TabKeyDownEvent) => void) {
+        const old = this._onKeyDownWhenOpened; this._onKeyDownWhenOpened = (...args) => { old(...args); callback(...args); };
+    }
+
+    private _onBeforeRemove: (e:BeforeRemoveEvent)=>void = () => { };
+    public AddOnBeforeRemove(callback: (e: BeforeRemoveEvent) => void) {
         const old = this._onBeforeRemove; this._onBeforeRemove = (...args) => { old(...args); callback(...args); };
     }
 
@@ -47,3 +56,6 @@ export class Tab {
         this.Hide();
     }
 }
+
+export type BeforeRemoveEvent = { cancelClose: boolean };
+export type TabKeyDownEvent = KeyboardEvent;

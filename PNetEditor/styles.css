@@ -148,13 +148,13 @@ body {
   .modal-show {
     display: block; }
   .modal-content {
-    min-width: 50%;
-    min-height: 50%;
     background: white;
-    margin: 25%;
     padding-top: 20%;
     position: relative;
-    border: 4px lightgrey solid; }
+    border: 4px lightgrey solid;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%; }
   .modal-message {
     text-align: center;
     margin-bottom: 1em; }

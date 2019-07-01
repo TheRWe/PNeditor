@@ -1,4 +1,4 @@
-﻿import { Tab } from "../CORE/TabControl/Tab";
+﻿import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
 import { d3BaseSelector, Position } from "../CORE/Constants";
 import { PNModel, Place, Arc, Transition } from "./Models/PNet/PNModel";
 import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
@@ -13,6 +13,7 @@ import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
 import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
 import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
 import * as path from 'path';
+import { Key } from "ts-keycode-enum";
 
 
 export class PNEditor implements TabInterface {
@@ -59,7 +60,7 @@ export class PNEditor implements TabInterface {
 
         const maxlength = 20;
 
-        this.tab.label = (withoutExtension.length > maxlength) ? (withoutExtension.slice(0, maxlength-3) + '...') : withoutExtension;
+        this.tab.label = (withoutExtension.length > maxlength) ? (withoutExtension.slice(0, maxlength - 3) + '...') : withoutExtension;
     }
 
 
@@ -444,6 +445,8 @@ export class PNEditor implements TabInterface {
 
         inputs.AddOnInputArc(this.keyboard.inputs.arcValue.onInputEnd);
         inputs.AddOnInputMarking(this.keyboard.inputs.marking.onInputEnd);
+
+        this.tab.AddOnKeyDownWhenOpened(this.keyboard.shortcuts.callback);
     }
 
     /** keyboard properties */
@@ -477,7 +480,28 @@ export class PNEditor implements TabInterface {
                     this.mode.swap();
                 },
             }
-        }
+        },
+        shortcuts: {
+            callback: ((e: TabKeyDownEvent) => {
+                console.debug(e);
+                if (e.ctrlKey) {
+                    switch (e.keyCode) {
+                        case Key.Z:
+                        case Key.Y:
+                        // todo: opravit
+                        case 26:
+                            if (e.shiftKey)
+                                this.pnAction.Redo();
+                            else 
+                                this.pnAction.Undo();
+                            this.pnDraw.update();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }),
+        },
     }
 
 
@@ -511,6 +535,14 @@ export class PNEditor implements TabInterface {
             .style("flex-direction", "column");
         const controlDiv = tab.container.append("div");
         const svg = this.svg = tab.container.append("svg");
+
+        tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
+            if (this._analysis) {
+                this._analysis.close();
+                this._analysis = null;
+            }
+
+        });
 
         this.pnModel = pnmodel;
 

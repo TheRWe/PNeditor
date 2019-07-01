@@ -49,6 +49,24 @@ export class PNAnalysis {
         })();
     }
 
+    public close() {
+        const tabs = this.tabs;
+
+        const analysisTab = tabs.pnAnalysis;
+        if (analysisTab) {
+            analysisTab.remove();
+            tabs.pnAnalysis = null;
+        }
+
+        const reachabilityGraphTab = tabs.reachabilityGraph;
+        if (reachabilityGraphTab) {
+            reachabilityGraphTab.remove();
+            tabs.reachabilityGraph = null;
+        }
+
+        this.models.reachabilityTree.calculatingToDepth = false;
+    }
+
     constructor(tab: Tab, pnmodel: PNModel) {
         this.models.pnModel = pnmodel;
 

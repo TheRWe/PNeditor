@@ -3,6 +3,7 @@ import * as p from './Helpers/Purify';
 import { ipcRenderer, remote } from 'electron';
 import { messageType } from './Helpers/ProgramEventType';
 import { InitWindow } from './CORE/MainWindow';
+import { showModal, modalResult } from './CORE/Modal';
 
 window.addEventListener('load', main);
 
