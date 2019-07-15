@@ -45,3 +45,8 @@ export const html = {
         },
     },
 }
+
+export const numbers = {
+    /** vysoké celé číslo symbolizující hodnotu omega */
+    omega: 9007199254740666,
+}

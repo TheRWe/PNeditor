@@ -2,6 +2,27 @@
 type Position = { x: number, y: number };
 
 
+export async function AsyncForeach<T>(arr: T[], fnc: (elm: T) => Promise<any>) {
+    await Promise.all(arr.map(elm =>
+        new Promise((resolve, reject) =>
+            setTimeout(async () => {
+                try {
+                    await fnc(elm);
+                    resolve();
+                } catch (ex) {
+                    reject(ex);
+                }
+            })
+        )
+    ));
+}
+
+
+export function RemoveAll<T>(arr: T[], removeFnc: (elm: T) => boolean) {
+    let found = -1;
+    while ((found = arr.findIndex(removeFnc)) !== -1) { arr.splice(found, 1); }
+}
+
 export function IsInPosition(pos1: Position, pos2: Position, elmPos: Position) {
     return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
         && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
@@ -16,10 +37,8 @@ export function notImplemented() {
 export type EnumType = { [id: number]: string };
 
 type fncHelpSortKeySelector<T> = ((a: T, b: T) => number);
-export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSelected): fncHelpSortKeySelector<TIn>
-{
-    function f(a: TIn, b: TIn)
-    {
+export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSelected): fncHelpSortKeySelector<TIn> {
+    function f(a: TIn, b: TIn) {
         const valA = fncSelector(a);
         const valB = fncSelector(b);
         return valA > valB ? 1 : valA === valB ? 0 : -1;
@@ -27,7 +46,7 @@ export function SortKeySelector<TIn, TSelected>(fncSelector: (val: TIn) => TSele
     return f;
 }
 
-export function arraysDifferences<T>(arr1: T[], arr2: T[]): {added: T[], removed: T[]} {
+export function arraysDifferences<T>(arr1: T[], arr2: T[]): { added: T[], removed: T[] } {
     const added = [...arr2];
     const removed = arr1.filter((elm) => {
         const i = added.findIndex((x) => { return elm === x; });
@@ -45,42 +64,37 @@ export function ClassNameOf(obj: any): string {
     return obj.constructor.name;
 }
 
-export function EnumValues(obj: EnumType): string[]{
-    return (Object as any).values(obj).filter((x:any) => typeof x === 'string');
+export function EnumValues(obj: EnumType): string[] {
+    return (Object as any).values(obj).filter((x: any) => typeof x === 'string');
 }
 
 export class Ref<T>{
-    public get value(): T
-    {
+    public get value(): T {
         return this.get();
     }
-    public set value(newValue: T)
-    {
+    public set value(newValue: T) {
         this.set(newValue);
     }
     private readonly get: () => T;
     private readonly set: (value: T) => void;
 
-    constructor(get: () => T, set: (value: T) => void)
-    {
+    constructor(get: () => T, set: (value: T) => void) {
         this.get = get;
         this.set = set;
     }
 }
 
 /** returns null as specified type - helper for declaring types in anonymous classes */
-export function typedNull<T>(): T | null{
+export function typedNull<T>(): T | null {
     return null;
 }
 
-export function flatten<T>(arr: (T[] | T)[]):T[]
-{
+export function flatten<T>(arr: (T[] | T)[]): T[] {
     return Array.prototype.concat(...arr);
 }
 
 //todo: named tuple(univerzálně ne jenom bool)
-export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { element: T, classifications: boolean[] }[]
-{
+export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { element: T, classifications: boolean[] }[] {
     return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
 }
 
@@ -88,8 +102,7 @@ export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { eleme
 export interface Type<T> extends Function { new(...args: any[]): T; }
 
 //todo: async
-export function fileExample()
-{
+export function fileExample() {
     const fileName = "settings.json";
     let sett = {
         autosave: true,
@@ -98,8 +111,7 @@ export function fileExample()
 
     file.writeFile(fileName, JSON.stringify(sett), (err) => { if (err) console.error("error writing data"); });
     sleep(10000);
-    file.readFile(fileName, { encoding: "utf8" }, (err, data: string) =>
-    {
+    file.readFile(fileName, { encoding: "utf8" }, (err, data: string) => {
         if (err)
             console.error('failed to read');
         else
@@ -108,11 +120,9 @@ export function fileExample()
 }
 
 
-export async function sleep(ms: number)
-{
+export async function sleep(ms: number) {
     await _sleep(ms);
 }
-function _sleep(ms: number)
-{
+function _sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }

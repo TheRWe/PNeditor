@@ -126,7 +126,7 @@ export class Place implements ForceNode {
             this.y = 0;
         }
         this.name = name;
-        this.marking = marking;
+        this.marking = marking || 0;
 
         if (id >= 0) {
             this.id = id;

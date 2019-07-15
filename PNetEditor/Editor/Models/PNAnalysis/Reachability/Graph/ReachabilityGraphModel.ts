@@ -1,6 +1,7 @@
 ﻿import { ModelBase } from "../../../_Basic/ModelBase";
 import { ReachabilityTree } from "../ReachabilityTree";
 
+// todo: implementovat 
 export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON> {
     private _transitions = [] as { source: number, target: number, transitionID: number }[];
 
@@ -21,13 +22,16 @@ export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON
 
     /** show nodes from given state */
     public async ExpandState(stateIndex: number) {
+        /*
         const indx = this.treeModel.allNodes.findIndex(x => x.id === stateIndex);
         if (indx === -1) return;
         const state = this.treeModel.allNodes[indx];
         (await state.reachableMarkings()).forEach(x => this.AddTransition(stateIndex, x.node.id, x.transitionID));
+        */
     }
 
     private AddTransition(source: number, target: number, transitionID: number) {
+        /*
         this._transitions.push({ source, target, transitionID });
         if (this.states.findIndex(x => x.id === source) === -1) {
             const { id, depth } = this.treeModel.allNodes.find(x => x.id === source);
@@ -37,6 +41,7 @@ export class ReachabilityGraphModel extends ModelBase<ReachabilityGraphModelJSON
             const { id, depth } = this.treeModel.allNodes.find(x => x.id === target);
             this.states.push({ id, x: undefined, y: undefined, depth });
         }
+         */
     }
 
     constructor(tree: ReachabilityTree) {

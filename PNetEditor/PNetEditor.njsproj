@@ -61,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pkg\JS\gpu.js" />
+    <TypeScriptCompile Include="CORE\Graph.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="CORE\HashSet.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -70,7 +73,6 @@
     <TypeScriptCompile Include="CORE\Modal.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="CORE\SimulationNode.ts" />
     <TypeScriptCompile Include="CORE\TabControl\TabControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

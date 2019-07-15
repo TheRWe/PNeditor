@@ -16,16 +16,17 @@ export class PNAnalysisModel extends ModelBase<PNAnalysisModelJSON> {
         return this.tree.calculatingToDepth;
     };
     public get numRechableMarkings(): number {
-        return this.tree.allNodes.length;
+        return this.tree.graph.allNodes.length;
     };
-    public get stepsFromInitialMarkingCalculated(): number {
-        return Math.max(...this.tree.allNodes.map(x => x.depth));
+    public get stepsFromInitialMarkingCalculated() {
+        return "not implemented";
+        //return Math.max(...this.tree.graph.allNodes.map(x => x.depth));
     };
     public get isCalculatedAllMarking(): boolean {
         return this.tree.isAllPossibleNodesCalculated();
     };
     public get maxMarking(): number {
-        return Math.max(...this.tree.allNodes.map(x => Math.max(...x.markings.map(y => y.marking))));
+        return Math.max(...this.tree.graph.allNodes.map(x => Math.max(...x.data.marking.map(y => y.marking))));
     };
 }
 

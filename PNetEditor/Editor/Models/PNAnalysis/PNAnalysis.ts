@@ -36,21 +36,11 @@ export class PNAnalysis {
 
             let graphCalc = false;
 
-            function calc() {
-                if (graphCalc) return;
-                if (self.draws.pnAnalysisDraw.data.stepsFromInitialMarkingCalculated > ReachabilitySettings.GraphDepthDefault) {
-                    self.models.reachabilityTree.allNodes.filter(x => x.depth < ReachabilitySettings.GraphDepthDefault).forEach(x => {
-                        self.draws.graphDraw.data.ExpandState(x.id);
-                    })
-                    self.draws.graphDraw.update();
-                    graphCalc = true;
-                }
-            }
 
             function raf() {
                 self.draws.pnAnalysisDraw.update();
 
-                calc();
+                // todo: vykrslování marking grafu
 
                 if (calculating) {
                     requestAnimationFrame(raf);
@@ -60,13 +50,6 @@ export class PNAnalysis {
 
             await self.models.reachabilityTree.calculateToDepth(ReachabilitySettings.defaultCalculationDepth);
 
-            if (!graphCalc) {
-                self.models.reachabilityTree.allNodes.filter(x => x.depth < ReachabilitySettings.GraphDepthDefault).forEach(x => {
-                    self.draws.graphDraw.data.ExpandState(x.id);
-                });
-
-                self.draws.graphDraw.update();
-            }
 
             console.debug(self);
 
