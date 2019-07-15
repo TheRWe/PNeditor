@@ -16,7 +16,7 @@ export class PNAnalysisModel extends ModelBase<PNAnalysisModelJSON> {
         return this.tree.calculatingToDepth;
     };
     public get numRechableMarkings(): number {
-        return this.tree.graph.allNodes.length;
+        return this.tree.graph.nodes.length;
     };
     public get stepsFromInitialMarkingCalculated() {
         return "not implemented";
@@ -26,7 +26,7 @@ export class PNAnalysisModel extends ModelBase<PNAnalysisModelJSON> {
         return this.tree.isAllPossibleNodesCalculated();
     };
     public get maxMarking(): number {
-        return Math.max(...this.tree.graph.allNodes.map(x => Math.max(...x.data.marking.map(y => y.marking))));
+        return Math.max(...this.tree.graph.nodes.map(x => Math.max(...x.data.marking.map(y => y.marking))));
     };
 }
 

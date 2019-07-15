@@ -1,70 +1,90 @@
 ﻿import { RemoveAll } from "../Helpers/purify";
 
-export class Graph<T>{
-    public allNodes: GraphNode<T>[] = [];
+export class Graph<VT, ET>{
+    public nodes: GraphNode<VT>[] = [];
+    public connections: { from: GraphNode<VT>, to: GraphNode<VT>, data?: ET }[] = [];
 
-    public CreateNode(data?: T): GraphNode<T> {
-        const node = new GraphNode<T>(data);
-        this.allNodes.push(node);
+    private _getConnectionIndex(from: GraphNode<VT>, to: GraphNode<VT>) {
+        return this.connections.findIndex(x => x.to === to && x.from === from);
+    }
+
+    public CreateNode(data?: VT): GraphNode<VT> {
+        const node = new GraphNode<VT>(data);
+        this.nodes.push(node);
         return node;
     }
 
-    public Connect(from: GraphNode<T>, to: GraphNode<T>) {
-        if (from.ConnectedTo.findIndex(x => x === to) >= 0) return;
-        from.ConnectedTo.push(to);
-        to.ConnectedFrom.push(from);
+    public Connect(from: GraphNode<VT>, to: GraphNode<VT>, data?: ET) {
+        if (this._getConnectionIndex(from, to) >= 0) return;
+        this.connections.push({ from, to, data })
     }
 
 
-    public Disconnect(from: GraphNode<T>, to: GraphNode<T>) {
-        RemoveAll(from.ConnectedTo, e => e === to);
-        RemoveAll(to.ConnectedFrom, e => e === from);
+    public Disconnect(from: GraphNode<VT>, to: GraphNode<VT>) {
+        const cons = this.connections;
+        const index = this._getConnectionIndex(from, to);
+        if (index === -1) return;
+        this.connections.splice(index, 1);
     }
 
-    public DisconnectFrom(node: GraphNode<T>) {
-        let n: GraphNode<T> | undefined;
-        while (n = node.ConnectedFrom.pop())
-            n.ConnectedTo.splice(n.ConnectedTo.findIndex(x => x === node), 1);
+    /** removes all connections going FROM given node */
+    public DisconnectFrom(node: GraphNode<VT>) {
+        RemoveAll(this.connections, x => x.from === node);
     }
 
-    public DisconnectTo(node: GraphNode<T>) {
-        let n: GraphNode<T> | undefined;
-        while (n = node.ConnectedTo.pop())
-            n.ConnectedFrom.splice(n.ConnectedFrom.findIndex(x => x === node), 1);
+    /** removes all connections going TO given node */
+    public DisconnectTo(node: GraphNode<VT>) {
+        RemoveAll(this.connections, x => x.to === node);
     }
 
-    public DisconnectAll(node: GraphNode<T>) {
-        this.DisconnectTo(node);
-        this.DisconnectFrom(node);
+    /** removes all connections with this node */
+    public DisconnectAll(node: GraphNode<VT>) {
+        RemoveAll(this.connections, x => x.to === node || x.from === node);
     }
 
-    public Remove(node: GraphNode<T>) {
+    /** Disconnect node and remove it from graph */
+    public Remove(node: GraphNode<VT>) {
+        if (this.nodes.findIndex(x => x === node) === -1) return;
         this.DisconnectAll(node);
-        this.allNodes.splice(this.allNodes.findIndex(x => x === node), 1);
+        this.nodes.splice(this.nodes.findIndex(x => x === node), 1);
     }
 
-    /** returns all nodes accessible from this - including this */
-    public GetAllAccessibleFrom(node: GraphNode<T>) {
-        const nodes: GraphNode<T>[] = [];
+    public GetConnectionData(from: GraphNode<VT>, to: GraphNode<VT>): ET | undefined {
+        return (this.connections.find(x => x.to === to && x.from === from) || {} as any).data;
+    }
 
-        const rec = (n: GraphNode<T>) => {
+    /** returns all nodes accessible from this */
+    public GetFrom(node: GraphNode<VT>) {
+        return this.connections.filter(x => x.from === node).map(x => x.to);
+    }
+
+    /** returns all nodes from which is this node accessible */
+    public GetTo(node: GraphNode<VT>) {
+        return this.connections.filter(x => x.to === node).map(x => x.from);
+    }
+
+    /** returns all nodes !transitively! accessible from this - including this */
+    public GetTransitiveFrom(node: GraphNode<VT>) {
+        const nodes: GraphNode<VT>[] = [];
+
+        const rec = (n: GraphNode<VT>) => {
             if (nodes.findIndex(x => x === n) >= 0) return;
             nodes.push(n);
-            n.ConnectedTo.forEach(x => rec(x));
+            this.connections.filter(x => x.from === n).forEach(x => rec(x.to));
         }
         rec(node);
 
         return nodes;
     }
 
-    /** returns all nodes from which is this node accessible - including this */
-    public GetAllAccessibleTo(node: GraphNode<T>) {
-        const nodes: GraphNode<T>[] = [];
+    /** returns all nodes !transitively! from which is this node accessible - including this */
+    public GetTransitiveTo(node: GraphNode<VT>) {
+        const nodes: GraphNode<VT>[] = [];
 
-        const rec = (n: GraphNode<T>) => {
+        const rec = (n: GraphNode<VT>) => {
             if (nodes.findIndex(x => x === n) >= 0) return;
             nodes.push(n);
-            n.ConnectedFrom.forEach(x => rec(x));
+            this.connections.filter(x => x.to === n).forEach(x => rec(x.from));
         }
         rec(node);
 
@@ -72,18 +92,25 @@ export class Graph<T>{
     }
 
     /** copies connection from one node to second */
-    public CopyConnections(from: GraphNode<T>, to: GraphNode<T>) {
-        from.ConnectedFrom.forEach(x => this.Connect(x,to))
-        from.ConnectedTo.forEach(x => this.Connect(to,x))
+    public CopyConnections(copyFrom: GraphNode<VT>, copyTo: GraphNode<VT>, edgeMergerFnc: (copyFromData: ET, copyToData: ET) => ET) {
+        const c = this.connections;
+
+        c.filter(x => x.from === copyFrom).forEach(x => {
+            const _from = copyTo, _to = x.to;
+            this.Connect(_from, _to);
+            this.connections.find(y => y.from === _from && y.to === _to).data = edgeMergerFnc(x.data, this.GetConnectionData(_from, _to));
+        });
+        c.filter(x => x.from === copyFrom).forEach(x => {
+            const _from = x.from, _to = copyTo;
+            this.Connect(_from, _to);
+            this.connections.find(y => y.from === _from && y.to === _to).data = edgeMergerFnc(x.data, this.GetConnectionData(_from, _to));
+        });
     }
 }
 
 
 export class GraphNode<T>{
     public data: T;
-
-    public ConnectedTo: GraphNode<T>[] = [];
-    public ConnectedFrom: GraphNode<T>[] = [];
 
     constructor(data?: T) {
         this.data = data;

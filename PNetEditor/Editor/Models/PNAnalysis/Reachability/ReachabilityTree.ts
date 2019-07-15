@@ -6,12 +6,18 @@ const omega = numbers.omega;
 
 type placeMarking = { id: number, marking: number };
 type marking = placeMarking[];
+
+/** Graph node */
 type _markingType = {
     marking: marking,
     calculatedNextMarking: boolean,
 };
+
+/** IDs of transitions */
+type _edgeType =
+    number[];
 type markingNode = GraphNode<_markingType>;
-type markingGraph = Graph<_markingType>;
+type markingGraph = Graph<_markingType, _edgeType>;
 
 export const ReachabilitySettings = {
     defaultCalculationDepth: 100,
@@ -30,7 +36,7 @@ export class ReachabilityTree {
     private _isAllPossibleNodesCalculatedCache: "false" | "true" | "" = "";
     public isAllPossibleNodesCalculated() {
         if (this._isAllPossibleNodesCalculatedCache === "") {
-            for (const node of this.graph.allNodes) {
+            for (const node of this.graph.nodes) {
                 if (!node.data.calculatedNextMarking) {
                     this._isAllPossibleNodesCalculatedCache = "false";
                     break;
@@ -76,11 +82,17 @@ export class ReachabilityTree {
 
                 let existingNodeIndex: number;
                 const nextNode =
-                    ((existingNodeIndex = this.graph.allNodes.findIndex(x => compareMarking(x.data.marking, newMark))) === -1)
+                    ((existingNodeIndex = this.graph.nodes.findIndex(x => compareMarking(x.data.marking, newMark))) === -1)
                         ? this.graph.CreateNode({ marking: newMark, calculatedNextMarking: false })
-                        : this.graph.allNodes[existingNodeIndex];
+                        : this.graph.nodes[existingNodeIndex];
 
-                this.graph.Connect(node, nextNode);
+                let data: _edgeType;
+                if (data = this.graph.GetConnectionData(node, nextNode)) {
+                    data.findIndex(x => x === t.id) === -1
+                        && data.push(t.id);
+                }
+                else
+                    this.graph.Connect(node, nextNode, [t.id]);
             }
         );
         await this.Omeganize();
@@ -88,8 +100,8 @@ export class ReachabilityTree {
     }
 
     private async Omeganize() {
-        [...this.graph.allNodes].forEach(node => {
-            const precedingNodes = this.graph.GetAllAccessibleTo(node);
+        [...this.graph.nodes].forEach(node => {
+            const precedingNodes = this.graph.GetTransitiveTo(node);
             precedingNodes
                 .filter(x => isLowerSameMarking(x.data.marking, node.data.marking))
                 .forEach(prec => {
@@ -110,8 +122,8 @@ export class ReachabilityTree {
                 });
         });
 
-        [...this.graph.allNodes].forEach(node => {
-            const nextNodes = this.graph.GetAllAccessibleFrom(node);
+        [...this.graph.nodes].forEach(node => {
+            const nextNodes = this.graph.GetTransitiveFrom(node);
             node.data.marking.filter(x => x.marking === omega).forEach(p => {
                 nextNodes.forEach(next => {
                     next.data.marking.find(x => x.id === p.id).marking = omega;
@@ -122,18 +134,16 @@ export class ReachabilityTree {
 
     private async OptimizeGraph() {
         const g = this.graph;
-        [...g.allNodes].forEach(node => {
-            const nextNodes = g.GetAllAccessibleFrom(node).filter(x => x !== node);
+        [...g.nodes].forEach(node => {
+            const nextNodes = g.GetTransitiveFrom(node).filter(x => x !== node);
             nextNodes.forEach(next => {
                 if (!isLowerSameMarking(node.data.marking, next.data.marking)) return;
                 console.debug("optimizating");
                 console.debug(markingToString(node.data.marking));
                 console.debug(markingToString(next.data.marking));
 
-                g.CopyConnections(node, next);
+                g.CopyConnections(node, next, (d1, d2) => { const d3 = [...d1 || []]; d2 && d2.forEach(x => d3.findIndex(y => y === x) === -1 && d3.push(x)); return d3; });
                 g.Remove(node);
-
-
             })
         });
     }
@@ -148,20 +158,20 @@ export class ReachabilityTree {
 
         const calculatedNodes: markingNode[] = [];
 
-        const rec = async (node: markingNode, d: number) => {
-            if (!this.calculatingToDepth || calculatedNodes.findIndex(x => x === node) >= 0) return;
-            calculatedNodes.push(node);
+        const rec = async (n: markingNode, d: number) => {
+            if (!this.calculatingToDepth || calculatedNodes.findIndex(x => x === n) >= 0) return;
+            calculatedNodes.push(n);
 
-            await this.calculateReachableMarkingsForNode(node);
+            await this.calculateReachableMarkingsForNode(n);
 
             if (d < depth) {
                 const dd = d + 1;
-                await Promise.all(node.ConnectedTo.map(x => rec(x, dd)));
+                await Promise.all(this.graph.GetFrom(n).map(x => rec(x, dd)));
             }
         }
         await rec(this.root, 0);
 
-        this.graph.allNodes.map(x => markingToString(x.data.marking))
+        this.graph.nodes.map(x => markingToString(x.data.marking))
             .forEach(x => {
                 console.debug(x);
             })
@@ -175,7 +185,7 @@ export class ReachabilityTree {
 
         const marking: marking = this.net.places.map(x => { return { id: x.id, marking: x.marking } });
 
-        this.graph = new Graph<_markingType>();
+        this.graph = new Graph<any, any>() as markingGraph;
 
         const root = this.root = this.graph.CreateNode();
         root.data = { marking, calculatedNextMarking: false };
