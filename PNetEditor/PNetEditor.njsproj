@@ -120,6 +120,9 @@
     <TypeScriptCompile Include="Editor\PNEditor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Settings.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="renderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

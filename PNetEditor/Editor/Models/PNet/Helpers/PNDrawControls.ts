@@ -43,6 +43,23 @@ export class PNDrawControls {
             .on("click", () => { editor.RunAnalysis(); })
 
 
+        // todo: omezení max min velikost
+        container.append("span").text("Zoom ");
+
+        container.append("input")
+            .attr("type", "button")
+            .attr("value", "+")
+            .on("click", () => { editor.pnDraw.scale += 0.1; })
+
+        container.append("span").text("/");
+
+        container.append("input")
+            .attr("type", "button")
+            .attr("value", "-")
+            .on("click", () => { editor.pnDraw.scale -= 0.1; })
+
+
+
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");
     }
 }

@@ -19,7 +19,9 @@ import { Key } from "ts-keycode-enum";
 export class PNEditor implements TabInterface {
 
     public readonly tab: Tab;
-    public readonly svg: d3BaseSelector
+    /** Container for svg element */
+    public readonly svgContainer: d3BaseSelector;
+    public readonly svg: d3BaseSelector;
 
     public readonly pnModel: PNModel;
     public readonly pnDraw: PNDraw;
@@ -492,7 +494,7 @@ export class PNEditor implements TabInterface {
                         case 26:
                             if (e.shiftKey)
                                 this.pnAction.Redo();
-                            else 
+                            else
                                 this.pnAction.Undo();
                             this.pnDraw.update();
                             break;
@@ -532,9 +534,18 @@ export class PNEditor implements TabInterface {
         tab.label = "Unnamed Net";
         this.tab.container.style("height", "99vh")
             .style("display", "flex")
-            .style("flex-direction", "column");
+            .style("flex-direction", "column")
+            ;
         const controlDiv = tab.container.append("div");
-        const svg = this.svg = tab.container.append("svg");
+
+        const svgContainer = this.svg = tab.container.append("div")
+            .attr("width", "100%")
+            .style("flex", "auto")
+            .style("position", "relative")
+            .style("overflow", "auto")
+            ;
+        const svg = this.svg = svgContainer.append("svg")
+            .style("position","absolute");
 
         tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
             if (this._analysis) {

@@ -76,6 +76,16 @@ export class PNDraw extends DrawBase<PNModel>{
         }
     }
 
+    private _scale:number = 1;
+    public get scale(): number {
+        return +this._scale;
+    }
+
+    public set scale(n: number) {
+        this._scale = n;
+        this.container.style("transform", `scale(${n})`);
+    }
+
 
     constructor(container: d3BaseSelector) {
         super(container);
@@ -97,12 +107,15 @@ export class PNDraw extends DrawBase<PNModel>{
 
         const svg = this.container
             .attr("width", "100%")
-            .style("flex", "auto");
+            .attr("height", "100%")
+            .style("transform-origin", "left top")
+            ;
 
         const defs = svg.append('svg:defs');
         const defsNames = html.classes.PNEditor.defs;
 
         const G = svg.append("g");
+        "transform: scale(2.4)"
 
         G.append("g").classed(html.classes.PNEditor.g.arcs, true);
         G.append("g").classed(html.classes.PNEditor.g.places, true);
