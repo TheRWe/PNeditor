@@ -3,7 +3,12 @@ export type Position = { x: number, y: number }
 
 export const html = {
     id: {
-
+        PNEditor: {
+            defs: {
+                arrowTransitionEnd: "defs-arrow-t-end",
+                arrowPlaceEnd: "defs-arrow-p-end",
+            },
+        },
     },
     classes: {
         page: {

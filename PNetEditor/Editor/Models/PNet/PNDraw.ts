@@ -9,7 +9,15 @@ import { d3BaseSelector, html, Position } from "../../../CORE/Constants";
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
 
+let defsIndex = 0;
+
 export class PNDraw extends DrawBase<PNModel>{
+    private defs =
+        {
+            arrowTransitionEnd: html.id.PNEditor.defs.arrowTransitionEnd + defsIndex,
+            arrowPlaceEnd: html.id.PNEditor.defs.arrowPlaceEnd + defsIndex++,
+        };
+
     public Callbacks = {
         container: new Callbacks<{}>(),
         transition: new Callbacks<Transition>(),
@@ -104,21 +112,21 @@ export class PNDraw extends DrawBase<PNModel>{
 
         // define arrow markers for leading arrow
         defs.append('svg:marker')
-            .attr('id', defsNames.arrowTransitionEnd)
+            .attr('id', this.defs.arrowTransitionEnd)
             .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 9)
-            .attr('markerWidth', 8)
+            .attr('refX', 1)
+            .attr('markerWidth', 6)
             .attr('markerHeight', 8)
             .attr('orient', 'auto')
             .append('svg:path')
-            .attr('d', 'M0,-5L10,0L0,5');
+            .attr('d', 'M10,-5 L0,0 L10,5');
 
         // define arrow markers for leading arrow
         defs.append('svg:marker')
-            .attr('id', defsNames.arrowPlaceEnd)
+            .attr('id', this.defs.arrowPlaceEnd)
             .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 18)
-            .attr('markerWidth', 8)
+            .attr('refX', 23)
+            .attr('markerWidth', 6)
             .attr('markerHeight', 8)
             .attr('orient', 'auto')
             .append('svg:path')
@@ -298,7 +306,8 @@ export class PNDraw extends DrawBase<PNModel>{
 
         arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
             // todo: markery
-            //.style('marker-end', a => `url(#${a.line.endsIn === "T" ? defsNames.arrowTransitionEnd : defsNames.arrowPlaceEnd})`)
+            .style('marker-end', a => a.arc.toPlace > 0 ? `url(#${this.defs.arrowPlaceEnd})` : "")
+            .style('marker-start', a => a.arc.toTransition > 0 ? `url(#${this.defs.arrowTransitionEnd})` : "")
             .attr("x1", a => a.line.from.x)
             .attr("y1", a => a.line.from.y)
             .attr("x2", a => a.line.to.x)

@@ -63,7 +63,7 @@ export class Graph<VT, ET>{
         return this.connections.filter(x => x.to === node).map(x => x.from);
     }
 
-    /** returns all nodes !transitively! accessible from this - including this */
+    /** returns all nodes TRANSITIVELY accessible from this - including this */
     public GetTransitiveFrom(node: GraphNode<VT>) {
         const nodes: GraphNode<VT>[] = [];
 
@@ -77,7 +77,7 @@ export class Graph<VT, ET>{
         return nodes;
     }
 
-    /** returns all nodes !transitively! from which is this node accessible - including this */
+    /** returns all nodes TRANSITIVELY from which is this node accessible - including this */
     public GetTransitiveTo(node: GraphNode<VT>) {
         const nodes: GraphNode<VT>[] = [];
 

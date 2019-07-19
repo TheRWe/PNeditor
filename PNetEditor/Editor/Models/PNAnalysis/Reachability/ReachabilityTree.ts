@@ -171,10 +171,12 @@ export class ReachabilityTree {
         }
         await rec(this.root, 0);
 
+        console.group("calculated markings")
         this.graph.nodes.map(x => markingToString(x.data.marking))
             .forEach(x => {
                 console.debug(x);
             })
+        console.groupEnd()
 
 
         this.calculatingToDepth = false;

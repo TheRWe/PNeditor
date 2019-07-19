@@ -3,6 +3,7 @@ import { ReachabilityGraphModel, ReachabilityGraphsTransition, ReachabilityState
 import { html, d3BaseSelector } from "../../../../../CORE/Constants";
 import d3 = require("d3");
 import { Position } from "./../../../../../CORE/Constants";
+import { GraphNode } from "../../../../../CORE/Graph";
 
 export class ReachabilityGraphDraw extends DrawBase<ReachabilityGraphModel> {
     public Callbacks: { container: Callbacks<{}>; };
@@ -76,7 +77,7 @@ export class ReachabilityGraphDraw extends DrawBase<ReachabilityGraphModel> {
         states()
             .attr("transform", (d: any) => `translate(${d.x}, ${d.y})`)
             // todo: colorblind
-            .attr("fill", d => d.id === 1 ? "green" : "black")
+            .attr("fill", /*d => d.id === 1 ? "green" : */"black")
             ;
 
         const transitionsEnter = transitions()
@@ -96,13 +97,13 @@ export class ReachabilityGraphDraw extends DrawBase<ReachabilityGraphModel> {
             ;
 
         const nodes = states().data();
-        const links: ReachabilityGraphsTransition[] = (this.data as any)._transitions;
+        const links: { source: GraphNode<any>, target: GraphNode<any>, transitionID: number }[] = (this.data as any)._transitions;
 
         (this.simulation.force('link') as any).links([]);
         this.simulation.nodes(nodes);
         // todo: nevím co to dělá ani jak to funguje ale funguje to
         (this.simulation.force('link') as any).links(links.map(x => {
-            return { source: nodes.findIndex(y => y.id === x.source), target: nodes.findIndex(y => y.id === x.target), transitionID: x.transitionID };
+            return { source: nodes.findIndex(y => y.node === x.source), target: nodes.findIndex(y => y.node === x.target), transitionID: x.transitionID };
         }));
     }
 }

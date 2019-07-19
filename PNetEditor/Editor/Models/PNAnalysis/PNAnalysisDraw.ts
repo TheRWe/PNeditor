@@ -14,10 +14,17 @@ export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
     protected _update(): void {
         const PNAnalysisModel = this.data;
 
-        this.containers.calculationState.value = (PNAnalysisModel.isCalculating ? "calculating" : "done")
-        this.containers.reachableMarkings.value = PNAnalysisModel.numRechableMarkings + (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");
-        this.containers.calculatedMarkingSteps.value = "" + PNAnalysisModel.stepsFromInitialMarkingCalculated;
-        this.containers.maxMarking.value = "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
+        // todo: calculating zobrazit
+        //this.containers.calculationState.value = (PNAnalysisModel.isCalculating ? "calculating" : "done")
+
+        //todo: počet stavů bude při výpočtu zobrazen s +
+        this.containers.states.value = PNAnalysisModel.numStates + "" //+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");
+        this.containers.bounded.value = PNAnalysisModel.containstOmega ? "No" : "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
+        this.containers.containsOmega.value = PNAnalysisModel.containstOmega ? "Yes" : "No" + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
+
+        this.containers.reversible.value = PNAnalysisModel.reversible ? "Yes" : "No";
+        this.containers.terminates.value = PNAnalysisModel.terminates ? "Yes" : "No";
+        this.containers.deadlockFree.value = PNAnalysisModel.deadlockFree ? "Yes" : "No";
     }
 
     //private models = {
@@ -25,10 +32,13 @@ export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
     //}
 
     private containers = {
-        calculationState: typedNull<PNAnalysisContainer>(),
-        reachableMarkings: typedNull<PNAnalysisContainer>(),
-        calculatedMarkingSteps: typedNull<PNAnalysisContainer>(),
-        maxMarking: typedNull<PNAnalysisContainer>(),
+        states: typedNull<PNAnalysisContainer>(),
+        bounded: typedNull<PNAnalysisContainer>(),
+
+        containsOmega: typedNull<PNAnalysisContainer>(),
+        reversible: typedNull<PNAnalysisContainer>(),
+        terminates: typedNull<PNAnalysisContainer>(),
+        deadlockFree: typedNull<PNAnalysisContainer>(),
     }
 
     public setReachabilityTree(markingModel: ReachabilityTree) {
@@ -50,17 +60,15 @@ export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
                 .text(x);
         })
 
-        const calculationState = this.containers.calculationState = new PNAnalysisContainer(flex);
-        calculationState.label = "state";
+        const reachableMarkings = this.containers.states = new PNAnalysisContainer(flex);
+        reachableMarkings.label = "states";
 
-        const reachableMarkings = this.containers.reachableMarkings = new PNAnalysisContainer(flex);
-        reachableMarkings.label = "reachable markings";
+        (this.containers.bounded = new PNAnalysisContainer(flex)).label = "bounded";
+        (this.containers.containsOmega = new PNAnalysisContainer(flex)).label = "Contains ω marking";
 
-        const calculatedMarkingSteps = this.containers.calculatedMarkingSteps = new PNAnalysisContainer(flex);
-        calculatedMarkingSteps.label = "calculated steps";
-
-        const maxMarking = this.containers.maxMarking = new PNAnalysisContainer(flex);
-        maxMarking.label = "max marking";
+        (this.containers.reversible = new PNAnalysisContainer(flex)).label = "reversible";
+        (this.containers.terminates = new PNAnalysisContainer(flex)).label = "terminates";
+        (this.containers.deadlockFree = new PNAnalysisContainer(flex)).label = "deadlock-free";
 
         this.data = new PNAnalysisModel();
     }
