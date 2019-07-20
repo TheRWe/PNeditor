@@ -111,6 +111,9 @@
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawInputs.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Editor\Models\PNet\PlaceTransitionTable.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\PNAction.ts" />
     <TypeScriptCompile Include="Editor\Models\PNet\PNDraw.ts" />
     <TypeScriptCompile Include="Editor\Models\PNet\PNModel.ts" />
@@ -169,7 +172,6 @@
     <Folder Include="Editor\" />
     <Folder Include="Editor\Models\" />
     <Folder Include="Editor\Models\PNAnalysis\" />
-    <Folder Include="Editor\Models\PNAnalysis\Algorithms\" />
     <Folder Include="Editor\Models\PNAnalysis\Reachability\" />
     <Folder Include="Editor\Models\PNAnalysis\Reachability\Graph\" />
     <Folder Include="Editor\Models\PNet\" />

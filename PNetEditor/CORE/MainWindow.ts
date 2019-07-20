@@ -4,11 +4,12 @@ import d3 = require("d3");
 import { html } from "../CORE/Constants";
 import * as file from 'fs';
 import * as path from 'path';
-import { PNModel } from "../Editor/Models/PNet/PNModel";
+import { PNModel, JSONNet } from "../Editor/Models/PNet/PNModel";
 import { PNEditor } from '../Editor/PNEditor';
 import { TabGroup } from './TabControl/TabGroup';
 import { TabKeyDownEvent } from './TabControl/Tab';
 import { showModal } from './Modal';
+import { PlaceTransitionTable } from '../Editor/Models/PNet/PlaceTransitionTable';
 
 export var tabControl: TabControl;
 
@@ -131,6 +132,10 @@ function InitFileButtons() {
     groupmap = new Map();
 }
 
+type placeMarking = { id: number, marking: number };
+type marking = placeMarking[];
+type netConfiguration = { marking: placeMarking[], enabledTransitions: number[] }
+
 
 function InitTabControl() {
     const tabsButtons = d3.select("." + html.classes.page.controlPanelTabs);
@@ -161,8 +166,38 @@ function InitTabControl() {
         }
     });
 
-    //const tab = tabControl.addTab();
+    // todo: test - smazat
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const tab = tabControl.addTab();
     //tabControl.addTab(tab.parentTabGroup);
+
+    const testJsonnet: JSONNet = {
+        places: [
+            { id: 0, marking: 10 },
+            { id: 1, marking: 15 },
+            { id: 2, marking: 13 },
+
+            { id: 4, marking: 20 },
+        ],
+        transitions: [
+            { id: 0 },
+            { id: 1 },
+            { id: 2 },
+        ],
+        arcs: [],
+    }
+
+    const table = new PlaceTransitionTable(tab.container);
+    table.models.net = testJsonnet;
+    table.models.configurations = [
+        { enabledTransitions: [1], marking: [{ id: 0, marking: 5 }] },
+        { enabledTransitions: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
+    ] as netConfiguration[];
+    table.update();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 export interface TabInterface {

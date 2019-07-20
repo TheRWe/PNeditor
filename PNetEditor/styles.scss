@@ -10,6 +10,24 @@ html {
     box-sizing: border-box;
 }
 
+table {
+    text-align: end;
+}
+
+.table{
+    &-gray{
+        background: lightgray;
+        
+        tr {
+            background: white;
+        }
+    }
+}
+
+th{
+    text-align:center;
+}
+
 @media print {
     body::after {
         content: "";

@@ -1,11 +1,20 @@
-* {
+﻿* {
   box-sizing: inherit;
-  margin: 0;
-  /* transform: scale(1); */
-  }
+  margin: 0; }
 
 html {
   box-sizing: border-box; }
+
+table {
+  text-align: end; }
+
+.table-gray {
+  background: lightgray; }
+  .table-gray tr {
+    background: white; }
+
+th {
+  text-align: center; }
 
 @media print {
   body::after {
