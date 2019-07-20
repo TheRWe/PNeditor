@@ -1,15 +1,11 @@
 ﻿import { d3BaseSelector } from "../../../CORE/Constants";
-import { JSONNet } from "./PNModel";
+import { JSONNet, netConfiguration } from "./PNModel";
 import { DrawBase, Callbacks } from "../_Basic/DrawBase";
 
-type placeMarking = { id: number, marking: number };
-type marking = placeMarking[];
-type netConfiguration = { marking: placeMarking[], enabledTransitions: number[] }
-
 export type ConfigTransitionClickEvent = { configIndex: number, transitionID: number };
-export type ConfigShowClickEvent = { configIndex: number};
+export type ConfigShowClickEvent = { configIndex: number };
 
-export class PlaceTransitionTable extends DrawBase {
+export class PlaceTransitionTableDraw extends DrawBase {
     public models = {
         net: null as JSONNet,
         configurations: [] as netConfiguration[],
@@ -31,25 +27,30 @@ export class PlaceTransitionTable extends DrawBase {
         const placeIndexes = net.places.map(x => x.id);
         const transitionIndexes = net.transitions.map(x => x.id);
 
-        const head = table.append("tr");
+        const makeHead = () => {
+            const head = table.append("thead").append("tr");
 
-        head.append("th").text("");
+            head.append("th").text("");
 
-        placeIndexes.forEach(x => {
-            const p = net.places.find(y => y.id === x);
-            head.append("th").text(p.id).style("min-width","1em");
-        })
+            placeIndexes.forEach(x => {
+                const p = net.places.find(y => y.id === x);
+                head.append("th").text(p.id).style("min-width", "1em");
+            })
 
-        head.append("th").style("background", "black");
+            head.append("th").style("background", "black");
 
 
-        transitionIndexes.forEach(x => {
-            const t = net.transitions.find(y => y.id === x);
-            head.append("th").text(t.id).style("width","1.2em");
-        })
+            transitionIndexes.forEach(x => {
+                const t = net.transitions.find(y => y.id === x);
+                head.append("th").text(t.id).style("min-width", "1.1em");
+            })
+            return head;
+        }
+        makeHead();
 
-        configs.forEach((c,ci) => {
-            const row = table.append("tr");
+        const tableBody = table.append("tbody");
+        configs.forEach((c, ci) => {
+            const row = tableBody.append("tr");
 
             const showbutton = row.append("td");
             showbutton
@@ -71,17 +72,20 @@ export class PlaceTransitionTable extends DrawBase {
 
 
             transitionIndexes.forEach(x => {
-                const enabled = c.enabledTransitions.some(y => y === x);
+                const enabled = c.enabledTransitionsIDs.some(y => y === x);
+                const isUsed = x === c.usedTransition;
+                const color = isUsed ? "yellowgreen" : (enabled ? "green" : "lightgray");
                 row.append("td")
-                    .style("background", enabled ? "green" : "lightgray")
+                    .style("background", color)
                     .style("cursor", enabled ? "pointer" : "not-allowed")
-                    .on("click", enabled ? () => { this._onConfigTransitionClick({ configIndex: ci, transitionID:x }); } : () => { })
+                    .on("click", enabled ? () => { this._onConfigTransitionClick({ configIndex: ci, transitionID: x }); } : () => { })
                     .classed("unselectable", true)
                     .classed("bright-on-hover", enabled ? true : false)
                     ;
             })
 
         });
+        (this.container.node() as HTMLElement).scrollTop = Number.MAX_SAFE_INTEGER;
     }
 
     private _onConfigTransitionClick: (e: ConfigTransitionClickEvent) => void = () => { };
@@ -102,6 +106,7 @@ export class PlaceTransitionTable extends DrawBase {
         table
             .style("font-size", "1.1em")
             .classed("table-gray", true)
+            .classed("unselectable", true)
             ;
 
         this.AddOnConfigTransitionClick((e) => { console.debug(`Table transition clicked cfgIndex:${e.configIndex} tIndex:${e.transitionID}`); });

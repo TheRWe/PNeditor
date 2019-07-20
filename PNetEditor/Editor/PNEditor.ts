@@ -1,6 +1,6 @@
 ﻿import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
 import { d3BaseSelector, Position } from "../CORE/Constants";
-import { PNModel, Place, Arc, Transition } from "./Models/PNet/PNModel";
+import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./Models/PNet/PNModel";
 import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
 import { CallbackType, ForceNode } from "./Models/_Basic/DrawBase";
@@ -14,18 +14,21 @@ import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
 import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
 import * as path from 'path';
 import { Key } from "ts-keycode-enum";
+import { PlaceTransitionTableDraw } from "./Models/PNet/PlaceTransitionTable";
 
 
 export class PNEditor implements TabInterface {
 
     public readonly tab: Tab;
-    /** Container for svg element */
-    public readonly svgContainer: d3BaseSelector;
+    /** Container under controlbar */
+    public readonly underControlContainer: d3BaseSelector;
     public readonly svg: d3BaseSelector;
 
     public readonly pnModel: PNModel;
     public readonly pnDraw: PNDraw;
     public readonly pnAction: PNAction;
+
+    public readonly tableDraw: PlaceTransitionTableDraw;
 
     public readonly inputs: PNDrawInputs;
     private readonly controls: PNDrawControls;
@@ -528,6 +531,45 @@ export class PNEditor implements TabInterface {
     //#endregion
 
 
+    //#region Table
+
+    // todo: hide table
+
+    private _expandTable(configID: number, transitionID: number) {
+        const tableModels = this.tableDraw.models;
+        const configs = tableModels.configurations;
+        configs.splice(configID + 1);
+        const selectedConfig = configs[configID];
+        configs.push(CalculateNextConfiguration(tableModels.net, selectedConfig.marking, transitionID));
+        selectedConfig.usedTransition = transitionID;
+    }
+
+    private _updateTable() {
+
+    }
+
+    private _resetTable() {
+        const jsonNet = this.pnModel.toJSON();
+        this.tableDraw.models.net = jsonNet;
+        const marking = jsonNet.places.map(p => { return { id: p.id, marking: p.marking }; })
+        const enabledTransitionsIDs = GetEnabledTransitionsIDs(jsonNet, marking);
+        this.tableDraw.models.configurations = [{ marking, enabledTransitionsIDs }];
+        this.tableDraw.update();
+    }
+
+    private InitTable() {
+        this._resetTable();
+        // funguje
+        this.pnAction.AddOnModelChange(() => { this._resetTable(); });
+        this.tableDraw.AddOnConfigTransitionClick((e) => {
+            this._expandTable(e.configIndex, e.transitionID);
+            this.tableDraw.update();
+        })
+    }
+
+    //#endregion
+
+
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
@@ -538,22 +580,38 @@ export class PNEditor implements TabInterface {
             ;
         const controlDiv = tab.container.append("div");
 
-        const svgContainer = this.svg = tab.container.append("div")
-            .attr("width", "100%")
+        const underControlContainer = this.underControlContainer = tab.container.append("div")
+            .style("width", "100%")
             .style("flex", "auto")
             .style("position", "relative")
+            //.style("overflow", "auto")
+            ;
+
+        const svgContainer = underControlContainer
+            .append("div")
+            .style("min-width", "100%")
+            .style("min-height", "100%")
+            .style("position", "absolute")
             .style("overflow", "auto")
             ;
+
         const svg = this.svg = svgContainer.append("svg")
-            .style("position","absolute");
+            .style("position", "absolute");
 
-        tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
-            if (this._analysis) {
-                this._analysis.close();
-                this._analysis = null;
-            }
+        // todo: resize do nastavení
+        const tableDiv = this.underControlContainer
+            .append("div")
+            .style("position", "absolute")
+            .style("max-width", "500px")
+            .style("max-height", "300px")
+            .style("right", "20px")
+            .style("bottom", "20px")
+            .style("background", "lightgray")
+            .style("border", "2px lightgray solid")
+            .style("overflow", "auto")
+            ;
 
-        });
+        this.tableDraw = new PlaceTransitionTableDraw(tableDiv);
 
         this.pnModel = pnmodel;
 
@@ -580,6 +638,14 @@ export class PNEditor implements TabInterface {
 
         this.InitMouseEvents();
         this.InitKeyboardEvents();
+        this.InitTable();
+
+        tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
+            if (this._analysis) {
+                this._analysis.close();
+                this._analysis = null;
+            }
+        });
 
         groupmap.set(tab.parentTabGroup, this);
     }

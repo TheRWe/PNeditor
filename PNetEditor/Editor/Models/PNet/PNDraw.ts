@@ -11,6 +11,7 @@ export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
 
 let defsIndex = 0;
 
+/** class for drawing petri net model as graph */
 export class PNDraw extends DrawBase{
     public models = {
         net: null as PNModel,

@@ -184,3 +184,32 @@ export type JSONNet = {
         toTransition: number,
     }[],
 }
+
+
+export type placeMarking = { id: number, marking: number };
+export type marking = placeMarking[];
+export type netConfiguration = { marking: placeMarking[], enabledTransitionsIDs: number[], usedTransition?: number }
+
+export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking, transitionID: number): netConfiguration {
+    if (!GetEnabledTransitionsIDs(net, currentMarking).some(x => x === transitionID))
+        throw new Error("cannot enable transition");
+
+    const marking: placeMarking[] = net.places.map(p => {
+        let marking = (currentMarking.find(x => p.id === x.id) || { marking: 0 }).marking;
+        const arces = net.arcs.filter(x => x.place_id === p.id && x.transition_id === transitionID);
+        arces.forEach(x => { marking += x.toPlace - x.toTransition });
+        return { id: p.id, marking } as placeMarking;
+    });
+    const enabledTransitionsIDs: number[] = GetEnabledTransitionsIDs(net, marking);
+
+    return { marking, enabledTransitionsIDs };
+}
+
+export function GetEnabledTransitionsIDs(net: JSONNet, currentMarking: marking) {
+    return net.transitions.filter(t => {
+        return net.arcs
+            .filter(x => x.transition_id === t.id)
+            .filter(x => x.toTransition > 0)
+            .every(x => x.toTransition <= (currentMarking.find(y => y.id === x.place_id) || { marking: 0 }).marking);
+    }).map(t => t.id);
+}

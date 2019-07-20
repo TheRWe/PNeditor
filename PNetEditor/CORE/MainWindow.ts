@@ -4,12 +4,12 @@ import d3 = require("d3");
 import { html } from "../CORE/Constants";
 import * as file from 'fs';
 import * as path from 'path';
-import { PNModel, JSONNet } from "../Editor/Models/PNet/PNModel";
+import { PNModel, JSONNet, netConfiguration } from "../Editor/Models/PNet/PNModel";
 import { PNEditor } from '../Editor/PNEditor';
 import { TabGroup } from './TabControl/TabGroup';
 import { TabKeyDownEvent } from './TabControl/Tab';
 import { showModal } from './Modal';
-import { PlaceTransitionTable } from '../Editor/Models/PNet/PlaceTransitionTable';
+import { PlaceTransitionTableDraw } from '../Editor/Models/PNet/PlaceTransitionTable';
 
 export var tabControl: TabControl;
 
@@ -132,10 +132,6 @@ function InitFileButtons() {
     groupmap = new Map();
 }
 
-type placeMarking = { id: number, marking: number };
-type marking = placeMarking[];
-type netConfiguration = { marking: placeMarking[], enabledTransitions: number[] }
-
 
 function InitTabControl() {
     const tabsButtons = d3.select("." + html.classes.page.controlPanelTabs);
@@ -188,11 +184,11 @@ function InitTabControl() {
         arcs: [],
     }
 
-    const table = new PlaceTransitionTable(tab.container);
+    const table = new PlaceTransitionTableDraw(tab.container);
     table.models.net = testJsonnet;
     table.models.configurations = [
-        { enabledTransitions: [1], marking: [{ id: 0, marking: 5 }] },
-        { enabledTransitions: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
+        { enabledTransitionsIDs: [1], marking: [{ id: 0, marking: 5 }] },
+        { enabledTransitionsIDs: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
     ] as netConfiguration[];
     table.update();
 

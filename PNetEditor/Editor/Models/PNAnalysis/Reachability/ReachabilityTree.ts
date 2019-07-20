@@ -1,11 +1,8 @@
-﻿import { JSONNet } from "../../PNet/PNModel";
+﻿import { JSONNet, marking } from "../../PNet/PNModel";
 import { numbers } from "../../../../CORE/Constants";
 import { GraphNode, Graph } from "../../../../CORE/Graph";
 import { AsyncForeach, SortKeySelector } from "../../../../Helpers/purify";
 const omega = numbers.omega;
-
-type placeMarking = { id: number, marking: number };
-type marking = placeMarking[];
 
 /** Graph node */
 type _markingType = {
