@@ -54,6 +54,7 @@ th{
     }
 }
 
+
 button, .button, input[type=button] {
     display: inline-block;
     margin: 1px;
@@ -87,6 +88,9 @@ button:focus {
 }
 
 
+.bright-on-hover:hover{
+    filter: brightness(1.5);
+}
 
 
 .placeSVGCircle {

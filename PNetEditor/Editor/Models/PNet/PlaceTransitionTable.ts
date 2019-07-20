@@ -6,6 +6,9 @@ type placeMarking = { id: number, marking: number };
 type marking = placeMarking[];
 type netConfiguration = { marking: placeMarking[], enabledTransitions: number[] }
 
+export type ConfigTransitionClickEvent = { configIndex: number, transitionID: number };
+export type ConfigShowClickEvent = { configIndex: number};
+
 export class PlaceTransitionTable extends DrawBase {
     public models = {
         net: null as JSONNet,
@@ -45,7 +48,7 @@ export class PlaceTransitionTable extends DrawBase {
             head.append("th").text(t.id).style("width","1.2em");
         })
 
-        configs.forEach(c => {
+        configs.forEach((c,ci) => {
             const row = table.append("tr");
 
             const showbutton = row.append("td");
@@ -56,7 +59,8 @@ export class PlaceTransitionTable extends DrawBase {
                 .style("cursor", "pointer")
                 .classed("unselectable", true)
                 .on("mouseover", () => { showbutton.style("filter", "invert(1)") })
-                .on("mouseout", () => { showbutton.style("filter", "")});
+                .on("mouseout", () => { showbutton.style("filter", "") })
+                .on("click", () => { this._onConfigShowClick({ configIndex: ci }); });
 
             placeIndexes.forEach(x => {
                 const m = c.marking.find(y => y.id === x);
@@ -71,14 +75,24 @@ export class PlaceTransitionTable extends DrawBase {
                 row.append("td")
                     .style("background", enabled ? "green" : "lightgray")
                     .style("cursor", enabled ? "pointer" : "not-allowed")
-                    .classed("unselectable")
+                    .on("click", enabled ? () => { this._onConfigTransitionClick({ configIndex: ci, transitionID:x }); } : () => { })
+                    .classed("unselectable", true)
+                    .classed("bright-on-hover", enabled ? true : false)
                     ;
             })
 
         });
     }
 
+    private _onConfigTransitionClick: (e: ConfigTransitionClickEvent) => void = () => { };
+    public AddOnConfigTransitionClick(callback: (e: ConfigTransitionClickEvent) => void) {
+        const old = this._onConfigTransitionClick; this._onConfigTransitionClick = (...args) => { old(...args); callback(...args); };
+    }
 
+    private _onConfigShowClick: (e: ConfigShowClickEvent) => void = () => { };
+    public AddOnConfigShowClick(callback: (e: ConfigShowClickEvent) => void) {
+        const old = this._onConfigShowClick; this._onConfigShowClick = (...args) => { old(...args); callback(...args); };
+    }
 
     constructor(container: d3BaseSelector) {
         super(container);
@@ -89,5 +103,8 @@ export class PlaceTransitionTable extends DrawBase {
             .style("font-size", "1.1em")
             .classed("table-gray", true)
             ;
+
+        this.AddOnConfigTransitionClick((e) => { console.debug(`Table transition clicked cfgIndex:${e.configIndex} tIndex:${e.transitionID}`); });
+        this.AddOnConfigShowClick((e) => { console.debug(`Table config show clicked cfgIndex:${e.configIndex}`); });
     }
 }
