@@ -27,8 +27,8 @@ export class PNAnalysis {
         if (this.models.reachabilityTree)
             this.models.reachabilityTree.calculatingToDepth = false;
 
-        this.draws.pnAnalysisDraw.data.tree = this.models.reachabilityTree = new ReachabilityTree(this.models.pnModel.toJSON());
-        this.draws.graphDraw.data = new ReachabilityGraphModel(this.models.reachabilityTree);
+        this.draws.pnAnalysisDraw.models.pnanalysisModel.tree = this.models.reachabilityTree = new ReachabilityTree(this.models.pnModel.toJSON());
+        this.draws.graphDraw.models.reachabilityGraphModel = new ReachabilityGraphModel(this.models.reachabilityTree);
 
         const self = this;
         (async function () {

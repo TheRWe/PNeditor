@@ -5,11 +5,14 @@ import d3 = require("d3");
 import { Position } from "./../../../../../CORE/Constants";
 import { GraphNode } from "../../../../../CORE/Graph";
 
-export class ReachabilityGraphDraw extends DrawBase<ReachabilityGraphModel> {
+export class ReachabilityGraphDraw extends DrawBase {
     public Callbacks: { container: Callbacks<{}>; };
+    public models = {
+        reachabilityGraphModel: null as ReachabilityGraphModel,
+    };
     protected Selectors = {
-        states: () => this.container.select("." + html.classes.ReachabilityGraph.states).selectAll("g").data((this.data).states),
-        transitions: () => this.container.select("." + html.classes.ReachabilityGraph.transitions).selectAll("g").data((this.data).transitions),
+        states: () => this.container.select("." + html.classes.ReachabilityGraph.states).selectAll("g").data((this.models.reachabilityGraphModel).states),
+        transitions: () => this.container.select("." + html.classes.ReachabilityGraph.transitions).selectAll("g").data((this.models.reachabilityGraphModel).transitions),
     };
 
     public readonly simulation: d3.Simulation<{}, undefined>;
@@ -97,7 +100,7 @@ export class ReachabilityGraphDraw extends DrawBase<ReachabilityGraphModel> {
             ;
 
         const nodes = states().data();
-        const links: { source: GraphNode<any>, target: GraphNode<any>, transitionID: number }[] = (this.data as any)._transitions;
+        const links: { source: GraphNode<any>, target: GraphNode<any>, transitionID: number }[] = (this.models.reachabilityGraphModel as any)._transitions;
 
         (this.simulation.force('link') as any).links([]);
         this.simulation.nodes(nodes);

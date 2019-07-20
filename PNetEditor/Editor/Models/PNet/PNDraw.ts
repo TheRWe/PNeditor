@@ -11,7 +11,11 @@ export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
 
 let defsIndex = 0;
 
-export class PNDraw extends DrawBase<PNModel>{
+export class PNDraw extends DrawBase{
+    public models = {
+        net: null as PNModel,
+    };
+
     private defs =
         {
             arrowTransitionEnd: html.id.PNEditor.defs.arrowTransitionEnd + defsIndex,
@@ -28,11 +32,11 @@ export class PNDraw extends DrawBase<PNModel>{
     public readonly simulation: d3.Simulation<{}, undefined>;
 
     protected Selectors = {
-        places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.data).places),
-        transitions: () => this.container.select("." + html.classes.PNEditor.g.transitions).selectAll("g").data((this.data).transitions),
+        places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.models.net).places),
+        transitions: () => this.container.select("." + html.classes.PNEditor.g.transitions).selectAll("g").data((this.models.net).transitions),
         arcs: () =>
             this.container.select("." + html.classes.PNEditor.g.arcs).selectAll("g")
-                .data((this.data).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.data, x) }; })),
+                .data((this.models.net).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.models.net, x) }; })),
         arcDragLine: typedNull<d3BaseSelector>(),
     };
 
@@ -153,10 +157,10 @@ export class PNDraw extends DrawBase<PNModel>{
     }
 
     protected _update(): void {
-        if (!this.data)
+        if (!this.models.net)
             return;
 
-        const net = this.data;
+        const net = this.models.net;
         const netSelectors = this.Selectors;
         const callbacks = this.Callbacks;
         const getPos = this.getPos.bind(this);

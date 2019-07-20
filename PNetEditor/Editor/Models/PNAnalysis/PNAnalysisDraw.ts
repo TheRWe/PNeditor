@@ -5,14 +5,18 @@ import { typedNull } from "../../../Helpers/purify";
 import { ReachabilityTree } from "./Reachability/ReachabilityTree";
 import { PNAnalysisModel } from "./PNAnalysisModel";
 
-export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
+export class PNAnalysisDraw extends DrawBase{
+    public models = {
+        pnanalysisModel: null as PNAnalysisModel,
+    };
+
     public Callbacks = {
         container: new Callbacks<any>(),
     };
 
     protected Selectors: any;
     protected _update(): void {
-        const PNAnalysisModel = this.data;
+        const PNAnalysisModel = this.models.pnanalysisModel;
 
         // todo: calculating zobrazit
         //this.containers.calculationState.value = (PNAnalysisModel.isCalculating ? "calculating" : "done")
@@ -42,7 +46,7 @@ export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
     }
 
     public setReachabilityTree(markingModel: ReachabilityTree) {
-        this.data.tree = markingModel;
+        this.models.pnanalysisModel.tree = markingModel;
         this.update();
     }
 
@@ -70,7 +74,7 @@ export class PNAnalysisDraw extends DrawBase<PNAnalysisModel>{
         (this.containers.terminates = new PNAnalysisContainer(flex)).label = "terminates";
         (this.containers.deadlockFree = new PNAnalysisContainer(flex)).label = "deadlock-free";
 
-        this.data = new PNAnalysisModel();
+        this.models.pnanalysisModel = new PNAnalysisModel();
     }
 }
 

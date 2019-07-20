@@ -50,14 +50,14 @@ export class PNDrawControls {
             .attr("type", "button")
             .attr("value", "+")
             .on("click", () => { editor.pnDraw.scale += 0.1; })
-
+            ;
         container.append("span").text("/");
 
         container.append("input")
             .attr("type", "button")
             .attr("value", "-")
             .on("click", () => { editor.pnDraw.scale -= 0.1; })
-
+            ;
 
 
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");

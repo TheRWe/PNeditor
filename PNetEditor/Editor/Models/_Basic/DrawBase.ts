@@ -15,9 +15,8 @@ export interface ForceNode {
     fy: number;
 }
 
-export abstract class DrawBase<Model extends ModelBase<any>> {
+export abstract class DrawBase {
     public readonly container: d3BaseSelector;
-    public data: Model;
 
     public abstract get Callbacks(): { container: Callbacks<{}>, [key: string]: Callbacks<any> };
 

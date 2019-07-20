@@ -573,7 +573,7 @@ export class PNEditor implements TabInterface {
         });
 
         const pnDraw = this.pnDraw = new PNDraw(svg);
-        pnDraw.data = pnmodel;
+        pnDraw.models.net = pnmodel;
         pnDraw.update();
 
         this.inputs = new PNDrawInputs(pnDraw);
