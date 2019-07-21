@@ -23,6 +23,7 @@ export class PNEditor implements TabInterface {
     /** Container under controlbar */
     public readonly underControlContainer: d3BaseSelector;
     public readonly svg: d3BaseSelector;
+    private readonly analysisContainer: d3BaseSelector;
 
     public readonly pnModel: PNModel;
     public readonly pnDraw: PNDraw;
@@ -34,15 +35,6 @@ export class PNEditor implements TabInterface {
     private readonly controls: PNDrawControls;
 
     private _analysis: PNAnalysis = null;
-    public RunAnalysis() {
-        if (this._analysis == null) {
-            this._analysis = new PNAnalysis(this.tab, this.pnModel);
-        }
-        this.pnAction.AddOnModelChange(() => {
-            this._analysis.update();
-        });
-
-    }
 
     public IsSaveable(): boolean {
         return true;
@@ -611,6 +603,13 @@ export class PNEditor implements TabInterface {
             .style("overflow", "auto")
             ;
 
+        const analysisDiv = this.analysisContainer = this.underControlContainer
+            .append("div")
+            .style("position", "absolute")
+            .style("left", "10px")
+            .style("bottom", "20px")
+            ;
+
         this.tableDraw = new PlaceTransitionTableDraw(tableDiv);
 
         this.pnModel = pnmodel;
@@ -634,6 +633,11 @@ export class PNEditor implements TabInterface {
         pnDraw.models.net = pnmodel;
         pnDraw.update();
 
+        this._analysis = new PNAnalysis({ analysisContainer: this.analysisContainer }, this.pnModel);
+        this.pnAction.AddOnModelChange(() => {
+            this._analysis.update();
+        });
+
         this.inputs = new PNDrawInputs(pnDraw);
 
         this.InitMouseEvents();
@@ -642,7 +646,7 @@ export class PNEditor implements TabInterface {
 
         tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
             if (this._analysis) {
-                this._analysis.close();
+                this._analysis.models.reachabilityTree.calculatingToDepth = false;
                 this._analysis = null;
             }
         });

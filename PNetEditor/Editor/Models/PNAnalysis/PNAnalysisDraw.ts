@@ -14,36 +14,34 @@ export class PNAnalysisDraw extends DrawBase{
         container: new Callbacks<any>(),
     };
 
-    protected Selectors: any;
+    protected Selectors = {
+        rightDiv: null as d3BaseSelector,
+    };
+
     protected _update(): void {
         const PNAnalysisModel = this.models.pnanalysisModel;
 
-        // todo: calculating zobrazit
-        //this.containers.calculationState.value = (PNAnalysisModel.isCalculating ? "calculating" : "done")
+        const rightDiv = this.Selectors.rightDiv.html("");
 
-        //todo: počet stavů bude při výpočtu zobrazen s +
-        this.containers.states.value = PNAnalysisModel.numStates + "" //+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");
-        this.containers.bounded.value = PNAnalysisModel.containstOmega ? "No" : "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
-        this.containers.containsOmega.value = PNAnalysisModel.containstOmega ? "Yes" : "No" + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?");
+        [
+            PNAnalysisModel.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
+            PNAnalysisModel.containstOmega ? "No" : "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?"),
+            PNAnalysisModel.containstOmega ? "Yes" : "No" + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?"),
+            PNAnalysisModel.reversible ? "Yes" : "No",
+            PNAnalysisModel.terminates ? "Yes" : "No",
+            PNAnalysisModel.deadlockFree ? "Yes" : "No",
+        ].forEach(x => {
+            rightDiv.append("div")
+                .text(x)
+                ;
+        });
 
-        this.containers.reversible.value = PNAnalysisModel.reversible ? "Yes" : "No";
-        this.containers.terminates.value = PNAnalysisModel.terminates ? "Yes" : "No";
-        this.containers.deadlockFree.value = PNAnalysisModel.deadlockFree ? "Yes" : "No";
+
     }
 
     //private models = {
     //    markingModel: typedNull<PNMarkingModel>(),
     //}
-
-    private containers = {
-        states: typedNull<PNAnalysisContainer>(),
-        bounded: typedNull<PNAnalysisContainer>(),
-
-        containsOmega: typedNull<PNAnalysisContainer>(),
-        reversible: typedNull<PNAnalysisContainer>(),
-        terminates: typedNull<PNAnalysisContainer>(),
-        deadlockFree: typedNull<PNAnalysisContainer>(),
-    }
 
     public setReachabilityTree(markingModel: ReachabilityTree) {
         this.models.pnanalysisModel.tree = markingModel;
@@ -52,73 +50,26 @@ export class PNAnalysisDraw extends DrawBase{
 
     constructor(container: d3BaseSelector) {
         super(container);
-        const flex = container.append("div");
+        container
+            .style("font-size", "1.2em")
+            .classed("unselectable", true)
+            ;
+        const leftDiv = container.append("div")
+            .style("display", "inline-block")
+            .style("padding-right", ".5em")
+            .style("text-align", "right")
+            ;
+        const rightDiv = this.Selectors.rightDiv = container.append("div")
+            .style("display", "inline-block")
+            ;
 
-        flex
-            .style("display", "flex")
-            .style("flex-wrap", "wrap");
-
-
-        [].forEach(x => {
-            flex.append("div")
-                .text(x);
-        })
-
-        const reachableMarkings = this.containers.states = new PNAnalysisContainer(flex);
-        reachableMarkings.label = "states";
-
-        (this.containers.bounded = new PNAnalysisContainer(flex)).label = "bounded";
-        (this.containers.containsOmega = new PNAnalysisContainer(flex)).label = "Contains ω marking";
-
-        (this.containers.reversible = new PNAnalysisContainer(flex)).label = "reversible";
-        (this.containers.terminates = new PNAnalysisContainer(flex)).label = "terminates";
-        (this.containers.deadlockFree = new PNAnalysisContainer(flex)).label = "deadlock-free";
+        ["states", "bounded", "Contains ω marking", "reversible", "terminates", "deadlock-free"].forEach(x => {
+            leftDiv.append("div")
+                .text(x)
+                ;
+        });
 
         this.models.pnanalysisModel = new PNAnalysisModel();
     }
 }
 
-class PNAnalysisContainer {
-    private readonly container: d3BaseSelector;
-    private selectors = {
-        div: typedNull<d3BaseSelector>(),
-        label: typedNull<d3BaseSelector>(),
-        value: typedNull<d3BaseSelector>(),
-    }
-
-    public get label(): string {
-        return this.selectors.label.text();
-    }
-    public set label(lab: string) {
-        this.selectors.label.text(lab);
-    }
-
-    public get value(): string {
-        return this.selectors.value.text();
-    }
-    public set value(val: string) {
-        this.selectors.value.text(val);
-    }
-
-
-    constructor(container: d3BaseSelector) {
-        this.container = container;
-
-        const div = this.selectors.div = container.append("div")
-            .style("border", "1px solid lightgray")
-            .style("margin", "5px")
-            .style("text-align", "center")
-            ;
-
-        const label = this.selectors.label = div.append("div")
-            .style("padding", "5px")
-            .text(" ")
-            .style("border-bottom", "1px solid lightgray")
-            ;
-
-        const value = this.selectors.value = div.append("div")
-            .style("padding", "5px")
-            .text(" ")
-            ;
-    }
-}

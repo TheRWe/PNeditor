@@ -35,12 +35,7 @@ export class PNDrawControls {
                 window.print();
                 editor.pnDraw.container.classed("print", false);
             })
-
-        container.append("input")
-            .attr("type", "button")
-            .attr("value", "Analyze")
-            .style("width", "95px")
-            .on("click", () => { editor.RunAnalysis(); })
+            ;
 
 
         // todo: omezení max min velikost
