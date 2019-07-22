@@ -1,4 +1,4 @@
-﻿* {
+* {
   box-sizing: inherit;
   margin: 0; }
 
@@ -190,5 +190,54 @@ label.switcher {
     display: none; }
   label.switcher > input[type=checkbox]:checked ~ .switcher-label-on {
     display: none; }
+
+/*#endregion*/
+/*#region ZoomIcon*/
+.zoom-in, .zoom-out {
+  box-sizing: content-box;
+  width: .4em;
+  height: .4em;
+  border-radius: .4em;
+  position: relative;
+  border: 0.05em solid black;
+  margin-left: .1em;
+  }
+
+.zoom-in > *:nth-child(1) {
+  width: .05em;
+  height: .3em;
+  background: #000;
+  display: block;
+  top: .05em;
+  left: .17em;
+  position: absolute;
+  }
+
+.zoom-in > *:nth-child(2),
+.zoom-out > *:nth-child(2) {
+  height: .1em;
+  width: .3em;
+  background: #000;
+  display: block;
+  top: .15em;
+  left: .05em;
+  position: absolute; }
+
+.zoom-in > *:nth-child(3),
+.zoom-out > *:nth-child(3) {
+  width: .3em;
+  height: .15em;
+  display: block;
+  background: #000;
+  position: absolute;
+  top: .35em; }
+
+.zoom-in > *:nth-child(3) {
+  left: .35em;
+  transform: rotate(45deg); }
+
+.zoom-out > *:nth-child(3) {
+  right: .35em;
+  transform: rotate(-45deg); }
 
 /*#endregion*/

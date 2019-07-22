@@ -1,4 +1,5 @@
 ﻿import * as file from 'fs';
+import { d3BaseSelector } from '../CORE/Constants';
 type Position = { x: number, y: number };
 
 
@@ -100,6 +101,51 @@ export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { eleme
 
 /** type of class defining given type (typeof cls = Type<cls>) */
 export interface Type<T> extends Function { new(...args: any[]): T; }
+
+export function MakeZoomInOutIcon(container: d3BaseSelector, type: "in" | "out") {
+    const svg = container.append("svg");
+    const g = svg.append("g");
+    svg.style("width", "1em").style("height", "1em")
+        ;
+    g.style("font-size:1.4em")
+        ;
+    g.append("circle")
+        .attr("cx", ".3em")
+        .attr("cy", ".3em")
+        .attr("r", ".2em")
+        .attr("stroke", "black")
+        .attr("stroke-width", ".045em")
+        .attr("fill", "none")
+        ;
+    g.append("line")
+        .attr("x1", ".17em")
+        .attr("x2", ".42em")
+        .attr("y1", ".3em")
+        .attr("y2", ".3em")
+        .attr("stroke", "black")
+        .attr("stroke-width", ".04em")
+        .attr("stroke-linecap", "round")
+        ;
+    if (type === "in")
+        g.append("line")
+            .attr("y1", ".17em")
+            .attr("y2", ".42em")
+            .attr("x1", ".3em")
+            .attr("x2", ".3em")
+            .attr("stroke", "black")
+            .attr("stroke-width", ".04em")
+            .attr("stroke-linecap", "round")
+            ;
+    g.append("line")
+        .attr("y1", ".45em")
+        .attr("x1", ".45em")
+        .attr("y2", ".6em")
+        .attr("x2", ".6em")
+        .attr("stroke", "black")
+        .attr("stroke-width", ".07em")
+        .attr("stroke-linecap", "round")
+        ;
+}
 
 //todo: async
 export function fileExample() {

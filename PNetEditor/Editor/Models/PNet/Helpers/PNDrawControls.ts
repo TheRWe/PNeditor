@@ -1,6 +1,7 @@
 ﻿import { d3BaseSelector } from "../../../../CORE/Constants";
 import { PNEditor } from "../../../PNEditor";
 import { ToggleSwitch } from "../../../../CORE/ToggleSwitch";
+import { MakeZoomInOutIcon } from "../../../../Helpers/purify";
 
 
 export class PNDrawControls {
@@ -16,20 +17,29 @@ export class PNDrawControls {
 
         container.append("input")
             .attr("type", "button")
-            .attr("value", "UNDO")
-            .style("width", "95px")
+            .attr("value", "⇦")
+            .style("width", "1.5em")
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
+            .style("padding-top",".1em")
             .on("click", () => { editor.pnAction.Undo(); editor.pnDraw.update(); })
 
         container.append("input")
             .attr("type", "button")
-            .attr("value", "REDO")
-            .style("width", "95px")
+            .attr("value", "⇨")
+            .style("width", "1.5em")
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
+            .style("padding-top",".1em")
             .on("click", () => { editor.pnAction.Redo(); editor.pnDraw.update(); })
 
         container.append("input")
             .attr("type", "button")
-            .attr("value", "Print")
-            .style("width", "95px")
+            .attr("value", "🖶")
+            .style("width", "1.5em")
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
+            .style("padding-top", ".1em")
             .on("click", () => {
                 editor.pnDraw.container.classed("print", true);
                 window.print();
@@ -39,20 +49,28 @@ export class PNDrawControls {
 
 
         // todo: omezení max min velikost
-        container.append("span").text("Zoom ");
+        //container.append("span").text("🔍 ");
 
-        container.append("input")
-            .attr("type", "button")
-            .attr("value", "+")
+        const zoomInContainer = container
+            .append("div")
+            .style("display", "inline-block")
+            .style("font-size", "1.8em")
+            .style("cursor", "pointer")
             .on("click", () => { editor.pnDraw.scale += 0.1; })
             ;
-        container.append("span").text("/");
 
-        container.append("input")
-            .attr("type", "button")
-            .attr("value", "-")
+        MakeZoomInOutIcon(zoomInContainer, "in");
+
+
+        const zoomOutContainer = container
+            .append("div")
+            .style("display", "inline-block")
+            .style("font-size", "1.8em")
+            .style("cursor", "pointer")
             .on("click", () => { editor.pnDraw.scale -= 0.1; })
             ;
+
+        MakeZoomInOutIcon(zoomOutContainer, "out");
 
 
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");

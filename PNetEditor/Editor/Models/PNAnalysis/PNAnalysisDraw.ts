@@ -52,6 +52,8 @@ export class PNAnalysisDraw extends DrawBase{
         super(container);
         container
             .style("font-size", "1.2em")
+            .style("border","1px lightgray solid")
+            .style("padding", "4px")
             .classed("unselectable", true)
             ;
         const leftDiv = container.append("div")
@@ -63,7 +65,7 @@ export class PNAnalysisDraw extends DrawBase{
             .style("display", "inline-block")
             ;
 
-        ["states", "bounded", "Contains ω marking", "reversible", "terminates", "deadlock-free"].forEach(x => {
+        ["states", "bounded", "ω marking", "reversible", "terminates", "deadlock-free"].forEach(x => {
             leftDiv.append("div")
                 .text(x)
                 ;
