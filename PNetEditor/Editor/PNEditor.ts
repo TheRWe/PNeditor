@@ -645,10 +645,7 @@ export class PNEditor implements TabInterface {
         this.InitTable();
 
         tab.AddOnBeforeRemove((event: BeforeRemoveEvent) => {
-            if (this._analysis) {
-                this._analysis.models.reachabilityTree.calculatingToDepth = false;
-                this._analysis = null;
-            }
+            this._analysis = null;
         });
 
         groupmap.set(tab.parentTabGroup, this);

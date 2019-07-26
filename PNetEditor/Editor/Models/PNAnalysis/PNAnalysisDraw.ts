@@ -1,13 +1,14 @@
 ﻿import { DrawBase, Callbacks } from "../../Models/_Basic/DrawBase";
-import { PNModel } from "../PNet/PNModel";
+import { PNModel, JSONNet } from "../PNet/PNModel";
 import { d3BaseSelector } from "../../../CORE/Constants";
 import { typedNull } from "../../../Helpers/purify";
-import { ReachabilityTree } from "./Reachability/ReachabilityTree";
+import { CoverabilityGraph } from "./Reachability/ReachabilityTree";
 import { PNAnalysisModel } from "./PNAnalysisModel";
 
 export class PNAnalysisDraw extends DrawBase{
     public models = {
-        pnanalysisModel: null as PNAnalysisModel,
+        CoverabilityGraph: null as CoverabilityGraph,
+        pnet: null as JSONNet,
     };
 
     public Callbacks = {
@@ -19,17 +20,17 @@ export class PNAnalysisDraw extends DrawBase{
     };
 
     protected _update(): void {
-        const PNAnalysisModel = this.models.pnanalysisModel;
+        const CoverabilityGraph = this.models.CoverabilityGraph;
 
         const rightDiv = this.Selectors.rightDiv.html("");
 
         [
-            PNAnalysisModel.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
-            PNAnalysisModel.containstOmega ? "No" : "" + PNAnalysisModel.maxMarking + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?"),
-            PNAnalysisModel.containstOmega ? "Yes" : "No" + (PNAnalysisModel.isCalculatedAllMarking ? "" : "?"),
-            PNAnalysisModel.reversible ? "Yes" : "No",
-            PNAnalysisModel.terminates ? "Yes" : "No",
-            PNAnalysisModel.deadlockFree ? "Yes" : "No",
+            CoverabilityGraph.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
+            CoverabilityGraph.containstOmega ? "No" : "" + CoverabilityGraph.maxMarking + (CoverabilityGraph.isCalculatedAllMarking ? "" : "?"),
+            CoverabilityGraph.containstOmega ? "Yes" : "No" + (CoverabilityGraph.isCalculatedAllMarking ? "" : "?"),
+            CoverabilityGraph.reversible ? "Yes" : "No",
+            CoverabilityGraph.terminates ? "Yes" : "No",
+            CoverabilityGraph.deadlockFree ? "Yes" : "No",
         ].forEach(x => {
             rightDiv.append("div")
                 .text(x)
@@ -39,13 +40,12 @@ export class PNAnalysisDraw extends DrawBase{
 
     }
 
-    //private models = {
-    //    markingModel: typedNull<PNMarkingModel>(),
-    //}
-
-    public setReachabilityTree(markingModel: ReachabilityTree) {
-        this.models.pnanalysisModel.tree = markingModel;
-        this.update();
+    public setPnet(pnet: JSONNet) {
+        this.models.pnet = pnet;
+        const g = this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
+        g.Calculate().then(() => {
+            this.update();
+        })
     }
 
     constructor(container: d3BaseSelector) {
@@ -70,8 +70,6 @@ export class PNAnalysisDraw extends DrawBase{
                 .text(x)
                 ;
         });
-
-        this.models.pnanalysisModel = new PNAnalysisModel();
     }
 }
 

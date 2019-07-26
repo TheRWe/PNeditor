@@ -1,5 +1,5 @@
 ﻿import { ModelBase } from "../_Basic/ModelBase";
-import { Position } from "./../../../CORE/Constants";
+import { Position, numbers } from "./../../../CORE/Constants";
 import { ForceNode } from "../_Basic/DrawBase";
 
 export class PNModel extends ModelBase<JSONNet>{
@@ -197,7 +197,8 @@ export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking
     const marking: placeMarking[] = net.places.map(p => {
         let marking = (currentMarking.find(x => p.id === x.id) || { marking: 0 }).marking;
         const arces = net.arcs.filter(x => x.place_id === p.id && x.transition_id === transitionID);
-        arces.forEach(x => { marking += x.toPlace - x.toTransition });
+        if (marking !== numbers.omega)
+            arces.forEach(x => { marking += x.toPlace - x.toTransition });
         return { id: p.id, marking } as placeMarking;
     });
     const enabledTransitionsIDs: number[] = GetEnabledTransitionsIDs(net, marking);

@@ -2,13 +2,12 @@
 import { Tab } from "../../../CORE/TabControl/Tab";
 import { typedNull } from "../../../Helpers/purify";
 import { PNAnalysisDraw } from "./PNAnalysisDraw";
-import { ReachabilityTree, ReachabilitySettings } from "./Reachability/ReachabilityTree";
+import { CoverabilityGraph, ReachabilitySettings } from "./Reachability/ReachabilityTree";
 import { d3BaseSelector } from "../../../CORE/Constants";
 
 export class PNAnalysis {
     public readonly models = {
         pnModel: typedNull<PNModel>(),
-        reachabilityTree: typedNull<ReachabilityTree>(),
     };
 
     private draws = {
@@ -20,22 +19,13 @@ export class PNAnalysis {
     };
 
     public update() {
-        if (this.models.reachabilityTree)
-            this.models.reachabilityTree.calculatingToDepth = false;
-
-        this.draws.pnAnalysisDraw.models.pnanalysisModel.tree = this.models.reachabilityTree = new ReachabilityTree(this.models.pnModel.toJSON());
-
         const self = this;
         (async function () {
             let calculating = true;
-
-            let graphCalc = false;
-
+            self.draws.pnAnalysisDraw.setPnet(self.models.pnModel.toJSON());
 
             function raf() {
                 self.draws.pnAnalysisDraw.update();
-
-                // todo: vykrslování marking grafu
 
                 if (calculating) {
                     requestAnimationFrame(raf);
@@ -43,8 +33,7 @@ export class PNAnalysis {
             }
             raf();
 
-            await self.models.reachabilityTree.calculateToDepth(ReachabilitySettings.defaultCalculationDepth);
-
+            await self.draws.pnAnalysisDraw.models.CoverabilityGraph.Calculate();
 
             console.debug(self);
 
@@ -54,7 +43,6 @@ export class PNAnalysis {
     }
 
     public close() {
-        this.models.reachabilityTree.calculatingToDepth = false;
     }
 
     constructor(containers: { analysisContainer: d3BaseSelector }, pnmodel: PNModel) {
