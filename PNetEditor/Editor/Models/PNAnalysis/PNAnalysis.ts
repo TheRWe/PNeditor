@@ -33,7 +33,18 @@ export class PNAnalysis {
             }
             raf();
 
-            await self.draws.pnAnalysisDraw.models.CoverabilityGraph.Calculate();
+            async function calculate() {
+                await self.draws.pnAnalysisDraw.models.CoverabilityGraph.Calculate();
+
+                if (calculating) {
+                    calculate();
+                }
+            }
+            calculate();
+
+
+            // todo: do nastavení
+            await new Promise(r => setTimeout(r, 10000));
 
             console.debug(self);
 

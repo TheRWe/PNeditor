@@ -63,8 +63,11 @@ export class CoverabilityGraph {
             graph.E.push([marking, transition, calculatedMarking]);
         }
 
-        this.graph = graph;
         console.groupCollapsed("calculation done");
+        if (this.graph.V.length === 1 || this.graph.V.length > graph.V.length) {
+            console.debug("graph updated");
+            this.graph = graph;
+        }
         console.groupCollapsed("V");
         graph.V.forEach(x => console.debug(markingToString(x)));
         console.groupEnd();
