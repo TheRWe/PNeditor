@@ -5,7 +5,7 @@ import { typedNull } from "../../../Helpers/purify";
 import { CoverabilityGraph } from "./Reachability/ReachabilityTree";
 import { PNAnalysisModel } from "./PNAnalysisModel";
 
-export class PNAnalysisDraw extends DrawBase{
+export class PNAnalysisDraw extends DrawBase {
     public models = {
         CoverabilityGraph: null as CoverabilityGraph,
         pnet: null as JSONNet,
@@ -43,16 +43,17 @@ export class PNAnalysisDraw extends DrawBase{
     public setPnet(pnet: JSONNet) {
         this.models.pnet = pnet;
         const g = this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
-        g.Calculate().then(() => {
-            this.update();
-        })
+        if (pnet.places.length > 0)
+            g.Calculate().then(() => {
+                this.update();
+            })
     }
 
     constructor(container: d3BaseSelector) {
         super(container);
         container
             .style("font-size", "1.2em")
-            .style("border","1px lightgray solid")
+            .style("border", "1px lightgray solid")
             .style("padding", "4px")
             .classed("unselectable", true)
             ;

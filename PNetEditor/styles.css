@@ -27,12 +27,12 @@ th {
     right: 0;
     z-index: 999; }
   .print {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
     max-width: 100% !important;
     max-height: 100% !important;
     width: 100% !important;
@@ -42,7 +42,7 @@ button, .button, input[type=button] {
   display: inline-block;
   margin: 1px;
   text-decoration: none;
-  background: inherit;
+  background: #ebebeb;
   color: inherit;
   font-family: sans-serif;
   font-size: inherit;
@@ -51,7 +51,12 @@ button, .button, input[type=button] {
   transition: none;
   user-select: none;
   padding: .2em;
-  border: 1px solid lightgray; }
+  border: none;
+  box-shadow: 2px 3px 7px lightgrey; }
+
+button:hover, .button:hover, input[type=button]:hover {
+  background: #e1e1e1;
+  box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.1); }
 
 button:focus {
   outline: none; }
@@ -121,8 +126,8 @@ body {
   .page-left {
     flex-basis: 200px;
     min-width: 200px;
-    border-right: 1px gray solid;
-    padding: 5px;
+    border-right: 3px lightgray solid;
+    padding: 10px;
     overflow-y: auto; }
   .page-content {
     flex: auto; }
@@ -133,22 +138,31 @@ body {
   /*color: white;*/ }
 
 .control-panel-tab {
-  background-color: azure;
-  padding: 5px 10px; }
+  /* background-color: azure; */
+  padding: 0px 0px;
+  /* border: 2px solid lightgray; */
+  }
   .control-panel-tab:nth-child(5n + 1) {
-    background-color: #00ff00; }
+    /* background-color: #00ff00; */
+    }
   .control-panel-tab:nth-child(5n + 2) {
-    background-color: #ff0000; }
+    /* background-color: #ff0000; */
+    }
   .control-panel-tab:nth-child(5n + 3) {
-    background-color: #0000ff; }
+    /* background-color: #0000ff; */
+    }
   .control-panel-tab:nth-child(5n + 4) {
-    background-color: #ff00ff; }
+    /* background-color: #ff00ff; */
+    }
   .control-panel-tab:nth-child(5n + 5) {
-    background-color: #ffff00; }
+    /* background-color: #ffff00; */
+    }
   .control-panel-tab-sub {
     background-color: white;
     color: black;
-    width: 100%; }
+    width: 100%;
+    border: 2px solid lightgrey;
+    }
     .control-panel-tab-sub-selected {
       background-color: lightgray; }
 
@@ -199,19 +213,17 @@ label.switcher {
   height: .4em;
   border-radius: .4em;
   position: relative;
-  border: 0.05em solid black;
-  margin-left: .1em;
-  }
+  border: .1em solid black;
+  margin-left: .1em; }
 
 .zoom-in > *:nth-child(1) {
-  width: .05em;
+  width: .1em;
   height: .3em;
   background: #000;
   display: block;
   top: .05em;
-  left: .17em;
-  position: absolute;
-  }
+  left: .15em;
+  position: absolute; }
 
 .zoom-in > *:nth-child(2),
 .zoom-out > *:nth-child(2) {

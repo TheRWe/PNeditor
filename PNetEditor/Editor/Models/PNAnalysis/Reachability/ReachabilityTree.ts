@@ -159,5 +159,7 @@ function isSameMarking(one: marking, another: marking) {
 }
 
 function markingToString(mark: marking) {
+    if (mark.length === 0)
+        return "";
     return mark.sort(SortKeySelector(x => x.id)).map(y => y.marking === omega ? "ω" : y.marking + "").reduce((x, y) => x + y);
 }

@@ -40,7 +40,9 @@ export class PNAnalysis {
                     calculate();
                 }
             }
-            calculate();
+            const net = self.draws.pnAnalysisDraw.models.CoverabilityGraph.net;
+            if (net.places.length > 0 && net.transitions.length > 0)
+                calculate();
 
 
             // todo: do nastavení

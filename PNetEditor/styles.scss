@@ -41,12 +41,12 @@ th{
     }
 
     .print {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
         max-width: 100% !important;
         max-height: 100% !important;
         width: 100% !important;
@@ -59,7 +59,7 @@ button, .button, input[type=button] {
     display: inline-block;
     margin: 1px;
     text-decoration: none;
-    background: inherit;
+    background: rgb(235,235,235);
     color: inherit;
     font-family: sans-serif;
     font-size: inherit;
@@ -68,7 +68,13 @@ button, .button, input[type=button] {
     transition: none;
     user-select: none;
     padding: .2em;
-    border: 1px solid lightgray;
+    border: none;
+    box-shadow: 2px 3px 7px lightgrey;
+}
+
+button:hover, .button:hover, input[type=button]:hover {
+    background: rgb(225,225,225);
+    box-shadow: 2px 3px 7px rgba(0,0,0,.1);
 }
 
 button:focus {
@@ -167,8 +173,8 @@ body {
     &-left {
         flex-basis: 200px;
         min-width: 200px;
-        border-right: 1px gray solid;
-        padding: 5px;
+        border-right: 3px lightgray solid;
+        padding: 10px;
         overflow-y: auto;
     }
 
