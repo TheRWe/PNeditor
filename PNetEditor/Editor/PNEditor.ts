@@ -23,7 +23,6 @@ export class PNEditor implements TabInterface {
     /** Container under controlbar */
     public readonly underControlContainer: d3BaseSelector;
     public readonly svg: d3BaseSelector;
-    private readonly analysisContainer: d3BaseSelector;
 
     public readonly pnModel: PNModel;
     public readonly pnDraw: PNDraw;
@@ -525,6 +524,29 @@ export class PNEditor implements TabInterface {
 
     //#region Table
 
+    private readonly buttonTableHide: d3BaseSelector;
+    private readonly tableContainer: d3BaseSelector;
+    private _tableVisible = true;
+    public get tableVisible() {
+        return this._tableVisible;
+    }
+    public set tableVisible(v:boolean) {
+        this._tableVisible = v;
+        if (v) {
+            this.buttonTableHide
+                .text("⇩")
+                ;
+            this.tableContainer.style("display", "block");
+        } else {
+            this.buttonTableHide
+                .text("⇧")
+                ;
+            this.tableContainer.style("display", "none");
+        }
+    }
+
+
+
     // todo: hide table
 
     private _expandTable(configID: number, transitionID: number) {
@@ -562,6 +584,33 @@ export class PNEditor implements TabInterface {
     //#endregion
 
 
+    //#region Analysis
+    private readonly buttonAnalysisHide: d3BaseSelector;
+    private readonly analysisContainer: d3BaseSelector;
+    private _analysisVisible = true;
+    public get analysisVisible() {
+        return this._analysisVisible;
+    }
+    public set analysisVisible(v: boolean) {
+        this._analysisVisible = v;
+        if (v) {
+            this.buttonAnalysisHide
+                .text("⇩")
+                ;
+            this.analysisContainer.style("display", "block");
+        } else {
+            this.buttonAnalysisHide
+                .text("⇧")
+                ;
+            this.analysisContainer.style("display", "none");
+        }
+    }
+
+
+	//#endregion
+
+
+
     constructor(tab: Tab, pnmodel: PNModel) {
         this.tab = tab;
 
@@ -594,23 +643,58 @@ export class PNEditor implements TabInterface {
         const tableDiv = this.underControlContainer
             .append("div")
             .style("position", "absolute")
-            .style("max-width", "500px")
-            .style("max-height", "300px")
             .style("right", "20px")
             .style("bottom", "20px")
+            ;
+
+        const tableHideButton = this.buttonTableHide = tableDiv.append("div")
+            .style("width", "35px")
+            .style("height", "25px")
+            .style("display", "block")
+            .style("margin-left", "auto")
+            .classed("button", true)
+            .text("⇩")
+            .on("click", () => {
+                this.tableVisible = !this.tableVisible;
+            })
+            ;
+
+        const tableContainer = this.tableContainer = tableDiv.append("div")
+            .style("max-width", "500px")
+            .style("max-height", "300px")
             .style("background", "lightgray")
             .style("border", "2px lightgray solid")
             .style("overflow", "auto")
             ;
 
-        const analysisDiv = this.analysisContainer = this.underControlContainer
+
+
+        const analysisDiv = this.underControlContainer
             .append("div")
             .style("position", "absolute")
             .style("left", "10px")
             .style("bottom", "20px")
             ;
 
-        this.tableDraw = new PlaceTransitionTableDraw(tableDiv);
+        const analysisButton = this.buttonAnalysisHide = analysisDiv.append("div")
+            .style("width", "35px")
+            .style("height", "25px")
+            .style("display", "block")
+            //.style("margin-left", "auto")
+            .classed("button", true)
+            .text("⇩")
+            .on("click", () => {
+                this.analysisVisible = !this.analysisVisible;
+            })
+            ;
+
+        const analysisContainer = this.analysisContainer = analysisDiv.append("div")
+            .style("background", "rgba(255,255,255,0.9)")
+            ;
+
+
+
+        this.tableDraw = new PlaceTransitionTableDraw(tableContainer);
 
         this.pnModel = pnmodel;
 
