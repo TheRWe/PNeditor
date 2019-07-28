@@ -165,34 +165,34 @@ function InitTabControl() {
     // todo: test - smazat
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const tab = tabControl.addTab();
-    //tabControl.addTab(tab.parentTabGroup);
+    //const tab = tabControl.addTab();
+    ////tabControl.addTab(tab.parentTabGroup);
 
-    const testJsonnet: JSONNet = {
-        places: [
-            { id: 0, marking: 10 },
-            { id: 1, marking: 15 },
-            { id: 2, marking: 13 },
+    //const testJsonnet: JSONNet = {
+    //    places: [
+    //        { id: 0, marking: 10 },
+    //        { id: 1, marking: 15 },
+    //        { id: 2, marking: 13 },
 
-            { id: 4, marking: 20 },
-        ],
-        transitions: [
-            { id: 0 },
-            { id: 1 },
-            { id: 2 },
-        ],
-        arcs: [],
-    }
+    //        { id: 4, marking: 20 },
+    //    ],
+    //    transitions: [
+    //        { id: 0 },
+    //        { id: 1 },
+    //        { id: 2 },
+    //    ],
+    //    arcs: [],
+    //}
 
-    const table = new PlaceTransitionTableDraw(tab.container);
-    table.models.net = testJsonnet;
-    table.models.configurations = [
-        { enabledTransitionsIDs: [1], marking: [{ id: 0, marking: 5 }] },
-        { enabledTransitionsIDs: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
-    ] as netConfiguration[];
-    table.update();
+    //const table = new PlaceTransitionTableDraw(tab.container);
+    //table.models.net = testJsonnet;
+    //table.models.configurations = [
+    //    { enabledTransitionsIDs: [1], marking: [{ id: 0, marking: 5 }] },
+    //    { enabledTransitionsIDs: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
+    //] as netConfiguration[];
+    //table.update();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

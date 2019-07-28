@@ -19,25 +19,30 @@ export class PNAnalysisDraw extends DrawBase {
         rightDiv: null as d3BaseSelector,
     };
 
+    public Clear() {
+        const rightDiv = this.Selectors.rightDiv.html("");
+        rightDiv.append("p").text("   ");
+    }
+
     protected _update(): void {
         const CoverabilityGraph = this.models.CoverabilityGraph;
 
         const rightDiv = this.Selectors.rightDiv.html("");
-
-        [
-            CoverabilityGraph.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
-            CoverabilityGraph.containstOmega ? "No" : "" + CoverabilityGraph.maxMarking + (CoverabilityGraph.isCalculatedAllMarking ? "" : "?"),
-            CoverabilityGraph.containstOmega ? "Yes" : "No" + (CoverabilityGraph.isCalculatedAllMarking ? "" : "?"),
-            CoverabilityGraph.reversible ? "Yes" : "No",
-            CoverabilityGraph.terminates ? "Yes" : "No",
-            CoverabilityGraph.deadlockFree ? "Yes" : "No",
-        ].forEach(x => {
-            rightDiv.append("div")
-                .text(x)
-                ;
-        });
-
-
+        if (CoverabilityGraph.calculated)
+            [
+                CoverabilityGraph.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
+                CoverabilityGraph.containstOmega ? "No" : "" + CoverabilityGraph.maxMarking,
+                CoverabilityGraph.containstOmega ? "Yes" : "No",
+                CoverabilityGraph.reversible ? "Yes" : "No",
+                CoverabilityGraph.terminates ? "Yes" : "No",
+                CoverabilityGraph.deadlockFree ? "Yes" : "No",
+            ].forEach(x => {
+                rightDiv.append("div")
+                    .text(x)
+                    ;
+            });
+        else
+            this.Clear();
     }
 
     public setPnet(pnet: JSONNet) {

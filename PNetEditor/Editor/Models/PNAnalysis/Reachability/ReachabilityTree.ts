@@ -18,6 +18,7 @@ export const ReachabilitySettings = {
 export class CoverabilityGraph {
     public readonly net: JSONNet;
 
+    public calculated = false;
     public root: Vertice;
     public graph: Graph;
 
@@ -67,6 +68,8 @@ export class CoverabilityGraph {
         if (graphChanged) {
             this.graph = graph;
         }
+        console.debug("calculating done");
+        this.calculated = true;
         /*
         console.groupCollapsed("calculation done");
         if (graphChanged) {
@@ -88,16 +91,8 @@ export class CoverabilityGraph {
     public get containstOmega(): boolean {
         return this.graph.V.some(x => x.some(y => y.marking === numbers.omega));
     }
-    public get isCalculating(): boolean {
-        //todo: implementovat ?
-        return undefined;
-    };
     public get numStates(): number {
         return this.graph.V.length;
-    };
-    public get isCalculatedAllMarking(): boolean {
-        //todo: implementovat ?
-        return undefined;
     };
     public get maxMarking(): number {
         return Math.max(...this.graph.V.map(x => Math.max(...x.map(y => y.marking).filter(y => y !== numbers.omega))));
