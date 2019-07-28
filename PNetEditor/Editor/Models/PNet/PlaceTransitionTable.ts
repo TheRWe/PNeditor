@@ -1,6 +1,7 @@
 ﻿import { d3BaseSelector } from "../../../CORE/Constants";
 import { JSONNet, netConfiguration } from "./PNModel";
 import { DrawBase, Callbacks } from "../_Basic/DrawBase";
+import { getArrayElementMapToNumber, convertToNumberingScheme } from "../../../Helpers/purify";
 
 export type ConfigTransitionClickEvent = { configIndex: number, transitionID: number };
 export type ConfigShowClickEvent = { configIndex: number };
@@ -32,10 +33,12 @@ export class PlaceTransitionTableDraw extends DrawBase {
 
             head.append("th").text("");
 
-            placeIndexes.forEach(x => {
-                const p = net.places.find(y => y.id === x);
-                head.append("th").text(p.id).style("min-width", "1em");
-            })
+            const mapper = getArrayElementMapToNumber(placeIndexes);
+            placeIndexes
+                .forEach(x => {
+                    const p = net.places.find(y => y.id === x);
+                    head.append("th").text(convertToNumberingScheme(mapper(x)+1)).style("min-width", "1em");
+                })
 
             head.append("th").style("background", "black");
 

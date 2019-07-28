@@ -102,6 +102,31 @@ export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { eleme
 /** type of class defining given type (typeof cls = Type<cls>) */
 export interface Type<T> extends Function { new(...args: any[]): T; }
 
+/** 
+ * source: https://codereview.stackexchange.com/questions/16124/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting
+ */
+export function convertToNumberingScheme(number: number) {
+    var baseChar = ("A").charCodeAt(0),
+        letters = "";
+
+    do {
+        number -= 1;
+        letters = String.fromCharCode(baseChar + (number % 26)) + letters;
+        number = (number / 26) >> 0; // quick `floor`
+    } while (number > 0);
+
+    return letters;
+}
+
+/**
+ * 
+ */
+export function getArrayElementMapToNumber(arr: any[]) {
+    return (elm: any) => {
+        return arr.findIndex(x => x === elm);
+    };
+}
+
 export function MakeZoomInOutIcon(container: d3BaseSelector, type: "in" | "out") {
     const svg = container.append("svg");
     const g = svg.append("g");
