@@ -530,18 +530,24 @@ export class PNEditor implements TabInterface {
     public get tableVisible() {
         return this._tableVisible;
     }
-    public set tableVisible(v:boolean) {
+    public set tableVisible(v: boolean) {
         this._tableVisible = v;
         if (v) {
             this.buttonTableHide
                 .text("⇩")
                 ;
-            this.tableContainer.style("display", "block");
+            this.tableContainer
+                .style("border", "3px lightgray solid")
+                .style("max-height", "300px")
+                ;
         } else {
             this.buttonTableHide
                 .text("⇧")
                 ;
-            this.tableContainer.style("display", "none");
+            this.tableContainer
+                .style("border", "0px lightgray solid")
+                .style("max-height", "0px")
+                ;
         }
     }
 
@@ -597,17 +603,23 @@ export class PNEditor implements TabInterface {
             this.buttonAnalysisHide
                 .text("⇩")
                 ;
-            this.analysisContainer.style("display", "block");
+            this.analysisContainer
+                .style("border", "3px lightgray solid")
+                .style("max-height", "300px")
+                ;
         } else {
             this.buttonAnalysisHide
                 .text("⇧")
                 ;
-            this.analysisContainer.style("display", "none");
+            this.analysisContainer
+                .style("border", "0px lightgray solid")
+                .style("max-height", "0px")
+                ;
         }
     }
 
 
-	//#endregion
+    //#endregion
 
 
 
@@ -660,11 +672,12 @@ export class PNEditor implements TabInterface {
             ;
 
         const tableContainer = this.tableContainer = tableDiv.append("div")
-            .style("max-width", "500px")
-            .style("max-height", "300px")
             .style("background", "lightgray")
-            .style("border", "2px lightgray solid")
+            .style("max-width", "500px")
             .style("overflow", "auto")
+            .style("transition", "border .3s ease, max-height .3s ease")
+            .style("display", "block")
+            .style("overflow-y", "scroll")
             ;
 
 
@@ -690,6 +703,9 @@ export class PNEditor implements TabInterface {
 
         const analysisContainer = this.analysisContainer = analysisDiv.append("div")
             .style("background", "rgba(255,255,255,0.9)")
+            .style("transition", "border .3s ease, max-height .3s ease")
+            .style("display", "block")
+            .style("overflow", "hidden")
             ;
 
 
@@ -733,6 +749,9 @@ export class PNEditor implements TabInterface {
         });
 
         groupmap.set(tab.parentTabGroup, this);
+
+        this.analysisVisible = true;
+        this.tableVisible = true;
     }
 }
 

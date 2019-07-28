@@ -10,7 +10,8 @@ function createWindow() {
     //todo: může být frameless window
     mainWindow = new BrowserWindow({
         width: 1600, height: 900,
-        title: 'PetriNetEdit'
+        title: 'PetriNetEdit',
+        minWidth: 900, minHeight: 500
     });
 
     const userDefaultNetSavePath = path.join(app.getPath('userData'), 'User_saved_nets');
