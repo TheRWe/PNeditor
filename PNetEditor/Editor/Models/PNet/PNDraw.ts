@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
-import { typedNull } from "./../../../Helpers/purify";
+import { typedNull, convertToNumberingScheme, getArrayElementMapToNumber } from "./../../../Helpers/purify";
 import { DrawBase, Callbacks, CallbackType, ForceNode } from "../_Basic/DrawBase";
 import { d3BaseSelector, html, Position } from "../../../CORE/Constants";
 
@@ -175,6 +175,7 @@ export class PNDraw extends DrawBase{
         const transitions = netSelectors.transitions;
         const arcs = netSelectors.arcs;
 
+
         //#region Place
 
         const placesEnterGroup = places()
@@ -207,7 +208,28 @@ export class PNDraw extends DrawBase{
             .attr("dy", ".3em")
             .attr("font-size", 10)
             .text(d => d.marking || "")
-            .classed("txt", true)
+            .classed("marking", true)
+            ;
+
+
+        const placeEnterNameBackground = placesEnterGroup.append("text")
+            .classed("text-background", true)
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", "-1.3em")
+            .attr("font-size", 10)
+            // todo: class do constants
+            .style("stroke-width", ".5em")
+            .style("stroke", "white")
+            .style("stroke-linejoin", "round")
+            ;
+
+        const placeEntrName = placesEnterGroup.append("text")
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", "-1.3em")
+            .attr("font-size", 10)
+            .classed("idtxt", true)
             ;
 
         places()
@@ -215,8 +237,18 @@ export class PNDraw extends DrawBase{
             ;
         places()
             //todo: scaling
-            .select("text")
+            .select(".marking")
             .text(d => d.marking || "")
+            ;
+
+        const placeMapper = getArrayElementMapToNumber(places().data());
+        places()
+            .select(".idtxt")
+            .text(d => convertToNumberingScheme(placeMapper(d) + 1))
+            ;
+        places()
+            .select(".text-background")
+            .text(d => convertToNumberingScheme(placeMapper(d) + 1))
             ;
 
         //#endregion
@@ -249,6 +281,26 @@ export class PNDraw extends DrawBase{
             .text("ε")
             ;
 
+        const transitionEnterNameBackground = transitionEnterGroup.append("text")
+            .classed("text-background", true)
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", "-1.3em")
+            .attr("font-size", 10)
+            // todo: class do constants
+            .style("stroke-width", ".5em")
+            .style("stroke", "white")
+            .style("stroke-linejoin", "round")
+            ;
+
+        const transitionEnterName = transitionEnterGroup.append("text")
+            .classed("unselectable", true)
+            .attr("text-anchor", "middle")
+            .attr("dy", "-1.3em")
+            .attr("font-size", 10)
+            .classed("idtxt", true)
+            ;
+
         /*
         const transitionEnterSelect =
             transitionEnterGroup.append("rect")
@@ -274,6 +326,16 @@ export class PNDraw extends DrawBase{
         transitions()
             .select("rect")
             .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex())
+            ;
+
+        const transitionMapper = getArrayElementMapToNumber(transitions().data());
+        transitions()
+            .select(".idtxt")
+            .text(d => (transitionMapper(d) + 1))
+            ;
+        transitions()
+            .select(".text-background")
+            .text(d => (transitionMapper(d) + 1))
             ;
 
         //#endregion
@@ -365,6 +427,7 @@ export class PNDraw extends DrawBase{
             });
 
         //#endregion
+
 
         // todo:
         netSelectors.places().classed(html.classes.PNEditor.multiSelection.selected, false);

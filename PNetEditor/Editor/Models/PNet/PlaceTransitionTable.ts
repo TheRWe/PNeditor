@@ -33,19 +33,19 @@ export class PlaceTransitionTableDraw extends DrawBase {
 
             head.append("th").text("");
 
-            const mapper = getArrayElementMapToNumber(placeIndexes);
+            const placeMapper = getArrayElementMapToNumber(placeIndexes);
             placeIndexes
                 .forEach(x => {
                     const p = net.places.find(y => y.id === x);
-                    head.append("th").text(convertToNumberingScheme(mapper(x)+1)).style("min-width", "1em");
+                    head.append("th").text(convertToNumberingScheme(placeMapper(x)+1)).style("min-width", "1em");
                 })
 
             head.append("th").style("background", "black");
 
-
+            const transitionMapper = getArrayElementMapToNumber(transitionIndexes);
             transitionIndexes.forEach(x => {
                 const t = net.transitions.find(y => y.id === x);
-                head.append("th").text(t.id).style("min-width", "1.1em");
+                head.append("th").text(transitionMapper(x)+1).style("min-width", "1.1em");
             })
             return head;
         }
