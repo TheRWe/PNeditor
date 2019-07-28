@@ -39,12 +39,12 @@ export class CoverabilityGraph {
             const calculatedMarking = CalculateNextConfiguration(this.net, marking, transition).marking;
 
             const availableFrom = [] as marking[];
-            const searchAvailebleFrom = (node: marking) => {
+            const searchAvailebleFrom = async (node: marking) => {
                 if (availableFrom.some(x => x === node)) return;
                 availableFrom.push(node);
-                graph.E.filter(x => x["2"] === node).map(x => x["0"]).forEach(x => searchAvailebleFrom(x));
+                await Promise.all(graph.E.filter(x => x["2"] === node).map(x => x["0"]).map(x => searchAvailebleFrom(x)));
             }
-            searchAvailebleFrom(marking);
+            await searchAvailebleFrom(marking);
 
             availableFrom.filter(x => isLowerSameMarking(x, calculatedMarking)).forEach(availebleFromMarking => {
                 availebleFromMarking.forEach(p => {
@@ -63,10 +63,14 @@ export class CoverabilityGraph {
             graph.E.push([marking, transition, calculatedMarking]);
         }
 
-        console.groupCollapsed("calculation done");
-        if (this.graph.V.length === 1 || this.graph.V.length > graph.V.length) {
-            console.debug("graph updated");
+        const graphChanged = this.graph.V.length === 1 || this.graph.V.length > graph.V.length;
+        if (graphChanged) {
             this.graph = graph;
+        }
+        /*
+        console.groupCollapsed("calculation done");
+        if (graphChanged) {
+            console.debug("graph updated");
         }
         console.groupCollapsed("V");
         graph.V.forEach(x => console.debug(markingToString(x)));
@@ -75,6 +79,7 @@ export class CoverabilityGraph {
         graph.E.forEach(x => console.debug(markingToString(x["0"]) + "  " + x["1"] + "  " + markingToString(x["2"])));
         console.groupEnd();
         console.groupEnd();
+        */
     }
 
 

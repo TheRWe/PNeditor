@@ -33,10 +33,22 @@ export class PNAnalysis {
             }
             raf();
 
+            // todo: to settings
+            const maxSameGraphSizeTimes = 5;
+            let LastGraphSize = Number.MAX_SAFE_INTEGER;
+            let sameGraphSizeTimes = 0;
             async function calculate() {
-                await self.draws.pnAnalysisDraw.models.CoverabilityGraph.Calculate();
+                const g = self.draws.pnAnalysisDraw.models.CoverabilityGraph;
+                await g.Calculate();
 
-                if (calculating) {
+                if (LastGraphSize > g.numStates) {
+                    sameGraphSizeTimes = 0;
+                    LastGraphSize = g.numStates;
+                } else {
+                    sameGraphSizeTimes++;
+                }
+
+                if (calculating && g.containstOmega && sameGraphSizeTimes < maxSameGraphSizeTimes) {
                     calculate();
                 }
             }
