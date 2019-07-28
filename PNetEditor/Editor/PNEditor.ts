@@ -165,6 +165,12 @@ export class PNEditor implements TabInterface {
                     case editorMode.arcMake:
                         this.mouseEndArc();
                         break;
+                    case editorMode.valueEdit:
+                        this.keyboard.inputs.marking.editedPlace = null;
+                        this.keyboard.inputs.arcValue.editedArc = null;
+                        this.inputs.HideAllInputs();
+                        this.mode.swap();
+                        break;
                     default:
                         break;
                 }
