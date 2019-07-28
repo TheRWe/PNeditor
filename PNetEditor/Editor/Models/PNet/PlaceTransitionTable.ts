@@ -5,6 +5,7 @@ import { getArrayElementMapToNumber, convertToNumberingScheme } from "../../../H
 
 export type ConfigTransitionClickEvent = { configIndex: number, transitionID: number };
 export type ConfigShowClickEvent = { configIndex: number };
+export type ConfigShowHoverEvent = { configIndex: number | null };
 
 export class PlaceTransitionTableDraw extends DrawBase {
     public models = {
@@ -62,8 +63,14 @@ export class PlaceTransitionTableDraw extends DrawBase {
                 .style("background", "white")
                 .style("cursor", "pointer")
                 .classed("unselectable", true)
-                .on("mouseover", () => { showbutton.style("filter", "invert(1)") })
-                .on("mouseout", () => { showbutton.style("filter", "") })
+                .on("mouseover", () => {
+                    showbutton.style("filter", "invert(1)");
+                    this._onConfigShowHover({ configIndex: ci })
+                })
+                .on("mouseout", () => {
+                    showbutton.style("filter", "");
+                    this._onConfigShowHover({ configIndex: null })
+                })
                 .on("click", () => { this._onConfigShowClick({ configIndex: ci }); });
 
             placeIndexes.forEach(x => {
@@ -99,6 +106,11 @@ export class PlaceTransitionTableDraw extends DrawBase {
     private _onConfigShowClick: (e: ConfigShowClickEvent) => void = () => { };
     public AddOnConfigShowClick(callback: (e: ConfigShowClickEvent) => void) {
         const old = this._onConfigShowClick; this._onConfigShowClick = (...args) => { old(...args); callback(...args); };
+    }
+
+    private _onConfigShowHover: (e: ConfigShowHoverEvent) => void = () => { };
+    public AddOnConfigShowHover(callback: (e: ConfigShowHoverEvent) => void) {
+        const old = this._onConfigShowHover; this._onConfigShowHover = (...args) => { old(...args); callback(...args); };
     }
 
     constructor(container: d3BaseSelector) {

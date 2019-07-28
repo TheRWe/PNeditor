@@ -587,10 +587,17 @@ export class PNEditor implements TabInterface {
         this._resetTable();
         // funguje
         this.pnAction.AddOnModelChange(() => { this._resetTable(); });
-        this.tableDraw.AddOnConfigTransitionClick((e) => {
-            this._expandTable(e.configIndex, e.transitionID);
+        this.tableDraw.AddOnConfigTransitionClick(({ configIndex, transitionID }) => {
+            this._expandTable(configIndex, transitionID);
             this.tableDraw.update();
-        })
+        });
+        this.tableDraw.AddOnConfigShowHover(({ configIndex }) => {
+            if (configIndex === null)
+                this.pnDraw.models.configuration = null;
+            else
+                this.pnDraw.models.configuration = this.tableDraw.models.configurations[configIndex];
+            this.pnDraw.update();
+        });
     }
 
     //#endregion
@@ -737,6 +744,9 @@ export class PNEditor implements TabInterface {
 
         const pnDraw = this.pnDraw = new PNDraw(svg);
         pnDraw.models.net = pnmodel;
+        this.pnAction.AddOnModelChange(() => {
+            this.pnDraw.models.configuration = null;
+        });
         pnDraw.update();
 
         this._analysis = new PNAnalysis({ analysisContainer: this.analysisContainer }, this.pnModel);

@@ -1,4 +1,4 @@
-﻿import { Place, Arc, Transition, PNModel } from "./PNModel";
+﻿import { Place, Arc, Transition, PNModel, netConfiguration } from "./PNModel";
 import * as d3 from 'd3';
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
@@ -12,9 +12,10 @@ export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
 let defsIndex = 0;
 
 /** class for drawing petri net model as graph */
-export class PNDraw extends DrawBase{
+export class PNDraw extends DrawBase {
     public models = {
         net: null as PNModel,
+        configuration: null as netConfiguration,
     };
 
     private defs =
@@ -81,7 +82,7 @@ export class PNDraw extends DrawBase{
         }
     }
 
-    private _scale:number = 1;
+    private _scale: number = 1;
     public get scale(): number {
         return +this._scale;
     }
@@ -162,6 +163,7 @@ export class PNDraw extends DrawBase{
             return;
 
         const net = this.models.net;
+        const netConfig = this.models.configuration;
         const netSelectors = this.Selectors;
         const callbacks = this.Callbacks;
         const getPos = this.getPos.bind(this);
@@ -238,7 +240,7 @@ export class PNDraw extends DrawBase{
         places()
             //todo: scaling
             .select(".marking")
-            .text(d => d.marking || "")
+            .text(d => netConfig ? ((netConfig.marking.find(x => x.id === d.id) || { marking: 0 }).marking || "") : d.marking || "")
             ;
 
         const placeMapper = getArrayElementMapToNumber(places().data());
@@ -325,7 +327,7 @@ export class PNDraw extends DrawBase{
             ;
         transitions()
             .select("rect")
-            .style("fill", t => net.IsTransitionEnabled(t) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex())
+            .style("fill", t => (netConfig ? netConfig.enabledTransitionsIDs.findIndex(x => x === t.id) >= 0 : net.IsTransitionEnabled(t)) ? rgb(0, 128, 0).hex() : rgb(0, 0, 0).hex())
             ;
 
         const transitionMapper = getArrayElementMapToNumber(transitions().data());
