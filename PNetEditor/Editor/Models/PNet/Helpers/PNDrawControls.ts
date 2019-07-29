@@ -10,6 +10,8 @@ export class PNDrawControls {
 
     constructor(container: d3BaseSelector, editor: PNEditor) {
         this.container = container
+            .style("display", "flex")
+            .style("align-items", "center")
             .classed("control-bar", true)
             ;
 
@@ -55,25 +57,39 @@ export class PNDrawControls {
         const zoomInContainer = container
             .append("div")
             .style("display", "inline-block")
-            .style("font-size", "1.8em")
+            .style("font-size", "1.5em")
             .style("cursor", "pointer")
+            .style("height", "1.4em")
             .on("click", () => { editor.pnDraw.scale += 0.1; })
+            .classed("button", true)
             ;
 
         MakeZoomInOutIcon(zoomInContainer, "in");
-
+        zoomInContainer.select("svg")
+            .style("margin-top", "0.2em")
+            .style("margin-left", "0.2em")
+            ;
 
         const zoomOutContainer = container
             .append("div")
             .style("display", "inline-block")
-            .style("font-size", "1.8em")
             .style("cursor", "pointer")
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
             .on("click", () => { editor.pnDraw.scale -= 0.1; })
+            .classed("button", true)
             ;
 
         MakeZoomInOutIcon(zoomOutContainer, "out");
-
+        zoomOutContainer.select("svg")
+            .style("margin-top", "0.2em")
+            .style("margin-left", "0.2em")
+            ;
 
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");
+        this.toggleSwitchRunEdit.selectors.label
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
+            ;
     }
 }

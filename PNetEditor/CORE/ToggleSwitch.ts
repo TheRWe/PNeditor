@@ -4,7 +4,7 @@ import { typedNull } from "../Helpers/purify";
 export enum ToggleSwitchState { on = "on", off = "off", hidden = "hidden" }
 
 export class ToggleSwitch {
-    private selectors = {
+    public selectors = {
         label: typedNull<d3BaseSelector>(),
         input: typedNull<d3BaseSelector>(),
         labelOn: typedNull<d3BaseSelector>(),
