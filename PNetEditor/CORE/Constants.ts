@@ -3,6 +3,16 @@ export type Position = { x: number, y: number }
 
 export const html = {
     id: {
+        controlPanel: {
+            buttons: {
+                new: "file-button-new",
+                load: "file-button-load",
+                save: "file-button-save",
+                close: "file-button-close",
+            },
+
+        },
+        content: "content",
         PNEditor: {
             defs: {
                 arrowTransitionEnd: "defs-arrow-t-end",
@@ -11,8 +21,16 @@ export const html = {
         },
     },
     classes: {
-        page: {
-            controlPanelTabs: "control-panel-tabs",
+        controlPanel: {
+            container: "panel",
+            label: "panel-label",
+            button: "panel-button",
+            tabContainer: "panel-tab-container",
+            tabButton: "panel-button-tab",
+            tabSelected: "panel-button-tab-selected",
+        },
+        common: {
+            a4: "a4size",
         },
         PNEditor: {
             helper: {

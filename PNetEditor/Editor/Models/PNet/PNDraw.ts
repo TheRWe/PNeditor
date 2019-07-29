@@ -112,9 +112,9 @@ export class PNDraw extends DrawBase {
     private initializeContainer() {
 
         const svg = this.container
-            .attr("width", "100%")
-            .attr("height", "100%")
+            .classed(html.classes.common.a4, true)
             .style("transform-origin", "left top")
+            .style("border-bottom", "1px lightgray solid")
             ;
 
         const defs = svg.append('svg:defs');

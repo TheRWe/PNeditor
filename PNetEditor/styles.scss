@@ -1,4 +1,8 @@
-﻿$tabColors: #00ff00, #ff0000, #0000ff, #ff00ff, #ffff00;
+﻿$backgroundColor: white;
+$mainColor: #ebebeb;
+$secondaryColor: lightgray;
+$borderColor: lightgray;
+
 
 
 * {
@@ -10,22 +14,8 @@ html {
     box-sizing: border-box;
 }
 
-table {
-    text-align: end;
-}
-
-.table{
-    &-gray{
-        background: lightgray;
-        
-        tr {
-            background: white;
-        }
-    }
-}
-
-th{
-    text-align:center;
+body {
+    background: $backgroundColor;
 }
 
 @media print {
@@ -54,6 +44,10 @@ th{
     }
 }
 
+.a4size {
+    width: (210mm - 21mm);
+    height: (297mm - 29mm);
+}
 
 button, .button, input[type=button] {
     display: inline-block;
@@ -86,18 +80,67 @@ button:focus {
 }
 
 .no-border {
-    border: 0;
+    border: 0 !important;
 }
 
 .hidden {
     display: none !important;
 }
 
-
-.bright-on-hover:hover{
+.bright-on-hover:hover {
     filter: brightness(1.5);
 }
 
+.page {
+    height: 99vh;
+}
+
+/*#region Panel*/
+.panel {
+    flex-basis: 200px;
+    min-width: 200px;
+    border-right: 3px lightgray solid;
+    padding: 10px;
+    overflow-y: auto;
+
+    &-label {
+        margin: 10px 0;
+    }
+
+    &-button {
+        width: 100%;
+
+        &-tab {
+            margin: 2px 0px;
+            background-color: $backgroundColor;
+            color: black;
+            width: 100%;
+
+            &-selected {
+                background-color: $secondaryColor;
+            }
+        }
+    }
+
+    &-tab {
+        &-container {
+        }
+    }
+}
+/*#endregion*/
+
+.table {
+    text-align: end;
+    background: lightgray;
+
+    tr {
+        background: white;
+    }
+}
+
+th {
+    text-align: center;
+}
 
 .placeSVGCircle {
     animation: placeSVGCircleAnimation 0.4s cubic-bezier(1,1.5,0.7,2);
@@ -126,10 +169,7 @@ button:focus {
     -webkit-touch-callout: none;
     user-select: none;
 }
-
-
 /* tabs */
-
 .checkbox-tab-radio {
     display: none;
     /* label */
@@ -144,7 +184,6 @@ button:focus {
     background-color: darkolivegreen;
     color: white;
 }
-
 
 .select-outline {
     display: none;
@@ -164,65 +203,20 @@ body {
     display: flex;
 }
 
-
-
-
 .page {
-    height: 99vh;
-
-    &-left {
-        flex-basis: 200px;
-        min-width: 200px;
-        border-right: 3px lightgray solid;
-        padding: 10px;
-        overflow-y: auto;
-    }
-
     &-content {
         flex: auto;
     }
 }
 
-.button {
-    &-menu {
-        width: 100%;
-        /*background-color: black;*/
-        /*color: white;*/
-    }
+.control-bar {
+    border: 3px lightgray solid;
+    padding: .3em;
+    border-left: none;
+    background: rgb(220,220,220);
 }
-
-.control-panel {
-    &-tabs {
-    }
-
-    &-tab {
-        background-color: azure;
-        padding: 5px 10px;
-
-        @each $color in $tabColors {
-            $i: index($tabColors, $color);
-            $len: length($tabColors);
-
-            &:nth-child(#{$len}n + #{$i}) {
-                background-color: $color;
-            }
-        }
-
-        &-sub {
-            background-color: white;
-            color: black;
-            width: 100%;
-
-            &-selected {
-                background-color: lightgray;
-            }
-        }
-    }
-}
-
 
 /*#region Modal*/
-
 .modal {
     position: fixed;
     background: rgba(0,0,0,.6);
@@ -240,9 +234,9 @@ body {
         padding-top: 20%;
         position: relative;
         border: 4px lightgrey solid;
-        margin: 15% auto; 
+        margin: 15% auto;
         padding: 20px;
-        width: 80%; 
+        width: 80%;
     }
 
     &-message {
@@ -263,9 +257,7 @@ body {
         }
     }
 }
-
 /*#endregion*/
-
 
 /*#region switcher*/
 label.switcher {
@@ -283,13 +275,9 @@ label.switcher {
         display: none;
     }
 }
-
 /*#endregion*/
 
-
-
 /*#region ZoomIcon*/
-
 .zoom-in, .zoom-out {
     box-sizing: content-box;
     width: .4em;
@@ -340,6 +328,4 @@ label.switcher {
     right: .35em;
     transform: rotate(-45deg);
 }
-
 /*#endregion*/
-

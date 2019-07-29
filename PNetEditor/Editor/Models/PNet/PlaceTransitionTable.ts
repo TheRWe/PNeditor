@@ -120,7 +120,7 @@ export class PlaceTransitionTableDraw extends DrawBase {
 
         table
             .style("font-size", "1.1em")
-            .classed("table-gray", true)
+            .classed("table", true)
             .classed("unselectable", true)
             ;
 

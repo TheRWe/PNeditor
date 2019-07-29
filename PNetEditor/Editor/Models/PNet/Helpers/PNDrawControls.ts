@@ -10,10 +10,8 @@ export class PNDrawControls {
 
     constructor(container: d3BaseSelector, editor: PNEditor) {
         this.container = container
-            .style("background", "lightgray")
-
-        container
-            .style("margin", ".4em")
+            .classed("control-bar", true)
+            ;
 
         container.append("input")
             .attr("type", "button")
@@ -42,7 +40,10 @@ export class PNDrawControls {
             .style("padding-top", ".1em")
             .on("click", () => {
                 editor.pnDraw.container.classed("print", true);
+                const scale = editor.pnDraw.scale;
+                editor.pnDraw.scale = 1;
                 window.print();
+                editor.pnDraw.scale = scale;
                 editor.pnDraw.container.classed("print", false);
             })
             ;

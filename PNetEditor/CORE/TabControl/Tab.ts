@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../CORE/Constants";
+﻿import { d3BaseSelector, html } from "../../CORE/Constants";
 import { TabGroup } from "./TabGroup";
 
 
@@ -17,12 +17,12 @@ export class Tab {
 
     public Hide() {
         this.container.classed("hidden", true);
-        this.tabButton.classed("control-panel-tab-sub-selected", false);
+        this.tabButton.classed(html.classes.controlPanel.tabSelected, false);
     }
 
     public Show() {
         this.container.classed("hidden", false);
-        this.tabButton.classed("control-panel-tab-sub-selected", true);
+        this.tabButton.classed(html.classes.controlPanel.tabSelected, true);
     }
 
     private _onKeyDownWhenOpened: (e: TabKeyDownEvent) => void = () => { };
@@ -48,7 +48,7 @@ export class Tab {
 
         this.parentTabGroup = parentTabGroup;
         tabButton.classed("button", true);
-        tabButton.classed("control-panel-tab-sub", true);
+        tabButton.classed(html.classes.controlPanel.tabButton, true);
         tabButton.classed("no-border", true);
 
         this.label = "unnamed";

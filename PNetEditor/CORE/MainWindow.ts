@@ -108,15 +108,17 @@ const TabActions = {
 }
 
 function InitFileButtons() {
-    const buttonNew = d3.select("#buttonNew");
-    const buttonLoad = d3.select("#buttonLoad");
-    const buttonSave = d3.select("#buttonSave");
-    const buttonClose = d3.select("#buttonClose");
+    const btn = html.id.controlPanel.buttons;
+    const buttonNew = d3.select("#" + btn.new);
+    const buttonLoad = d3.select("#" + btn.load);
+    const buttonSave = d3.select("#" + btn.save);
+    const buttonClose = d3.select("#" + btn.close);
 
-    buttonNew.on("click", TabActions.new)
-    buttonLoad.on("click", TabActions.initDialog.load);
-    buttonSave.on("click", TabActions.initDialog.save);
-    buttonClose.on("click", TabActions.close);
+    const c = "click";
+    buttonNew.on(c, TabActions.new)
+    buttonLoad.on(c, TabActions.initDialog.load);
+    buttonSave.on(c, TabActions.initDialog.save);
+    buttonClose.on(c, TabActions.close);
 
     ipcRenderer.on("load-dialog-response", (e: any, path: string) => {
         console.debug(path);
@@ -127,15 +129,13 @@ function InitFileButtons() {
         TabActions.save(path);
     });
 
-
-
     groupmap = new Map();
 }
 
 
 function InitTabControl() {
-    const tabsButtons = d3.select("." + html.classes.page.controlPanelTabs);
-    const content = d3.select("#content");
+    const tabsButtons = d3.select("." + html.classes.controlPanel.tabContainer);
+    const content = d3.select("#" + html.id.content);
 
     tabControl = new TabControl(tabsButtons, content);
 
@@ -161,39 +161,6 @@ function InitTabControl() {
                 TabActions.initDialog.save();
         }
     });
-
-    // todo: test - smazat
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //const tab = tabControl.addTab();
-    ////tabControl.addTab(tab.parentTabGroup);
-
-    //const testJsonnet: JSONNet = {
-    //    places: [
-    //        { id: 0, marking: 10 },
-    //        { id: 1, marking: 15 },
-    //        { id: 2, marking: 13 },
-
-    //        { id: 4, marking: 20 },
-    //    ],
-    //    transitions: [
-    //        { id: 0 },
-    //        { id: 1 },
-    //        { id: 2 },
-    //    ],
-    //    arcs: [],
-    //}
-
-    //const table = new PlaceTransitionTableDraw(tab.container);
-    //table.models.net = testJsonnet;
-    //table.models.configurations = [
-    //    { enabledTransitionsIDs: [1], marking: [{ id: 0, marking: 5 }] },
-    //    { enabledTransitionsIDs: [0,2], marking: [{ id: 1, marking: 50 }, { id: 4, marking: 5000 }] },
-    //] as netConfiguration[];
-    //table.update();
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
 
 export interface TabInterface {

@@ -120,21 +120,6 @@
     <TypeScriptCompile Include="renderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <Compile Include="SMAZAT\Run.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SMAZAT\smazat.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SMAZAT\smazat2.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SMAZAT\smazat3.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SMAZAT\toggleExample.js">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Helpers\Color.ts" />
@@ -154,9 +139,6 @@
     <TypeScriptCompile Include="Helpers\purify.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SMAZAT\autoserialize.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CORE\TabControl\" />
@@ -170,7 +152,6 @@
     <Folder Include="Helpers\" />
     <Folder Include="CORE\" />
     <Folder Include="pkg\JS\" />
-    <Folder Include="SMAZAT\" />
     <Folder Include="pkg\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
