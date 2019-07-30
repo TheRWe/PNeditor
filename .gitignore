@@ -264,3 +264,4 @@ __pycache__/
 /**/*.js.map
 /**/*.d.ts
 /PNetEditor/dist
+/PNetEditor/Text/smazat ukázky

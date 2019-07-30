@@ -1,0 +1,118 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {czech}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Petriho s\IeC {\'\i }t\IeC {\v e}}{8}{section.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1}Z\IeC {\'a}kladn\IeC {\'\i } definice}{8}{subsection.1.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2}Vyu\IeC {\v z}it\IeC {\'\i }}{8}{subsection.1.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3}Graf pokryt\IeC {\'\i }}{8}{subsection.1.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.3.1}Sestrojen\IeC {\'\i } grafu}{8}{subsubsection.1.3.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}Editor}{10}{section.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{10}{subsection.2.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }}{10}{subsection.2.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3}Implementovan\IeC {\'e} algoritmy}{10}{section.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1}Z\IeC {\'a}kladn\IeC {\'\i } anal\IeC {\'y}za}{10}{subsection.3.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Pou\IeC {\v z}it\IeC {\'e} technologie}{10}{section.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}nodejs}{10}{subsection.4.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Typescript}{10}{subsection.4.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Electron}{10}{subsection.4.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{11}{subsection.4.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.5}Scalable Vector Graphics (SVG)}{11}{subsection.4.5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}Stavba programu}{11}{section.5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1}T\IeC {\v r}\IeC {\'\i }da 1}{11}{subsection.5.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2}T\IeC {\v r}\IeC {\'\i }da 2}{11}{subsection.5.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.3}T\IeC {\v r}\IeC {\'\i }da 3}{11}{subsection.5.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4}T\IeC {\v r}\IeC {\'\i }da 4}{11}{subsection.5.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6}Styly pro psan\IeC {\'\i } bakal\IeC {\'a}\IeC {\v r}sk\IeC {\'y}ch a diplomov\IeC {\'y}ch prac\IeC {\'\i }}{11}{section.6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1}Po\IeC {\v z}adavky a podprovan\IeC {\'a} prost\IeC {\v r}ed\IeC {\'\i }}{11}{subsection.6.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.2}P\IeC {\v r}ep\IeC {\'\i }na\IeC {\v c}e}{12}{subsection.6.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3}Geometrie str\IeC {\'a}nky}{12}{subsection.6.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7}Sazba \IeC {\v c}\IeC {\'a}st\IeC {\'\i } dokumentu}{12}{section.7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1}Sazba \IeC {\'u}vodn\IeC {\'\i } strany \IeC {\v c}i obsahu}{12}{subsection.7.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2}Z\IeC {\'a}v\IeC {\v e}ry}{12}{subsection.7.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.3}Matematika}{14}{subsection.7.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4}Sazba literatury}{14}{subsection.7.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.4.1}Sazba bibliografie p\IeC {\v r}es \textsc {Bib}\LaTeX {}}{14}{subsubsection.7.4.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.4.2}Manu\IeC {\'a}ln\IeC {\'\i } sazba bibliografie}{15}{subsubsection.7.4.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.5}Drobn\IeC {\'a} makra}{15}{subsection.7.5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.6}Sazba rejst\IeC {\v r}\IeC {\'\i }ku}{15}{subsection.7.6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.7}Sazba zdrojov\IeC {\'y}ch k\IeC {\'o}d\IeC {\r u}}{17}{subsection.7.7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Z\'av\v er}{20}{section*.6}% 
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Conclusions}{21}{section*.8}% 
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {A}Prvn\IeC {\'\i } p\IeC {\v r}\IeC {\'\i }loha}{22}{appendix.A}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B}Druh\IeC {\'a} p\IeC {\v r}\IeC {\'\i }loha}{22}{appendix.B}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {C}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{22}{appendix.C}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Seznam zkratek}{24}{section*.10}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Literatura}{25}{section*.11}% 
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Rejst\v {r}\'{i}k}{27}{section*.14}% 
