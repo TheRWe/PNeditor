@@ -47,11 +47,7 @@ export class PNAnalysisDraw extends DrawBase {
 
     public setPnet(pnet: JSONNet) {
         this.models.pnet = pnet;
-        const g = this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
-        if (pnet.places.length > 0)
-            g.Calculate().then(() => {
-                this.update();
-            })
+        this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
     }
 
     constructor(container: d3BaseSelector) {

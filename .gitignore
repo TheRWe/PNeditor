@@ -265,3 +265,4 @@ __pycache__/
 /**/*.d.ts
 /PNetEditor/dist
 /PNetEditor/Text/smazat ukázky
+/PNetEditor/package-lock.json

@@ -165,10 +165,9 @@ export interface TabInterface {
 // todo: mapovat Tab ne tabgroup
 export var groupmap: Map<TabGroup, TabInterface>;
 
-
-
-
 async function main() {
+    // called only once
+    if ((window as any)["__main__"]) return; (window as any)["__main__"] = true;
     InitSettings();
     InitTabControl();
     InitFileButtons();

@@ -189,9 +189,6 @@
     <TypeScriptCompile Include="Editor\Settings.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="renderer.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Helpers\Color.ts" />

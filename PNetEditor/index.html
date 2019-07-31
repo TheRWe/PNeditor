@@ -7,12 +7,6 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <!--
-    <script>document.write(process.versions.node)</script>,
-    <script>document.write(process.versions.chrome)</script>,
-    <script>document.write(process.versions.electron)</script>.
-    -->
-
     <div id="modal" class="modal">
         <div class="modal-content">
             <button id="modal-button-X" class="modal-button-X">X</button>
@@ -40,19 +34,10 @@
         </div>
         <div class="panel-label">Tabs</div>
         <div class="panel-tab-container">
-            <!--
-                <div class="control-panel-tab">
-                <div class="button control-panel-tab-sub control-panel-tab-sub-selected">SubTab1</div>
-                </div>
-            -->
+
         </div>
     </div>
 
     <div id="content" class="fill-content page page-content"></div>
-
-    <script>
-        // You can also require other files to run in this process
-        require('./renderer.js')
-    </script>
 </body>
 </html>

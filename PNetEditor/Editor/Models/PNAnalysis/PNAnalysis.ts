@@ -35,7 +35,10 @@ export class PNAnalysis {
             async function calculate() {
                 await new Promise(r => setTimeout(r, 100));
                 const g = self.draws.pnAnalysisDraw.models.CoverabilityGraph;
-                await g.Calculate();
+                const pefm = performance.now();
+                await g.CalculateHashed();
+                //await g.Calculate();
+                console.info(`calculated time: ${performance.now() - pefm}`);
                 self.draws.pnAnalysisDraw.update();
 
                 if (LastGraphSize > g.numStates) {
