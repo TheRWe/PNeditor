@@ -1,18 +1,18 @@
 [0] Config.pm:304> INFO - This is Biber 2.12
 [0] Config.pm:307> INFO - Logfile is 'kidiplom.blg'
-[34] biber-MSWIN32:315> INFO - === 
-[65] Biber.pm:371> INFO - Reading 'kidiplom.bcf'
-[175] Biber.pm:886> INFO - Using all citekeys in bib section 0
-[199] Biber.pm:4093> INFO - Processing section 0
-[219] Biber.pm:4254> INFO - Looking for bibtex format file 'bibliografie.bib' for section 0
-[223] bibtex.pm:1523> INFO - LaTeX decoding ...
-[267] bibtex.pm:1340> INFO - Found BibTeX data source 'bibliografie.bib'
-[332] Utils.pm:193> WARN - ISBN '978-222-626-222-2' in entry 'sbornik' is invalid - run biber with '--validate_datamodel' for details.
-[343] Utils.pm:193> WARN - year field '1980-' in entry 'tug' is not an integer - this will probably not sort properly.
-[362] Utils.pm:193> WARN - ISBN '978-44-55-X' in entry 'kniha' is invalid - run biber with '--validate_datamodel' for details.
-[420] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[420] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
-[420] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'cs_CZ'
-[439] bbl.pm:636> INFO - Writing 'kidiplom.bbl' with encoding 'UTF-8'
-[449] bbl.pm:739> INFO - Output to kidiplom.bbl
-[449] Biber.pm:110> INFO - WARNINGS: 3
+[36] biber-MSWIN32:315> INFO - === 
+[66] Biber.pm:371> INFO - Reading 'kidiplom.bcf'
+[187] Biber.pm:886> INFO - Using all citekeys in bib section 0
+[203] Biber.pm:4093> INFO - Processing section 0
+[218] Biber.pm:4254> INFO - Looking for bibtex format file 'bibliografie.bib' for section 0
+[221] bibtex.pm:1523> INFO - LaTeX decoding ...
+[260] bibtex.pm:1340> INFO - Found BibTeX data source 'bibliografie.bib'
+[306] Utils.pm:193> WARN - ISBN '978-222-626-222-2' in entry 'sbornik' is invalid - run biber with '--validate_datamodel' for details.
+[322] Utils.pm:193> WARN - year field '1980-' in entry 'tug' is not an integer - this will probably not sort properly.
+[343] Utils.pm:193> WARN - ISBN '978-44-55-X' in entry 'kniha' is invalid - run biber with '--validate_datamodel' for details.
+[389] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[389] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
+[389] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'cs_CZ'
+[407] bbl.pm:636> INFO - Writing 'kidiplom.bbl' with encoding 'UTF-8'
+[417] bbl.pm:739> INFO - Output to kidiplom.bbl
+[417] Biber.pm:110> INFO - WARNINGS: 3

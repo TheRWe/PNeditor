@@ -69,8 +69,8 @@
       \strng{editorbibnamehash}{bae9ca4d8904691e0f18578bfd05842b}
       \strng{editornamehash}{bae9ca4d8904691e0f18578bfd05842b}
       \strng{editorfullhash}{bae9ca4d8904691e0f18578bfd05842b}
-      \field{sortinit}{2}
-      \field{sortinithash}{cbff857e587bcb4635511624d773949e}
+      \field{sortinit}{3}
+      \field{sortinithash}{a4b52e5432884761f50fb9571273b93e}
       \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
       \field{day}{22}
@@ -115,8 +115,8 @@
       \strng{authorbibnamehash}{d9e1f063e39d8db526569d948e82c594}
       \strng{authornamehash}{d9e1f063e39d8db526569d948e82c594}
       \strng{authorfullhash}{d9e1f063e39d8db526569d948e82c594}
-      \field{sortinit}{3}
-      \field{sortinithash}{a4b52e5432884761f50fb9571273b93e}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{first}
@@ -164,8 +164,8 @@
       \strng{editorbibnamehash}{21ead82686115609922787fd43c38950}
       \strng{editornamehash}{21ead82686115609922787fd43c38950}
       \strng{editorfullhash}{21ead82686115609922787fd43c38950}
-      \field{sortinit}{4}
-      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{sortinit}{5}
+      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booksubtitle}{reconfiguring academic information resources for the 21st century}
@@ -192,8 +192,8 @@
       \strng{authorbibnamehash}{893b6578ccff8391498e2dfb8c1fbd86}
       \strng{authornamehash}{893b6578ccff8391498e2dfb8c1fbd86}
       \strng{authorfullhash}{893b6578ccff8391498e2dfb8c1fbd86}
-      \field{sortinit}{5}
-      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
+      \field{sortinit}{6}
+      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1082-9873}
@@ -228,8 +228,8 @@
       \strng{authorbibnamehash}{f619eccbc6d251d291b392758a57ede8}
       \strng{authornamehash}{f619eccbc6d251d291b392758a57ede8}
       \strng{authorfullhash}{f619eccbc6d251d291b392758a57ede8}
-      \field{sortinit}{6}
-      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
+      \field{sortinit}{7}
+      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{2232-332X}
@@ -266,8 +266,8 @@
       \strng{authorbibnamehash}{1dfaf4e6abcc6038fe15eb32af03f190}
       \strng{authornamehash}{1dfaf4e6abcc6038fe15eb32af03f190}
       \strng{authorfullhash}{1dfaf4e6abcc6038fe15eb32af03f190}
-      \field{sortinit}{7}
-      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{sortinit}{8}
+      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
@@ -336,8 +336,8 @@
       \strng{authornamehash}{582ebd6a458864173bed1418468100d5}
       \strng{authorfullhash}{9d141ad24f29d1a91eb40ed34ea711b0}
       \field{extraname}{1}
-      \field{sortinit}{8}
-      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
+      \field{sortinit}{9}
+      \field{sortinithash}{1dd72ab054147731c9d824b49aba0534}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{3}
@@ -395,8 +395,8 @@
       \strng{authornamehash}{582ebd6a458864173bed1418468100d5}
       \strng{authorfullhash}{9d141ad24f29d1a91eb40ed34ea711b0}
       \field{extraname}{2}
-      \field{sortinit}{9}
-      \field{sortinithash}{1dd72ab054147731c9d824b49aba0534}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{3}
