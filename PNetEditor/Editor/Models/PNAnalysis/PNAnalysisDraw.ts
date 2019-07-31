@@ -46,6 +46,7 @@ export class PNAnalysisDraw extends DrawBase {
     }
 
     public setPnet(pnet: JSONNet) {
+        if (this.models.CoverabilityGraph) this.models.CoverabilityGraph.CancelCalculations();
         this.models.pnet = pnet;
         this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
     }

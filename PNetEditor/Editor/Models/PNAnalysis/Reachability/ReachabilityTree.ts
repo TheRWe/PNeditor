@@ -27,11 +27,24 @@ export class CoverabilityGraph {
     private root: Vertice;
     private graph: Graph;
 
+    public CancelCalculations() {
+        const call = (x: () => void) => { x() };
+        this.cancelFuncs.forEach(call);
+    }
+
+    private cancelFuncs: (() => void)[] = [];
+
     public async CalculateHashed() {
         const rootHash = sha1(this.root);
         const vertices: { [key: string]: marking[] } = {}; vertices[rootHash] = [this.root];
         const graphHashed: GraphHashed = { V: {}, E: [] };
         const WorkSet: { markingHashed: markingHashed, transition: TransitionID }[] = [];
+
+        let cancel = false;
+        const cancelFnc = () => {
+            cancel = true;
+        }
+        this.cancelFuncs.push(cancelFnc);
 
         GetEnabledTransitionsIDs(this.net, this.root).forEach(transition => {
             WorkSet.push({ markingHashed: { hash: rootHash, marking: this.root }, transition });
@@ -40,6 +53,7 @@ export class CoverabilityGraph {
         let WorkSetLength = -1;
         while ((WorkSetLength = WorkSet.length) > 0) {
             await new Promise(r => setTimeout(r));
+            if (cancel) return;
 
             const nextCalculateIndex = Math.floor(Math.random() * WorkSetLength);
             const { markingHashed: { marking, hash }, transition } = WorkSet.splice(nextCalculateIndex, 1)[0];
@@ -57,7 +71,6 @@ export class CoverabilityGraph {
                 await Promise.all(graphHashed.E.filter(x => x.to.hash === hash && isSameMarking(x.to.marking, node)).map(x => x.from).map(x => searchAvailebleFrom(x)));
             }
             await searchAvailebleFrom({ marking, hash });
-            console.debug({ availableFromHashed, flattened: flatten(Object.keys(availableFromHashed).map(h => { return availableFromHashed[h]; })) });
 
             flatten(Object.keys(availableFromHashed).map(h => { return availableFromHashed[h]; }))
                 .filter(x => isLowerSameMarking(x, calculatedMarking)).forEach(availebleFromMarking => {
@@ -94,12 +107,20 @@ export class CoverabilityGraph {
         }
         console.debug("calculating done");
         this.calculated = true;
+        { let cancelFncIndex = -1; if ((cancelFncIndex = this.cancelFuncs.findIndex(x => x === cancelFnc)) !== -1) this.cancelFuncs.splice(cancelFncIndex, 1); }
     }
 
 
     public async Calculate() {
         const graph: Graph = { V: [this.root], E: [] };
         const WorkSet: { marking: marking, transition: TransitionID }[] = [];
+
+        let cancel = false;
+        const cancelFnc = () => {
+            cancel = true;
+        }
+        this.cancelFuncs.push(cancelFnc);
+
 
         GetEnabledTransitionsIDs(this.net, this.root).forEach(transition => {
             WorkSet.push({ marking: this.root, transition });
@@ -108,6 +129,7 @@ export class CoverabilityGraph {
         let WorkSetLength = -1;
         while ((WorkSetLength = WorkSet.length) > 0) {
             await new Promise(r => setTimeout(r));
+            if (cancel) return;
 
             const nextCalculateIndex = Math.floor(Math.random() * WorkSetLength);
             const { marking, transition } = WorkSet.splice(nextCalculateIndex, 1)[0];
@@ -145,6 +167,7 @@ export class CoverabilityGraph {
         }
         console.debug("calculating done");
         this.calculated = true;
+        { let cancelFncIndex = -1; if ((cancelFncIndex = this.cancelFuncs.findIndex(x => x === cancelFnc)) !== -1) this.cancelFuncs.splice(cancelFncIndex, 1); }
     }
 
 

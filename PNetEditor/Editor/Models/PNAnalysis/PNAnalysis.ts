@@ -50,9 +50,7 @@ export class PNAnalysis {
 
                 if (sameGraphSizeTimes < maxSameGraphSizeTimes) {
                     endCalc();
-                    calculating = false;
-                }
-                if (calculating && g.containstOmega) {
+                } else if (calculating && g.containstOmega) {
                     calculate();
                 }
             }
