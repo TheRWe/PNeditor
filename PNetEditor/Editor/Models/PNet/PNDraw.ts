@@ -114,7 +114,7 @@ export class PNDraw extends DrawBase {
         const svg = this.container
             .classed(html.classes.common.a4, true)
             .style("transform-origin", "left top")
-            .style("border-bottom", "1px lightgray solid")
+            .style("border", "1px lightgray solid")
             ;
 
         const defs = svg.append('svg:defs');

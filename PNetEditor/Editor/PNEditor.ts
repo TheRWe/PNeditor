@@ -8,13 +8,13 @@ import * as d3 from 'd3';
 import { notImplemented, typedNull } from "../Helpers/purify";
 import { PNDrawControls } from "./Models/PNet/Helpers/PNDrawControls";
 import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
-import { groupmap, TabInterface } from "../CORE/MainWindow";
 import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
 import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
 import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
 import * as path from 'path';
 import { Key } from "ts-keycode-enum";
 import { PlaceTransitionTableDraw } from "./Models/PNet/PlaceTransitionTable";
+import { groupmap, TabInterface } from "../main";
 
 
 export class PNEditor implements TabInterface {
