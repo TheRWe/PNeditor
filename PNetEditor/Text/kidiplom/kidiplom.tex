@@ -119,6 +119,8 @@
 %% práce.
 \usepackage{lipsum}
 
+\setlength{\parskip}{1.2em}
+
 \begin{document}
 %% Sazba úvodních stran -- titulní, s bibliografickými údaji, s
 %% anotací a klíčovými slovy, s poděkováním a prohlášením, s obsahem a
@@ -155,44 +157,65 @@
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
 \todo{Smazat todo: command}
 
-
-
 \section{Petriho sítě}
-
-\todo{jako poznámka}
-Táto kapitola byla inspirovaná a čerpala informace z 
-\cite{reisig2013understanding}
+Táto kapitola byla inspirovaná a čerpala informace z Understanding petri nets\cite{reisig2013understanding}
 
 \subsection{Základní definice}
 
 Petriho síťe jsou matematickým nástrojem 
 pro modelování a simulaci paralelních procesů a jejich sychronizaci.
 
-$$ N = \langle P,T,F,M_{0}\rangle $$
+$$ N = \langle P,T,A,M_{0}\rangle $$
 \begin{itemize}
   \item $N$ je Petriho sítí
   \item $P$ je konečná množina míst
   \item $T$ je konečná množina přechodů
-  \item $F$ je konečná množina hran
-    $ F \subseteq (P \times T) \cup (T \times P) $ \\
-    pro $(P \times T)$ používáme také značení $^\circ t$ a pro $(T \times P)$ značení $t^\circ$
-  \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení míst 
+  \item $A$ je konečná množina hran
+    $ A \subseteq ((P \times T) \cup (T \times P)) \times \mathbb{N}_0 $ \\
+    kde číslo symbolizuje násobek kolik značek hrana 'přesune'
+  \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst 
     kde pro každé místo $p \in P$ existuje počet jeho značek $m \in M_{0}$ 
 \end{itemize}
 
-Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
- místu $p \in P$ petriho sítě počet značek. Formálně $M(p) \in \mathbb{N}_0$
+Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat 
+  notaci $P(a)$ pro odkázání na místo v hraně $a \in A$, 
+  $T(a)$ pro odkázání na přechod a $AM(a)$ pro odkaz na násobek.
 
-\begin{algorithm}
-  \caption{EnabledTransitions}
-  \begin{algorithmic}[1]
-    \Function{EnabledTransitions}{$P,t,F,M$}
-      \State $ $
-    \EndFunction
-  \end{algorithmic}      
-\end{algorithm}      
+Každý přechod $t$ může mít 'přiřazený' libovolný počet 
+  hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
+Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu 
+  $$^\circ t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
+a hrany směřující do místa 
+  $$ t ^\circ  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
+dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
+  $$ArcesOfTransition(t,A) = (^\circ t \cup t ^\circ) \subset A$$
+Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
+ místu $p \in P$ petriho sítě počet značek 
+  $$M(p) \in \mathbb{N}_0$$
+Výchozí ohodnocení petriho sítě se značí $M_{0}$.
+
+Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený 
+  pokud všechny hrany směřující do přechodu $\,^\circ t$ splňují svou podmínku tzn.
+  hrana splňuje svoji podmínku pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení 
+  (v daném $M$) než je násobek hrany $AM$
+$$IsEnabled(P,t,A,M) = (\forall a \in \,^\circ t)M(P(a)) \geq AM(a)$$
+Pak si můžeme ještě definovat množinu všech povolených přechodů pro zadané ohodnocení
+$$
+ EnabledTransitions(P,T,A,M) = 
+ \{ t \in T | IsEnabled(P,t,A,M) \}
+$$
+
+
+\todo{testovací hrany}
+
+
+\subsection{Vizuální zobrazení sítě}
+\todo{obrázky}
+
 
 \subsection{Využití}
+
+\subsection{Graf dosa}
 
 \subsection{Graf pokrytí}
 
@@ -203,10 +226,10 @@ Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující ka
 \begin{algorithm}
  \caption{MakeCoverabilityGraph}
  \begin{algorithmic}[1]
-  \Function{MakeCoverabilityGraph}{$\langle P,T,F,M_0\rangle$}
+  \Function{MakeCoverabilityGraph}{$\langle P,T,A,M_0\rangle$}
     \State $\langle V,E,v_0\rangle := \langle\{M_0\},\emptyset,M_0\rangle$
     \State $WorkSet := \emptyset $
-    \ForAll{$T \in EnabledTransitions(M_0)$}
+    \ForAll{$T \in EnabledTransitions(P,T,A,M_0)$}
       \State $WorkSet := WorkSet \cup \{\langle M_0, T \rangle\} $
     \EndFor
 
@@ -226,7 +249,7 @@ Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující ka
 
       \If{$M' \notin V$}
         \State $V := V \cup \{M'\}$
-        \ForAll{$T \in EnabledTransitions(M')$}
+        \ForAll{$T \in EnabledTransitions(P,T,A,M')$}
           \State $WorkSet := WorkSet \cup \{\langle M', T \rangle\} $
         \EndFor
       \EndIf
@@ -242,7 +265,8 @@ Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující ka
   
 \section{Implementované algoritmy}
 
-
+\subsection{Příklady sítí}
+\todo{síť + analýza}
   
 
 
@@ -285,7 +309,8 @@ se kterou je spjaté fungování našeptávačů v dnešních textových editore
 
 
 \subsection{Electron}
-Electron je opensource framework pro vytváření desktopových aplikací pomocí webových technologií JavaScript, HTML a CSS.
+Electron je opensource framework pro vytváření desktopových aplikací pomocí webových technologií JavaScript, HTML a CSS. 
+Využívá NodeJS
 
 
 \subsection{Javascriptová Knihovna Data driven documents (D3)}
