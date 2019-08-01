@@ -184,21 +184,21 @@ Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat
 Každý přechod $t$ může mít 'přiřazený' libovolný počet 
   hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
 Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu 
-  $$^\circ t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
-a hrany směřující do místa 
-  $$ t ^\circ  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
+  $$^\to t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
+a hrany směřující z přechodu (do místa)
+  $$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
 dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
-  $$ArcesOfTransition(t,A) = (^\circ t \cup t ^\circ) \subset A$$
+  $$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
 Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
  místu $p \in P$ petriho sítě počet značek 
   $$M(p) \in \mathbb{N}_0$$
 Výchozí ohodnocení petriho sítě se značí $M_{0}$.
 
 Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený 
-  pokud všechny hrany směřující do přechodu $\,^\circ t$ splňují svou podmínku tzn.
+  pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
   hrana splňuje svoji podmínku pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení 
   (v daném $M$) než je násobek hrany $AM$
-$$IsEnabled(P,t,A,M) = (\forall a \in \,^\circ t)M(P(a)) \geq AM(a)$$
+$$IsEnabled(P,t,A,M) = (\forall a \in \,^\to t)M(P(a)) \geq AM(a)$$
 Pak si můžeme ještě definovat množinu všech povolených přechodů pro zadané ohodnocení
 $$
  EnabledTransitions(P,T,A,M) = 
@@ -215,11 +215,30 @@ $$
 
 \subsection{Využití}
 
-\subsection{Graf dosa}
+\subsection{Graf dosažitelnosti}
+
+\subsubsection{Definice}
+$$RG = \{M, \langle M, t, M' \rangle\}$$
+
+
+
+
+\subsubsection{Vlastnosti odvoditelné z Grafu dosažitelnosti}
+
+\textbf{skončí}\index{síť skončí} 
+
+\textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
+
+\textbf{slabě živá}\index{síť slabě živá}
+
+\textbf{živá}\index{síť živá}
+
+
 
 \subsection{Graf pokrytí}
 
 \subsubsection{Sestrojení grafu}
+
 
 \todo{definice a úprava EnabledTransitions}
 
@@ -262,7 +281,10 @@ $$
 \end{algorithm}
 
 
-  
+\subsubsection{Upravená verze vlastností}
+
+
+
 \section{Implementované algoritmy}
 
 \subsection{Příklady sítí}
