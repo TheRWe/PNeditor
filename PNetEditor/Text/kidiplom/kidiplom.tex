@@ -88,13 +88,10 @@
 %% práce). Jeden odstavec!
 \annotation{Cílem bakalářské práce bylo vytvořit editor 
   petriho sítí umožňující jednoduché a pohodlné ovládání. 
-  Editor také obsahuje  }
+  Editor také obsahuje základní nástroje pro analýzu petriho 
+  sítí. }
 
-\annotation[english]{Sample text of thesis at the \kitextdepten,
-  \kitextfacultyen, \kitextuniven{} and, at the same time,
-  documentation of the \LaTeX{} style for the text. The source text in
-  \LaTeX{} is recommended to be used as a template for real student's
-  thesis text.}
+\annotation[english]{}
 
 %% Klíčová slova práce, včetně anglických. Oddělená (obvykle) středníkem.
 \keywords{styl textu; závěrečná práce; dokumentace; ukázkový text}
@@ -119,7 +116,7 @@
 %% práce.
 \usepackage{lipsum}
 
-\setlength{\parskip}{1.2em}
+\setlength{\parskip}{0.5em}
 
 \begin{document}
 %% Sazba úvodních stran -- titulní, s bibliografickými údaji, s
@@ -162,7 +159,7 @@ Táto kapitola byla inspirovaná a čerpala informace z Understanding petri nets
 
 \subsection{Základní definice}
 
-Petriho síťe jsou matematickým nástrojem 
+Petriho síťe jsou matematickým nástrojem
 pro modelování a simulaci paralelních procesů a jejich sychronizaci.
 
 $$ N = \langle P,T,A,M_{0}\rangle $$
@@ -171,38 +168,51 @@ $$ N = \langle P,T,A,M_{0}\rangle $$
   \item $P$ je konečná množina míst
   \item $T$ je konečná množina přechodů
   \item $A$ je konečná množina hran
-    $ A \subseteq ((P \times T) \cup (T \times P)) \times \mathbb{N}_0 $ \\
-    kde číslo symbolizuje násobek kolik značek hrana 'přesune'
-  \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst 
-    kde pro každé místo $p \in P$ existuje počet jeho značek $m \in M_{0}$ 
+        $ A \subseteq ((P \times T) \cup (T \times P)) \times \mathbb{N}_0 $ \\
+        kde číslo symbolizuje násobek kolik značek hrana 'přesune'
+  \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst
+        kde pro každé místo $p \in P$ existuje počet jeho značek $m \in M_{0}$
 \end{itemize}
 
-Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat 
-  notaci $P(a)$ pro odkázání na místo v hraně $a \in A$, 
-  $T(a)$ pro odkázání na přechod a $AM(a)$ pro odkaz na násobek.
+Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat
+notaci $P(a)$ pro odkázání na místo v hraně $a \in A$,
+$T(a)$ pro odkázání na přechod a $AM(a)$ pro odkaz na násobek.
 
-Každý přechod $t$ může mít 'přiřazený' libovolný počet 
-  hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
-Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu 
-  $$^\to t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
+Každý přechod $t$ může mít 'přiřazený' libovolný počet
+hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
+Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu
+$$^\to t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
 a hrany směřující z přechodu (do místa)
-  $$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
+$$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
 dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
-  $$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
+$$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
+
 Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
- místu $p \in P$ petriho sítě počet značek 
-  $$M(p) \in \mathbb{N}_0$$
+místu $p \in P$ petriho sítě počet značek
+$$M(p) \in \mathbb{N}_0$$
 Výchozí ohodnocení petriho sítě se značí $M_{0}$.
 
-Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený 
-  pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
-  hrana splňuje svoji podmínku pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení 
-  (v daném $M$) než je násobek hrany $AM$
+Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený
+pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
+hrana splňuje svoji podmínku pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení
+(v daném $M$) než je násobek hrany $AM$
 $$IsEnabled(P,t,A,M) = (\forall a \in \,^\to t)M(P(a)) \geq AM(a)$$
 Pak si můžeme ještě definovat množinu všech povolených přechodů pro zadané ohodnocení
 $$
- EnabledTransitions(P,T,A,M) = 
- \{ t \in T | IsEnabled(P,t,A,M) \}
+  EnabledTransitions(P,T,A,M) =
+  \{ t \in T | IsEnabled(P,t,A,M) \}
+$$
+
+Pokud je přechod $t$ v ohodnocení $M$ Petriho sítě povolen, znamená to že může dojít
+k aktivování tohoto přechodu čímž dojde ke změně aktuálního ohodnocení z $M$ do ohodnocení $M'$
+tak, že pro každé místo $p \in P$ a každou hranu $A_{pt} \subset ArcesOfTransition(t,A)$ spojující $p$ s $t$
+že nové ohonocení v místě $M'(p)$ je sumou násobků hran $\sum_{a \in A_{pt}} AM(a)$ a původního hodnocení $M(p)$
+$$
+  FireTransition(P,t,A,M) = function M'
+$$
+Výsledné ohodnocení $M'$ je pak definováno
+$$
+  M'(p) = M(p) + \sum_{a \in \{a_{tp} \in ArcesOfTransition(t,A) \,|\, P(a_{tp}) = p \}} AM(a)
 $$
 
 
@@ -215,27 +225,67 @@ $$
 
 \subsection{Využití}
 
+Petriho sítě se používají k analýze a modelování paralelních
+a distribuovaných systému, databázových systémů atd. a to ať už
+pro analýzu při vývoji softwaru a nebo pro popis vnitřńí struktury
+již hotového proprietárního softwaru umožnující lepší porozumění uživateli.
+
 \subsection{Graf dosažitelnosti}
+
+Graf dosažitelnosti je jeden z nejzákladnějších nástrojů pro analýzu Petriho sítí.
+Obsahuje vždy všechny ohodnocení které mohou vzniknout libovolnou sekvencí
+přechodů z výchozího ohodnocení, takovéto ohodnocení se nazývá \textbf{dosažitelné ohodnocení}\index{dosažitelné ohodnocení}
+(dosažitelné z výchozího ohodnocení). Vrcholy grafu jsou jednotlivá ohodnocení
+a hrany grafu jsou značené přechody které jsou aktivované aby z výchozího ohodnocení vzniklo cílové.
 
 \subsubsection{Definice}
 $$RG = \{M, \langle M, t, M' \rangle\}$$
-
-
-
+\begin{itemize}
+  \item $RG$ je Graf dosažitelnosti
+  \item $M$ je Vrchol grafu který je zároveň konkrétní ohodnocení petriho sítě
+  \item $\langle M, t, M' \rangle$ je Hrana grafu která je změnou z hodnocení $M$ přechodem $t$ ze kterého vzniká $M'$
+\end{itemize}
 
 \subsubsection{Vlastnosti odvoditelné z Grafu dosažitelnosti}
+Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
 
-\textbf{skončí}\index{síť skončí} 
+Petriho síť \textbf{skončí}\index{síť skončí} za předpokladu
+že graf je konečný a zároveň neobsahuje žádné cykly.
+Neboli Petriho sít vždy po nějakém počtu kroků dojde do stavu kdy žádný přechod není povolený.
 
-\textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
+Petriho síť je \textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
+pokud z každého vrcholu grafu vede alespoň jedna hrana.
+Petriho sít má v každém ohodnocení povolený alespoň jeden přechod.
 
-\textbf{slabě živá}\index{síť slabě živá}
+Petriho síť je \textbf{slabě živá}\index{síť slabě živá} pokud pro
+každý přechod existuje v grafu hrana označená tímto přechodem.
+Pro každý přechod Petriho sítě můžeme najít sekvenci přechodů (i prázdnou) takovou
+že z počatečního ohodnocení dojdeme do ohodnocení které povoluje daný přechod.
 
-\textbf{živá}\index{síť živá}
+Petriho síť je \textbf{živá}\index{síť živá} pokud je její graf silně souvislý.
+Stejně jako \textbf{slabě živá} s tím rozdílem že musí splňovat vlastnost ze všech dosažitelných ohodnocení
+a ne jen z počatečního ohodnocení ale ze všech dosažitelných ohodnocení Petriho sítě.
+
+
+\subsubsection{Příklady grafu dosažitelnosti}
 
 
 
 \subsection{Graf pokrytí}
+
+Hlavní nevýhodou grafu dosažitelnosti je že může být
+nekonečný a tudíž je nemožné ho zkonstruovat celý.
+Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť u které by konstrukce jejího grafu dosažitelnosti nikdy neskončila.
+
+\todo{obrázek petriho síť kde je jedne place a jedna transition a hrana z transition do place}
+
+Proto existuje rozšířená verze grafu dosažitelnosti která využíva
+tzv. $\omega$ ohodnocení které mimo celých čísel může přiřadit místu i hodnotu $\omega$
+symbolizující že místo může nabívat nekonečně vysokého počtu značek.
+Petriho síť se nemůže nacházet v $\omega$ ohodnocení, toto ohodnocení je pouze
+pro vytvoření abstrakce v grafu pokrytí.
+
+
 
 \subsubsection{Sestrojení grafu}
 
@@ -243,41 +293,41 @@ $$RG = \{M, \langle M, t, M' \rangle\}$$
 \todo{definice a úprava EnabledTransitions}
 
 \begin{algorithm}
- \caption{MakeCoverabilityGraph}
- \begin{algorithmic}[1]
-  \Function{MakeCoverabilityGraph}{$\langle P,T,A,M_0\rangle$}
+  \caption{MakeCoverabilityGraph}
+  \begin{algorithmic}[1]
+    \Function{MakeCoverabilityGraph}{$\langle P,T,A,M_0\rangle$}
     \State $\langle V,E,v_0\rangle := \langle\{M_0\},\emptyset,M_0\rangle$
     \State $WorkSet := \emptyset $
-    \ForAll{$T \in EnabledTransitions(P,T,A,M_0)$}
-      \State $WorkSet := WorkSet \cup \{\langle M_0, T \rangle\} $
+    \ForAll{$t \in EnabledTransitions(P,T,A,M_0)$}
+    \State $WorkSet := WorkSet \cup \{\langle M_0, t \rangle\} $
     \EndFor
 
     \While{$WorkSet \neq \emptyset$}
-      \State $\langle M, t \rangle := RandomElement(WorkSet)$
-      \State $WorkSet := WorkSet \setminus \{\langle M, t \rangle\}$
-      \State $M' := FireTransition(M,t)$
-      \ForAll{$\{M'' \;|\; M'' \in V \land (M'' \to_p M \lor M'' = M) \land M'' < M'\}$} 
-        \\ \Comment{$a \to_p b = \text{path from a to b}$}
-        \ForAll{$p \in P$}
-          \State $mp := M(p)$
-          \If{$M''(p)<M'(p)$}
-            \State $M'(p) := \omega$
-          \EndIf
-        \EndFor
-      \EndFor
+    \State $\langle M, t \rangle := RandomElement(WorkSet)$
+    \State $WorkSet := WorkSet \setminus \{\langle M, t \rangle\}$
+    \State $M' := FireTransition(P,t,A,M)$
+    \ForAll{$\{M'' \;|\; M'' \in V \land (M'' \to_p M \lor M'' = M) \land M'' < M'\}$}
+    \\ \Comment{$a \to_p b = \text{path from a to b}$}
+    \ForAll{$p \in P$}
+    \State $mp := M(p)$
+    \If{$M''(p)<M'(p)$}
+    \State $M'(p) := \omega$
+    \EndIf
+    \EndFor
+    \EndFor
 
-      \If{$M' \notin V$}
-        \State $V := V \cup \{M'\}$
-        \ForAll{$T \in EnabledTransitions(P,T,A,M')$}
-          \State $WorkSet := WorkSet \cup \{\langle M', T \rangle\} $
-        \EndFor
-      \EndIf
-      \State $E := E \cup \{\langle M,t,M'\rangle\}$
+    \If{$M' \notin V$}
+    \State $V := V \cup \{M'\}$
+    \ForAll{$t \in EnabledTransitions(P,T,A,M')$}
+    \State $WorkSet := WorkSet \cup \{\langle M', t \rangle\} $
+    \EndFor
+    \EndIf
+    \State $E := E \cup \{\langle M,t,M'\rangle\}$
     \EndWhile
 
     \State \textbf{return} $\langle V,E,v_0\rangle$
-  \EndFunction
- \end{algorithmic}
+    \EndFunction
+  \end{algorithmic}
 \end{algorithm}
 
 
@@ -285,11 +335,10 @@ $$RG = \{M, \langle M, t, M' \rangle\}$$
 
 
 
-\section{Implementované algoritmy}
 
 \subsection{Příklady sítí}
 \todo{síť + analýza}
-  
+
 
 
 
@@ -317,21 +366,21 @@ $$RG = \{M, \langle M, t, M' \rangle\}$$
 \section{Použité technologie}
 
 \subsection{nodejs}
-Aplikace je psaná za pomoci opensourcové technologie nodeJS, která umožňuje využívat jazyk 
+Aplikace je psaná za pomoci opensourcové technologie nodeJS, která umožňuje využívat jazyk
 JavaScript pro psaní serverových aplikací. Cílem platformy nodeJS je vytvořit
-ekosystém pro jednoduší vývoj webových stránek a aplikací kde stačí pro vyrvaření 
+ekosystém pro jednoduší vývoj webových stránek a aplikací kde stačí pro vyrvaření
 funkcionality pouze jeden programovací jazyk.
 
 \subsection{Typescript}
 Typescript je opensource programovací jazyk od společnosti Microsoft který je nadstavbou nad jazykem JavaScript.
 Jelikož je Typescript nadstavbou nad programovacím jazykem JavaScript tak je jakýkoliv validní kód v JavaScriptu automaticky validním kódem v Typescriptu.
-Typecript se kompiluje do Javascriptu a proto po stránce funkcionality nenabízí nic navíc avšak po stránce vývoje nabízí možnost statické typové kontroly 
+Typecript se kompiluje do Javascriptu a proto po stránce funkcionality nenabízí nic navíc avšak po stránce vývoje nabízí možnost statické typové kontroly
 se kterou je spjaté fungování našeptávačů v dnešních textových editorech a také nabízí možnost kompilace do starších verzí JavaScript se simulací funkcionality novejších verzí JavaScriptu.
 \todo{příklady kódu ?}
 
 
 \subsection{Electron}
-Electron je opensource framework pro vytváření desktopových aplikací pomocí webových technologií JavaScript, HTML a CSS. 
+Electron je opensource framework pro vytváření desktopových aplikací pomocí webových technologií JavaScript, HTML a CSS.
 Využívá NodeJS
 
 
@@ -397,14 +446,14 @@ Toto jsou styly pro psaní bakalářských a diplomových prací přes typografi
 \subsection{Požadavky a podprovaná prostředí}
 Sada balíku \textbf{kistyles} podporuje následující distribuce systému \LaTeX{}:
 \begin{itemize}
-\item \TeX{} Live.
+  \item \TeX{} Live.
 \end{itemize}
 
 Jsou podporovány všechny výstupní ovladače, tedy jak \textbf{dvi}, tak \textbf{pdf} i \textbf{ps}. Funkčnost zmiňovaných distribucí byla ověřena na několika operačních systémech, mezi které patří:
 \begin{enumerate}
-\item Windows $8.1$,
-\item Archlinux,
-\item Debian.
+  \item Windows $8.1$,
+  \item Archlinux,
+  \item Debian.
 \end{enumerate}
 
 Důrazně se doporučuje používat aktuální verzi dané distribuce systému \LaTeX{}.
@@ -419,85 +468,85 @@ Důrazně se doporučuje používat aktuální verzi dané distribuce systému \
 \subsection{Přepínače}
 Styl kidiplom je z hlediska uživatele zastoupen ekvivalentně nazvanou třídou, kterou je třeba volat na záčátku dokumentu:
 \begin{kicode}{TeX}{}{Volání třídy \textbf{kidiplom}}
-\documentclass[
-  master=true,
-  font=sans,
-  printversion=false,
-  joinlists=true,
-  glossaries=true,
-  figures=true,
-  tables=true,
-  sourcecodes=true,
-  theorems=true,
-  bibencoding=utf8,
-  language=czech,
-  encoding=utf8,
-  field=inf,
-  index=true,
-  biblatex=true
-]{kidiplom}
+  \documentclass[
+    master=true,
+    font=sans,
+    printversion=false,
+    joinlists=true,
+    glossaries=true,
+    figures=true,
+    tables=true,
+    sourcecodes=true,
+    theorems=true,
+    bibencoding=utf8,
+    language=czech,
+    encoding=utf8,
+    field=inf,
+    index=true,
+    biblatex=true
+  ]{kidiplom}
 \end{kicode}
 
 Následuje přehled přepínačů, je vždy uvedeno jméno přepínač, včetně výchozí hodnoty. Přepínače uvádí tabulka \ref{tab:prepinace}.
 
 \begin{table}
-\begin{center}
-\caption{Seznam přepínačů}\label{tab:prepinace}
-\scalebox{0.95}{\begin{tabular}{>{\bfseries}l >{\ttfamily}c L{8cm}}
-{\normalfont Přepínač} & {\normalfont Výchozí hodnota} & {\normalfont Popis} \\
-\hline
-master & false & Povolí nebo zakáže režim diplomové práce. Výchozí režim je tedy bakalářská práce. \\
+  \begin{center}
+    \caption{Seznam přepínačů}\label{tab:prepinace}
+    \scalebox{0.95}{\begin{tabular}{>{\bfseries}l >{\ttfamily}c L{8cm}}
+        {\normalfont Přepínač} & {\normalfont Výchozí hodnota} & {\normalfont Popis}                                                                                                  \\
+        \hline
+        master                 & false                         & Povolí nebo zakáže režim diplomové práce. Výchozí režim je tedy bakalářská práce.                                    \\
 
-field & ainfp & Specifikuje studijní obor:\newline
-\begin{description}
-\item[ainf] Aplikovaná informatika\,--\,prezenční,
-\item[ainfk] Aplikovaná informatika\,--\,kombinovaná,
-\item[inf] Informatika\,--\,prezenční,
-\item[infv] Informatika ve vzdělávání\,--\,kombinovaná,
-\item[binf] Bioinformatika\,--\,prezenční.
-\end{description} \\
+        field                  & ainfp                         & Specifikuje studijní obor:\newline
+        \begin{description}
+          \item[ainf] Aplikovaná informatika\,--\,prezenční,
+          \item[ainfk] Aplikovaná informatika\,--\,kombinovaná,
+          \item[inf] Informatika\,--\,prezenční,
+          \item[infv] Informatika ve vzdělávání\,--\,kombinovaná,
+          \item[binf] Bioinformatika\,--\,prezenční.
+        \end{description}                                                                                                                                                     \\
 
-font & serif & Zapne či vypne podporu pěkného bezpatkového fontu. Možné hodnoty jsou:\newline
-\begin{description}
-\item[sans] Bezpatkové písmo (písmo Iwona).
-\item[serif] Patkové písmo (písmo Computer Modern).
-\end{description} \\
+        font                   & serif                         & Zapne či vypne podporu pěkného bezpatkového fontu. Možné hodnoty jsou:\newline
+        \begin{description}
+          \item[sans] Bezpatkové písmo (písmo Iwona).
+          \item[serif] Patkové písmo (písmo Computer Modern).
+        \end{description}                                                                                                                                                     \\
 
-%%  'encoding=kódování' pro kódování tohoto a vložených zdrojových
-%%  textů v kódování jiném než výchozím utf8
-encoding & utf8 & Kódování souboru dokumentu, doporučuje se ponechat výchozí hodnotu. \\
+        %%  'encoding=kódování' pro kódování tohoto a vložených zdrojových
+        %%  textů v kódování jiném než výchozím utf8
+        encoding               & utf8                          & Kódování souboru dokumentu, doporučuje se ponechat výchozí hodnotu.                                                  \\
 
-bibencoding & utf8 & Kódování souboru bibliografie. Tato volba má smysl pouze, pokud je použita bibliografie skrze balíček \BibLaTeX{}. \\
+        bibencoding            & utf8                          & Kódování souboru bibliografie. Tato volba má smysl pouze, pokud je použita bibliografie skrze balíček \BibLaTeX{}.   \\
 
-language & czech & Jazyk práce. \\
+        language               & czech                         & Jazyk práce.                                                                                                         \\
 
-printversion & false & Je-li zapnuto, pak budou odkazy vysázeny optimalizovaně pro knižní sazbu. Tuto volbu je nutno použít pro tisk práce. \\
+        printversion           & false                         & Je-li zapnuto, pak budou odkazy vysázeny optimalizovaně pro knižní sazbu. Tuto volbu je nutno použít pro tisk práce. \\
 
-%%% Nepovinné argumenty `tables' a `figures' použijte pouze v případě,
-%%% že váš dokument obsahuje tabulky a obrázky a chcete vytvořit
-%%% jejich seznamy za obsahem.
-%%%
-%%% Argument `joinlists' způsobí zřetězení obsahu a seznamů tabulek a obrázků.
-%%% Není-li použít, všechny seznamy jsou uvedeny na samostatných stránkách.
+        %%% Nepovinné argumenty `tables' a `figures' použijte pouze v případě,
+        %%% že váš dokument obsahuje tabulky a obrázky a chcete vytvořit
+        %%% jejich seznamy za obsahem.
+        %%%
+        %%% Argument `joinlists' způsobí zřetězení obsahu a seznamů tabulek a obrázků.
+        %%% Není-li použít, všechny seznamy jsou uvedeny na samostatných stránkách.
 
-joinlists & true & Je-li zapnuto, pak seznamy obrázků, tabulek, vět a
-zdrojových kódů sázené za obsahem nebudou rozděleny na samostatné stránky. \\
+        joinlists              & true                          & Je-li zapnuto, pak seznamy obrázků, tabulek, vět a
+        zdrojových kódů sázené za obsahem nebudou rozděleny na samostatné stránky.                                                                                                    \\
 
-figures & true & Je-li zapnuto, pak v seznamech položek bude zahrnut seznam obrázků. \\
+        figures                & true                          & Je-li zapnuto, pak v seznamech položek bude zahrnut seznam obrázků.                                                  \\
 
-tables & true & Je-li zapnuto, pak v seznamech položek bude zahrnut seznam tabulek. \\
+        tables                 & true                          & Je-li zapnuto, pak v seznamech položek bude zahrnut seznam tabulek.                                                  \\
 
-theorems & false & Je-li zapnuto, pak v seznamech bude zahrnut seznam teorémů. \\
+        theorems               & false                         & Je-li zapnuto, pak v seznamech bude zahrnut seznam teorémů.                                                          \\
 
-sourcecodes & false & Je-li zapnuto, pak v seznamech bude zahrnut seznam zdrojových kódů. \\
+        sourcecodes            & false                         & Je-li zapnuto, pak v seznamech bude zahrnut seznam zdrojových kódů.                                                  \\
 
-glossaries & false & Je-li zapnuto, pak na konci dokumentu bude vysázen seznam zkratek. \\
+        glossaries             & false                         & Je-li zapnuto, pak na konci dokumentu bude vysázen seznam zkratek.                                                   \\
 
-index & false & Zapíná podporu sazby rejstříku. \\
+        index                  & false                         & Zapíná podporu sazby rejstříku.                                                                                      \\
 
-biblatex & true & Zapne sazbu bibliografie přes balík \BibLaTeX{}.
-\end{tabular}}
-\end{center}
+        biblatex               & true                          & Zapne sazbu bibliografie přes balík \BibLaTeX{}.
+      \end{tabular}}
+  \end{center}
 \end{table}
 
 \subsection{Geometrie stránky}
@@ -519,40 +568,40 @@ Vysázení všech podstatných částí úvodu práce obstará makro \kiinlineco
 Závěr práce by se měl poskytnout jak v původním jazyce práce, tak v jazyce anglickém. Pro sazbu závěru jsou k dispozici příslušná makra. Berte na vědomí, že v anglickém závěru se aktivuje plně anglická sazba se všemi konvencemi. Tedy je třeba používat anglické uvozovky a další správné typografické prvky.
 
 \begin{kicode}{TeX}{}{Sazba závěrů}
-% Tiskne český závěr práce.
-\begin{kiconclusions}
-Závěr práce v \uv{českém} jazyce.
-\end{kiconclusions}
+  % Tiskne český závěr práce.
+  \begin{kiconclusions}
+    Závěr práce v \uv{českém} jazyce.
+  \end{kiconclusions}
 
-% Tiskne anglický závěr práce.
-\begin{kiconclusions}[english]
-Thesis conclusions written in \uv{English}.
-\end{kiconclusions}
+  % Tiskne anglický závěr práce.
+  \begin{kiconclusions}[english]
+    Thesis conclusions written in \uv{English}.
+  \end{kiconclusions}
 \end{kicode}
 
 \subsection{Matematika}
 Pro sazbu matematiky je k dispozici sada standardních maker.
 $$\langle f \rangle, \lfloor g \rfloor,
-\lceil h \rceil, \ulcorner i \urcorner$$
+  \lceil h \rceil, \ulcorner i \urcorner$$
 
 $$\left\{\frac{x^2}{y^3}\right\}$$
 
 $$
-A_{m,n} =
- \begin{pmatrix}
-  a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
-  a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
-  \vdots  & \vdots  & \ddots & \vdots  \\
-  a_{m,1} & a_{m,2} & \cdots & a_{m,n}
- \end{pmatrix}
+  A_{m,n} =
+  \begin{pmatrix}
+    a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
+    a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
+    \vdots  & \vdots  & \ddots & \vdots  \\
+    a_{m,1} & a_{m,2} & \cdots & a_{m,n}
+  \end{pmatrix}
 $$
 
 $$
-M = \begin{bmatrix}
-       \frac{5}{6} & \frac{1}{6} & 0           \\[0.3em]
-       \frac{5}{6} & 0           & \frac{1}{6} \\[0.3em]
-       0           & \frac{5}{6} & \frac{1}{6}
-     \end{bmatrix}
+  M = \begin{bmatrix}
+    \frac{5}{6} & \frac{1}{6} & 0           \\[0.3em]
+    \frac{5}{6} & 0           & \frac{1}{6} \\[0.3em]
+    0           & \frac{5}{6} & \frac{1}{6}
+  \end{bmatrix}
 $$
 
 \subsection{Sazba literatury}
@@ -581,12 +630,12 @@ Sazba uvozovek respektuje nastavení částí dokumentu, a proto se doporučuje 
 Styl podporuje sazbu odstavců v tabulkách, více obsahuje tabulka \ref{tab:odstavce}.
 
 \begin{table}
-\begin{center}
-\caption{Seznam přepínačů}\label{tab:odstavce}
-\begin{tabular}{L{4cm}|R{4cm}|L{4cm}}
-\lipsum[23] & \lipsum[22] & \lipsum[21]
-\end{tabular}
-\end{center}
+  \begin{center}
+    \caption{Seznam přepínačů}\label{tab:odstavce}
+    \begin{tabular}{L{4cm}|R{4cm}|L{4cm}}
+      \lipsum[23] & \lipsum[22] & \lipsum[21]
+    \end{tabular}
+  \end{center}
 \end{table}
 
 K dispozici jsou také makra pro sazbu \csharp{} (\kiinlinecode{TeX}{!}{\\csharp}) či \cpp{} (\kiinlinecode{TeX}{!}{\\cpp}).
@@ -601,9 +650,9 @@ K dispozici jsou také makra pro sazbu \csharp{} (\kiinlinecode{TeX}{!}{\\csharp
 Sazba rejstříku sestává z několika kroků:
 
 \begin{enumerate}
-\item Je třeba přes volbu \kiinlinecode{TeX}{!}{index=true} rejstříkování povolit.
-\item Použítím makra \kiinlinecode{TeX}{!}{\\index} rejstříkovat vybrané pojmy.
-\item Kompilovat s použitím utility \kiinlinecode{TeX}{!}{makeindex}. Pro specifika tohoto kroku si stačí prohlédnout soubor \kiinlinecode{text}{!}{Makefile}.
+  \item Je třeba přes volbu \kiinlinecode{TeX}{!}{index=true} rejstříkování povolit.
+  \item Použítím makra \kiinlinecode{TeX}{!}{\\index} rejstříkovat vybrané pojmy.
+  \item Kompilovat s použitím utility \kiinlinecode{TeX}{!}{makeindex}. Pro specifika tohoto kroku si stačí prohlédnout soubor \kiinlinecode{text}{!}{Makefile}.
 \end{enumerate}
 
 Makro \kiinlinecode{TeX}{!}{\\index} je redefinováno tak, že sází klikací odkaz na výraz v rejstříku. Je doporučeno jej použít ihned za výrazem\index{výraz}.
@@ -616,64 +665,64 @@ Rejstřík lze vysázet pomocí makra \kiinlinecode{TeX}{!}{\\printindex}.
 Styl nabízí dva způsoby sazby zdrojových kódů:
 
 \begin{enumerate}
-\item Sazbu řádkových kódů, například \kiinlinecode{CSS}{!}{background-color: white;}. K tomu slouží makro formátu \kiinlinecode{TeX}{!}{\\kiinlinecode\{jazyk\}\{separátor\}\{kód\}}. Za separátor je vhodné volit jakýkoliv znak, který se nevyskytuje v samotném sázeném zdrojovém kódu. Za jazyk je nutno dosadit jeden z těchto: C, TeX, PHP, HTML, Lisp, SQL, TeX, Python, Java, TutorialD, text, csharp, cpp, JavaScript, CSS.
+  \item Sazbu řádkových kódů, například \kiinlinecode{CSS}{!}{background-color: white;}. K tomu slouží makro formátu \kiinlinecode{TeX}{!}{\\kiinlinecode\{jazyk\}\{separátor\}\{kód\}}. Za separátor je vhodné volit jakýkoliv znak, který se nevyskytuje v samotném sázeném zdrojovém kódu. Za jazyk je nutno dosadit jeden z těchto: C, TeX, PHP, HTML, Lisp, SQL, TeX, Python, Java, TutorialD, text, csharp, cpp, JavaScript, CSS.
 
-\item Sazbu zdrojových kódu do separátních prostředí. Takto vytištěný kód se objeví v seznamu zdrojových kódů. Ukázka například zdrojový kód \ref{kod:cpp}. Ukázku sazby naleznete ve zdrojovém kódu tohoto dokumentu.
+  \item Sazbu zdrojových kódu do separátních prostředí. Takto vytištěný kód se objeví v seznamu zdrojových kódů. Ukázka například zdrojový kód \ref{kod:cpp}. Ukázku sazby naleznete ve zdrojovém kódu tohoto dokumentu.
 \end{enumerate}
 
 \newacronym{UPOL}{UPOL}{\kitextunivcz}
 
 \begin{definition}[Název definice]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. \gls{UPOL}
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. \gls{UPOL}
 \end{definition}
 
 \begin{proof}[Název důkazu]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{proof}
 
 \begin{remark}[Pumpovací věta]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{remark}
 
 \begin{example}[Pumpovací věta]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{example}
 
 \begin{lemma}[Název definice]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{lemma}
 
 \begin{consequence}[Název důkazu]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{consequence}
 
 \begin{theorem}[Pumpovací věta]
-Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. 
+  Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd. Abcd.
 \end{theorem}
 
 
 \begin{kicode}{cpp}{kod:cpp}{\cpp}
-int main("cs acsa") // komentar
-int main("cs acsa") // komentar
-int main("cs acsa") // komentar
-int main("cs acsa") // komentar
-int main("cs acsa") // komentar
+  int main("cs acsa") // komentar
+  int main("cs acsa") // komentar
+  int main("cs acsa") // komentar
+  int main("cs acsa") // komentar
+  int main("cs acsa") // komentar
 \end{kicode}
 
 \begin{kicode}{JavaScript}{}{JS}
-new object() // komentar
+  new object() // komentar
 \end{kicode}
 
 \begin{kicode}{csharp}{}{\csharp}
-public static int main("cs acsa") // komentar
+  public static int main("cs acsa") // komentar
 \end{kicode}
 
 \begin{kicode}{SQL}{}{SQL}
-SELECT * FROM table_1; /* komentar */
+  SELECT * FROM table_1; /* komentar */
 \end{kicode}
 
 \begin{kicode}{TutorialD}{}{TutorialD}
-table_1 AND table_2;
+  table_1 AND table_2;
 \end{kicode}
 
 %% Závěry práce. V jazyce práce a anglicky. Text pro jiný než
@@ -681,11 +730,11 @@ table_1 AND table_2;
 %% \documentclass, výchozí český) se zadává použitím makra s uvedením
 %% jazyka jako nepovinného parametru.
 \begin{kiconclusions}
-Závěr práce v \uv{českém} jazyce.
+  Závěr práce v \uv{českém} jazyce.
 \end{kiconclusions}
 
 \begin{kiconclusions}[english]
-Thesis conclusions in \uv{English}.
+  Thesis conclusions in \uv{English}.
 \end{kiconclusions}
 
 %% Přílohy obsahu textu práce, za makrem \appendix.
@@ -707,36 +756,36 @@ souborů apod.
 
 \begin{description}
 
-\item[\texttt{bin/}] \hfill \\
-  Instalátor \textsc{Instalator} programu, popř.~program
-  \textsc{Program}, spustitelné přímo z~CD/DVD. / Kompletní adresářová
-  struktura webové aplikace \textsc{Webovka} (v~ZIP archivu) pro
-  zkopírování na webový server. Adresář obsahuje i~všechny runtime
-  knihovny a~další soubory potřebné pro bezproblémový běh instalátoru
-  a~programu z~CD/DVD / pro bezproblémový provoz webové aplikace na
-  webovém serveru.
+  \item[\texttt{bin/}] \hfill \\
+        Instalátor \textsc{Instalator} programu, popř.~program
+        \textsc{Program}, spustitelné přímo z~CD/DVD. / Kompletní adresářová
+        struktura webové aplikace \textsc{Webovka} (v~ZIP archivu) pro
+        zkopírování na webový server. Adresář obsahuje i~všechny runtime
+        knihovny a~další soubory potřebné pro bezproblémový běh instalátoru
+        a~programu z~CD/DVD / pro bezproblémový provoz webové aplikace na
+        webovém serveru.
 
-\item[\texttt{doc/}] \hfill \\
-  Text práce ve formátu PDF, vytvořený s~použitím závazného stylu KI
-  PřF UP v~Olomouci pro závěrečné práce, včetně všech příloh,
-  a~všechny soubory potřebné pro bezproblémové vygenerování PDF
-  dokumentu textu (v~ZIP archivu), tj.~zdrojový text textu, vložené
-  obrázky, apod.
+  \item[\texttt{doc/}] \hfill \\
+        Text práce ve formátu PDF, vytvořený s~použitím závazného stylu KI
+        PřF UP v~Olomouci pro závěrečné práce, včetně všech příloh,
+        a~všechny soubory potřebné pro bezproblémové vygenerování PDF
+        dokumentu textu (v~ZIP archivu), tj.~zdrojový text textu, vložené
+        obrázky, apod.
 
-\item[\texttt{src/}] \hfill \\
-  Kompletní zdrojové texty programu \textsc{Program} / webové aplikace
-  \textsc{Webovka} se všemi potřebnými (příp.~převzatými) zdrojovými
-  texty, knihovnami a~dalšími soubory potřebnými pro bezproblémové
-  vytvoření spustitelných verzí programu / adresářové struktury pro
-  zkopírování na webový server.
+  \item[\texttt{src/}] \hfill \\
+        Kompletní zdrojové texty programu \textsc{Program} / webové aplikace
+        \textsc{Webovka} se všemi potřebnými (příp.~převzatými) zdrojovými
+        texty, knihovnami a~dalšími soubory potřebnými pro bezproblémové
+        vytvoření spustitelných verzí programu / adresářové struktury pro
+        zkopírování na webový server.
 
-\item[\texttt{readme.txt}] \hfill \\
-  Instrukce pro instalaci a~spuštění programu \textsc{Program}, včetně
-  všech požadavků pro jeho bezproblémový provoz. / Instrukce pro
-  nasazení webové aplikace \textsc{Webovka} na webový server, včetně
-  všech požadavků pro její bezproblémový provoz, a~webová adresa, na
-  které je aplikace nasazena pro účel testování při tvorbě posudků
-  práce a~pro účel obhajoby práce.
+  \item[\texttt{readme.txt}] \hfill \\
+        Instrukce pro instalaci a~spuštění programu \textsc{Program}, včetně
+        všech požadavků pro jeho bezproblémový provoz. / Instrukce pro
+        nasazení webové aplikace \textsc{Webovka} na webový server, včetně
+        všech požadavků pro její bezproblémový provoz, a~webová adresa, na
+        které je aplikace nasazena pro účel testování při tvorbě posudků
+        práce a~pro účel obhajoby práce.
 
 \end{description}
 
@@ -744,19 +793,19 @@ Navíc CD/DVD obsahuje:
 
 \begin{description}
 
-\item[\texttt{data/}] \hfill \\
-  Ukázková a~testovací data použitá v~práci a~pro potřeby testování
-  práce při tvorbě posudků a~obhajoby práce.
+  \item[\texttt{data/}] \hfill \\
+        Ukázková a~testovací data použitá v~práci a~pro potřeby testování
+        práce při tvorbě posudků a~obhajoby práce.
 
-\item[\texttt{install/}] \hfill \\
-  Instalátory aplikací, runtime knihoven a~jiných souborů potřebných
-  pro provoz programu \textsc{Program} / webové aplikace
-  \textsc{Webovka}, které nejsou standardní součástí operačního
-  systému určeného pro běh programu / provoz webové aplikace.
+  \item[\texttt{install/}] \hfill \\
+        Instalátory aplikací, runtime knihoven a~jiných souborů potřebných
+        pro provoz programu \textsc{Program} / webové aplikace
+        \textsc{Webovka}, které nejsou standardní součástí operačního
+        systému určeného pro běh programu / provoz webové aplikace.
 
-\item[\texttt{literature/}] \hfill \\
-  Vybrané položky bibliografie, příp.~jiná užitečná literatura
-  vztahující se k~práci.
+  \item[\texttt{literature/}] \hfill \\
+        Vybrané položky bibliografie, příp.~jiná užitečná literatura
+        vztahující se k~práci.
 
 \end{description}
 

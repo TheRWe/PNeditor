@@ -1,134 +1,122 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {czech}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1}Petriho s\IeC {\'\i }t\IeC {\v e}}{10}{section.1}% 
+\contentsline {section}{\numberline {1}Petriho s\IeC {\'\i }t\IeC {\v e}}{9}{section.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.1}Z\IeC {\'a}kladn\IeC {\'\i } definice}{10}{subsection.1.1}% 
+\contentsline {subsection}{\numberline {1.1}Z\IeC {\'a}kladn\IeC {\'\i } definice}{9}{subsection.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2}Vizu\IeC {\'a}ln\IeC {\'\i } zobrazen\IeC {\'\i } s\IeC {\'\i }t\IeC {\v e}}{11}{subsection.1.2}% 
+\contentsline {subsection}{\numberline {1.2}Vizu\IeC {\'a}ln\IeC {\'\i } zobrazen\IeC {\'\i } s\IeC {\'\i }t\IeC {\v e}}{10}{subsection.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3}Vyu\IeC {\v z}it\IeC {\'\i }}{11}{subsection.1.3}% 
+\contentsline {subsection}{\numberline {1.3}Vyu\IeC {\v z}it\IeC {\'\i }}{10}{subsection.1.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.4}Graf dosa\IeC {\v z}itelnosti}{11}{subsection.1.4}% 
+\contentsline {subsection}{\numberline {1.4}Graf dosa\IeC {\v z}itelnosti}{10}{subsection.1.4}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {1.4.1}Definice}{11}{subsubsection.1.4.1}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {1.4.2}Vlastnosti odvoditeln\IeC {\'e} z Grafu dosa\IeC {\v z}itelnosti}{11}{subsubsection.1.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.5}Graf pokryt\IeC {\'\i }}{12}{subsection.1.5}% 
+\contentsline {subsubsection}{\numberline {1.4.3}P\IeC {\v r}\IeC {\'\i }klady grafu dosa\IeC {\v z}itelnosti}{11}{subsubsection.1.4.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.5}Graf pokryt\IeC {\'\i }}{11}{subsection.1.5}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {1.5.1}Sestrojen\IeC {\'\i } grafu}{12}{subsubsection.1.5.1}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {1.5.2}Upraven\IeC {\'a} verze vlastnost\IeC {\'\i }}{13}{subsubsection.1.5.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Implementovan\IeC {\'e} algoritmy}{13}{section.2}% 
+\contentsline {subsection}{\numberline {1.6}P\IeC {\v r}\IeC {\'\i }klady s\IeC {\'\i }t\IeC {\'\i }}{13}{subsection.1.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}P\IeC {\v r}\IeC {\'\i }klady s\IeC {\'\i }t\IeC {\'\i }}{13}{subsection.2.1}% 
+\contentsline {section}{\numberline {2}Editor}{13}{section.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Editor}{13}{section.3}% 
+\contentsline {subsection}{\numberline {2.1}Syst\IeC {\'e}mov\IeC {\'e} po\IeC {\v z}adavky}{13}{subsection.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Syst\IeC {\'e}mov\IeC {\'e} po\IeC {\v z}adavky}{13}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {2.2}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }}{13}{subsection.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }}{13}{subsection.3.2}% 
+\contentsline {subsubsection}{\numberline {2.2.1}Postrann\IeC {\'\i } panel}{13}{subsubsection.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.1}Postrann\IeC {\'\i } panel}{13}{subsubsection.3.2.1}% 
+\contentsline {subsubsection}{\numberline {2.2.2}Hlavn\IeC {\'\i } plocha editoru}{13}{subsubsection.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.2}Hlavn\IeC {\'\i } plocha editoru}{14}{subsubsection.3.2.2}% 
+\contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{13}{subsubsection.2.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{14}{subsubsection.3.2.3}% 
+\contentsline {subsubsection}{\numberline {2.2.4}Tabulka ohodnocen\IeC {\'\i }}{13}{subsubsection.2.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.4}Tabulka ohodnocen\IeC {\'\i }}{14}{subsubsection.3.2.4}% 
+\contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{13}{subsubsection.2.2.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{14}{subsubsection.3.2.5}% 
+\contentsline {subsubsection}{\numberline {2.2.6}Tisk s\IeC {\'\i }t\IeC {\v e}}{13}{subsubsection.2.2.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.6}Tisk s\IeC {\'\i }t\IeC {\v e}}{14}{subsubsection.3.2.6}% 
+\contentsline {subsubsection}{\numberline {2.2.7}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{13}{subsubsection.2.2.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.2.7}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{14}{subsubsection.3.2.7}% 
+\contentsline {section}{\numberline {3}Pou\IeC {\v z}it\IeC {\'e} technologie}{13}{section.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Pou\IeC {\v z}it\IeC {\'e} technologie}{14}{section.4}% 
+\contentsline {subsection}{\numberline {3.1}nodejs}{13}{subsection.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}nodejs}{14}{subsection.4.1}% 
+\contentsline {subsection}{\numberline {3.2}Typescript}{14}{subsection.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}Typescript}{14}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {3.3}Electron}{14}{subsection.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}Electron}{15}{subsection.4.3}% 
+\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{14}{subsection.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{15}{subsection.4.4}% 
+\contentsline {subsection}{\numberline {3.5}Scalable Vector Graphics (SVG)}{14}{subsection.3.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.5}Scalable Vector Graphics (SVG)}{15}{subsection.4.5}% 
+\contentsline {section}{\numberline {4}Stavba programu}{14}{section.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Stavba programu}{15}{section.5}% 
+\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{14}{subsection.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1}T\IeC {\v r}\IeC {\'\i }da 1}{15}{subsection.5.1}% 
+\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{14}{subsection.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2}T\IeC {\v r}\IeC {\'\i }da 2}{15}{subsection.5.2}% 
+\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{14}{subsection.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.3}T\IeC {\v r}\IeC {\'\i }da 3}{15}{subsection.5.3}% 
+\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{14}{subsection.4.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.4}T\IeC {\v r}\IeC {\'\i }da 4}{15}{subsection.5.4}% 
+\contentsline {section}{\numberline {5}Styly pro psan\IeC {\'\i } bakal\IeC {\'a}\IeC {\v r}sk\IeC {\'y}ch a diplomov\IeC {\'y}ch prac\IeC {\'\i }}{15}{section.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}Styly pro psan\IeC {\'\i } bakal\IeC {\'a}\IeC {\v r}sk\IeC {\'y}ch a diplomov\IeC {\'y}ch prac\IeC {\'\i }}{16}{section.6}% 
+\contentsline {subsection}{\numberline {5.1}Po\IeC {\v z}adavky a podprovan\IeC {\'a} prost\IeC {\v r}ed\IeC {\'\i }}{15}{subsection.5.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.1}Po\IeC {\v z}adavky a podprovan\IeC {\'a} prost\IeC {\v r}ed\IeC {\'\i }}{16}{subsection.6.1}% 
+\contentsline {subsection}{\numberline {5.2}P\IeC {\v r}ep\IeC {\'\i }na\IeC {\v c}e}{15}{subsection.5.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.2}P\IeC {\v r}ep\IeC {\'\i }na\IeC {\v c}e}{16}{subsection.6.2}% 
+\contentsline {subsection}{\numberline {5.3}Geometrie str\IeC {\'a}nky}{15}{subsection.5.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.3}Geometrie str\IeC {\'a}nky}{16}{subsection.6.3}% 
+\contentsline {section}{\numberline {6}Sazba \IeC {\v c}\IeC {\'a}st\IeC {\'\i } dokumentu}{17}{section.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7}Sazba \IeC {\v c}\IeC {\'a}st\IeC {\'\i } dokumentu}{18}{section.7}% 
+\contentsline {subsection}{\numberline {6.1}Sazba \IeC {\'u}vodn\IeC {\'\i } strany \IeC {\v c}i obsahu}{17}{subsection.6.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.1}Sazba \IeC {\'u}vodn\IeC {\'\i } strany \IeC {\v c}i obsahu}{18}{subsection.7.1}% 
+\contentsline {subsection}{\numberline {6.2}Z\IeC {\'a}v\IeC {\v e}ry}{17}{subsection.6.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.2}Z\IeC {\'a}v\IeC {\v e}ry}{18}{subsection.7.2}% 
+\contentsline {subsection}{\numberline {6.3}Matematika}{17}{subsection.6.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.3}Matematika}{19}{subsection.7.3}% 
+\contentsline {subsection}{\numberline {6.4}Sazba literatury}{18}{subsection.6.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.4}Sazba literatury}{19}{subsection.7.4}% 
+\contentsline {subsubsection}{\numberline {6.4.1}Sazba bibliografie p\IeC {\v r}es \textsc {Bib}\LaTeX {}}{18}{subsubsection.6.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {7.4.1}Sazba bibliografie p\IeC {\v r}es \textsc {Bib}\LaTeX {}}{19}{subsubsection.7.4.1}% 
+\contentsline {subsubsection}{\numberline {6.4.2}Manu\IeC {\'a}ln\IeC {\'\i } sazba bibliografie}{19}{subsubsection.6.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {7.4.2}Manu\IeC {\'a}ln\IeC {\'\i } sazba bibliografie}{20}{subsubsection.7.4.2}% 
+\contentsline {subsection}{\numberline {6.5}Drobn\IeC {\'a} makra}{19}{subsection.6.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.5}Drobn\IeC {\'a} makra}{20}{subsection.7.5}% 
+\contentsline {subsection}{\numberline {6.6}Sazba rejst\IeC {\v r}\IeC {\'\i }ku}{19}{subsection.6.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.6}Sazba rejst\IeC {\v r}\IeC {\'\i }ku}{22}{subsection.7.6}% 
+\contentsline {subsection}{\numberline {6.7}Sazba zdrojov\IeC {\'y}ch k\IeC {\'o}d\IeC {\r u}}{21}{subsection.6.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.7}Sazba zdrojov\IeC {\'y}ch k\IeC {\'o}d\IeC {\r u}}{22}{subsection.7.7}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{Z\'av\v er}{25}{section*.6}% 
+\contentsline {section}{Z\'av\v er}{24}{section*.6}% 
 \babel@toc {czech}{}
 \babel@toc {czech}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Conclusions}{26}{section*.8}% 
+\contentsline {section}{Conclusions}{25}{section*.8}% 
 \babel@toc {english}{}
 \babel@toc {czech}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {A}Prvn\IeC {\'\i } p\IeC {\v r}\IeC {\'\i }loha}{27}{appendix.A}% 
+\contentsline {section}{\numberline {A}Prvn\IeC {\'\i } p\IeC {\v r}\IeC {\'\i }loha}{26}{appendix.A}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {B}Druh\IeC {\'a} p\IeC {\v r}\IeC {\'\i }loha}{27}{appendix.B}% 
+\contentsline {section}{\numberline {B}Druh\IeC {\'a} p\IeC {\v r}\IeC {\'\i }loha}{26}{appendix.B}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {C}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{27}{appendix.C}% 
+\contentsline {section}{\numberline {C}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{26}{appendix.C}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Seznam zkratek}{29}{section*.10}% 
+\contentsline {section}{Seznam zkratek}{28}{section*.10}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Literatura}{30}{section*.11}% 
+\contentsline {section}{Literatura}{29}{section*.11}% 
 \babel@toc {czech}{}
-\babel@toc {czech}{}
-\babel@toc {english}{}
 \babel@toc {czech}{}
 \babel@toc {english}{}
 \babel@toc {czech}{}
 \babel@toc {english}{}
-\babel@toc {czech}{}
-\babel@toc {english}{}
-\babel@toc {czech}{}
-\babel@toc {czech}{}
-\babel@toc {czech}{}
-\babel@toc {czech}{}
-\babel@toc {czech}{}
-\babel@toc {english}{}
-\babel@toc {czech}{}
-\babel@toc {czech}{}
 \babel@toc {czech}{}
 \babel@toc {english}{}
 \babel@toc {czech}{}
@@ -138,5 +126,17 @@
 \babel@toc {czech}{}
 \babel@toc {czech}{}
 \babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {english}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
+\babel@toc {czech}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Rejst\v {r}\'{i}k}{32}{section*.14}% 
+\contentsline {section}{Rejst\v {r}\'{i}k}{31}{section*.14}% 
