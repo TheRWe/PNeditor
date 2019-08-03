@@ -18,7 +18,6 @@ import { groupmap, TabInterface } from "../main";
 
 
 export class PNEditor implements TabInterface {
-
     public readonly tab: Tab;
     /** Container under controlbar */
     public readonly underControlContainer: d3BaseSelector;

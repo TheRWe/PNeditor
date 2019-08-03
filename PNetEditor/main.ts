@@ -94,7 +94,15 @@ const TabActions = {
                 showModal("Selected tab cannnot be saved.", "OK");
                 return;
             }
-            ipcRenderer.send('save-dialog');
+
+            if (obj.Path) {
+                showModal("Save to same file ?", "Yes", "Select file").then(result => {
+                    if (result === modalResult.btn0)
+                        TabActions.save(obj.Path);
+                    else if (result === modalResult.btn1)
+                        ipcRenderer.send('save-dialog');
+                });
+            }
         },
         load: () => { ipcRenderer.send('load-dialog'); },
     },
@@ -110,7 +118,10 @@ function InitFileButtons() {
     const c = "click";
     buttonNew.on(c, TabActions.new)
     buttonLoad.on(c, TabActions.initDialog.load);
-    buttonSave.on(c, TabActions.initDialog.save);
+    buttonSave.on(c, async () => {
+
+        TabActions.initDialog.save();
+    });
     buttonClose.on(c, TabActions.close);
 
     ipcRenderer.on("load-dialog-response", (e: any, path: string) => {
