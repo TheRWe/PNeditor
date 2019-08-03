@@ -74,7 +74,6 @@ export abstract class DrawBase {
 export enum CallbackType { 'letfClick', 'rightClick', 'wheel', 'dragStart', 'drag', 'dragEnd', 'dragRevert' }
 /** class for holding mouse callbacks for drawmodels */
 export class Callbacks<type> {
-    //todo: globální dragdistance -> do configu
     static readonly distanceDeadzone = 8;
 
     public AddCallback(type: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;

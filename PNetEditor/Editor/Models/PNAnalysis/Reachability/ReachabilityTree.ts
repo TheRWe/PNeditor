@@ -189,7 +189,6 @@ export class CoverabilityGraph {
         return Math.max(...this.graph.V.map(x => Math.max(...x.map(y => y.marking).filter(y => y !== omega))));
     };
 
-    // todo: musí být z reachability graph
     public get reversible(): boolean {
         if (this.containstOmega) {
             if (!this.hasConsumingTransition)

@@ -2,7 +2,6 @@
 import { classify, SortKeySelector } from "../../../../Helpers/purify";
 import { PNModel, Arc } from "../PNModel";
 
-//todo: casching
 /**
  * Helper function for calculating endpoints of arces
  * @param net whole net

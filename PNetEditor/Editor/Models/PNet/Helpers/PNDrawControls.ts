@@ -21,7 +21,7 @@ export class PNDrawControls {
             .style("width", "1.5em")
             .style("font-size", "1.5em")
             .style("height", "1.4em")
-            .style("padding-top",".1em")
+            .style("padding-top", ".1em")
             .on("click", () => { editor.pnAction.Undo(); editor.pnDraw.update(); })
 
         container.append("input")
@@ -30,7 +30,7 @@ export class PNDrawControls {
             .style("width", "1.5em")
             .style("font-size", "1.5em")
             .style("height", "1.4em")
-            .style("padding-top",".1em")
+            .style("padding-top", ".1em")
             .on("click", () => { editor.pnAction.Redo(); editor.pnDraw.update(); })
 
         container.append("input")
@@ -51,8 +51,6 @@ export class PNDrawControls {
             ;
 
 
-        // todo: omezení max min velikost
-        //container.append("span").text("🔍 ");
 
         const zoomInContainer = container
             .append("div")
@@ -60,7 +58,11 @@ export class PNDrawControls {
             .style("font-size", "1.5em")
             .style("cursor", "pointer")
             .style("height", "1.4em")
-            .on("click", () => { editor.pnDraw.scale += 0.1; })
+            .on("click", () => {
+                // todo: do settings
+                if (editor.pnDraw.scale < 2)
+                    editor.pnDraw.scale += 0.1;
+            })
             .classed("button", true)
             ;
 
@@ -76,7 +78,11 @@ export class PNDrawControls {
             .style("cursor", "pointer")
             .style("font-size", "1.5em")
             .style("height", "1.4em")
-            .on("click", () => { editor.pnDraw.scale -= 0.1; })
+            .on("click", () => {
+                // todo: do settings
+                if (editor.pnDraw.scale > 0.3)
+                    editor.pnDraw.scale -= 0.1;
+            })
             .classed("button", true)
             ;
 

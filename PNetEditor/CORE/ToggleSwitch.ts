@@ -39,7 +39,6 @@ export class ToggleSwitch {
         }
     }
 
-    // todo: lepší řešení spojování funkcí
     private _toggleChangedHandler = (obj: ToggleSwitch) => { };
     public AddOnToggleChange(handler: (obj: ToggleSwitch) => void): void {
         const prevHandler = this._toggleChangedHandler;

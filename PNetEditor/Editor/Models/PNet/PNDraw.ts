@@ -31,16 +31,9 @@ export class PNDraw extends DrawBase {
         place: new Callbacks<Place>(),
     };
 
-    public fixScroll() {
-        const node = this.container.node() as HTMLElement;
-
-        const scroll = node.scrollTop;
-        console.debug("sssss" + scroll);
-        setTimeout(() => {
-            console.debug("sssssaaaaaaa" + node.scrollTop);
-            node.scrollTop = scroll;
-
-        });
+    private preventScroll = false;
+    public scrollPreventDefault() {
+        this.preventScroll = true;
     }
 
     public readonly simulation: d3.Simulation<{}, undefined>;
@@ -66,7 +59,7 @@ export class PNDraw extends DrawBase {
 
         if (startingFrom == null) {
             this._isArcDragLineVisible = false;
-            //todo: nebezpečné, vymyslet alternativu
+            //todo: clears all 
             this.container.on("mousemove", null);
 
             arcDragLine
@@ -179,6 +172,17 @@ export class PNDraw extends DrawBase {
             .style("stroke-width", 1.5)
             .style("display", "none")
             .style("pointer-events", "none");
+
+        const node = (this.container.node() as HTMLElement).parentElement;
+
+        const fnc = (e: UIEvent) => {
+            if (this.preventScroll) {
+                e.preventDefault();
+                this.preventScroll = false;
+            }
+        };
+
+        node.addEventListener("wheel", fnc, { passive: false });
     }
 
     protected _update(): void {
@@ -211,7 +215,6 @@ export class PNDraw extends DrawBase {
 
         callbacks.place.ConnectToElement(placesEnterGroup, getPos, getWheelDeltaY);
 
-        // todo: any ? (taky u transition)
         const placesEnterCircle = placesEnterGroup.append("circle")
             .attr("r", 10)
             .classed(html.classes.PNEditor.place.svgCircle, true)
@@ -226,7 +229,6 @@ export class PNDraw extends DrawBase {
             .classed(html.classes.PNEditor.multiSelection.selectOutline, true)
             ;
 
-        //todo: kolečka/tečky pro nízké počty
         const placesEnterText = placesEnterGroup.append("text")
             .classed("unselectable", true)
             .attr("text-anchor", "middle")
@@ -243,7 +245,6 @@ export class PNDraw extends DrawBase {
             .attr("text-anchor", "middle")
             .attr("dy", "-1.3em")
             .attr("font-size", 10)
-            // todo: class do constants
             .style("stroke-width", ".5em")
             .style("stroke", "white")
             .style("stroke-linejoin", "round")
@@ -261,7 +262,6 @@ export class PNDraw extends DrawBase {
             .attr("transform", (p: Place) => `translate(${p.x}, ${p.y})`)
             ;
         places()
-            //todo: scaling
             .select(".marking")
             .text(d => netConfig ? ((netConfig.marking.find(x => x.id === d.id) || { marking: 0 }).marking || "") : d.marking || "")
             ;
@@ -314,7 +314,6 @@ export class PNDraw extends DrawBase {
             .attr("text-anchor", "middle")
             .attr("dy", "-1.3em")
             .attr("font-size", 10)
-            // todo: class do constants
             .style("stroke-width", ".5em")
             .style("stroke", "white")
             .style("stroke-linejoin", "round")
@@ -387,7 +386,7 @@ export class PNDraw extends DrawBase {
             .classed(html.classes.PNEditor.helper.arcHitboxLine, true)
             .style("stroke", "black")
             .attr("opacity", "0")
-            .style("stroke-width", 8)
+            .style("stroke-width", 15)
             ;
         callbacks.arc.ConnectToElement(enterArcHitboxLine, getPos, getWheelDeltaY);
 
@@ -397,7 +396,6 @@ export class PNDraw extends DrawBase {
             .attr("text-anchor", "middle")
             .attr("dy", ".3em")
             .attr("font-size", 10)
-            // todo: class do constants
             .style("stroke-width", ".3em")
             .style("stroke", "white")
             .style("stroke-linejoin", "round")
@@ -414,7 +412,6 @@ export class PNDraw extends DrawBase {
         callbacks.arc.ConnectToElement(enterArcText, getPos, getWheelDeltaY);
 
         arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
-            // todo: markery
             .style('marker-end', a => a.arc.toPlace > 0 ? `url(#${this.defs.arrowPlaceEnd})` : "")
             .style('marker-start', a => a.arc.toTransition > 0 ? `url(#${this.defs.arrowTransitionEnd})` : "")
             .attr("x1", a => a.line.from.x)
@@ -428,7 +425,6 @@ export class PNDraw extends DrawBase {
             .attr("x2", a => a.line.to.x)
             .attr("y2", a => a.line.to.y);
 
-        // todo: obravování -> pokud šipka z place tak červená jinak zelená (obarvit ají šipku)
         arcs().select('.text-foreground')
             .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
             .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
@@ -458,7 +454,6 @@ export class PNDraw extends DrawBase {
         //#endregion
 
 
-        // todo:
         netSelectors.places().classed(html.classes.PNEditor.multiSelection.selected, false);
         netSelectors.transitions().classed(html.classes.PNEditor.multiSelection.selected, false);
 
@@ -473,11 +468,9 @@ export class PNDraw extends DrawBase {
             netSelectors.transitions().classed("selected", false)
         }
 
-        // todo: kontrola
         arcs().exit().remove();
         places().exit().remove();
         transitions().exit().remove();
-
 
         const simulationNodes = [...places().data(), ...transitions().data()];
         this.simulation.nodes(simulationNodes);

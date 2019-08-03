@@ -18,7 +18,7 @@ export class PlaceTransitionTableDraw extends DrawBase {
     protected Selectors = {
         table: null as d3BaseSelector,
     };
-    // todo: v nastavení bude velikost textu tabulky
+
     protected _update(): void {
         const table = this.Selectors.table;
         const net = this.models.net;

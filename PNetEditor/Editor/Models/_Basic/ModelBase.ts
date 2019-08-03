@@ -1,8 +1,4 @@
 ﻿export abstract class ModelBase<JSONType>{
-    // todo: update model
-    // bude se používat v případě že se změní data v navázaných modelech -> přepočítání
-    //    public abstract update(updated?: {modela?: modelType ...})
-
     /** serialize object to json */
     public abstract toJSON(): JSONType;
     /** try to deserialize object from json */

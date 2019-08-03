@@ -10,7 +10,6 @@ export class Tab {
     public get label(): string { return this.tabButton.text(); }
     public set label(text: string) { this.tabButton.text(text); }
 
-    /** todo: test */
     public get isVisible() {
         return !this.container.classed("hidden");
     }

@@ -65,8 +65,6 @@ export class PNEditor implements TabInterface {
 
     // used to cancel all undone actions
     private resetState() {
-        // todo: Draw IsSelectionEnabled
-        // todo: toggles.run ? 
         if (this.mode.selected === this.mode.default)
             return;
 
@@ -79,7 +77,6 @@ export class PNEditor implements TabInterface {
                 this.keyboard.inputs.arcValue.editedArc = null;
                 this.keyboard.inputs.marking.editedPlace = null;
                 break;
-            // todo: implement state reset
             default:
                 console.warn("implement");
                 break;
@@ -218,7 +215,7 @@ export class PNEditor implements TabInterface {
                         t.isCold = !t.isCold;
                         this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
-                        this.pnDraw.fixScroll();
+                        this.pnDraw.scrollPreventDefault();
                         break;
                     default:
                         notImplemented();
@@ -275,7 +272,7 @@ export class PNEditor implements TabInterface {
                             this.pnDraw.update();
                         }
 
-                        d3.event.stopPropagation();
+                        this.pnDraw.scrollPreventDefault();
                         break;
                     default:
                         notImplemented();
@@ -322,7 +319,8 @@ export class PNEditor implements TabInterface {
 
                         this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
-                        d3.event.stopPropagation();
+
+                        this.pnDraw.scrollPreventDefault();
                         break;
                     default:
                         notImplemented();

@@ -10,10 +10,6 @@ export class PNModel extends ModelBase<JSONNet>{
     public arcs: Arc[];
 
     public toJSON(): JSONNet {
-        // todo: https://github.com/dsherret/ts-nameof
-        // todo: změna id
-        // todo: možnost ukládat pouze name bez id pokud je name unikátní
-        // todo: kontrola že se name neukládá pokud je "" | null | undefined
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
             = this.places.map(p => { return { name: p.name, id: p.id, position: ((p.x !== undefined && p.y !== undefined) ? { x: p.x, y: p.y } : undefined), marking: p.marking }; });
 
@@ -29,7 +25,6 @@ export class PNModel extends ModelBase<JSONNet>{
     }
 
     public fromJSON(json: JSONNet): boolean {
-        // todo: možnost používat name místo id
         const places: Place[] = json.places.map(p => new Place(p.name, p.position, p.marking, p.id))
 
         const transitions: Transition[] = json.transitions.map(tj => {
@@ -45,7 +40,6 @@ export class PNModel extends ModelBase<JSONNet>{
 
         Object.assign(this, { places: places, transitions: transitions, placeID: placeID, arcs: arcs });
 
-        // todo: validace
         return true;
     }
 
@@ -71,10 +65,8 @@ export class PNModel extends ModelBase<JSONNet>{
 }
 
 export class Transition implements ForceNode {
-    // todo: implementovat cold transitions
     public isCold: boolean = false;
 
-    //todo: o id a odkazování se bude starat ukládání a načítání
     public readonly id: number;
     private static idMaker = 0;
 
@@ -113,7 +105,6 @@ export class Place implements ForceNode {
     public name: string | null;
     public marking: number | null;
 
-    //todo: o id a odkazování se bude starat ukládání a načítání
     public id: number | null;
     private static idMaker = 0;
 
