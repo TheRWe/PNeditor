@@ -36,8 +36,9 @@ export class CoverabilityGraph {
 
     public async CalculateHashed() {
         const rootHash = sha1(this.root);
-        const vertices: { [key: string]: marking[] } = {}; vertices[rootHash] = [this.root];
-        const graphHashed: GraphHashed = { V: {}, E: [] };
+        const vertices: { [key: string]: marking[] } = {};
+        vertices[rootHash] = [this.root];
+        const graphHashed: GraphHashed = { V: vertices, E: [] };
         const WorkSet: { markingHashed: markingHashed, transition: TransitionID }[] = [];
 
         let cancel = false;
@@ -76,8 +77,9 @@ export class CoverabilityGraph {
                 .filter(x => isLowerSameMarking(x, calculatedMarking)).forEach(availebleFromMarking => {
                     availebleFromMarking.forEach(p => {
                         const pmark = calculatedMarking.find(pp => pp.id === p.id);
-                        if (p.marking < pmark.marking)
+                        if (p.marking < pmark.marking) {
                             pmark.marking = numbers.omega;
+                        }
                     });
                 });
 
@@ -100,7 +102,6 @@ export class CoverabilityGraph {
             E: graphHashed.E.map(x => { return [x.from.marking, x.TransitionID, x.to.marking] as Edge; }),
             V: flatten(Object.keys(graphHashed.V).map(x => graphHashed.V[x]))
         };
-
         const graphChanged = this.graph.V.length === 1 || this.graph.V.length > graph.V.length;
         if (graphChanged) {
             this.graph = graph;
@@ -173,46 +174,147 @@ export class CoverabilityGraph {
 
     //#region Coverability graph mathematical properties
 
+    public get hasConsumingTransition(): boolean {
+        const net = this.net;
+        return net.transitions.some(t => net.arcs.filter(a => a.transition_id === t.id).map(a => (a.toPlace || 0) - (a.toTransition || 0)).reduce((a, b) => a + b) < 0);
+    }
+
     public get containstOmega(): boolean {
-        return this.graph.V.some(x => x.some(y => y.marking === numbers.omega));
+        return this.graph.V.some(x => x.some(y => y.marking === omega));
     }
     public get numStates(): number {
         return this.graph.V.length;
     };
     public get maxMarking(): number {
-        return Math.max(...this.graph.V.map(x => Math.max(...x.map(y => y.marking).filter(y => y !== numbers.omega))));
+        return Math.max(...this.graph.V.map(x => Math.max(...x.map(y => y.marking).filter(y => y !== omega))));
     };
 
+    // todo: musí být z reachability graph
     public get reversible(): boolean {
-        const g = this.graph;
-        const root = this.root;
+        if (this.containstOmega) {
+            if (!this.hasConsumingTransition)
+                return false;
+            return null;
+        }
 
-        //todo: implementovat!
-        return undefined;
-    }
-
-    // todo: zkontrolovat že funguje
-    public get terminates(): boolean {
-        /*
         const g = this.graph;
-        const containsCycle = (node: GraphNode<any>) => {
-            // todo: algoritmus hledání smyček v grafu
-            try {
-                const rec = (n: GraphNode<any>): boolean => {
-                    const from = g.GetFrom(n);
-                    if (from.some(n => n === node))
-                        return true;
-                    return from.some(n => rec(n));
-                };
-                return rec(node);
-            } catch{
-                return true;
+        const len = g.V.length;
+        const fromToArray: boolean[][] = [];
+        for (var i = 0; i < len; i++) {
+            const arr = [];
+            for (var j = 0; j < len; j++) {
+                arr.push(false);
+            }
+            fromToArray.push(arr);
+        }
+
+        g.E.forEach(e => {
+            const from = g.V.findIndex(x => isSameMarking(x, e["0"]));
+            const to = g.V.findIndex(x => isSameMarking(x, e["2"]));
+            fromToArray[from][to] = true;
+        });
+
+        let changed: boolean;
+        do {
+            changed = false;
+
+            for (var from = 0; from < len; from++) {
+                for (var to = 0; to < len; to++) {
+                    if (fromToArray[from][to]) {
+                        for (var fromTo = 0; fromTo < len; fromTo++) {
+                            if (fromToArray[to][fromTo]) {
+                                if (!fromToArray[from][fromTo]) {
+                                    fromToArray[from][fromTo] = true;
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } while (changed);
+
+        for (var i = 0; i < len; i++) {
+            for (var j = 0; j < len; j++) {
+                if (fromToArray[i][j] === false)
+                    return false;
             }
         }
-        return g.nodes.every(n => !containsCycle(n));
-        */
-        //todo: implementovat!
-        return undefined;
+
+        return true;
+    }
+
+    // todo: max počet kroků ?
+    public get terminates(): boolean {
+        if (this.containstOmega)
+            return false;
+        const g = this.graph;
+        const len = g.V.length;
+        const fromToArray: boolean[][] = [];
+        for (var i = 0; i < len; i++) {
+            const arr = [];
+            for (var j = 0; j < len; j++) {
+                arr.push(false);
+            }
+            fromToArray.push(arr);
+        }
+
+        g.E.forEach(e => {
+            const from = g.V.findIndex(x => isSameMarking(x, e["0"]));
+            const to = g.V.findIndex(x => isSameMarking(x, e["2"]));
+            fromToArray[from][to] = true;
+        });
+
+        let changed: boolean;
+        do {
+            changed = false;
+
+            for (var from = 0; from < len; from++) {
+                for (var to = 0; to < len; to++) {
+                    if (fromToArray[from][to]) {
+                        for (var fromTo = 0; fromTo < len; fromTo++) {
+                            if (fromToArray[to][fromTo]) {
+                                if (!fromToArray[from][fromTo]) {
+                                    fromToArray[from][fromTo] = true;
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var i = 0; i < len; i++) {
+                if (fromToArray[i][i] === true)
+                    return false;
+            }
+        } while (changed);
+
+        return true;
+    }
+
+    public get live(): boolean {
+        if (this.weaklyLive === false)
+            return false;
+        return this.net.transitions.every(t => {
+            return this.graph.V.every((m,mi) => {
+                const visited = [] as marking[];
+                const checkMarking = (mark: marking): boolean => {
+                    if (visited.some(x => x === mark))
+                        return false;
+                    visited.push(mark);
+                    const comesFromThis = this.graph.E.filter(e => isSameMarking(e["0"], mark));
+                    if (comesFromThis.some(x => x["1"] === t.id))
+                        return true;
+                    return comesFromThis.some(x => checkMarking(x["2"]));
+                }
+                return checkMarking(m);
+            });
+        }) || (this.containstOmega ? null : false);
+    }
+
+    public get weaklyLive(): boolean {
+        return this.net.transitions.every(t => this.graph.E.some(e => e["1"] === t.id));
     }
 
     public get deadlockFree() {
@@ -239,8 +341,9 @@ function isLowerSameMarking(first: marking, second: marking) {
 }
 
 function isSameMarking(one: marking, another: marking) {
-    return one.every(x => another.find(y => y.id === x.id).marking === x.marking)
-        && another.every(x => one.find(y => y.id === x.id).marking === x.marking);
+    return one === another ||
+        (one.every(x => (another.find(y => y.id === x.id) || { marking: 0 }).marking === x.marking)
+            && another.every(x => (one.find(y => y.id === x.id) || { marking: 0 }).marking === x.marking));
 }
 
 function markingToString(mark: marking) {
