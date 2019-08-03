@@ -86,6 +86,15 @@ export class PNDrawControls {
             .style("margin-left", "0.2em")
             ;
 
+        container.append("input")
+            .attr("type", "button")
+            .attr("value", "Aa")
+            .style("width", "1.9em")
+            .style("font-size", "1.5em")
+            .style("height", "1.4em")
+            .style("padding-top", ".1em")
+            .on("click", () => { editor.pnDraw.showLabels = !editor.pnDraw.showLabels; })
+
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");
         this.toggleSwitchRunEdit.selectors.label
             .style("font-size", "1.5em")

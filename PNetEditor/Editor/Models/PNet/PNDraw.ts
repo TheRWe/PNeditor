@@ -93,6 +93,17 @@ export class PNDraw extends DrawBase {
     }
 
 
+    private _showLabels: boolean = true;
+    public get showLabels(): boolean {
+        return this._showLabels;
+    }
+
+    public set showLabels(n: boolean) {
+        this._showLabels = n;
+        this.update();
+    }
+
+
     constructor(container: d3BaseSelector) {
         super(container);
 
@@ -247,10 +258,12 @@ export class PNDraw extends DrawBase {
         places()
             .select(".idtxt")
             .text(d => convertToNumberingScheme(placeMapper(d) + 1))
+            .style("display", this._showLabels ? null : "none")
             ;
         places()
             .select(".text-background")
             .text(d => convertToNumberingScheme(placeMapper(d) + 1))
+            .style("display", this._showLabels ? null : "none")
             ;
 
         //#endregion
@@ -334,10 +347,12 @@ export class PNDraw extends DrawBase {
         transitions()
             .select(".idtxt")
             .text(d => (transitionMapper(d) + 1))
+            .style("display", this._showLabels ? null : "none")
             ;
         transitions()
             .select(".text-background")
             .text(d => (transitionMapper(d) + 1))
+            .style("display", this._showLabels ? null : "none")
             ;
 
         //#endregion
