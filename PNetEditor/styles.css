@@ -30,6 +30,12 @@ body {
     width: 100% !important;
     height: 100% !important; } }
 
+input {
+  padding: 0;
+  border: none; }
+  input:focus {
+    outline: none; }
+
 .a4size {
   width: 189mm;
   height: 268mm; }

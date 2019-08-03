@@ -31,6 +31,18 @@ export class PNDraw extends DrawBase {
         place: new Callbacks<Place>(),
     };
 
+    public fixScroll() {
+        const node = this.container.node() as HTMLElement;
+
+        const scroll = node.scrollTop;
+        console.debug("sssss" + scroll);
+        setTimeout(() => {
+            console.debug("sssssaaaaaaa" + node.scrollTop);
+            node.scrollTop = scroll;
+
+        });
+    }
+
     public readonly simulation: d3.Simulation<{}, undefined>;
 
     protected Selectors = {
@@ -470,7 +482,7 @@ export class PNDraw extends DrawBase {
         const simulationNodes = [...places().data(), ...transitions().data()];
         this.simulation.nodes(simulationNodes);
 
-        const margin = 10;
+        const margin = 25;
 
         const width = this.width;
         const height = this.height;

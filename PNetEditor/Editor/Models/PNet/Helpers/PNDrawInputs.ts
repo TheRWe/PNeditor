@@ -94,7 +94,8 @@ export class PNDrawInputs {
         const markingDiv = this.Selectors.marking.div = foreign.append("xhtml:div")
             .style("height", "50")
             .style("width", "fit-content")
-            .style("background", "white")
+            .style("background", "lightgray")
+            .style("padding", "1.2px 2px 3px 2.7px")
             .style("display", "none");
 
         const markingInput = this.Selectors.marking.input = markingDiv.append("xhtml:input")
@@ -137,7 +138,8 @@ export class PNDrawInputs {
         const arcDiv = this.Selectors.arcValue.div = foreign.append("xhtml:div")
             .style("height", "50")
             .style("width", "fit-content")
-            .style("background", "white")
+            .style("background", "lightgray")
+            .style("padding", "1.2px 2px 3px 2.7px")
             .style("display", "none");
 
         const arcInputToPlace = this.Selectors.arcValue.inputs.toPlace = arcDiv.append("xhtml:input")

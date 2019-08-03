@@ -44,6 +44,15 @@ body {
     }
 }
 
+input {
+    padding: 0;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+}
+
 .a4size {
     width: (210mm - 21mm);
     height: (297mm - 29mm);

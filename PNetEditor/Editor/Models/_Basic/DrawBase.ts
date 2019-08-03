@@ -123,7 +123,7 @@ export class Callbacks<type> {
         element
             .on("click", (elm) => { this.onClick(elm, mousePosGetter()); })
             .on("contextmenu", (elm) => { this.onContextMenu(elm, mousePosGetter()); })
-            .on("wheel", (elm) => { this.onWheel(elm, wheelDeltaGetter()); });
+            .on("wheel", (elm) => { this.onWheel(elm, wheelDeltaGetter()); }, true);
         (element as any).call(this.onDrag);
     }
 

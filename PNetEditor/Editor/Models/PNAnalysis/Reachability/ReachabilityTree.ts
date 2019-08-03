@@ -176,7 +176,7 @@ export class CoverabilityGraph {
 
     public get hasConsumingTransition(): boolean {
         const net = this.net;
-        return net.transitions.some(t => net.arcs.filter(a => a.transition_id === t.id).map(a => (a.toPlace || 0) - (a.toTransition || 0)).reduce((a, b) => a + b) < 0);
+        return net.transitions.some(t => net.arcs.filter(a => a.transition_id === t.id).map(a => (a.toPlace || 0) - (a.toTransition || 0)).reduce(((a, b) => a + b),0) < 0);
     }
 
     public get containstOmega(): boolean {

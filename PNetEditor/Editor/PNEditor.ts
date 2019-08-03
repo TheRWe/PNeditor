@@ -218,6 +218,7 @@ export class PNEditor implements TabInterface {
                         t.isCold = !t.isCold;
                         this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
+                        this.pnDraw.fixScroll();
                         break;
                     default:
                         notImplemented();
@@ -267,12 +268,14 @@ export class PNEditor implements TabInterface {
                             p.marking++;
                             this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
+
                         } else if (p.marking > 0) {
                             p.marking--;
                             this.pnAction.CallOnModelChange();
                             this.pnDraw.update();
                         }
 
+                        d3.event.stopPropagation();
                         break;
                     default:
                         notImplemented();
@@ -319,6 +322,7 @@ export class PNEditor implements TabInterface {
 
                         this.pnAction.CallOnModelChange();
                         this.pnDraw.update();
+                        d3.event.stopPropagation();
                         break;
                     default:
                         notImplemented();
