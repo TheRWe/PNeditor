@@ -116,7 +116,10 @@
 %% práce.
 \usepackage{lipsum}
 
-\setlength{\parskip}{0.5em}
+\usepackage{enumitem}
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{label = Krok \arabic*:}
+
 
 \begin{document}
 %% Sazba úvodních stran -- titulní, s bibliografickými údaji, s
@@ -161,6 +164,7 @@ Táto kapitola byla inspirovaná a čerpala informace z Understanding petri nets
 
 Petriho síťe jsou matematickým nástrojem
 pro modelování a simulaci paralelních procesů a jejich sychronizaci.
+Jsou tvořené místy, přechody a hranami které jsou vždy propojením jednoho místa s jedním přechodem.
 
 $$ N = \langle P,T,A,M_{0}\rangle $$
 \begin{itemize}
@@ -190,7 +194,7 @@ $$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
 Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
 místu $p \in P$ petriho sítě počet značek
 $$M(p) \in \mathbb{N}_0$$
-Výchozí ohodnocení petriho sítě se značí $M_{0}$.
+počáteční ohodnocení petriho sítě se značí $M_{0}$.
 
 Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený
 pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
@@ -203,18 +207,23 @@ $$
   \{ t \in T | IsEnabled(P,t,A,M) \}
 $$
 
-Pokud je přechod $t$ v ohodnocení $M$ Petriho sítě povolen, znamená to že může dojít
+Pokud je přechod $t$ v ohodnocení $M$ Petriho sítě \textbf{povolen}, znamená to že může dojít
 k aktivování tohoto přechodu čímž dojde ke změně aktuálního ohodnocení z $M$ do ohodnocení $M'$
 tak, že pro každé místo $p \in P$ a každou hranu $A_{pt} \subset ArcesOfTransition(t,A)$ spojující $p$ s $t$
 že nové ohonocení v místě $M'(p)$ je sumou násobků hran $\sum_{a \in A_{pt}} AM(a)$ a původního hodnocení $M(p)$
 $$
-  FireTransition(P,t,A,M) = function M'
+  FireTransition(P,t,A,M) = function\:M'
 $$
 Výsledné ohodnocení $M'$ je pak definováno
 $$
   M'(p) = M(p) + \sum_{a \in \{a_{tp} \in ArcesOfTransition(t,A) \,|\, P(a_{tp}) = p \}} AM(a)
 $$
+Tuto změnu můžeme značit $M \to ^t M'$
 
+Ohodnocení $M'$ je označené jako \textbf{dosažitelné}\index{dosažitelné ohodnocení} z ohodnocení $M$ 
+pokud existuje sekvence přechodů taková, že jejich postupným aktivováním
+z ohodnocení $M$ vznikne ohodnocení $M'$.
+Ohdonocení $M'$ je dostupné z ohodnocení $M$ pak značíme $M \to ^* M'$.
 
 \todo{testovací hrany}
 
@@ -233,10 +242,10 @@ již hotového proprietárního softwaru umožnující lepší porozumění uži
 \subsection{Graf dosažitelnosti}
 
 Graf dosažitelnosti je jeden z nejzákladnějších nástrojů pro analýzu Petriho sítí.
-Obsahuje vždy všechny ohodnocení které mohou vzniknout libovolnou sekvencí
-přechodů z výchozího ohodnocení, takovéto ohodnocení se nazývá \textbf{dosažitelné ohodnocení}\index{dosažitelné ohodnocení}
-(dosažitelné z výchozího ohodnocení). Vrcholy grafu jsou jednotlivá ohodnocení
-a hrany grafu jsou značené přechody které jsou aktivované aby z výchozího ohodnocení vzniklo cílové.
+Obsahuje vždy počáteční ohodnocení a všechny ohodnocení které jsou dostupné z počátečního ohodnocení, 
+takovéto ohodnocení budeme nazývat \textbf{dosažitelné ohodnocení}\index{dosažitelné ohodnocení}. 
+Vrcholy grafu jsou jednotlivá ohodnocení
+a hrany grafu jsou značené přechody které jsou aktivované aby z počátečního ohodnocení vzniklo cílové.
 
 \subsubsection{Definice}
 $$RG = \{M, \langle M, t, M' \rangle\}$$
@@ -279,21 +288,40 @@ Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť u kte
 
 \todo{obrázek petriho síť kde je jedne place a jedna transition a hrana z transition do place}
 
-Proto existuje rozšířená verze grafu dosažitelnosti která využíva
-tzv. $\omega$ ohodnocení které mimo celých čísel může přiřadit místu i hodnotu $\omega$
-symbolizující že místo může nabívat nekonečně vysokého počtu značek.
+Proto existuje rozšířená verze grafu dosažitelnosti která může obsahovat
+tzv. $\omega$ ohodnocení které mimo celých čísel přiřadí alespoň jednomu místu 
+i hodnotu $\omega$ symbolizující že místo může nabívat nekonečně 
+vysokého počtu značek.
 Petriho síť se nemůže nacházet v $\omega$ ohodnocení, toto ohodnocení je pouze
 pro vytvoření abstrakce v grafu pokrytí.
 
+Protože hodnotu $\omega$ bereme jako nekonečno pak od ní můžeme 
+odečíst nebo přičíst libovolně velké číslo a hodnota se nezmění.
+$$\dotsb = \omega - 2 = \omega - 1 = \omega = \omega + 1 = \omega + 2 = \dotsb$$
 
+Ohodnocení $M$ značíme jako že je ostře menší $<$ než ohodnocení $M'$
+pokud pro každé místo $p$ platí $M(p) \leq M'(p)$ a alespoň pro jedno
+místo $p$ platí $M(p) < M'(p)$.
+$$
+ M<M' = ((\forall p \in P) M(p) \leq M'(p)) \land (\exists p \in P) M(p) < M'(p)
+$$
 
 \subsubsection{Sestrojení grafu}
 
+Sestrojování grafu probíhá postupně přidáváním hran. Nejdříve se přidá počáteční 
+ohodnocení jako kořen grafu. Následně se z grafu vybírají náhodně
+nevypočítané povolené přechody a pokud vedou do místa které ještě 
+v grafu není tak se přidá a pokud je ostře menší než ohodnocení ze kterého
+je dosažitelné tak se přidají $\omega$ hodnoty na místa ve kterých má více značek.
+Algoritmus končí výpočet až jsou všechny povolené 
+přechody pro všechny vrcholy v grafu vypočítané.
 
-\todo{definice a úprava EnabledTransitions}
+\begin{center}
+  Sestrojení grafu pseudokód MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
+\end{center}
 
 \begin{algorithm}
-  \caption{MakeCoverabilityGraph}
+  \caption{MakeCoverabilityGraph}\label{alg:MakeCoverabilityGraph}
   \begin{algorithmic}[1]
     \Function{MakeCoverabilityGraph}{$\langle P,T,A,M_0\rangle$}
     \State $\langle V,E,v_0\rangle := \langle\{M_0\},\emptyset,M_0\rangle$
@@ -306,8 +334,7 @@ pro vytvoření abstrakce v grafu pokrytí.
     \State $\langle M, t \rangle := RandomElement(WorkSet)$
     \State $WorkSet := WorkSet \setminus \{\langle M, t \rangle\}$
     \State $M' := FireTransition(P,t,A,M)$
-    \ForAll{$\{M'' \;|\; M'' \in V \land (M'' \to_p M \lor M'' = M) \land M'' < M'\}$}
-    \\ \Comment{$a \to_p b = \text{path from a to b}$}
+    \ForAll{$\{M'' \;|\; M'' \in V \land (M'' \to^* M \lor M'' = M) \land M'' < M'\}$}
     \ForAll{$p \in P$}
     \State $mp := M(p)$
     \If{$M''(p)<M'(p)$}
@@ -330,8 +357,31 @@ pro vytvoření abstrakce v grafu pokrytí.
   \end{algorithmic}
 \end{algorithm}
 
+Pokud sestrojený graf pokrytí neobsahuje žádné $\omega$ohodnocení,
+pak je graf totožný s grafem dosažitelnosti. 
+Pokud graf pokrytí obsahuje $\omega$ohodnocení, zanamená to že 
+graf dosažitelnosti by byl nekonečný a tudíž by nebylo možné 
+ho zkonstruovat celý a nešli by na něm zjišťovat některé nebo všechy vlastnosti.
+Proto si vystačíme s algoritmem na vytváření grafu pokrytí.
+
+\subsubsection{Různé výsledky grafu pokrytí}
+
+Při konstrukci grafu pokrytí záleží v jakém pořadí se hrany přidávají
+a výsledný graf může mít různý počet vrcholů a hran 
+v závislosti na pořadí přidávání hran.
+V našem algoritmu využíváme funkce $RandomElement$ která vybere 
+náhodný prvek množiny. 
+Pokud bychom chtěli sestrojit minimální 
+graf pokrytí, museli bychom nahradit funkci $RandomElement$ nějakou
+nedeterministickou funkcí která by vždy vybrala přechody právě 
+v takovém pořadí aby došlo k sestrojení minimálního grafu.
+
+\todo{Příklad obrázek}
 
 \subsubsection{Upravená verze vlastností}
+
+Oproti grafu dosažitelnosti náš graf pokrytí tak jak jsme ho sestrojili 
+pomocí algoritmu MakeCoverabilityGraph \todo{odkaz}, protože mohou chybět
 
 
 
