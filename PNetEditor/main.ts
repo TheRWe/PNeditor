@@ -102,7 +102,8 @@ const TabActions = {
                     else if (result === modalResult.btn1)
                         ipcRenderer.send('save-dialog');
                 });
-            }
+            } else
+                ipcRenderer.send('save-dialog');
         },
         load: () => { ipcRenderer.send('load-dialog'); },
     },
