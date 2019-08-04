@@ -1,18 +1,14 @@
 [0] Config.pm:304> INFO - This is Biber 2.12
-[1] Config.pm:307> INFO - Logfile is 'kidiplom.blg'
-[45] biber-MSWIN32:315> INFO - === 
-[79] Biber.pm:371> INFO - Reading 'kidiplom.bcf'
-[224] Biber.pm:886> INFO - Using all citekeys in bib section 0
-[245] Biber.pm:4093> INFO - Processing section 0
-[261] Biber.pm:4254> INFO - Looking for bibtex format file 'bibliografie.bib' for section 0
-[265] bibtex.pm:1523> INFO - LaTeX decoding ...
-[305] bibtex.pm:1340> INFO - Found BibTeX data source 'bibliografie.bib'
-[355] Utils.pm:193> WARN - ISBN '978-222-626-222-2' in entry 'sbornik' is invalid - run biber with '--validate_datamodel' for details.
-[368] Utils.pm:193> WARN - year field '1980-' in entry 'tug' is not an integer - this will probably not sort properly.
-[392] Utils.pm:193> WARN - ISBN '978-44-55-X' in entry 'kniha' is invalid - run biber with '--validate_datamodel' for details.
-[462] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
-[462] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[462] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'cs_CZ'
-[483] bbl.pm:636> INFO - Writing 'kidiplom.bbl' with encoding 'UTF-8'
-[492] bbl.pm:739> INFO - Output to kidiplom.bbl
-[492] Biber.pm:110> INFO - WARNINGS: 3
+[0] Config.pm:307> INFO - Logfile is 'kidiplom.blg'
+[54] biber-MSWIN32:315> INFO - === 
+[91] Biber.pm:371> INFO - Reading 'kidiplom.bcf'
+[251] Biber.pm:886> INFO - Using all citekeys in bib section 0
+[272] Biber.pm:4093> INFO - Processing section 0
+[288] Biber.pm:4254> INFO - Looking for bibtex format file 'bibliografie.bib' for section 0
+[291] bibtex.pm:1523> INFO - LaTeX decoding ...
+[304] bibtex.pm:1340> INFO - Found BibTeX data source 'bibliografie.bib'
+[345] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
+[346] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[346] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'cs_CZ'
+[347] bbl.pm:636> INFO - Writing 'kidiplom.bbl' with encoding 'UTF-8'
+[348] bbl.pm:739> INFO - Output to kidiplom.bbl
