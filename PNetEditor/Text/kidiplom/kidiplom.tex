@@ -116,9 +116,15 @@
 %% práce.
 \usepackage{lipsum}
 
+
 \usepackage{enumitem}
 \newlist{steps}{enumerate}{1}
 \setlist[steps, 1]{label = Krok \arabic*:}
+
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usepackage{subcaption}
 
 
 \begin{document}
@@ -158,7 +164,7 @@
 \todo{Smazat todo: command}
 
 \section{Petriho sítě}
-Táto kapitola byla inspirovaná a čerpala informace z Understanding petri nets\cite{reisig2013understanding}
+Táto kapitola byla inspirovaná a čerpala informace z knihy Understanding petri nets\cite{reisig2013understanding}
 
 \subsection{Základní definice}
 
@@ -317,7 +323,7 @@ Algoritmus končí výpočet až jsou všechny povolené
 přechody pro všechny vrcholy v grafu vypočítané.
 
 \begin{center}
-  Sestrojení grafu pseudokód MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
+  Sestrojení grafu pokrytí pseudokód MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
 \end{center}
 
 \begin{algorithm}
@@ -381,13 +387,19 @@ v takovém pořadí aby došlo k sestrojení minimálního grafu.
 \subsubsection{Upravená verze vlastností}
 
 Oproti grafu dosažitelnosti náš graf pokrytí tak jak jsme ho sestrojili 
-pomocí algoritmu MakeCoverabilityGraph \todo{odkaz}, protože mohou chybět
-
+pomocí algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph} 
+nemusí obsahovat všechny výsledky přechodů které mohou nastat a to znamená 
+že v některých případech některé vlastnosti Petriho sítě nejsme schopni určit, 
+protože nám chbí informace o těchto chybějícíh hranách grafu pokrytí.
+Problém je částečně způsobený tím jak máme definovanou hodnotu $\omega$ a pokud 
+nějaké místo $p$ je ohodnoceno $\omega$ pak už není možné aby z vrcholu s tímto 
+ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
+\todo{ukázka sítě T->P->T  +  graf a chybějící hrana}
 
 
 
 \subsection{Příklady sítí}
-\todo{síť + analýza}
+\todo{síť + analýza v programu}
 
 
 
@@ -395,15 +407,54 @@ pomocí algoritmu MakeCoverabilityGraph \todo{odkaz}, protože mohou chybět
 
 \section{Editor}
 \subsection{Systémové požadavky}
-\todo{vyžaduje myš}
-\subsection{Ovládání}
-\todo{obrázek rozložení editoru}
-\subsubsection{Postranní panel}
-\todo{jiné pojmenování ?}
-\subsubsection{Hlavní plocha editoru}
-\subsubsection{Panel nástrojů editoru}
-\subsubsection{Tabulka ohodnocení}
-\subsubsection{Výsledky analýzy}
+\begin{itemize}
+  \item Operační systém: Windows 10 (starší verze windows netestovány)
+  \item Ovládání: klávesnice+myš
+\end{itemize}
+
+  
+\subsection{Rozložení editoru}
+Editor je rozložený na několik částí. Všechny tyto části 
+jsou písmeny označené v Obrázku \ref{fig:Rozložení editoru} 
+Rozložení editoru.Každá část editoru je popsaná ve své vlastní sekci.
+\begin{center}
+
+\end{center}
+  
+\begin{figure}[t!]
+  \centering
+  \begin{subfigure}[h]{350px}
+    \includegraphics[height=300px, width=350px]{full_image_splited}
+  \end{subfigure}
+  \caption{Rozložení editoru}
+  \label{fig:Rozložení editoru}
+  \begin{subfigure}[h]{0.55\textwidth}
+    \begin{tabular}{|c l c|}
+      \hline
+      označení &      název části editoru &    sekce \\
+      \hline
+      \hline
+      P &             Postranní panel&  \ref{panel} \\
+      HP &            Hlavní plocha editoru&  \ref{hlavní plocha} \\
+      B &             Panel nástrojů editoru &  \ref{panel nástrojů} \\
+      T &             Tabulka ohodnocení &  \ref{tabulka ohodnocení} \\
+      A &             Výsledky analýzy &  \ref{výsledky analýzy} \\
+      \hline
+    \end{tabular}
+  \end{subfigure}
+\end{figure}
+
+
+
+\subsubsection{Postranní panel}\label{panel}
+\subsubsection{Hlavní plocha editoru}\label{hlavní plocha}
+\subsubsection{Panel nástrojů editoru}\label{panel nástrojů}
+\subsubsection{Tabulka ohodnocení}\label{tabulka ohodnocení}
+\subsubsection{Výsledky analýzy}\label{výsledky analýzy}
+
+
+\subsubsection{Ovládání}
+
 \subsubsection{Tisk sítě}
 \todo{obrázek jak vytisknotu do PDF}
 
@@ -449,6 +500,60 @@ Využívá NodeJS
 \subsection{Třída 2}
 \subsection{Třída 3}
 \subsection{Třída 4}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -302,6 +302,14 @@ INPUT c:/texlive/2019/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex
 INPUT c:/texlive/2019/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex
 INPUT c:/texlive/2019/texmf-dist/tex/latex/enumitem/enumitem.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/enumitem/enumitem.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/subcaption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/subcaption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
@@ -548,6 +556,9 @@ INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmbx12.tfm
 INPUT c:/texlive/2019/texmf-dist/tex/latex/lm/omslmr.fd
 INPUT c:/texlive/2019/texmf-dist/tex/latex/lm/omslmr.fd
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmr10.tfm
+INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/./images/full_image_splited.pdf
+INPUT ./images/full_image_splited.pdf
+INPUT ./images/full_image_splited.pdf
 INPUT c:/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/listings/lstlang2.sty
