@@ -1,5 +1,5 @@
 ﻿import { d3BaseSelector } from "../../../../CORE/Constants";
-import { PNEditor } from "../../../PNEditor";
+import { PNEditor, editorMode } from "../../../PNEditor";
 import { ToggleSwitch } from "../../../../CORE/ToggleSwitch";
 import { MakeZoomInOutIcon } from "../../../../Helpers/purify";
 
@@ -22,7 +22,11 @@ export class PNDrawControls {
             .style("font-size", "1.5em")
             .style("height", "1.4em")
             .style("padding-top", ".1em")
-            .on("click", () => { editor.pnAction.Undo(); editor.pnDraw.update(); })
+            .on("click", () => {
+                if ((editor as any).mode.selected === editorMode.arcMake)
+                    (editor as any).mouseEndArc();
+                editor.pnAction.Undo(); editor.pnDraw.update();
+            })
 
         container.append("input")
             .attr("type", "button")
@@ -31,7 +35,11 @@ export class PNDrawControls {
             .style("font-size", "1.5em")
             .style("height", "1.4em")
             .style("padding-top", ".1em")
-            .on("click", () => { editor.pnAction.Redo(); editor.pnDraw.update(); })
+            .on("click", () => {
+                if ((editor as any).mode.selected === editorMode.arcMake)
+                    (editor as any).mouseEndArc();
+                editor.pnAction.Redo(); editor.pnDraw.update();
+            })
 
         container.append("input")
             .attr("type", "button")

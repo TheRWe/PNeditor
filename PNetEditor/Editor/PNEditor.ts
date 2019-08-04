@@ -493,6 +493,9 @@ export class PNEditor implements TabInterface {
                         case Key.Y:
                         // todo: opravit
                         case 26:
+                            if (this.mode.selected === editorMode.arcMake)
+                                this.mouseEndArc();
+
                             if (e.shiftKey)
                                 this.pnAction.Redo();
                             else
