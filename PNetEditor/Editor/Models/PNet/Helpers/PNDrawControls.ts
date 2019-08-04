@@ -41,11 +41,17 @@ export class PNDrawControls {
             .style("height", "1.4em")
             .style("padding-top", ".1em")
             .on("click", () => {
-                editor.pnDraw.container.classed("print", true);
+                const svg = editor.pnDraw.container
+                    .classed("print", true)
+                    .style("border", "none")
+                    ;
+
                 const scale = editor.pnDraw.scale;
                 editor.pnDraw.scale = 1;
+                
                 window.print();
                 editor.pnDraw.scale = scale;
+                svg.style("border", "1px lightgray solid");
                 editor.pnDraw.container.classed("print", false);
             })
             ;

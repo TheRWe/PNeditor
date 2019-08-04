@@ -29,7 +29,7 @@ export class PNAnalysis {
             self.draws.pnAnalysisDraw.setPnet(self.models.pnModel.toJSON());
 
             // todo: to settings
-            const maxSameGraphSizeTimes = 5;
+            const maxSameGraphSizeTimes = 30;
             let LastGraphSize = Number.MAX_SAFE_INTEGER;
             let sameGraphSizeTimes = 0;
             async function calculate() {
@@ -48,7 +48,7 @@ export class PNAnalysis {
                     sameGraphSizeTimes++;
                 }
 
-                if (sameGraphSizeTimes < maxSameGraphSizeTimes) {
+                if (sameGraphSizeTimes > maxSameGraphSizeTimes) {
                     endCalc();
                 } else if (calculating && g.containstOmega) {
                     calculate();
@@ -60,7 +60,7 @@ export class PNAnalysis {
 
 
             // todo: do nastavení
-            await new Promise(r => { endCalc = r; self.skipPreviousCalc = r; setTimeout(r, 10_000); });
+            await new Promise(r => { endCalc = r; self.skipPreviousCalc = r; setTimeout(r, 30_000); });
 
             console.debug(self);
 

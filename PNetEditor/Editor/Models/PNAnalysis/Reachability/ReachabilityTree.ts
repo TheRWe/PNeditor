@@ -102,7 +102,7 @@ export class CoverabilityGraph {
             E: graphHashed.E.map(x => { return [x.from.marking, x.TransitionID, x.to.marking] as Edge; }),
             V: flatten(Object.keys(graphHashed.V).map(x => graphHashed.V[x]))
         };
-        const graphChanged = this.graph.V.length === 1 || this.graph.V.length > graph.V.length;
+        const graphChanged = this.graph.V.length === 1 || graph.V.length < this.graph.V.length;
         if (graphChanged) {
             this.graph = graph;
         }
