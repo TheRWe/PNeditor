@@ -25,56 +25,54 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {1.6.3}Upraven\IeC {\'a} verze vlastnost\IeC {\'\i }}{16}{subsubsection.1.6.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.7}P\IeC {\v r}\IeC {\'\i }klady s\IeC {\'\i }t\IeC {\'\i }}{17}{subsection.1.7}% 
+\contentsline {subsection}{\numberline {1.7}P\IeC {\v r}\IeC {\'\i }klady s\IeC {\'\i }t\IeC {\'\i }}{18}{subsection.1.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Editor}{18}{section.2}% 
+\contentsline {section}{\numberline {2}Editor}{19}{section.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Syst\IeC {\'e}mov\IeC {\'e} po\IeC {\v z}adavky}{18}{subsection.2.1}% 
+\contentsline {subsection}{\numberline {2.1}Syst\IeC {\'e}mov\IeC {\'e} po\IeC {\v z}adavky}{19}{subsection.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Rozlo\IeC {\v z}en\IeC {\'\i } editoru}{18}{subsection.2.2}% 
+\contentsline {subsection}{\numberline {2.2}Rozlo\IeC {\v z}en\IeC {\'\i } editoru}{19}{subsection.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.1}Postrann\IeC {\'\i } panel}{19}{subsubsection.2.2.1}% 
+\contentsline {subsubsection}{\numberline {2.2.1}Postrann\IeC {\'\i } panel}{20}{subsubsection.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.2}Hlavn\IeC {\'\i } plocha editoru}{20}{subsubsection.2.2.2}% 
+\contentsline {subsubsection}{\numberline {2.2.2}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }, Hlavn\IeC {\'\i } plocha editoru}{20}{subsubsection.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{20}{subsubsection.2.2.3}% 
+\contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{21}{subsubsection.2.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.4}Tabulka ohodnocen\IeC {\'\i }}{20}{subsubsection.2.2.4}% 
+\contentsline {paragraph}{\numberline {2.2.3.1}Tisk}{21}{paragraph.2.2.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{20}{subsubsection.2.2.5}% 
+\contentsline {subsubsection}{\numberline {2.2.4}Tabulka ohodnocen\IeC {\'\i }}{21}{subsubsection.2.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.6}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }}{20}{subsubsection.2.2.6}% 
+\contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{23}{subsubsection.2.2.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.7}Tisk s\IeC {\'\i }t\IeC {\v e}}{20}{subsubsection.2.2.7}% 
+\contentsline {subsubsection}{\numberline {2.2.6}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{23}{subsubsection.2.2.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.8}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{20}{subsubsection.2.2.8}% 
+\contentsline {section}{\numberline {3}Pou\IeC {\v z}it\IeC {\'e} technologie}{23}{section.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Pou\IeC {\v z}it\IeC {\'e} technologie}{20}{section.3}% 
+\contentsline {subsection}{\numberline {3.1}nodejs}{23}{subsection.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}nodejs}{20}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.2}Typescript}{23}{subsection.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Typescript}{20}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.3}Electron}{23}{subsection.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Electron}{20}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{23}{subsection.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{20}{subsection.3.4}% 
+\contentsline {subsection}{\numberline {3.5}Scalable Vector Graphics (SVG)}{23}{subsection.3.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Scalable Vector Graphics (SVG)}{21}{subsection.3.5}% 
+\contentsline {section}{\numberline {4}Stavba programu}{24}{section.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Stavba programu}{21}{section.4}% 
+\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{24}{subsection.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{21}{subsection.4.1}% 
+\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{24}{subsection.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{21}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{24}{subsection.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{21}{subsection.4.3}% 
+\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{24}{subsection.4.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{21}{subsection.4.4}% 
+\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{24}{section.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{21}{section.5}% 
+\contentsline {section}{Seznam zkratek}{26}{section*.16}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Seznam zkratek}{23}{section*.13}% 
+\contentsline {section}{Literatura}{27}{section*.17}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Literatura}{24}{section*.14}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{Rejst\v {r}\'{i}k}{25}{section*.17}% 
+\contentsline {section}{Rejst\v {r}\'{i}k}{28}{section*.20}% 
