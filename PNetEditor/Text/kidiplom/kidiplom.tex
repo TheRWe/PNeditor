@@ -125,7 +125,6 @@
 \graphicspath{ {./images/} }
 
 \usepackage{subcaption}
-\usepackage{wrapfig}
 \usepackage[czech]{babel}
 
 \begin{document}
@@ -167,23 +166,25 @@
 \section{Petriho sítě}
 Táto kapitola byla inspirovaná a čerpala informace z knihy Understanding petri nets\cite{reisig2013understanding}
 
-\subsection{Základní definice}
+\subsection{Základní popis}
 
 Petriho síťe jsou matematickým nástrojem
 pro modelování a simulaci paralelních procesů a jejich sychronizaci.
 Jsou tvořené místy, přechody a hranami které jsou vždy propojením jednoho místa s jedním přechodem.
 
-$$ N = \langle P,T,A,M_{0}\rangle $$
-\begin{itemize}
-  \item $N$ je Petriho sítí
-  \item $P$ je konečná množina míst
-  \item $T$ je konečná množina přechodů
-  \item $A$ je konečná množina hran
+\begin{definition}[Petriho síť]
+  $$ N = \langle P,T,A,M_{0}\rangle $$
+  \begin{itemize}
+    \item $N$ je Petriho sítí
+    \item $P$ je konečná množina míst
+    \item $T$ je konečná množina přechodů
+    \item $A$ je konečná množina hran
         $ A \subseteq ((P \times T) \cup (T \times P)) \times \mathbb{N}_0 $ \\
         kde číslo symbolizuje násobek kolik značek hrana \uv{přesune}
-  \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst
+        \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst
         kde pro každé místo $p \in P$ existuje počet jeho značek $m \in M_{0}$
-\end{itemize}
+  \end{itemize}
+\end{definition}
 
 Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat
 notaci $P(a)$ pro odkázání na místo v hraně $a \in A$,
@@ -200,7 +201,7 @@ $$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
 
 Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
 místu $p \in P$ petriho sítě počet značek
-$$M(p) \in \mathbb{N}_0$$
+$$(\forall p \in P) M(p) \in \mathbb{N}_0$$
 počáteční ohodnocení petriho sítě se značí $M_{0}$.
 
 Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený
@@ -311,53 +312,107 @@ takovéto ohodnocení budeme nazývat \textbf{dosažitelné ohodnocení}\index{d
 Vrcholy grafu jsou jednotlivá ohodnocení
 a hrany grafu jsou značené přechody které jsou aktivované aby z počátečního ohodnocení vzniklo cílové.
 
-\subsubsection{Definice}
-$$RG = \{M, \langle M, t, M' \rangle\}$$
-\begin{itemize}
-  \item $RG$ je Graf dosažitelnosti
-  \item $M$ je Vrchol grafu který je zároveň konkrétní ohodnocení petriho sítě
-  \item $\langle M, t, M' \rangle$ je Hrana grafu která je změnou z hodnocení $M$ přechodem $t$ ze kterého vzniká $M'$
-\end{itemize}
+\begin{definition}[Graf dosažitelnosti]
+  $$RG = \{M, \langle M, T', M' \rangle\}$$
+  \begin{itemize}
+    \item $RG$ je Graf dosažitelnosti
+    \item $M$ je Vrchol grafu který je zároveň konkrétní ohodnocení petriho sítě
+    \item $\langle M, T', M' \rangle$ je Hrana grafu která je změnou z hodnocení $M$ libovolným přechodem $t \in T'$ ze kterého vzniká $M'$
+  \end{itemize}
+\end{definition}
 
 \subsubsection{Vlastnosti odvoditelné z Grafu dosažitelnosti}
 Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
 
-Petriho síť \textbf{skončí}\index{síť skončí} za předpokladu
-že graf je konečný a zároveň neobsahuje žádné cykly.
-Neboli Petriho sít vždy po nějakém počtu kroků dojde do stavu kdy žádný přechod není povolený.
+\begin{itemize}
+  \item 
+  Petriho síť je \textbf{ohraničená}\index{síť ohraničenost} pokud 
+  je její graf dosažitelnosti konečný. Pokud existuje takové přirozené číslo $n$
+  pro které v žádném dosažitelném ohodnocení nepřesahuje žádné místo svým ohodnocením 
+  číslo $n$. Pokud zvolíme $n$ aby splňovalo tuto podmínku a zároveň bylo 
+  nejmenší možné, pak můžeme nazývat síť že je \textbf{ohraničená $n$}.
+  \item 
+  Petriho síť \textbf{skončí}\index{síť skončí} za předpokladu
+  že graf je konečný a zároveň neobsahuje žádné cykly.
+  Neboli Petriho sít vždy po nějakém počtu kroků dojde do stavu kdy žádný přechod není povolený.
+  \item 
+  Petriho síť je \textbf{vratná}\index{síť vratná}
+  pokud je její graf silně souvislý. Z každého dosažitelného 
+  ohdonocení je dosažitelné počáteční ohodnocení.
+  \item 
+  Petriho síť je \textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
+  pokud z každého vrcholu grafu vede alespoň jedna hrana.
+  Petriho sít má v každém ohodnocení povolený alespoň jeden přechod.
+  \item 
+  Petriho síť je \textbf{slabě živá}\index{síť slabě živá} pokud pro
+  každý přechod existuje v grafu hrana označená tímto přechodem.
+  Pro každý přechod Petriho sítě existuje dosažitelné ohodnocení které 
+  povoluje daný přechod.
+  \item 
+  Petriho síť je \textbf{živá}\index{síť živá} pokud 
+  pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu cesta
+  z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu $t$.
+  Pro každý přechod $t$ a každé ohodnocení $M$ existuje dosažitelné ohodnocení $M'$ které přechod $t$ povoluje.
+\end{itemize}
+  
+Logickou úvahou pak můžeme určit někré vzájemné závislosti vlastnosti:
+\begin{itemize}
+  \item Síť která je \textbf{vratná} nebo/a \textbf{živá} je zároveň i \textbf{bez mrtvého bodu}.
+  \item Síť která je \textbf{bez mrtvého bodu} ne\textbf{skončí} a zároveň síť která \textbf{skončí} není \textbf{bez mrtvého bodu}(pozor, neznamená že síť musí mít alespoň jednu z těchto vlastností). 
+  \item Síť která není \textbf{slabě živá} nemůže být \textbf{živá}.
+\end{itemize}
 
-\todo{reversible}
-
-Petriho síť je \textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
-pokud z každého vrcholu grafu vede alespoň jedna hrana.
-Petriho sít má v každém ohodnocení povolený alespoň jeden přechod.
-
-Petriho síť je \textbf{slabě živá}\index{síť slabě živá} pokud pro
-každý přechod existuje v grafu hrana označená tímto přechodem.
-Pro každý přechod Petriho sítě můžeme najít sekvenci přechodů (i prázdnou) takovou
-že z počatečního ohodnocení dojdeme do ohodnocení které povoluje daný přechod.
-
-Petriho síť je \textbf{živá}\index{síť živá} pokud je její graf silně souvislý.
-Stejně jako \textbf{slabě živá} s tím rozdílem že musí splňovat vlastnost ze všech dosažitelných ohodnocení
-a ne jen z počatečního ohodnocení ale ze všech dosažitelných ohodnocení Petriho sítě.
-
-
+\clearpage
 \subsubsection{Příklady grafu dosažitelnosti s vlastnostmi}
 
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[h]{\linewidth}
+    \centering
+    \includegraphics{net_props_01}
+    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 1}
+  \end{subfigure}
+  
+  \begin{subfigure}[h]{\linewidth}
+    \includegraphics[width=\linewidth]{net_props_02}
+    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 2}
+  \end{subfigure}
+  
+  \begin{subfigure}[h]{\linewidth}
+    \includegraphics[width=\linewidth]{net_props_03}
+    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 3}
+  \end{subfigure}
+  \caption{Ukázky jednoduchých sítí s grafem dosažitelnosti}\label{fig: ukázky jednoduchých sítí}
+\end{figure}
 
+Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 1} \textbf{skončí} a je \textbf{slabě živá}.
+
+Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 2} \textbf{skončí} a není \textbf{slabě živá}.
+
+A síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 3} je \textbf{vratná} a \textbf{živá}.
+
+Všechny tři sítě jsou ohraničené 1. Také si můžeme všimnout že 
+z výše uvedených vlastností u ukázkových sítí 
+stačí jen vypsané vlastnosti a ostatní se dají odvodit ze závislosti vlastností.
+
+\clearpage
 
 \subsection{Graf pokrytí}
 
 Hlavní nevýhodou grafu dosažitelnosti je že může být
 nekonečný a tudíž je nemožné ho zkonstruovat celý.
-Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť u které by konstrukce jejího grafu dosažitelnosti nikdy neskončila.
+Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť (Obrázek \ref{fig:neohraničená síť}) u které by konstrukce jejího grafu dosažitelnosti nikdy neskončila.
 
-\todo{obrázek petriho síť kde je jedne place a jedna transition a hrana z transition do place}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{net_unbounded_reachability}
+  \caption{Příklad neohraničené sítě}\label{fig:neohraničená síť}
+\end{figure}
 
-Proto existuje rozšířená verze grafu dosažitelnosti která může obsahovat
-tzv. $\omega$ ohodnocení které mimo celých čísel přiřadí alespoň jednomu místu 
-i hodnotu $\omega$ symbolizující že místo může nabívat nekonečně 
-vysokého počtu značek.
+Proto existuje upravená verze grafu dosažitelnosti nazvaná grafu pokrytí,
+která může obsahovat tzv. $\omega$ ohodnocení které mimo celých 
+čísel přiřadí alespoň jednomu místu i hodnotu $\omega$ 
+symbolizující že místo může nabívat nekonečně vysokého počtu značek.
 Petriho síť se nemůže nacházet v $\omega$ ohodnocení, toto ohodnocení je pouze
 pro vytvoření abstrakce v grafu pokrytí.
 
@@ -423,9 +478,9 @@ přechody pro všechny vrcholy v grafu vypočítané.
   \end{algorithmic}
 \end{algorithm}
 
-Pokud sestrojený graf pokrytí neobsahuje žádné $\omega$ohodnocení,
+Pokud sestrojený graf pokrytí neobsahuje žádné $\omega$ ohodnocení,
 pak je graf totožný s grafem dosažitelnosti. 
-Pokud graf pokrytí obsahuje $\omega$ohodnocení, zanamená to že 
+Pokud graf pokrytí obsahuje $\omega$ ohodnocení, zanamená to že 
 graf dosažitelnosti by byl nekonečný a tudíž by nebylo možné 
 ho zkonstruovat celý a nešli by na něm zjišťovat některé nebo všechy vlastnosti.
 Proto si vystačíme s algoritmem na vytváření grafu pokrytí.
@@ -436,13 +491,24 @@ Při konstrukci grafu pokrytí záleží v jakém pořadí se hrany přidávají
 a výsledný graf může mít různý počet vrcholů a hran 
 v závislosti na pořadí přidávání hran.
 V našem algoritmu využíváme funkce $RandomElement$ která vybere 
-náhodný prvek množiny. 
+náhodný prvek množiny a snažíme se tak tipovat jaké pořadí hran bude
+ideální pro sestrojení nejmenšího grafu. 
 Pokud bychom chtěli sestrojit minimální 
 graf pokrytí, museli bychom nahradit funkci $RandomElement$ nějakou
-nedeterministickou funkcí která by vždy vybrala přechody právě 
+funkcí která by vždy vybrala přechody právě 
 v takovém pořadí aby došlo k sestrojení minimálního grafu.
 
-\todo{Příklad obrázek}
+Že záleží na pořadí v jakém se hrany přidávájí si můžeme ukázat na 
+síti v obrázku \ref{fig:síť různé coverability}. Zde ale musíme 
+dávat pozor, protože v tomto případě čísla neznačí přechody,
+ale pořadí ve kterém byly hrany přidány.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{net_coverability_difference}
+  \caption{Příklad sítě z knihy Understanding petri nets\cite{reisig2013understanding}(fig.  14.1) }\label{fig:síť různé coverability}
+\end{figure}
+
 
 \subsubsection{Upravená verze vlastností}
 
@@ -450,11 +516,28 @@ Oproti grafu dosažitelnosti náš graf pokrytí tak jak jsme ho sestrojili
 pomocí algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph} 
 nemusí obsahovat všechny výsledky přechodů které mohou nastat a to znamená 
 že v některých případech některé vlastnosti Petriho sítě nejsme schopni určit, 
-protože nám chbí informace o těchto chybějícíh hranách grafu pokrytí.
+protože nám chybí informace o těchto chybějícíh hranách grafu pokrytí.
 Problém je částečně způsobený tím jak máme definovanou hodnotu $\omega$ a pokud 
 nějaké místo $p$ je ohodnoceno $\omega$ pak už není možné aby z vrcholu s tímto 
 ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
-\todo{ukázka sítě T->P->T  +  graf a chybějící hrana}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{net_undecidable_reversion}
+  \caption{Příklad neohraničené sítě s chybějící hranou v grafu pokrytí}\label{fig:neohraničená síť reversible}
+\end{figure}
+
+V Obrázku \ref{fig:neohraničená síť reversible} vidíme červěně zvíražněnou 
+hrana která při použití algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
+chybí. Přitom by tam měla hrana být, protože když budeme neustále opakovat 
+aktivaci přechodu 2 tak se eventuelně dostaneme do ohodnocení kde má místo $A$
+hodnotu 0 což je zároveň výchozí ohodnocení. Díky této chybějící hraně 
+bychom síť určili jako že není \textbf{vratná} ale přitom ve skutečnosti je.
+Proto musíme zjistit jestli jsou všechny vlastnosti grafu dosažitelnosti 
+aplikovatlné i na graf pokrytí, případně poupravit nebo rozšířit jejich definici.
+
+\textbf{Ohraničenost} sítě je určená konečností grafu dosažitelnosti.
+Nekonečný rozvoj je 
 
 
 
@@ -464,7 +547,7 @@ ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
 
 
 
-
+\clearpage
 \section{Editor}
 \subsection{Systémové požadavky}
 \begin{itemize}
@@ -477,11 +560,8 @@ ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
 Editor je rozložený na několik částí. Všechny tyto části 
 jsou písmeny označené v Obrázku \ref{fig:Rozložení editoru} 
 Rozložení editoru.Každá část editoru je popsaná ve své vlastní sekci.
-\begin{center}
 
-\end{center}
-  
-\begin{figure}[t!]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[h]{350px}
     \includegraphics[height=300px, width=350px]{full_image_splited}
@@ -505,31 +585,31 @@ Rozložení editoru.Každá část editoru je popsaná ve své vlastní sekci.
 \end{figure}
 
 
-
 \subsubsection{Postranní panel}\label{panel}
 
-\todo{opravit}
+Postraní panel obsahuje tlačítka pro práci se záložkami a 
+samotné záložky. Pod označením \textbf{FILE} jsou tlačítka:
+\begin{center}
+  \begin{tabular}{c p{0.8\linewidth}}
+    \textbf{New}    & Vytvoří novou prázdnou záložku \\
+    \textbf{Load}   & Otevře dialog pro načtení uložené sítě \\
+    \textbf{Save}   & Uloží síť v otevřené záložce. Pokud byla síť již uložena 
+      nebo načtena dialog nabídne uživateli na výběr dvě možnosti.
+      Možnost \textit{yes} uloží a přepíše původní soubor.
+      Možnost \textit{Select file} otevře dialog 
+      a uživatel vybere vlastní místo uložoní. \\
+    \textbf{Close}  & Zavře aktuálně otevřenou záložku \\
+  \end{tabular}
+\end{center}
 
-\begin{wrapfigure}{r}{0.3\textwidth}
-  \includegraphics[width=\linewidth]{editor_panel}
-  \caption{\\Postranní panel}
-  \label{fig:Postranní panel}
-\end{wrapfigure}
+Pod označením \textbf{Tabs} jsou pak záložky které se otevírají kliknutím.
+Záložky jsou nazvané podle jména souboru sítě.
 
-
-  Postraní panel obsahuje tlačítka pro práci se záložkami a 
-samotné záložky. Pod kategorií \textbf{File} jsou tlačítka: \\ \\
-\begin{tabular}{c p{0.55\textwidth}}
-  \textbf{New}    & Vytvoří novou prázdnou záložku \\
-  \textbf{Load}   & Otevře dialog pro načtení uložené sítě \\
-  \textbf{Save}   & Uloží vybranou sít. Pokud byla síť již uložena 
-    nebo načtena dialog nabídne uživateli na výběr dvě možnosti.
-    Možnost \textit{yes} uloží a přepíše původní soubor.
-    Možnost \textit{Select file} otevře dialog 
-    a uživatel vybere vlastní místo uložoní. \\
-  \textbf{Close}  & Zavře aktuálně otevřenou záložku \\
-\end{tabular}
-
+\begin{figure}[h]
+  \centering
+  \includegraphics{editor_panel}
+  \caption{\\Postranní panel}\label{fig:Postranní panel}
+\end{figure}
 
 
 \subsubsection{Hlavní plocha editoru}\label{hlavní plocha}
