@@ -36,8 +36,7 @@ export class PNAnalysisDraw extends DrawBase {
                 CoverabilityGraph.terminates ? "Yes" : "No",
                 CoverabilityGraph.reversible === null ? "?" : (CoverabilityGraph.reversible ? "Yes" : "No"),
                 CoverabilityGraph.deadlockFree ? "Yes" : "No",
-                CoverabilityGraph.live === null ? "?" : (CoverabilityGraph.live ? "Yes" : "No"),
-                CoverabilityGraph.weaklyLive ? "Yes" : "No",
+                CoverabilityGraph.weaklyLive ? (CoverabilityGraph.live ? "Yes" : "Weakly") : "No",
             ].forEach(x => {
                 rightDiv.append("div")
                     .text(x)
@@ -70,7 +69,7 @@ export class PNAnalysisDraw extends DrawBase {
             .style("display", "inline-block")
             ;
 
-        ["states", "ω marking", "bounded", "terminates", "reversible", "deadlock-free", "live", "weakly live",].forEach(x => {
+        ["states", "ω marking", "bounded", "terminates", "reversible", "deadlock-free", "live",].forEach(x => {
             leftDiv.append("div")
                 .text(x)
                 ;

@@ -309,7 +309,7 @@ export class CoverabilityGraph {
                 }
                 return checkMarking(m);
             });
-        }) || (this.containstOmega ? null : false);
+        });
     }
 
     public get weaklyLive(): boolean {
