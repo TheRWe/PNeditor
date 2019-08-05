@@ -49,6 +49,71 @@
       \field{year}{2013}
       \true{nocite}
     \endentry
+    \entry{NodeJS}{online}{}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} NodeJS}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://nodejs.org/
+      \endverb
+      \verb{url}
+      \verb https://nodejs.org/
+      \endverb
+    \endentry
+    \entry{ElectronJS}{online}{}
+      \field{sortinit}{5}
+      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} ElectronJS}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://electronjs.org/
+      \endverb
+      \verb{url}
+      \verb https://electronjs.org/
+      \endverb
+    \endentry
+    \entry{D3}{online}{}
+      \field{sortinit}{6}
+      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} Data driven documents}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://d3js.org/
+      \endverb
+      \verb{url}
+      \verb https://d3js.org/
+      \endverb
+    \endentry
+    \entry{w3schoolsSVG}{misc}{}
+      \field{sortinit}{7}
+      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} Výukový materiál svg na w3schools\\}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.w3schools.com/graphics/
+      \endverb
+      \verb{url}
+      \verb https://www.w3schools.com/graphics/
+      \endverb
+    \endentry
+    \entry{GooglePromise}{misc}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} Google-developers JavaScript Promises: an Introduction}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://developers.google.com/web/fundamentals/primers/promises
+      \endverb
+      \verb{url}
+      \verb https://developers.google.com/web/fundamentals/primers/promises
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

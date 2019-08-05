@@ -310,6 +310,8 @@ INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT c:/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
@@ -474,6 +476,9 @@ INPUT ./images/bar.pdf
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/./images/tabulka.jpg
 INPUT ./images/tabulka.jpg
 INPUT ./images/tabulka.jpg
+INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/./images/analysis.jpg
+INPUT ./images/analysis.jpg
+INPUT ./images/analysis.jpg
 INPUT c:/texlive/2019/texmf-dist/tex/latex/psnfss/t1pcr.fd
 INPUT c:/texlive/2019/texmf-dist/tex/latex/psnfss/t1pcr.fd
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/adobe/courier/pcrr8t.tfm
@@ -492,6 +497,7 @@ INPUT c:/texlive/2019/texmf-dist/fonts/vf/adobe/courier/pcrb8t.vf
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/adobe/courier/pcrb8r.tfm
 INPUT c:/texlive/2019/texmf-dist/fonts/vf/adobe/courier/pcrr8t.vf
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm
+INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmbxi10.tfm
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.ind
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.ind
 OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.loe
@@ -499,14 +505,15 @@ INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PN
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.run.xml
 OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.run.xml
-INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
+INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc
 INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx10.pfb
 INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx12.pfb
+INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb
 INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb
 INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmex10.pfb
 INPUT c:/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi12.pfb

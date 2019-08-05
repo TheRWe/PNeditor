@@ -127,6 +127,9 @@
 \usepackage{subcaption}
 \usepackage[czech]{babel}
 
+\usepackage{multirow}
+\usepackage{array}
+
 \begin{document}
 
 %% Sazba úvodních stran -- titulní, s bibliografickými údaji, s
@@ -286,7 +289,7 @@ abychom předešli případným nedorozuměním.
 \subsection{Zkrácený zápis ohodnocení sítě}
 
 Abychom předešli zdlouhavému psaní kaźdého případu ohodnocovací funkce
-(např. $M(a) = 0; M(c) = 2; \dotsb$), zavedeme si kratší zápis.
+\\(např. $M(a) = 0; M(c) = 2; \dotsb$), zavedeme si kratší zápis.
 Nejdříve seřadíme všechny místa podle jejich značení jako by šlo 
 o číselnou soustavu (s písmeny místo čísel) 
 neboli $a, b, c, \dotsb, z, aa, ab, ac, \dotsb$.
@@ -527,7 +530,7 @@ ale pořadí ve kterém byly hrany přidány.
 \end{figure}
 
 
-\subsubsection{Upravená verze vlastností}
+\subsubsection{Upravená verze vlastností}\label{Upravená verze vlastností}
 
 Oproti grafu dosažitelnosti náš graf pokrytí tak jak jsme ho sestrojili 
 pomocí algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph} 
@@ -570,6 +573,7 @@ Petriho síť ne\textbf{skončí} pokud graf obsahuje $\omega$ ohodnocení.
   pokud její graf pokrytí obsahuje $\omega$ ohodnocení a skončí pokud je splněná
   původní podmínka v definici \ref{def:skončí}.
 \end{proof}
+
 
 Jestli je síť \textbf{vratná} z grafu s $\omega$ ohodnocením jsme si už ukázali 
 že díky chybějícím hranám určitelné není. Můžeme si ale jednoduchou 
@@ -703,7 +707,7 @@ Při najetí nad editované pole se zobrazí šipky kterými
 je možné přidávat nebo ubírat hodnotu, nebo je možné taky 
 do něj kliknout aby se do zde umístil kurzor klávesnice a 
 přitom když je myš stále nad polem použít kolečko na změnu hodnoty.
-Dialogy se ukládají kliknutím na OK, kliknutí do jiného místa(levé i pravé) 
+Dialogy se ukládají kliknutím na OK nebo stiknutím Enter, kliknutí do jiného místa(levé i pravé) 
 hlavní plochy způsobí zavření dialogu bez provedení změny.
 
 Ohodnocení místa se dá měnit i bez otevření dialogu a to najetím myši
@@ -739,7 +743,7 @@ Při editaci je možné také využít nějaké klávesové zkratky které jsou 
 
 Funkce tlačítek panelu nástrojů zobrezeného v obrázku \ref{fig:Panel nástrojů editoru}:
 \begin{center}
-  \begin{tabular}{r p{0.8\linewidth}}
+  \begin{tabular}{r p{0.6\linewidth}}
     \textbf{Zpět/Vpřed}          & Vrátí poslední akci nebo zruší vrácení poslední akce \\
     \textbf{Tisk}                & Otevře dialog pro tisk otevřené sítě \\
     \textbf{Přiblížit/Oddálit}   & Přiblíží/Oddálí Petriho síť \\
@@ -784,8 +788,65 @@ daného řádku do sítě na hlavní ploše editoru.
 
 \subsubsection{Výsledky analýzy}\label{výsledky analýzy}
 
+Ve výsledcích analýzy (viz Obrázek \ref{analýza obrázek}) jsou zobrazeny vlasnosti sítě podle sekce \ref{Upravená verze vlastností}.
+Jak jednolivé vlastnosti přečíst je popsané v tabulce 
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{| c | c | r l |}
+  \hline
+    Název v editoru & Vlasnost & Hodnota & Význam \\
+    \hline
+    \hline
+    & states & - & počet stavů sítě \\ 
+    \hline
+    \multirow{2}{*}{bounded} & \multirow{2}{*}{\textbf{ohraničenost}} & \textit{$\omega$} &  síť je \textbf{neohraničená} \\ 
+    &                   & číslo & určuje \textbf{ohraničenost} \\ 
+    \hline
+\multirow{2}{*}{terminates} & \multirow{2}{*}{síť \textbf{skončí}} & \textit{Yes} & sít \textbf{skončí} \\ 
+    &                   & \textit{No} & síť ne\textbf{skončí} \\ 
+    \hline
+\multirow{3}{*}{reversible} & \multirow{3}{*}{\textbf{vratná}} & \textit{Yes} & síť je \textbf{vratná} \\ 
+    &                   &   \textit{No} & síť není \textbf{vratná}  \\
+    &                   & \textit{?} & nevíme zda je síť \textbf{vratná} \\ 
+    \hline
+\multirow{2}{*}{deadlock-free} & \multirow{2}{*}{\textbf{mrtvý bodu}} & \textit{Yes} & síť je \textbf{bez mrtvého bodu} \\ 
+    &                   &  \textit{No} & síť má \textbf{mrtvý bod}  \\ 
+    \hline
+\multirow{3}{*}{live} & \multirow{3}{*}{\textbf{živá} / \textbf{slabě živá}} 
+                         & \textit{Yes} & Síť je \textbf{živá} \\ 
+    &                   & \textit{Weakly}  & Síť je \textbf{slabě živá} \\ 
+    &                   & \textit{No} & Síť není \textbf{slabě živá} \\ 
+    \hline
+
+  \end{tabular}
+  \caption{Určování vlastností sítě v editoru} \label{}  
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics{analysis}
+  \caption{ukázka výsledků analýzy sítě}\label{analýza obrázek}
+\end{figure}
+
 
 \subsubsection{Klávesové zkratky}\label{zkratky}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{| c | l |}
+    \hline
+    Zkratka & Akce \\
+    \hline
+    Ctrl + Z      & Zpět \\
+    Ctrl + Shift + Z & Vpřed \\
+    Ctrl + O & Otevření uložené sítě \\
+    Ctrl + S & Uložení sítě na aktuální záložce\\
+    Ctrl + N & Vytvoření nové sítě \\
+    \hline
+  \end{tabular}
+  \caption{Klavesové zkratky využitelné v editoru}\label{tabulka zkratky}
+\end{table}
 
 
 
@@ -837,7 +898,7 @@ tento jazyk využíváme správně a neobcházíme ho tak že bychom si jím sp�
 \subsection{Electron}
 Electron je opensource framework vytvořený v NodeJS který 
 zaobaluje Windows API (viz zdrojový kód \ref{electron vyrvoření okna}) a dohromady se softwarem chromium umožňují 
-vytváření okenních aplikací za pomocí technologií HTML, CSS a JavaScript(TypeScript).
+vytváření okenních aplikací za pomocí technologií HTML, CSS a JavaScript nebo TypeScript.
 Electron je stejně jako webová stránka nebo webová aplikace rozdělený
 na dvě části. \uv{Serverová} část komunikuje s Windows API a 
 \uv{klientská} tzv. renderer část se stará už pouze o vykreslování 
@@ -874,7 +935,8 @@ a přes \textit{ipcMain} na straně serveru (viz Zdrojový kód \ref{electron ko
 \end{kicode}
 
 \subsection{Javascriptová Knihovna Data driven documents - D3}
-Účel knihovny D3 je jednodušší zobrazení dat do \textit{document object modelu}.
+Knihovna D3 se používá pro zobrazení dat do 
+\textit{document object modelu}.
 Knihovna obsahuje selektory které umožňují vybrat zároveň data 
 i DOM objekty a pracovat s nimi najednou. Hlavní výhodou knihovny 
 je její rozdělení selektorů na \textbf{Enter}, \textbf{Exit}, \textbf{Update}.
@@ -925,10 +987,42 @@ V editoru je tato technologie využita v samotnému vykreslovaní sítí.
 JSON je technologie která využívá notace javascriptových objektů pro ukladání dat.
 Výhodou tohoto formátu je že po rozparsování souboru se může s ním hned v 
 javascriptu jednoduše pracovat a také je čitelný pro člověka a je podporovaný ve většině softwaru.
-Sítě vytvořené v editoru jsou ukládané v tomto formátu (viz Zdrojový kód \ref{Uložení sítě}).
+Sítě vytvořené v editoru jsou ukládané v tomto formátu.
 Uložené sítě nejsou určené aby je někdo editoval, ale uložená síť může být třeba 
 použita v jiném programu který si ji rozparsuje a bude s ní dál pracovat.
+V ukázce (viz Zdrojový kód \ref{Uložení sítě}) je síť tvořená jedním místem s ohodnocením 2, 
+jedním přechodem a hranou směřující do místa.
 
+\begin{kicode}{JavaScript}{Uložení sítě}{Uložení petriho sítě}
+{
+  "places": [
+    {
+      "id": 0,
+      "position": {
+        "x": 95, "y": 35
+      },
+      "marking": 2
+    }
+  ],
+  "transitions": [
+    {
+      "position": {
+        "x": 30, "y": 35
+      },
+      "id": 0,
+      "isCold": false
+    }
+  ],
+  "arcs": [
+    {
+      "place_id": 0,
+      "transition_id": 0,
+      "toPlace": 1,
+      "toTransition": 0
+    }
+  ]
+}
+\end{kicode}
 
 \section{Stavba programu}
 
@@ -1104,6 +1198,7 @@ nebo v souboru \texttt{readme.txt}.
 %% BibLaTeXu. Volitelné.
 \nocite{*}
 %% Vlastní sazba bibliografie při použití BibLaTeXu.
+
 \printbibliography
 
 %% Bibliografie, včetně sazby, při nepoužití BibLaTeXu.

@@ -49,30 +49,30 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Pou\IeC {\v z}it\IeC {\'e} technologie}{22}{section.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}nodejs}{22}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.1}nodejs}{23}{subsection.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}TypeScript}{22}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.2}TypeScript}{23}{subsection.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Electron}{22}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.3}Electron}{23}{subsection.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents - D3}{23}{subsection.3.4}% 
+\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents - D3}{24}{subsection.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Scalable vector graphics (SVG)}{23}{subsection.3.5}% 
+\contentsline {subsection}{\numberline {3.5}Scalable vector graphics (SVG)}{24}{subsection.3.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{24}{subsection.3.6}% 
+\contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{25}{subsection.3.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Stavba programu}{25}{section.4}% 
+\contentsline {section}{\numberline {4}Stavba programu}{26}{section.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{25}{subsection.4.1}% 
+\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{26}{subsection.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{25}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{26}{subsection.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{25}{subsection.4.3}% 
+\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{26}{subsection.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{25}{subsection.4.4}% 
+\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{26}{subsection.4.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{25}{section.5}% 
+\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{26}{section.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Literatura}{27}{section*.20}% 
+\contentsline {section}{Literatura}{29}{section*.24}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Rejst\v {r}\'{i}k}{28}{section*.23}% 
+\contentsline {section}{Rejst\v {r}\'{i}k}{30}{section*.27}% 
