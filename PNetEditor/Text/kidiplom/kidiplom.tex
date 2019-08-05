@@ -325,7 +325,7 @@ a hrany grafu jsou značené přechody které jsou aktivované aby z počátečn
 \subsubsection{Vlastnosti odvoditelné z Grafu dosažitelnosti}
 Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
 
-\begin{definition}
+\begin{definition}[Ohraničenost sítě]
   
   Petriho síť je \textbf{ohraničená}\index{síť ohraničenost} pokud 
   je její graf dosažitelnosti konečný. Pokud existuje takové přirozené číslo $n$
@@ -334,28 +334,28 @@ Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
   nejmenší možné, pak můžeme nazývat síť že je \textbf{ohraničená $n$}.
   
 \end{definition}
-\begin{definition}\label{def:skončí}
+\begin{definition}[Konečnost sítě]\label{def:skončí}
   
   Petriho síť \textbf{skončí}\index{síť skončí} za předpokladu
   že graf je konečný a zároveň neobsahuje žádné cykly.
   Neboli Petriho sít vždy po nějakém počtu kroků dojde do stavu kdy žádný přechod není povolený.
   
 \end{definition}
-\begin{definition}
+\begin{definition}[Vratnost sítě]
   
   Petriho síť je \textbf{vratná}\index{síť vratná}
   pokud je její graf silně souvislý. Z každého dosažitelného 
   ohdonocení je dosažitelné počáteční ohodnocení.
 
 \end{definition}
-\begin{definition}
+\begin{definition}[Síť bez mrtvého bodu]
   
   Petriho síť je \textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
   pokud z každého vrcholu grafu dosažitelnosti vede alespoň jedna hrana.
   Petriho sít má v každém ohodnocení povolený alespoň jeden přechod.
 
 \end{definition}
-\begin{definition}
+\begin{definition}[Slabě živá síť]
   
   Petriho síť je \textbf{slabě živá}\index{síť slabě živá} pokud pro
   každý přechod existuje v grafu hrana označená tímto přechodem.
@@ -363,7 +363,7 @@ Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
   povoluje daný přechod.
 
 \end{definition}
-\begin{definition}
+\begin{definition}[Živá síť]
   
   Petriho síť je \textbf{živá}\index{síť živá} pokud 
   pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu cesta
@@ -555,7 +555,7 @@ Proto musíme zjistit jestli jsou všechny vlastnosti grafu dosažitelnosti
 aplikovatlné i na graf pokrytí, případně poupravit nebo rozšířit jejich definici.
 
 Síť je \textbf{ohraničená} pokud graf pokrytí neobsahuje žádné $\omega$ ohodnocení
-\begin{proof}
+\begin{proof}[Ohraničenost sítě v grafu pokrytí]
   \textbf{Ohraničenost} sítě je určená konečností grafu dosažitelnosti.
   Nekonečný rozvoj grafu dosažitelnosti je vždy v grafu pokrytí symbolizován
   $\omega$ ohodnocenímy. Z toho můžeme vyvodit že síť je 
@@ -564,19 +564,19 @@ Síť je \textbf{ohraničená} pokud graf pokrytí neobsahuje žádné $\omega$ 
 
 
 Petriho síť ne\textbf{skončí} pokud graf obsahuje $\omega$ ohodnocení.
-\begin{proof}
+\begin{proof}[Konečnost sítě v grafu pokrytí]
   Petriho síť ne\textbf{skončí} pokud je její graf dosažitelnosti nekonečný tudíš
   stejnou úvahou jako u ohraničenosti můžeme říct že síť ne\textbf{skončí}
   pokud její graf pokrytí obsahuje $\omega$ ohodnocení a skončí pokud je splněná
   původní podmínka v definici \ref{def:skončí}.
 \end{proof}
 
-Jestli je síť vratná z grafu s $\omega$ ohodnocením jsme si už ukázali 
+Jestli je síť \textbf{vratná} z grafu s $\omega$ ohodnocením jsme si už ukázali 
 že díky chybějícím hranám určitelné není. Můžeme si ale jednoduchou 
 úvahou určit množinu případů kdy síť rozhodně vratná není, a to v 
 situaci kdy existuje $\omega$ ohodnocení a neexistuje žádný přechod 
 který by měl větší vstup jak výstup.
-\begin{proof}
+\begin{proof}[Vratnost sítě v grafu pokrytí]
   Pokud máme $\omega$ ohodnocení tak to mimo jiné znamená že se suma značek všech 
   míst může při opakovaném aktivování
   některých přechodů zvyšovat neustále. Pak musí existovat i přechod
@@ -591,14 +591,14 @@ bychom potřebovali algoritmus který vytváří i zpětné hrany z $\omega$ oho
 
 Petriho síť je \textbf{bez mrtvého bodu} pokud z každého vrcholu grafu 
 pokrytí vede alespoň jedna hrana.
-\begin{proof}
+\begin{proof}[Síť bez mrtvého bodu v grafu pokrytí]
   V tomto případě nemusíme rozlišovat $\omega$ ohodnocení a standardní ohodnocení,
   pokud z něj vede v grafu hrana, znamená to že v tomto ohodnocení síť neuvázne.
 \end{proof}
 
 Petriho síť je \textbf{slabě živá} pokud pro každý přechod existuje 
 v grafu hrana označená tímto přechodem.
-\begin{proof}
+\begin{proof}[Slabě živá síť v grafu pokrytí]
   $\omega$ ohodnocení stejně jako v případě 
   určování jestli je síť \textbf{bez mrtvého bodu} 
   výsledek neovlivní.
@@ -607,7 +607,7 @@ v grafu hrana označená tímto přechodem.
 Petriho síť je \textbf{živá}\index{síť živá} pokud 
 pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu cesta
 z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu $t$.
-\begin{proof}
+\begin{proof}[živá síť v grafu pokrytí]
  Když jsou ohodnocení $M < M'$, pak pokud je přechod $t$ 
   povolený v $M$ pak musí být povolený i v $M'$. Díky tomu můžemě určit
   že chybějící hrany z ostře větších ohodnocení do menších nejsou potřeba protože 
@@ -714,6 +714,10 @@ $\epsilon$ označení(označení pouze orientační pro uživatele).
 Kliknutím a tažením je pak možné jednotlivá místa a přechody přesouvat.
 Při přesouvání se jednotlivé objekty navzájem odpuzují aby nedošlo k jejich překrytí.
 
+Nakonec pravým tlačítkem je možné místo, přechod nebo hranu odstranit.
+
+Při editaci je možné také využít nějaké klávesové zkratky které jsou popsané v \ref{zkratky}
+
 \begin{figure}[h]
   \centering
   \begin{subfigure}[h]{0,4\linewidth}
@@ -721,7 +725,7 @@ Při přesouvání se jednotlivé objekty navzájem odpuzují aby nedošlo k jej
     \caption{editace ohodnocení místa}
   \end{subfigure}
   \begin{subfigure}[h]{0,4\linewidth}
-    \includegraphics{dialog_arc}
+    \includegraphics[width=\linewidth]{dialog_arc}
     \caption{editace hodnot hrany}
   \end{subfigure}
   \caption{Editace hodnot}
@@ -781,7 +785,7 @@ daného řádku do sítě na hlavní ploše editoru.
 \subsubsection{Výsledky analýzy}\label{výsledky analýzy}
 
 
-\subsubsection{Klávesové zkratky}
+\subsubsection{Klávesové zkratky}\label{zkratky}
 
 
 
@@ -789,32 +793,141 @@ daného řádku do sítě na hlavní ploše editoru.
 
 \section{Použité technologie}
 
-\subsection{nodejs}
-Aplikace je psaná za pomoci opensourcové technologie nodeJS, která umožňuje využívat jazyk
-JavaScript pro psaní serverových aplikací. Cílem platformy nodeJS je vytvořit
-ekosystém pro jednoduší vývoj webových stránek a aplikací kde stačí pro vyrvaření
-funkcionality pouze jeden programovací jazyk.
+Následující technologie byly využity pro vytvoření editoru Petriho sítí.
 
-\subsection{Typescript}
-Typescript je opensource programovací jazyk od společnosti Microsoft který je nadstavbou nad jazykem JavaScript.
-Jelikož je Typescript nadstavbou nad programovacím jazykem JavaScript tak je jakýkoliv validní kód v JavaScriptu automaticky validním kódem v Typescriptu.
+\subsection{nodejs}
+Technologie která umožňuje využívat jazyk JavaScript pro psaní 
+serverových aplikací. Cílem platformy nodeJS je vytvořit
+ekosystém pro jednoduší vývoj webových stránek a aplikací, 
+kde stačí pro vyrvaření funkcionality pouze jeden programovací jazyk.
+
+\subsection{TypeScript}
+TypeScript je opensource programovací jazyk od společnosti Microsoft který je nadstavbou nad jazykem JavaScript.
+Jelikož je TypeScript nadstavbou nad programovacím jazykem JavaScript tak je jakýkoliv validní kód v JavaScriptu automaticky validním kódem v TypeScriptu.
 Typecript se kompiluje do Javascriptu a proto po stránce funkcionality nenabízí nic navíc avšak po stránce vývoje nabízí možnost statické typové kontroly
 se kterou je spjaté fungování našeptávačů v dnešních textových editorech a také nabízí možnost kompilace do starších verzí JavaScript se simulací funkcionality novejších verzí JavaScriptu.
-\todo{příklady kódu ?}
 
+Zdrojový kód \ref{TypeScript} je ukázka jednoduchého kódu v JavaScript. Můžeme
+si zde všimnou proměnné \textit{a} do které nakonec nahrajeme řetězec i přesto že 
+ji máme definouvanou jako číslo. Proto si musíme zároveň sami dávat pozor na to jestli
+tento jazyk využíváme správně a neobcházíme ho tak že bychom si jím spíš škodili než pomohli.
+\begin{kicode}{JavaScript}{TypeScript}{Ukázka TypeScriptu}
+  // typová inference 
+  let a = 10;
+  // řetězec není číslo CHYBA! - nezkompiluje se
+  a = "necislo";
+  // 12 je číslo, v pořádku
+  a = 12; 
+  // obejití typovosti, proběhne v pořádku ale POZOR v a už není číslo ikdyž podle typescriptu to tak vypadá
+  (a as any) = "necislo"
+  // definice typu s inicializací, b je číslo nebo text
+  let b: number | string = 10;
+  /**
+   * Funkce fnc je funce jednoho argumentu který je je složený objekt obsahující
+   * vlasnosti x a y které jseou čísla.
+   * Funkce fnc vrací pravdivostní hodnotu.
+   */
+  function fnc(arg: {x:number,y:number}): boolean {
+      // Kód funkce, pokud všechny větve funkce 
+      // nevrací definovanou návratovou hodnotu vyhodí chybu
+  }
+
+\end{kicode}
 
 \subsection{Electron}
-Electron je opensource framework pro vytváření desktopových aplikací pomocí webových technologií JavaScript, HTML a CSS.
-Využívá NodeJS
+Electron je opensource framework vytvořený v NodeJS který 
+zaobaluje Windows API (viz zdrojový kód \ref{electron vyrvoření okna}) a dohromady se softwarem chromium umožňují 
+vytváření okenních aplikací za pomocí technologií HTML, CSS a JavaScript(TypeScript).
+Electron je stejně jako webová stránka nebo webová aplikace rozdělený
+na dvě části. \uv{Serverová} část komunikuje s Windows API a 
+\uv{klientská} tzv. renderer část se stará už pouze o vykreslování 
+okna. Obě části jsou pak propojené přes \textit{Inter-Process Communication}, 
+což uživatel může využívat přes objekty \textit{ipcRenderer} na straně rendereru
+a přes \textit{ipcMain} na straně serveru (viz Zdrojový kód \ref{electron komunikace}).
 
+\begin{kicode}{JavaScript}{electron vyrvoření okna}{Vytváření okna v elektronu}
+  import { BrowserWindow, Menu, app } from "electron";
+  function createWindow() {
+      // vytvoření samotného okna
+      const mainWindow = new BrowserWindow({
+          width: 400, height: 500,
+          title: 'NazevOkna',
+      });
+      // otevře výchozí stránku
+      mainWindow.loadURL(`file://${__dirname}/index.html`);
+      // odebere horní menu aplikace
+      Menu.setApplicationMenu(null);
+  }
+  
+  // počká až vše bude připraveno
+  app.on('ready', createWindow);
+\end{kicode}
 
-\subsection{Javascriptová Knihovna Data driven documents (D3)}
-\todo{příklady kódu ?}
+\begin{kicode}{JavaScript}{electron komunikace}{Komunikace v rámci procesu elektronu}
+  //server
+  ipcMain.on("user-event-name", (e, arg)=>{
+    // Do Something
+  })
 
-\subsection{Scalable Vector Graphics (SVG)}
-\todo{příklady kódu ?}
+  //renderer
+  ipcRenderer.send("user-event-name", {/*DATA*/})
+\end{kicode}
 
+\subsection{Javascriptová Knihovna Data driven documents - D3}
+Účel knihovny D3 je jednodušší zobrazení dat do \textit{document object modelu}.
+Knihovna obsahuje selektory které umožňují vybrat zároveň data 
+i DOM objekty a pracovat s nimi najednou. Hlavní výhodou knihovny 
+je její rozdělení selektorů na \textbf{Enter}, \textbf{Exit}, \textbf{Update}.
+Selektor \textbf{Enter} se volá pokud dojde k případu že má kolekce 
+dat větši počet prvků než je vytvořeno DOM elementů do kterých se mají zobrazovat.
+\textbf{Enter} je tedy selektor který definuje jak se vytváří nové DOM elementy 
+když přibydou data. Naopak \textbf{Exit} selektor je pravým opakem \textbf{Enter}
+selektoru a stará se tedy o případy kdy máme méně dat než máme DOM elementů.
+Poslední selektor je \textbf{Update} který je standardním selektorem 
+(jako je například přímo v JavaScriptu document.querySelector), který přímo 
+aplikuje změny dat do DOM elemntů. Selektory \textbf{Enter} a \textbf{Exit} 
+mají své příkazy zatímco selektor \textbf{Update} speciální příkaz nemá a je to jen 
+souhrné označení všech ostatních selektorů. V ukázce (viz Zdrojový kód \ref{D3}) je
+jednoduchý kód který pro každý prvek dat zobrazí jeden řádek s těmito daty.
 
+\begin{kicode}{JavaScript}{D3}{Ukázka kódu v D3}
+import * as d3 from 'd3';
+
+// vybere v DOM element co má id container
+const container = d3.select("#container");
+// data která chceme zobrazit 
+const data = [1, 2, 3, 4];
+// propojíme data s DOMem
+container.data(data)
+    // enter selektor
+    .enter()
+    // pro data které nemají element jej přidáme
+    .append("li")
+    // přejde zpět na update selektor
+    .merge(container)
+    // změní text li elementu na číslo z dat
+    .text(d => d)
+    // exit selektor
+    .exit()
+    // odebere přebívající DOM elementy
+    .remove()
+    ;
+  
+\end{kicode}
+
+\subsection{Scalable vector graphics (SVG)}
+SVG je značkovací jazyk vycházející z XML který popsije vykreslovaní 
+vektororvé grafiky. Je idaální pro vytvaření grafiky je vyžadováno
+aby se dala přibližovat a přitom se neztrácela kvalita obrazu (proto Scalable).
+V editoru je tato technologie využita v samotnému vykreslovaní sítí.
+
+\subsection{JavaScript object notation (JSON)}
+JSON je technologie která využívá notace javascriptových objektů pro ukladání dat.
+Výhodou tohoto formátu je že po rozparsování souboru se může s ním hned v 
+javascriptu jednoduše pracovat a také je čitelný pro člověka a je podporovaný ve většině softwaru.
+Sítě vytvořené v editoru jsou ukládané v tomto formátu (viz Zdrojový kód \ref{Uložení sítě}).
+Uložené sítě nejsou určené aby je někdo editoval, ale uložená síť může být třeba 
+použita v jiném programu který si ji rozparsuje a bude s ní dál pracovat.
 
 
 \section{Stavba programu}
@@ -981,7 +1094,7 @@ nebo v souboru \texttt{readme.txt}.
 %% -------------------------------------------------------------------
 
 %% Sazba volitelného seznamu zkratek, za přílohami.
-\printglossary
+%\printglossary
 
 %% Sazba povinné bibliografie, za přílohami (případně i za seznamem
 %% zkratek). Při použití BibLaTeXu použijte makro
