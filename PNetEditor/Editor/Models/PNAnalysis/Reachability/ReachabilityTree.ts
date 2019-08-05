@@ -193,7 +193,6 @@ export class CoverabilityGraph {
         if (this.containstOmega) {
             if (!this.hasConsumingTransition)
                 return false;
-            return null;
         }
 
         const g = this.graph;
@@ -236,7 +235,7 @@ export class CoverabilityGraph {
         for (var i = 0; i < len; i++) {
             for (var j = 0; j < len; j++) {
                 if (fromToArray[i][j] === false)
-                    return false;
+                    return this.containstOmega && null;
             }
         }
 

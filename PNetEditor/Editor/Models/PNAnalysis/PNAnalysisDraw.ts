@@ -31,8 +31,7 @@ export class PNAnalysisDraw extends DrawBase {
         if (CoverabilityGraph.calculated)
             [
                 CoverabilityGraph.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
-                CoverabilityGraph.containstOmega ? "Yes" : "No",
-                CoverabilityGraph.containstOmega ? "No" : "" + CoverabilityGraph.maxMarking,
+                CoverabilityGraph.containstOmega ? "ω" : "" + CoverabilityGraph.maxMarking,
                 CoverabilityGraph.terminates ? "Yes" : "No",
                 CoverabilityGraph.reversible === null ? "?" : (CoverabilityGraph.reversible ? "Yes" : "No"),
                 CoverabilityGraph.deadlockFree ? "Yes" : "No",
@@ -69,7 +68,7 @@ export class PNAnalysisDraw extends DrawBase {
             .style("display", "inline-block")
             ;
 
-        ["states", "ω marking", "bounded", "terminates", "reversible", "deadlock-free", "live",].forEach(x => {
+        ["states", "bounded", "terminates", "reversible", "deadlock-free", "live",].forEach(x => {
             leftDiv.append("div")
                 .text(x)
                 ;
