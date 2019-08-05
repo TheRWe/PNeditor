@@ -52,8 +52,8 @@ export class PNAction extends ActionBase<PNModel>{
 
     //#region Edit Modifications
 
-    public AddPlace(pos: Position, name: string = null): Place {
-        const place = new Place(name, pos);
+    public AddPlace(pos: Position): Place {
+        const place = new Place(pos);
         this.model.places.push(place);
         this.CallOnModelChange();
         return place;

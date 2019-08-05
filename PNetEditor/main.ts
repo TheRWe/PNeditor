@@ -33,8 +33,9 @@ const TabActions = {
             const jsonNet = JSON.parse(objString);
             const net = new PNModel();
 
-            // todo: eskalace
-            if (net.fromJSON(jsonNet)) { }
+            if (!net.fromJSON(jsonNet)) {
+                throw Error("file corrupted");
+            }
 
             console.log("%c LOADED net", "color: rgb(0, 0, 255)");
 

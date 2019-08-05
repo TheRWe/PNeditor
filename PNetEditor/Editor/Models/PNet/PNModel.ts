@@ -11,7 +11,7 @@ export class PNModel extends ModelBase<JSONNet>{
 
     public toJSON(): JSONNet {
         const places: { name?: string, id: number, position?: Position, marking?: number }[]
-            = this.places.map(p => { return { name: p.name, id: p.id, position: ((p.x !== undefined && p.y !== undefined) ? { x: p.x, y: p.y } : undefined), marking: p.marking }; });
+            = this.places.map(p => { return { id: p.id, position: ((p.x !== undefined && p.y !== undefined) ? { x: p.x, y: p.y } : undefined), marking: p.marking }; });
 
         const transitions: { position?: Position, id: number, isCold?: boolean }[]
             = this.transitions.map(t => { return { position: (t.x !== undefined && t.y !== undefined) ? { x: t.x, y: t.y } : undefined, id: t.id, isCold: t.isCold } });
@@ -25,20 +25,30 @@ export class PNModel extends ModelBase<JSONNet>{
     }
 
     public fromJSON(json: JSONNet): boolean {
-        const places: Place[] = json.places.map(p => new Place(p.name, p.position, p.marking, p.id))
+        if ((json.places.map(p => p.id).slice().sort().reduce((x, y) => x < 0 ? -1 : (x === y ? -1 : y), Number.MAX_SAFE_INTEGER) === -1)
+            || (json.transitions.map(p => p.id).slice().sort().reduce((x, y) => x < 0 ? -1 : (x === y ? -1 : y), Number.MAX_SAFE_INTEGER) === -1)
+            || (json.arcs.map(a => a.place_id).map(pid => json.places.map(p => p.id).findIndex(p => p === pid)).some(x => x === -1))
+            || (json.arcs.map(a => a.transition_id).map(tid => json.transitions.map(t => t.id).findIndex(t => t === tid)).some(x => x === -1))
+            || (json.arcs.map(a => a.toPlace || 0).some(x => x < 0))
+            || (json.arcs.map(a => a.toTransition || 0).some(x => x < 0))
+            )
+            return false;
+
+        const places: Place[] = json.places.map(p => new Place(p.position, p.marking || 0, p.id))
 
         const transitions: Transition[] = json.transitions.map(tj => {
             const t = new Transition(tj.position, tj.id);
-            t.isCold = tj.isCold;
+            t.isCold = tj.isCold || false;
             return t;
         })
 
-        const arcs = json.arcs.map(aj =>
-            new Arc(transitions.find(t => t.id === aj.transition_id), places.find(p => p.id === aj.place_id), aj.toPlace, aj.toTransition));
+        const arcs = json.arcs.map(aj => {
+            const t = transitions.find(t => t.id === aj.transition_id)
+            const p = places.find(p => p.id === aj.place_id);
+            return new Arc(t, p, aj.toPlace || 0, aj.toTransition || 0);
+        });
 
-        const placeID: number = Math.max(-1, ...places.map(p => p.id)) + 1;
-
-        Object.assign(this, { places: places, transitions: transitions, placeID: placeID, arcs: arcs });
+        Object.assign(this, { places: places, transitions: transitions, arcs: arcs });
 
         return true;
     }
@@ -102,13 +112,12 @@ export class Transition implements ForceNode {
 }
 
 export class Place implements ForceNode {
-    public name: string | null;
     public marking: number | null;
 
     public id: number | null;
     private static idMaker = 0;
 
-    constructor(name: string | null = null, position: Position | null = null, marking: number | null = null, id: number = -1) {
+    constructor(position: Position | null = null, marking: number | null = null, id: number = -1) {
         if (position) {
             this.x = position.x;
             this.y = position.y;
@@ -116,7 +125,6 @@ export class Place implements ForceNode {
             this.x = 0;
             this.y = 0;
         }
-        this.name = name;
         this.marking = marking || 0;
 
         if (id >= 0) {
@@ -158,7 +166,6 @@ export class Arc {
 export type JSONNet = {
     places:
     {
-        name?: string,
         id: number,
         position?: Position,
         marking?: number,
