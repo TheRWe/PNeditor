@@ -39,8 +39,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{20}{subsubsection.2.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\numberline {2.2.3.1}Tisk}{20}{paragraph.2.2.3.1}% 
-\defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.4}Tabulka ohodnocen\IeC {\'\i }}{21}{subsubsection.2.2.4}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{22}{subsubsection.2.2.5}% 
@@ -61,17 +59,17 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{25}{subsection.3.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Stavba programu}{26}{section.4}% 
+\contentsline {section}{\numberline {4}Stavba programu}{25}{section.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}T\IeC {\v r}\IeC {\'\i }da 1}{26}{subsection.4.1}% 
+\contentsline {subsection}{\numberline {4.1}Modely}{26}{subsection.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}T\IeC {\v r}\IeC {\'\i }da 2}{26}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.2}Draw t\IeC {\v r}\IeC {\'\i }dy}{26}{subsection.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da 3}{26}{subsection.4.3}% 
+\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da editor}{26}{subsection.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.4}T\IeC {\v r}\IeC {\'\i }da 4}{26}{subsection.4.4}% 
+\contentsline {subsection}{\numberline {4.4}}{27}{subsection.4.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{26}{section.5}% 
+\contentsline {section}{\numberline {5}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD/DVD}{27}{section.5}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{Literatura}{29}{section*.24}% 
 \defcounter {refsection}{0}\relax 

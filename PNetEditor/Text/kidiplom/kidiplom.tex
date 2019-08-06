@@ -91,13 +91,13 @@
   Editor také obsahuje základní nástroje pro analýzu petriho 
   sítí. }
 
-\annotation[english]{The goal of paper is to make editor for petri 
+\annotation[english]{The goal of bachelor thesis is to make editor for petri 
 nets with simple convenient control. Editor contains basic analysis 
 tools too.}
 
 %% Klíčová slova práce, včetně anglických. Oddělená (obvykle) středníkem.
 \keywords{Petriho síť; Editor }
-\keywords[english]{Petri nets; Editor}
+\keywords[english]{Petri net; Editor}
 
 %% Volitelná specifikace příloh textu práce, i anglicky. Výchozí je '1
 %% CD/DVD'.
@@ -743,8 +743,8 @@ Při editaci je možné také využít nějaké klávesové zkratky které jsou 
   \label{fig:editace hodnot}
 \end{figure}
 
-
-\todo{módy + odkaz na tlačítko}
+Pokud je mód nastavený na hodnotu \textit{Run} výše popsané akce myší 
+se vypnou. Jediná akce v tomto módu je aktivace přechodu.
 
 \subsubsection{Panel nástrojů editoru}\label{panel nástrojů}
 
@@ -758,18 +758,15 @@ Funkce tlačítek panelu nástrojů zobrezeného v obrázku \ref{fig:Panel nást
     \textbf{Změna módu}  & Přepíná mezi \textbf{editovacím módem} a módem \textbf{spouštění sítě}. \\
   \end{tabular}
 \end{center}
-
+Tisk nemusí vždy fungovat, je to způsobené chybou ve verzi Electronu 
+která byla k vytvoření programu použita. Pokud tisk 
+nefunguje mělo by stačit editor restartovat.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{bar}
   \caption{Panel nástrojů editoru}\label{fig:Panel nástrojů editoru}
 \end{figure}
-
-\subsubsubsection{Tisk}
-
-Pro uložení sítě na disk je potřeba ještě vir
-
 
 \subsubsection{Tabulka ohodnocení}\label{tabulka ohodnocení}
 
@@ -1033,93 +1030,27 @@ jedním přechodem a hranou směřující do místa.
 
 \section{Stavba programu}
 
-\subsection{Třída 1}
-\subsection{Třída 2}
-\subsection{Třída 3}
-\subsection{Třída 4}
+Editor je napsán hlavně v render straně elektronu. Díky tomu je možné 
+editor v případě potřeby v budoucnu předělat na webovou aplikaci.
 
+\subsection{Modely}
 
+V programu jsou třídy nazvané model které obsahují data a starají se o jejich zpracování.
+Tyto modely obsahují také definice pro převod mezi anonymním objektem a objektem 
+vytvořeným z těchto tříd a díky tomu je jednoduché je serializovat a deserializovat.
 
+\subsection{Draw třídy}
 
+Draw třídy obsahují logiku k zobrazovaní dat obsažených v modelech a taky
+zároveň odchytávání akcí způsobených na DOM elementech reprezentujících 
+data v modelech.
 
+\subsection{Třída editor}
 
+Třída editor propojuje všechny potřebné třídy a zároveň obsahuje obsluhu 
+akcí provedených na třídách draw.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\subsection{}
 
 
 
