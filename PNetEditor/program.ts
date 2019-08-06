@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 let mainWindow: BrowserWindow;
-const debug: boolean = true;
+const debug: boolean = false;
 
 function createWindow() {
     // todo: frameless window
