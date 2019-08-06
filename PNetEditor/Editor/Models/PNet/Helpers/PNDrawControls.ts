@@ -55,7 +55,8 @@ export class PNDrawControls {
 
                 const scale = editor.pnDraw.scale;
                 editor.pnDraw.scale = 1;
-                
+                editor.resetState();
+
                 window.print();
                 editor.pnDraw.scale = scale;
                 svg.style("border", "1px lightgray solid");
@@ -72,7 +73,6 @@ export class PNDrawControls {
             .style("cursor", "pointer")
             .style("height", "1.4em")
             .on("click", () => {
-                // todo: do settings
                 if (editor.pnDraw.scale < 2)
                     editor.pnDraw.scale += 0.1;
             })
@@ -92,7 +92,6 @@ export class PNDrawControls {
             .style("font-size", "1.5em")
             .style("height", "1.4em")
             .on("click", () => {
-                // todo: do settings
                 if (editor.pnDraw.scale > 0.3)
                     editor.pnDraw.scale -= 0.1;
             })

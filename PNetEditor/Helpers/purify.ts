@@ -1,5 +1,4 @@
-﻿import * as file from 'fs';
-import { d3BaseSelector } from '../CORE/Constants';
+﻿import { d3BaseSelector } from '../CORE/Constants';
 type Position = { x: number, y: number };
 
 
@@ -89,7 +88,6 @@ export function flatten<T>(arr: (T[] | T)[]): T[] {
     return Array.prototype.concat(...arr);
 }
 
-//todo: named tuple(univerzálně ne jenom bool)
 export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { element: T, classifications: boolean[] }[] {
     return srr.map(x => ({ element: x, classifications: fncs.map(f => f(x)) }));
 }
@@ -113,9 +111,6 @@ export function convertToNumberingScheme(number: number) {
     return letters;
 }
 
-/**
- * 
- */
 export function getArrayElementMapToNumber(arr: any[]) {
     return (elm: any) => {
         return arr.findIndex(x => x === elm);
@@ -166,25 +161,6 @@ export function MakeZoomInOutIcon(container: d3BaseSelector, type: "in" | "out")
         .attr("stroke-linecap", "round")
         ;
 }
-
-//todo: async
-export function fileExample() {
-    const fileName = "settings.json";
-    let sett = {
-        autosave: true,
-        dafults: [1, 2, 100]
-    };
-
-    file.writeFile(fileName, JSON.stringify(sett), (err) => { if (err) console.error("error writing data"); });
-    sleep(10000);
-    file.readFile(fileName, { encoding: "utf8" }, (err, data: string) => {
-        if (err)
-            console.error('failed to read');
-        else
-            console.log(data);
-    });
-}
-
 
 export async function sleep(ms: number = 0) {
     await _sleep(ms);

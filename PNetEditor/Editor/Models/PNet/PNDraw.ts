@@ -7,7 +7,7 @@ import { DrawBase, Callbacks } from "../_Basic/DrawBase";
 import { d3BaseSelector, html, Position, ForceNode } from "../../../CORE/Constants";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
-export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
+export type arc = { arc: Arc, line: { from: Position, to: Position } };
 
 let defsIndex = 0;
 
@@ -27,7 +27,7 @@ export class PNDraw extends DrawBase {
     public Callbacks = {
         container: new Callbacks<{}>(),
         transition: new Callbacks<Transition>(),
-        arc: new Callbacks<arcWithLine>(),
+        arc: new Callbacks<arc>(),
         place: new Callbacks<Place>(),
     };
 
@@ -59,7 +59,6 @@ export class PNDraw extends DrawBase {
 
         if (startingFrom == null) {
             this._isArcDragLineVisible = false;
-            //todo: clears all 
             this.container.on("mousemove", null);
 
             arcDragLine

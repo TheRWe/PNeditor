@@ -27,7 +27,6 @@ export class PNAnalysis {
             let endCalc = () => { };
             self.draws.pnAnalysisDraw.setPnet(self.models.pnModel.toJSON());
 
-            // todo: to settings
             const maxSameGraphSizeTimes = 30;
             let LastGraphSize = Number.MAX_SAFE_INTEGER;
             let sameGraphSizeTimes = 0;
@@ -36,7 +35,6 @@ export class PNAnalysis {
                 const g = self.draws.pnAnalysisDraw.Models.CoverabilityGraph;
                 const pefm = performance.now();
                 await g.CalculateHashed();
-                //await g.Calculate();
                 console.info(`calculated time: ${performance.now() - pefm}`);
                 self.draws.pnAnalysisDraw.update();
 
@@ -57,9 +55,7 @@ export class PNAnalysis {
             if (net.places.length > 0 && net.transitions.length > 0)
                 calculate();
 
-
-            // todo: do nastavení
-            await new Promise(r => { endCalc = r; self.skipPreviousCalc = r; setTimeout(r, 30_000); });
+            await new Promise(r => { endCalc = r; self.skipPreviousCalc = r; setTimeout(r, 60_000); });
 
             console.debug(self);
 

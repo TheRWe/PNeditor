@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
 import { d3BaseSelector, Position, ForceNode } from "../CORE/Constants";
 import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./Models/PNet/PNModel";
-import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
+import { PNDraw, arc } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
 import { CallbackType } from "./Models/_Basic/DrawBase";
 import { notImplemented } from "../Helpers/purify";
@@ -63,7 +63,7 @@ export class PNEditor implements TabInterface {
     private mode: EditorMode = new EditorMode();
 
     // used to cancel all undone actions
-    private resetState() {
+    public resetState() {
         if (this.mode.selected === this.mode.default)
             return;
 
@@ -122,7 +122,6 @@ export class PNEditor implements TabInterface {
 
     /** mouse properties */
     private readonly mouse = {
-        //todo: oddělat new_
         svg: {
             //todo: redundantní kód s gePos na draw
             getMousePosition: (): Position => {
@@ -147,8 +146,6 @@ export class PNEditor implements TabInterface {
                         this.pnDraw.update();
                         break;
                     case editorMode.valueEdit:
-                        //todo: bude uloženo v settings jestli má dojít k uložení nebo resetu
-                        console.debug("resetstate");
                         this.resetState();
                         break;
                     default:
@@ -233,7 +230,6 @@ export class PNEditor implements TabInterface {
                         d3.event.stopPropagation();
                         break;
                     case editorMode.arcMake:
-                        // todo: kontrola na to jeslti už na daný place existuje arc a pokud jo ... (todo: analýza chování)
                         this.mouseEndArc(p);
 
                         d3.event.stopPropagation();
@@ -279,11 +275,9 @@ export class PNEditor implements TabInterface {
             }
         },
         arc: {
-            // todo: bude jen arc a ne arcWithLine
-            onClick: (a: arcWithLine) => {
+            onClick: (a: arc) => {
                 console.debug("arc clicked");
 
-                const mouse = this.mouse;
                 switch (this.mode.selected) {
                     case editorMode.valueEdit:
                     case editorMode.default:
@@ -294,7 +288,7 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
             },
-            onRightClick: (a: arcWithLine) => {
+            onRightClick: (a: arc) => {
                 console.debug("arc right click");
                 switch (this.mode.selected) {
                     case editorMode.default:
@@ -305,9 +299,8 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
             },
-            onWheel: (a: arcWithLine) => {
+            onWheel: (a: arc) => {
                 const e = d3.event;
-                // todo: arc wheel
                 console.debug("arc wheel");
                 var deltaY = e.deltaY;
                 switch (this.mode.selected) {
@@ -417,7 +410,6 @@ export class PNEditor implements TabInterface {
                 const addedPlace = this.pnAction.AddPlace(this.mouse.svg.getMousePosition());
                 this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, addedPlace, 1, null);
             } else if (this.mouse.helpers.arcMakeHolder instanceof Place) {
-                //todo place making
                 console.error("make transition");
             }
         } else if (ending instanceof Place) {
@@ -429,8 +421,7 @@ export class PNEditor implements TabInterface {
                 console.error("can't connect two transitions");
             }
         } else {
-            //todo: propojování
-            console.error("connect");
+            console.error("connect error");
         }
 
         this.mouse.helpers.arcMakeHolder = null;
@@ -490,7 +481,6 @@ export class PNEditor implements TabInterface {
                     switch (e.keyCode) {
                         case Key.Z:
                         case Key.Y:
-                        // todo: opravit
                         case 26:
                             if (this.mode.selected === editorMode.arcMake)
                                 this.mouseEndArc();
@@ -560,10 +550,6 @@ export class PNEditor implements TabInterface {
         }
     }
 
-
-
-    // todo: hide table
-
     private _expandTable(configID: number, transitionID: number) {
         const tableModels = this.tableDraw.Models;
         const configs = tableModels.configurations;
@@ -571,10 +557,6 @@ export class PNEditor implements TabInterface {
         const selectedConfig = configs[configID];
         configs.push(CalculateNextConfiguration(tableModels.net, selectedConfig.marking, transitionID));
         selectedConfig.usedTransition = transitionID;
-    }
-
-    private _updateTable() {
-
     }
 
     private _resetTable() {
@@ -667,7 +649,6 @@ export class PNEditor implements TabInterface {
         const svg = this.svg = svgContainer.append("svg")
             .style("position", "absolute");
 
-        // todo: resize do nastavení
         const tableDiv = this.underControlContainer
             .append("div")
             .style("position", "absolute")
