@@ -8,6 +8,7 @@ type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 type selectors = { [key: string]: d3BaseSelector | (() => d3BaseSelector) | selectors };
 type models = { [key: string]: {} | ModelBase<any> | (() => ModelBase<any>) | models};
 
+/** Base abstract class for handling visualisation of models. */
 export abstract class DrawBase {
     public readonly container: d3BaseSelector;
 

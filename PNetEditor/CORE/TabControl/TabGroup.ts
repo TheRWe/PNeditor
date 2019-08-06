@@ -4,7 +4,6 @@ import { Tab } from "./Tab";
 
 
 export class TabGroup{
-
     public readonly containerLabel: d3BaseSelector;
     public readonly containerGroupContent: d3BaseSelector;
     public readonly parentTabControl: TabControl;

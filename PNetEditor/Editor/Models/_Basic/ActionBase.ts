@@ -1,6 +1,6 @@
 ﻿import { ModelBase } from "./ModelBase";
 
-
+/** Class for catching  */
 export abstract class ActionBase<modelType extends ModelBase<any>>{
     public readonly model: modelType;
 

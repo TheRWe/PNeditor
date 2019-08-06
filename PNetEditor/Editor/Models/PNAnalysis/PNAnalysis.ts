@@ -2,7 +2,6 @@
 import { Tab } from "../../../CORE/TabControl/Tab";
 import { sleep } from "../../../Helpers/purify";
 import { PNAnalysisDraw } from "./PNAnalysisDraw";
-import { CoverabilityGraph, ReachabilitySettings } from "./Reachability/ReachabilityTree";
 import { d3BaseSelector } from "../../../CORE/Constants";
 
 export class PNAnalysis {

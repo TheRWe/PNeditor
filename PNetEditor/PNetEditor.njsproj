@@ -157,7 +157,7 @@
     <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNAnalysis\Reachability\ReachabilityTree.ts">
+    <TypeScriptCompile Include="Editor\Models\PNAnalysis\CoverabilityGraph.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
@@ -199,7 +199,6 @@
     <Folder Include="Editor\" />
     <Folder Include="Editor\Models\" />
     <Folder Include="Editor\Models\PNAnalysis\" />
-    <Folder Include="Editor\Models\PNAnalysis\Reachability\" />
     <Folder Include="Editor\Models\PNet\" />
     <Folder Include="Editor\Models\PNet\Helpers\" />
     <Folder Include="Editor\Models\_Basic\" />

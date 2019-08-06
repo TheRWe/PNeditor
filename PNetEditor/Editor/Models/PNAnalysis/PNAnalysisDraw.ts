@@ -1,7 +1,7 @@
 ﻿import { DrawBase, Callbacks } from "../../Models/_Basic/DrawBase";
-import { PNModel, JSONNet } from "../PNet/PNModel";
+import { JSONNet } from "../PNet/PNModel";
 import { d3BaseSelector } from "../../../CORE/Constants";
-import { CoverabilityGraph } from "./Reachability/ReachabilityTree";
+import { CoverabilityGraph } from "./CoverabilityGraph";
 
 export class PNAnalysisDraw extends DrawBase {
     public Models = {

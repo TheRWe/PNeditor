@@ -1,5 +1,6 @@
 ﻿
 export enum modalResult { X, btn0, btn1, btn2, btn3 }
+/** Function that opens modals with given button labels and returns clicked button. */
 export async function showModal(message: string, btn0: string = null, btn1: string = null, btn2: string = null, btn3: string = null) {
     const modalElm = document.querySelector("#modal");
     const messageElm = document.querySelector(".js-modal-message");

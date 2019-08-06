@@ -2,12 +2,14 @@
 import { Tab } from "./Tab";
 import { TabGroup } from "./TabGroup";
 
+/** Object to create and control tab component */
 export class TabControl {
     public readonly containerLabels: d3BaseSelector;
     public readonly containerContent: d3BaseSelector;
 
     public TabGroups = [] as TabGroup[];
 
+    /** Creates tab and add it to tab group. If tab group is not defined, creates new tab. */
     public addTab(group: TabGroup = null): Tab {
         if (group == null) {
             const groupLabel = this.containerLabels.append("div");
@@ -20,6 +22,7 @@ export class TabControl {
     }
 
     private _selectedTab: Tab;
+    /** Currently opened tab */
     public get SelectedTab() { return this._selectedTab; }
     public SelectTab(tab: Tab) {
         this.TabGroups.forEach(g => g.tabs.forEach(t => { t.Hide(); }));
@@ -37,7 +40,5 @@ export class TabControl {
     constructor(containerLabels: d3BaseSelector, containerContent: d3BaseSelector) {
         this.containerLabels = containerLabels;
         this.containerContent = containerContent;
-
-        //containerLabels.html("");
     }
 }

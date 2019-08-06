@@ -2,6 +2,7 @@
 
 export enum ToggleSwitchState { on = "on", off = "off", hidden = "hidden" }
 
+/** Class that creates button that switches two states. */
 export class ToggleSwitch {
     public selectors = {
         label: null as d3BaseSelector,
@@ -52,8 +53,6 @@ export class ToggleSwitch {
     }
 
     constructor(containerSelector: d3BaseSelector, textOn: string, textOff: string) {
-
-
         const label = this.selectors.label = containerSelector.append("label")
             .classed(html.classes.ToggleSwitch.switcher, true)
             .classed("button", true)

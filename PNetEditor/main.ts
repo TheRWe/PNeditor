@@ -173,7 +173,6 @@ export interface TabInterface {
     Path: string;
 }
 
-// todo: mapovat Tab ne tabgroup
 export var groupmap: Map<TabGroup, TabInterface>;
 
 async function main() {
