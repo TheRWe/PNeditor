@@ -91,11 +91,13 @@
   Editor také obsahuje základní nástroje pro analýzu petriho 
   sítí. }
 
-\annotation[english]{}
+\annotation[english]{The goal of paper is to make editor for petri 
+nets with simple convenient control. Editor contains basic analysis 
+tools too.}
 
 %% Klíčová slova práce, včetně anglických. Oddělená (obvykle) středníkem.
-\keywords{styl textu; závěrečná práce; dokumentace; ukázkový text}
-\keywords[english]{text style; thesis; documentation; sample text}
+\keywords{Petriho síť; Editor }
+\keywords[english]{Petri nets; Editor}
 
 %% Volitelná specifikace příloh textu práce, i anglicky. Výchozí je '1
 %% CD/DVD'.
@@ -104,7 +106,9 @@
 
 %% Volitelné poděkování. Stručné! Výchozí je prázdné. Makro nemá
 %% nepovinný parametr pro uvedení jazyka.
-\thanks{Děkuji, děkuji, děkuji.}
+\thanks{Tímto bych chtěl poděkovat vedoucímu bakalářské práce 
+panu Mgr. Petrovi Osičkovi, Ph.D. za hodnotné rady při vývoji editoru.
+}
 
 %% Cesta k souboru s bibliografií pro její sazbu pomocí BibLaTeXu
 %% (zvolenou nepovinným parametrem biblatex makra
@@ -168,7 +172,8 @@
 \todo{Smazat todo: command}
 
 \section{Petriho sítě}
-Táto kapitola byla inspirovaná a čerpala informace z knihy Understanding petri nets\cite{reisig2013understanding}
+Tato kapitola byla inspirovaná a čerpala informace z knihy 
+Understanding petri nets\cite{reisig2013understanding}.
 
 \subsection{Základní popis}
 
@@ -190,18 +195,18 @@ Jsou tvořené místy, přechody a hranami které jsou vždy propojením jednoho
   \end{itemize}
 \end{definition}
 
-Pro odkazovaní na jednotlivé členy prvků z množiny hran budeme používat
-notaci $P(a)$ pro odkázání na místo v hraně $a \in A$,
+Pro odkazovaní na jednotlivé členy prvků z množiny hran $a \in A$ 
+budeme používat notaci $P(a)$ pro odkázání na místo hrany,
 $T(a)$ pro odkázání na přechod a $AM(a)$ pro odkaz na násobek.
 
-Každý přechod $t$ může mít 'přiřazený' libovolný počet
+Každý přechod $t$ může mít \uv{přiřazený} libovolný počet
 hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
 Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu
 $$^\to t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
 a hrany směřující z přechodu (do místa)
 $$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
 dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
-$$ArcesOfTransition(t,A) = (^\to t \cup t ^\to) \subset A$$
+$$ArcesOfTransition(t,A) = (^\to t \cup t ^\to)\;\; \subset A$$
 
 Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
 místu $p \in P$ petriho sítě počet značek
@@ -232,10 +237,12 @@ $$
 $$
 Tuto změnu můžeme značit $M \to ^t M'$
 
-Ohodnocení $M'$ je označené jako \textbf{dosažitelné}\index{dosažitelné ohodnocení} z ohodnocení $M$ 
-pokud existuje sekvence přechodů taková, že jejich postupným aktivováním
-z ohodnocení $M$ vznikne ohodnocení $M'$.
-Ohdonocení $M'$ je dostupné z ohodnocení $M$ pak značíme $M \to ^* M'$.
+Ohodnocení $M'$ je označené jako 
+\textbf{dosažitelné}\index{dosažitelné ohodnocení} z ohodnocení $M$ 
+pokud existuje sekvence přechodů taková, že jejich postupným 
+aktivováním z ohodnocení $M$ vznikne ohodnocení $M'$.
+Ohdonocení $M'$ je dostupné z ohodnocení $M$ pak značíme 
+$M \to ^* M'$.
 
 
 \subsection{Vizuální zobrazení sítě}
