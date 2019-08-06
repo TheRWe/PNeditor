@@ -1,6 +1,6 @@
 ﻿import { JSONNet, marking, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "../PNet/PNModel";
-import { numbers } from "../../../CORE/Constants";
-import { AsyncForeach, SortKeySelector, flatten, sleep } from "../../../Helpers/purify";
+import { numbers } from "../../CORE/Constants";
+import { AsyncForeach, SortKeySelector, flatten, sleep } from "../../Helpers/purify";
 import { sha1 } from 'object-hash';
 import { ModelBase } from "../_Basic/ModelBase";
 const omega = numbers.omega;

@@ -1,6 +1,6 @@
 ﻿import * as d3 from 'd3';
 import { Selection } from "d3";
-import { d3BaseSelector, Position } from "./../../../CORE/Constants";
+import { d3BaseSelector, Position } from "../../CORE/Constants";
 import { ModelBase } from "./ModelBase";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;

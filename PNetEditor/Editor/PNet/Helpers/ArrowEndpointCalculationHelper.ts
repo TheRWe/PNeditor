@@ -1,5 +1,5 @@
-﻿import { Position } from "../../../../CORE/Constants";
-import { classify, SortKeySelector } from "../../../../Helpers/purify";
+﻿import { Position } from "../../../CORE/Constants";
+import { classify, SortKeySelector } from "../../../Helpers/purify";
 import { PNModel, Arc } from "../PNModel";
 
 /**

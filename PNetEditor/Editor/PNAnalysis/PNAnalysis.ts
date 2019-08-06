@@ -1,8 +1,8 @@
 ﻿import { PNModel } from "../PNet/PNModel";
-import { Tab } from "../../../CORE/TabControl/Tab";
-import { sleep } from "../../../Helpers/purify";
+import { Tab } from "../../CORE/TabControl/Tab";
+import { sleep } from "../../Helpers/purify";
 import { PNAnalysisDraw } from "./PNAnalysisDraw";
-import { d3BaseSelector } from "../../../CORE/Constants";
+import { d3BaseSelector } from "../../CORE/Constants";
 
 export class PNAnalysis {
     public readonly models = {

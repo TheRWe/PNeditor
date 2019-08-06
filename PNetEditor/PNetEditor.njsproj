@@ -42,81 +42,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="PNIcon.png" />
-    <Content Include="Text\kidiplom\.vs\ProjectSettings.json" />
-    <Content Include="Text\kidiplom\.vs\slnx.sqlite" />
-    <Content Include="Text\kidiplom\.vs\VSWorkspaceState.json" />
-    <Content Include="Text\kidiplom\bibliografie.bib" />
-    <Content Include="Text\kidiplom\czech-iso.lbx" />
-    <Content Include="Text\kidiplom\czech.lbx" />
-    <Content Include="Text\kidiplom\english-iso.lbx" />
-    <Content Include="Text\kidiplom\graphics\kititle-cz-nofont.pdf" />
-    <Content Include="Text\kidiplom\graphics\kititle-cz-nofont.ps" />
-    <Content Include="Text\kidiplom\graphics\kititle-en-nofont.pdf" />
-    <Content Include="Text\kidiplom\graphics\kititle-en-nofont.ps" />
-    <Content Include="Text\kidiplom\graphics\UP_znak.pdf" />
-    <Content Include="Text\kidiplom\graphics\UP_znak.ps" />
-    <Content Include="Text\kidiplom\graphics\UP_znak_cerna.pdf" />
-    <Content Include="Text\kidiplom\graphics\UP_znak_cerna.ps" />
-    <Content Include="Text\kidiplom\graphics\UP_znak_outline.pdf" />
-    <Content Include="Text\kidiplom\graphics\UP_znak_outline.ps" />
-    <Content Include="Text\kidiplom\iso-authoryear.bbx" />
-    <Content Include="Text\kidiplom\iso-authoryear.cbx" />
-    <Content Include="Text\kidiplom\iso-numeric.bbx" />
-    <Content Include="Text\kidiplom\iso-numeric.cbx" />
-    <Content Include="Text\kidiplom\iso.bbx" />
-    <Content Include="Text\kidiplom\iso.cbx" />
-    <Content Include="Text\kidiplom\kibase.sty" />
-    <Content Include="Text\kidiplom\kidiplom.acn" />
-    <Content Include="Text\kidiplom\kidiplom.aux" />
-    <Content Include="Text\kidiplom\kidiplom.bbl" />
-    <Content Include="Text\kidiplom\kidiplom.bcf" />
-    <Content Include="Text\kidiplom\kidiplom.blg" />
-    <Content Include="Text\kidiplom\kidiplom.cls" />
-    <Content Include="Text\kidiplom\kidiplom.fdb_latexmk" />
-    <Content Include="Text\kidiplom\kidiplom.fls" />
-    <Content Include="Text\kidiplom\kidiplom.glo" />
-    <Content Include="Text\kidiplom\kidiplom.glsdefs" />
-    <Content Include="Text\kidiplom\kidiplom.idx" />
-    <Content Include="Text\kidiplom\kidiplom.ilg" />
-    <Content Include="Text\kidiplom\kidiplom.ind" />
-    <Content Include="Text\kidiplom\kidiplom.ist" />
-    <Content Include="Text\kidiplom\kidiplom.loe" />
-    <Content Include="Text\kidiplom\kidiplom.lof" />
-    <Content Include="Text\kidiplom\kidiplom.log" />
-    <Content Include="Text\kidiplom\kidiplom.lol" />
-    <Content Include="Text\kidiplom\kidiplom.lot" />
-    <Content Include="Text\kidiplom\kidiplom.pdf" />
-    <Content Include="Text\kidiplom\kidiplom.run.xml" />
-    <Content Include="Text\kidiplom\kidiplom.synctex.gz" />
-    <Content Include="Text\kidiplom\kidiplom.tex" />
-    <Content Include="Text\kidiplom\kidiplom.toc" />
-    <Content Include="Text\kidiplom\LICENSE" />
-    <Content Include="Text\kidiplom\Makefile" />
-    <Content Include="Text\kidiplom\README.txt" />
-    <Content Include="Text\kidiplom\slovak-iso.lbx" />
-    <Content Include="Text\kidiplom\slovak.lbx" />
-    <Content Include="Text\smazat ukázky\00106149-623274108.pdf" />
-    <Content Include="Text\smazat ukázky\00187735-489419257.pdf" />
-    <Content Include="Text\smazat ukázky\00218098-818089908.pdf" />
-    <Content Include="Text\smazat ukázky\00219606-753649419.pdf" />
-    <Content Include="Text\smazat ukázky\00223416-856792523.pdf" />
-    <Content Include="Text\smazat ukázky\106165-285132506.pdf" />
-    <Content Include="Text\smazat ukázky\12313213213213213211.pdf" />
-    <Content Include="Text\smazat ukázky\program\gpl-3.0.txt" />
-    <Content Include="Text\smazat ukázky\program\plink.tex" />
-    <Content Include="Text\smazat ukázky\program\program-demo.aux" />
-    <Content Include="Text\smazat ukázky\program\program-demo.fdb_latexmk" />
-    <Content Include="Text\smazat ukázky\program\program-demo.fls" />
-    <Content Include="Text\smazat ukázky\program\program-demo.log" />
-    <Content Include="Text\smazat ukázky\program\program-demo.pdf" />
-    <Content Include="Text\smazat ukázky\program\program-demo.synctex.gz" />
-    <Content Include="Text\smazat ukázky\program\program-demo.tex" />
-    <Content Include="Text\smazat ukázky\program\program-demo.toc" />
-    <Content Include="Text\smazat ukázky\program\program-doc.pdf" />
-    <Content Include="Text\smazat ukázky\program\program-doc.tex" />
-    <Content Include="Text\smazat ukázky\program\program.sty" />
-    <Content Include="Text\smazat ukázky\program\README" />
-    <Content Include="Text\smazat ukázky\VyhnalekChessEngine.pdf" />
     <None Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.defaults">
       <SubType>Content</SubType>
@@ -151,31 +76,31 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="CORE\Constants.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysis.ts">
+    <TypeScriptCompile Include="Editor\PNAnalysis\PNAnalysis.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNAnalysis\PNAnalysisDraw.ts">
+    <TypeScriptCompile Include="Editor\PNAnalysis\PNAnalysisDraw.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNAnalysis\CoverabilityGraph.ts">
+    <TypeScriptCompile Include="Editor\PNAnalysis\CoverabilityGraph.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawControls.ts">
+    <TypeScriptCompile Include="Editor\PNet\Helpers\ArrowEndpointCalculationHelper.ts" />
+    <TypeScriptCompile Include="Editor\PNet\Helpers\PNDrawControls.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\Helpers\PNDrawInputs.ts">
+    <TypeScriptCompile Include="Editor\PNet\Helpers\PNDrawInputs.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\PlaceTransitionTable.ts">
+    <TypeScriptCompile Include="Editor\PNet\PlaceTransitionTable.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Models\PNet\PNAction.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNet\PNDraw.ts" />
-    <TypeScriptCompile Include="Editor\Models\PNet\PNModel.ts" />
-    <TypeScriptCompile Include="Editor\Models\_Basic\ActionBase.ts" />
-    <TypeScriptCompile Include="Editor\Models\_Basic\DrawBase.ts" />
-    <TypeScriptCompile Include="Editor\Models\_Basic\ModelBase.ts" />
+    <TypeScriptCompile Include="Editor\PNet\PNAction.ts" />
+    <TypeScriptCompile Include="Editor\PNet\PNDraw.ts" />
+    <TypeScriptCompile Include="Editor\PNet\PNModel.ts" />
+    <TypeScriptCompile Include="Editor\_Basic\ActionBase.ts" />
+    <TypeScriptCompile Include="Editor\_Basic\DrawBase.ts" />
+    <TypeScriptCompile Include="Editor\_Basic\ModelBase.ts" />
     <TypeScriptCompile Include="Editor\PNEditor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -197,21 +122,12 @@
   <ItemGroup>
     <Folder Include="CORE\TabControl\" />
     <Folder Include="Editor\" />
-    <Folder Include="Editor\Models\" />
-    <Folder Include="Editor\Models\PNAnalysis\" />
-    <Folder Include="Editor\Models\PNet\" />
-    <Folder Include="Editor\Models\PNet\Helpers\" />
-    <Folder Include="Editor\Models\_Basic\" />
+    <Folder Include="Editor\PNAnalysis\" />
+    <Folder Include="Editor\PNet\" />
+    <Folder Include="Editor\PNet\Helpers\" />
+    <Folder Include="Editor\_Basic\" />
     <Folder Include="Helpers\" />
     <Folder Include="CORE\" />
-    <Folder Include="Text\" />
-    <Folder Include="Text\kidiplom\" />
-    <Folder Include="Text\kidiplom\.vs\" />
-    <Folder Include="Text\kidiplom\.vs\kidiplom\" />
-    <Folder Include="Text\kidiplom\.vs\kidiplom\v15\" />
-    <Folder Include="Text\kidiplom\graphics\" />
-    <Folder Include="Text\smazat ukázky\" />
-    <Folder Include="Text\smazat ukázky\program\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->

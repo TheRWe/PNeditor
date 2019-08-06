@@ -1,7 +1,7 @@
-﻿import { d3BaseSelector } from "../../../../CORE/Constants";
-import { PNEditor, editorMode } from "../../../PNEditor";
-import { ToggleSwitch } from "../../../../CORE/ToggleSwitch";
-import { MakeZoomInOutIcon } from "../../../../Helpers/purify";
+﻿import { d3BaseSelector } from "../../../CORE/Constants";
+import { PNEditor, editorMode } from "../../PNEditor";
+import { ToggleSwitch } from "../../../CORE/ToggleSwitch";
+import { MakeZoomInOutIcon } from "../../../Helpers/purify";
 
 
 export class PNDrawControls {

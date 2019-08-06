@@ -2,17 +2,17 @@
 import * as d3 from 'd3';
 import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
 import { d3BaseSelector, Position, ForceNode } from "../CORE/Constants";
-import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./Models/PNet/PNModel";
-import { PNDraw, arc } from "./Models/PNet/PNDraw";
-import { PNAction } from "./Models/PNet/PNAction";
-import { CallbackType } from "./Models/_Basic/DrawBase";
+import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./PNet/PNModel";
+import { PNDraw, arc } from "./PNet/PNDraw";
+import { PNAction } from "./PNet/PNAction";
+import { CallbackType } from "./_Basic/DrawBase";
 import { notImplemented } from "../Helpers/purify";
-import { PNDrawControls } from "./Models/PNet/Helpers/PNDrawControls";
+import { PNDrawControls } from "./PNet/Helpers/PNDrawControls";
 import { ToggleSwitchState } from "../CORE/ToggleSwitch";
-import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
-import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
+import { PNDrawInputs } from "./PNet/Helpers/PNDrawInputs";
+import { PNAnalysis } from "./PNAnalysis/PNAnalysis";
 import { Key } from "ts-keycode-enum";
-import { PlaceTransitionTableDraw } from "./Models/PNet/PlaceTransitionTable";
+import { PlaceTransitionTableDraw } from "./PNet/PlaceTransitionTable";
 import { groupmap, TabInterface } from "../main";
 
 

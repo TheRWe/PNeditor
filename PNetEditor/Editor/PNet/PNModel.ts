@@ -1,5 +1,5 @@
 ﻿import { ModelBase } from "../_Basic/ModelBase";
-import { Position, numbers, ForceNode } from "./../../../CORE/Constants";
+import { Position, numbers, ForceNode } from "../../CORE/Constants";
 
 export class PNModel extends ModelBase<JSONNet>{
     public selected: { places: Place[], tranisitons: Transition[] } = null;

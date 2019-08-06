@@ -3,7 +3,7 @@ import * as file from 'fs';
 import { ipcRenderer, remote } from 'electron';
 import { showModal, modalResult } from './CORE/Modal';
 import { TabControl } from './CORE/TabControl/TabControl';
-import { PNModel, JSONNet, netConfiguration } from "./Editor/Models/PNet/PNModel";
+import { PNModel, JSONNet, netConfiguration } from "./Editor/PNet/PNModel";
 import { PNEditor } from './Editor/PNEditor';
 import { html } from "./CORE/Constants";
 import { TabKeyDownEvent } from './CORE/TabControl/Tab';

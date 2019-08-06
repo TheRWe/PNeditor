@@ -2,9 +2,9 @@
 import * as d3 from 'd3';
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
-import { convertToNumberingScheme, getArrayElementMapToNumber } from "./../../../Helpers/purify";
+import { convertToNumberingScheme, getArrayElementMapToNumber } from "../../Helpers/purify";
 import { DrawBase, Callbacks } from "../_Basic/DrawBase";
-import { d3BaseSelector, html, Position, ForceNode } from "../../../CORE/Constants";
+import { d3BaseSelector, html, Position, ForceNode } from "../../CORE/Constants";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 export type arc = { arc: Arc, line: { from: Position, to: Position } };

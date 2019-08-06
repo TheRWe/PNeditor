@@ -1,7 +1,7 @@
-﻿import { d3BaseSelector } from "../../../CORE/Constants";
+﻿import { d3BaseSelector } from "../../CORE/Constants";
 import { JSONNet, netConfiguration } from "./PNModel";
 import { DrawBase, Callbacks } from "../_Basic/DrawBase";
-import { getArrayElementMapToNumber, convertToNumberingScheme } from "../../../Helpers/purify";
+import { getArrayElementMapToNumber, convertToNumberingScheme } from "../../Helpers/purify";
 
 export type ConfigTransitionClickEvent = { configIndex: number, transitionID: number };
 export type ConfigShowClickEvent = { configIndex: number };
