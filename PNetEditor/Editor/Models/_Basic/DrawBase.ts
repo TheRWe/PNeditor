@@ -5,22 +5,17 @@ import { ModelBase } from "./ModelBase";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
-export interface ForceNode {
-    index: number;
-    vx: number;
-    vy: number;
-    x: number;
-    y: number;
-    fx: number;
-    fy: number;
-}
+type selectors = { [key: string]: d3BaseSelector | (() => d3BaseSelector) | selectors };
+type models = { [key: string]: {} | ModelBase<any> | (() => ModelBase<any>) | models};
 
 export abstract class DrawBase {
     public readonly container: d3BaseSelector;
 
     public abstract get Callbacks(): { container: Callbacks<{}>, [key: string]: Callbacks<any> };
 
-    protected abstract get Selectors(): any/*{ [key: string]: d3.Selection<d3.BaseType, any, d3.BaseType, any> }*/;
+    public abstract get Models(): models;
+
+    protected abstract get Selectors(): selectors;
 
     public get width() { return (this.container.node() as HTMLElement).getBoundingClientRect().width; }
     public get height() { return (this.container.node() as HTMLElement).getBoundingClientRect().height; }

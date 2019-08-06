@@ -5,11 +5,10 @@ import { MakeZoomInOutIcon } from "../../../../Helpers/purify";
 
 
 export class PNDrawControls {
-    private readonly container: d3BaseSelector;
     public readonly toggleSwitchRunEdit: ToggleSwitch;
 
     constructor(container: d3BaseSelector, editor: PNEditor) {
-        this.container = container
+        container
             .style("display", "flex")
             .style("align-items", "center")
             .classed("control-bar", true)

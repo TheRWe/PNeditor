@@ -1,8 +1,9 @@
-﻿import { JSONNet, marking, GetEnabledTransitionsIDs, CalculateNextConfiguration, Transition } from "../../PNet/PNModel";
+﻿// todo: přejmenovat soubor
+import { JSONNet, marking, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "../../PNet/PNModel";
 import { numbers } from "../../../../CORE/Constants";
-import { GraphNode } from "../../../../CORE/Graph";
-import { AsyncForeach, SortKeySelector, flatten } from "../../../../Helpers/purify";
+import { AsyncForeach, SortKeySelector, flatten, sleep } from "../../../../Helpers/purify";
 import { sha1 } from 'object-hash';
+import { ModelBase } from "../../_Basic/ModelBase";
 const omega = numbers.omega;
 
 type TransitionID = number;
@@ -19,8 +20,8 @@ export const ReachabilitySettings = {
     automaticalyStopCalculationAfterSeconds: 60,
 }
 
-// todo: jako model
-export class CoverabilityGraph {
+export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
+
     public readonly net: JSONNet;
 
     public calculated = false;
@@ -69,7 +70,8 @@ export class CoverabilityGraph {
                 availableFromHashed[hash] = availableFromHashed[hash] || [];
                 availableFromHashed[hash].push(node);
 
-                await Promise.all(graphHashed.E.filter(x => x.to.hash === hash && isSameMarking(x.to.marking, node)).map(x => x.from).map(x => searchAvailebleFrom(x)));
+                await AsyncForeach(graphHashed.E.filter(x => x.to.hash === hash && isSameMarking(x.to.marking, node)),
+                    x => searchAvailebleFrom(x.from));
             }
             await searchAvailebleFrom({ marking, hash });
 
@@ -129,7 +131,7 @@ export class CoverabilityGraph {
 
         let WorkSetLength = -1;
         while ((WorkSetLength = WorkSet.length) > 0) {
-            await new Promise(r => setTimeout(r));
+            await sleep();
             if (cancel) return;
 
             const nextCalculateIndex = Math.floor(Math.random() * WorkSetLength);
@@ -141,7 +143,9 @@ export class CoverabilityGraph {
             const searchAvailebleFrom = async (node: marking) => {
                 if (availableFrom.some(x => x === node)) return;
                 availableFrom.push(node);
-                await Promise.all(graph.E.filter(x => x["2"] === node).map(x => x["0"]).map(x => searchAvailebleFrom(x)));
+                
+                await AsyncForeach(graph.E.filter(x => x["2"] === node),
+                    x => searchAvailebleFrom(x["0"]))
             }
             await searchAvailebleFrom(marking);
 
@@ -322,8 +326,20 @@ export class CoverabilityGraph {
 
     //#endregion
 
+    public toJSON(): CoverabilityGraphJSON {
+        const graph = this.graph;
+        const root = this.root;
+        return { graph, root };
+    }
+
+    public fromJSON(json: CoverabilityGraphJSON): boolean {
+        Object.assign(this, json);
+        this.calculated = json.graph.V.length > 0;
+        return true;
+    }
 
     constructor(net: JSONNet) {
+        super();
         this.net = net;
 
         const marking: marking = this.net.places.map(x => { return { id: x.id, marking: x.marking } });
@@ -332,6 +348,8 @@ export class CoverabilityGraph {
         this.graph = { V: [this.root], E: [] };
     }
 }
+
+type CoverabilityGraphJSON = { graph: Graph, root: Vertice };
 
 /** returns true if first marking is lower than second for all places */
 function isLowerSameMarking(first: marking, second: marking) {

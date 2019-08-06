@@ -41,6 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="PNIcon.png" />
     <Content Include="Text\kidiplom\.vs\ProjectSettings.json" />
     <Content Include="Text\kidiplom\.vs\slnx.sqlite" />
     <Content Include="Text\kidiplom\.vs\VSWorkspaceState.json" />
@@ -132,16 +133,8 @@
     <Content Include="styles.scss" />
     <Content Include="index.html" />
     <Content Include="package.json" />
-    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="pkg\JS\gpu.js" />
-    <TypeScriptCompile Include="CORE\Graph.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="CORE\HashSet.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="CORE\Modal.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -186,22 +179,14 @@
     <TypeScriptCompile Include="Editor\PNEditor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Editor\Settings.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Helpers\Color.ts" />
-    <TypeScriptCompile Include="Helpers\ProgramEventType.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers\Toggle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="main.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="pkg\JS\gpu.d.ts" />
     <TypeScriptCompile Include="program.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -220,8 +205,6 @@
     <Folder Include="Editor\Models\_Basic\" />
     <Folder Include="Helpers\" />
     <Folder Include="CORE\" />
-    <Folder Include="pkg\JS\" />
-    <Folder Include="pkg\" />
     <Folder Include="Text\" />
     <Folder Include="Text\kidiplom\" />
     <Folder Include="Text\kidiplom\.vs\" />

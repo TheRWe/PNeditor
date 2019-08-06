@@ -1,14 +1,13 @@
 ﻿import { d3BaseSelector, html } from "./Constants";
-import { typedNull } from "../Helpers/purify";
 
 export enum ToggleSwitchState { on = "on", off = "off", hidden = "hidden" }
 
 export class ToggleSwitch {
     public selectors = {
-        label: typedNull<d3BaseSelector>(),
-        input: typedNull<d3BaseSelector>(),
-        labelOn: typedNull<d3BaseSelector>(),
-        labelOff: typedNull<d3BaseSelector>(),
+        label: null as d3BaseSelector,
+        input: null as d3BaseSelector,
+        labelOn: null as d3BaseSelector,
+        labelOff: null as d3BaseSelector,
     }
 
     private _state: ToggleSwitchState;

@@ -1,12 +1,10 @@
 ﻿import { DrawBase, Callbacks } from "../../Models/_Basic/DrawBase";
 import { PNModel, JSONNet } from "../PNet/PNModel";
 import { d3BaseSelector } from "../../../CORE/Constants";
-import { typedNull } from "../../../Helpers/purify";
 import { CoverabilityGraph } from "./Reachability/ReachabilityTree";
-import { PNAnalysisModel } from "./PNAnalysisModel";
 
 export class PNAnalysisDraw extends DrawBase {
-    public models = {
+    public Models = {
         CoverabilityGraph: null as CoverabilityGraph,
         pnet: null as JSONNet,
     };
@@ -25,12 +23,12 @@ export class PNAnalysisDraw extends DrawBase {
     }
 
     protected _update(): void {
-        const CoverabilityGraph = this.models.CoverabilityGraph;
+        const CoverabilityGraph = this.Models.CoverabilityGraph;
 
         const rightDiv = this.Selectors.rightDiv.html("");
         if (CoverabilityGraph.calculated)
             [
-                CoverabilityGraph.numStates + "" /*+ (PNAnalysisModel.isCalculatedAllMarking ? "" : "+");*/,
+                "" + CoverabilityGraph.numStates,
                 CoverabilityGraph.containstOmega ? "ω" : "" + CoverabilityGraph.maxMarking,
                 CoverabilityGraph.terminates ? "Yes" : "No",
                 CoverabilityGraph.reversible === null ? "?" : (CoverabilityGraph.reversible ? "Yes" : "No"),
@@ -46,13 +44,13 @@ export class PNAnalysisDraw extends DrawBase {
     }
 
     public setPnet(pnet: JSONNet) {
-        if (this.models.CoverabilityGraph) this.models.CoverabilityGraph.CancelCalculations();
-        this.models.pnet = pnet;
-        this.models.CoverabilityGraph = new CoverabilityGraph(pnet);
+        if (this.Models.CoverabilityGraph) this.Models.CoverabilityGraph.CancelCalculations();
+        this.Models.pnet = pnet;
+        this.Models.CoverabilityGraph = new CoverabilityGraph(pnet);
     }
 
-    constructor(container: d3BaseSelector) {
-        super(container);
+    private InitializeContainer() {
+        const container = this.container;
         container
             .style("font-size", "1.2em")
             .style("border", "1px lightgray solid")
@@ -73,6 +71,11 @@ export class PNAnalysisDraw extends DrawBase {
                 .text(x)
                 ;
         });
+    }
+
+    constructor(container: d3BaseSelector) {
+        super(container);
+        this.InitializeContainer();
     }
 }
 

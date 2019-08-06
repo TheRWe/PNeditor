@@ -110,8 +110,6 @@ export class PNAction extends ActionBase<PNModel>{
     //#endregion
 
 
-    //#region Running methods
-
     public ClearMarkings() {
         this.model.places.forEach(p => { p.marking = 0; });
     }

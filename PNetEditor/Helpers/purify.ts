@@ -85,11 +85,6 @@ export class Ref<T>{
     }
 }
 
-/** returns null as specified type - helper for declaring types in anonymous classes */
-export function typedNull<T>(): T | null {
-    return null;
-}
-
 export function flatten<T>(arr: (T[] | T)[]): T[] {
     return Array.prototype.concat(...arr);
 }
@@ -191,7 +186,7 @@ export function fileExample() {
 }
 
 
-export async function sleep(ms: number) {
+export async function sleep(ms: number = 0) {
     await _sleep(ms);
 }
 function _sleep(ms: number) {

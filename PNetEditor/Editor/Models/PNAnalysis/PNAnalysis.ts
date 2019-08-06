@@ -1,17 +1,17 @@
 ﻿import { PNModel } from "../PNet/PNModel";
 import { Tab } from "../../../CORE/TabControl/Tab";
-import { typedNull } from "../../../Helpers/purify";
+import { sleep } from "../../../Helpers/purify";
 import { PNAnalysisDraw } from "./PNAnalysisDraw";
 import { CoverabilityGraph, ReachabilitySettings } from "./Reachability/ReachabilityTree";
 import { d3BaseSelector } from "../../../CORE/Constants";
 
 export class PNAnalysis {
     public readonly models = {
-        pnModel: typedNull<PNModel>(),
+        pnModel: null as PNModel,
     };
 
     private draws = {
-        pnAnalysisDraw: typedNull<PNAnalysisDraw>(),
+        pnAnalysisDraw: null as PNAnalysisDraw,
     };
 
     private Selectors = {
@@ -33,8 +33,8 @@ export class PNAnalysis {
             let LastGraphSize = Number.MAX_SAFE_INTEGER;
             let sameGraphSizeTimes = 0;
             async function calculate() {
-                await new Promise(r => setTimeout(r, 100));
-                const g = self.draws.pnAnalysisDraw.models.CoverabilityGraph;
+                await sleep(100);
+                const g = self.draws.pnAnalysisDraw.Models.CoverabilityGraph;
                 const pefm = performance.now();
                 await g.CalculateHashed();
                 //await g.Calculate();
@@ -54,7 +54,7 @@ export class PNAnalysis {
                     calculate();
                 }
             }
-            const net = self.draws.pnAnalysisDraw.models.CoverabilityGraph.net;
+            const net = self.draws.pnAnalysisDraw.Models.CoverabilityGraph.net;
             if (net.places.length > 0 && net.transitions.length > 0)
                 calculate();
 
@@ -67,9 +67,6 @@ export class PNAnalysis {
             console.debug("end calc");
             calculating = false;
         })();
-    }
-
-    public close() {
     }
 
     constructor(containers: { analysisContainer: d3BaseSelector }, pnmodel: PNModel) {

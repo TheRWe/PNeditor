@@ -2,9 +2,9 @@
 import * as d3 from 'd3';
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
-import { typedNull, convertToNumberingScheme, getArrayElementMapToNumber } from "./../../../Helpers/purify";
-import { DrawBase, Callbacks, CallbackType, ForceNode } from "../_Basic/DrawBase";
-import { d3BaseSelector, html, Position } from "../../../CORE/Constants";
+import { convertToNumberingScheme, getArrayElementMapToNumber } from "./../../../Helpers/purify";
+import { DrawBase, Callbacks } from "../_Basic/DrawBase";
+import { d3BaseSelector, html, Position, ForceNode } from "../../../CORE/Constants";
 
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 export type arcWithLine = { arc: Arc, line: { from: Position, to: Position } };
@@ -13,7 +13,7 @@ let defsIndex = 0;
 
 /** class for drawing petri net model as graph */
 export class PNDraw extends DrawBase {
-    public models = {
+    public Models = {
         net: null as PNModel,
         configuration: null as netConfiguration,
     };
@@ -39,12 +39,12 @@ export class PNDraw extends DrawBase {
     public readonly simulation: d3.Simulation<{}, undefined>;
 
     protected Selectors = {
-        places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.models.net).places),
-        transitions: () => this.container.select("." + html.classes.PNEditor.g.transitions).selectAll("g").data((this.models.net).transitions),
+        places: () => this.container.select("." + html.classes.PNEditor.g.places).selectAll("g").data((this.Models.net).places),
+        transitions: () => this.container.select("." + html.classes.PNEditor.g.transitions).selectAll("g").data((this.Models.net).transitions),
         arcs: () =>
             this.container.select("." + html.classes.PNEditor.g.arcs).selectAll("g")
-                .data((this.models.net).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.models.net, x) }; })),
-        arcDragLine: typedNull<d3BaseSelector>(),
+                .data((this.Models.net).arcs.map(x => { return { arc: x, line: GetArcEndpoints(this.Models.net, x) }; })),
+        arcDragLine: null as d3BaseSelector,
     };
 
     public _isArcDragLineVisible = false;
@@ -186,11 +186,11 @@ export class PNDraw extends DrawBase {
     }
 
     protected _update(): void {
-        if (!this.models.net)
+        if (!this.Models.net)
             return;
 
-        const net = this.models.net;
-        const netConfig = this.models.configuration;
+        const net = this.Models.net;
+        const netConfig = this.Models.configuration;
         const netSelectors = this.Selectors;
         const callbacks = this.Callbacks;
         const getPos = this.getPos.bind(this);
@@ -327,21 +327,6 @@ export class PNDraw extends DrawBase {
             .classed("idtxt", true)
             ;
 
-        /*
-        const transitionEnterSelect =
-            transitionEnterGroup.append("rect")
-                .attr("width", 29)
-                .attr("height", 29)
-                .attr("x", -14.5)
-                .attr("y", -14.5)
-                .style("stroke", "black")
-                .style("stroke-width", 1.5)
-                .style("stroke-dasharray", 4)
-                .style("stroke-opacity", 0.5)
-                .style("stroke-linecap", "round")
-                .classed(html.classes.PNEditor.multiSelection.selectOutline, true)
-            ;
-        */
         transitions()
             .attr("transform", (t: Transition) => `translate(${t.x}, ${t.y})`)
             ;

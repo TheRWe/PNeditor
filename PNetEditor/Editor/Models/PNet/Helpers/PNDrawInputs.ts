@@ -1,25 +1,23 @@
 ﻿import { d3BaseSelector, Position } from "../../../../CORE/Constants";
-import { typedNull } from "../../../../Helpers/purify";
 import * as d3 from "d3";
 import { Key } from "ts-keycode-enum";
 import { PNDraw } from "./../PNDraw";
 
 export class PNDrawInputs {
-    private readonly svgGContainer: d3BaseSelector;
     private Selectors = {
-        foreign: typedNull<d3BaseSelector>(),
+        foreign: null as d3BaseSelector,
         marking: {
-            div: typedNull<d3BaseSelector>(),
-            input: typedNull<d3BaseSelector>(),
-            buttonOK: typedNull<d3BaseSelector>(),
+            div: null as d3BaseSelector,
+            input: null as d3BaseSelector,
+            buttonOK: null as d3BaseSelector,
         },
         arcValue: {
-            div: typedNull<d3BaseSelector>(),
+            div: null as d3BaseSelector,
             inputs: {
-                toPlace: typedNull<d3BaseSelector>(),
-                toTransition: typedNull<d3BaseSelector>(),
+                toPlace: null as d3BaseSelector,
+                toTransition: null as d3BaseSelector,
             },
-            buttonOK: typedNull<d3BaseSelector>(),
+            buttonOK: null as d3BaseSelector,
         },
     };
 
@@ -83,7 +81,6 @@ export class PNDrawInputs {
 
     constructor(pndraw: PNDraw) {
         const svgGContainer = pndraw.container;
-        this.svgGContainer = svgGContainer;
 
         const foreign = this.Selectors.foreign = svgGContainer.append("foreignObject")
             .style("display", "none")

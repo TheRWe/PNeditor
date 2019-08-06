@@ -1,17 +1,16 @@
-﻿import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
-import { d3BaseSelector, Position } from "../CORE/Constants";
+﻿import * as path from 'path';
+import * as d3 from 'd3';
+import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../CORE/TabControl/Tab";
+import { d3BaseSelector, Position, ForceNode } from "../CORE/Constants";
 import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./Models/PNet/PNModel";
 import { PNDraw, arcWithLine } from "./Models/PNet/PNDraw";
 import { PNAction } from "./Models/PNet/PNAction";
-import { CallbackType, ForceNode } from "./Models/_Basic/DrawBase";
-import * as d3 from 'd3';
-import { notImplemented, typedNull } from "../Helpers/purify";
+import { CallbackType } from "./Models/_Basic/DrawBase";
+import { notImplemented } from "../Helpers/purify";
 import { PNDrawControls } from "./Models/PNet/Helpers/PNDrawControls";
-import { PNAnalysisDraw } from "./Models/PNAnalysis/PNAnalysisDraw";
-import { ToggleSwitch, ToggleSwitchState } from "../CORE/ToggleSwitch";
+import { ToggleSwitchState } from "../CORE/ToggleSwitch";
 import { PNDrawInputs } from "./Models/PNet/Helpers/PNDrawInputs";
 import { PNAnalysis } from "./Models/PNAnalysis/PNAnalysis";
-import * as path from 'path';
 import { Key } from "ts-keycode-enum";
 import { PlaceTransitionTableDraw } from "./Models/PNet/PlaceTransitionTable";
 import { groupmap, TabInterface } from "../main";
@@ -384,7 +383,7 @@ export class PNEditor implements TabInterface {
             },
         },
         helpers: {
-            arcMakeHolder: typedNull<Place | Transition>()
+            arcMakeHolder: null as Place | Transition,
         }
     }
 
@@ -458,7 +457,7 @@ export class PNEditor implements TabInterface {
         inputs: {
             marking: {
                 /** curently edited place with marking edit input */
-                editedPlace: typedNull<Place>(),
+                editedPlace: null as Place,
                 onInputEnd: (val: number | null) => {
                     if (val != null) {
                         this.keyboard.inputs.marking.editedPlace.marking = val;
@@ -471,7 +470,7 @@ export class PNEditor implements TabInterface {
             },
             arcValue: {
                 /** curently edited arc with value edit input */
-                editedArc: typedNull<Arc>(),
+                editedArc: null as Arc,
                 onInputEnd: (val: { toPlace: number, toTransition: number } | null) => {
                     if (val != null) {
                         this.keyboard.inputs.arcValue.editedArc.toPlace = val.toPlace;
@@ -566,7 +565,7 @@ export class PNEditor implements TabInterface {
     // todo: hide table
 
     private _expandTable(configID: number, transitionID: number) {
-        const tableModels = this.tableDraw.models;
+        const tableModels = this.tableDraw.Models;
         const configs = tableModels.configurations;
         configs.splice(configID + 1);
         const selectedConfig = configs[configID];
@@ -580,10 +579,10 @@ export class PNEditor implements TabInterface {
 
     private _resetTable() {
         const jsonNet = this.pnModel.toJSON();
-        this.tableDraw.models.net = jsonNet;
+        this.tableDraw.Models.net = jsonNet;
         const marking = jsonNet.places.map(p => { return { id: p.id, marking: p.marking }; })
         const enabledTransitionsIDs = GetEnabledTransitionsIDs(jsonNet, marking);
-        this.tableDraw.models.configurations = [{ marking, enabledTransitionsIDs }];
+        this.tableDraw.Models.configurations = [{ marking, enabledTransitionsIDs }];
         this.tableDraw.update();
     }
 
@@ -597,9 +596,9 @@ export class PNEditor implements TabInterface {
         });
         this.tableDraw.AddOnConfigShowHover(({ configIndex }) => {
             if (configIndex === null)
-                this.pnDraw.models.configuration = null;
+                this.pnDraw.Models.configuration = null;
             else
-                this.pnDraw.models.configuration = this.tableDraw.models.configurations[configIndex];
+                this.pnDraw.Models.configuration = this.tableDraw.Models.configurations[configIndex];
             this.pnDraw.update();
         });
     }
@@ -747,9 +746,9 @@ export class PNEditor implements TabInterface {
         });
 
         const pnDraw = this.pnDraw = new PNDraw(svg);
-        pnDraw.models.net = pnmodel;
+        pnDraw.Models.net = pnmodel;
         this.pnAction.AddOnModelChange(() => {
-            this.pnDraw.models.configuration = null;
+            this.pnDraw.Models.configuration = null;
         });
         pnDraw.update();
 

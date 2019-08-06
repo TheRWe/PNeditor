@@ -1,9 +1,6 @@
-﻿import { typedNull } from "../../Helpers/purify";
-import { d3BaseSelector } from "../../CORE/Constants";
+﻿import { d3BaseSelector } from "../../CORE/Constants";
 import { Tab } from "./Tab";
 import { TabGroup } from "./TabGroup";
-
-type TabDataType = any;
 
 export class TabControl {
     public readonly containerLabels: d3BaseSelector;

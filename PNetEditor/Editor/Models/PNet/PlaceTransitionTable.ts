@@ -8,7 +8,7 @@ export type ConfigShowClickEvent = { configIndex: number };
 export type ConfigShowHoverEvent = { configIndex: number | null };
 
 export class PlaceTransitionTableDraw extends DrawBase {
-    public models = {
+    public Models = {
         net: null as JSONNet,
         configurations: [] as netConfiguration[],
     };
@@ -21,8 +21,8 @@ export class PlaceTransitionTableDraw extends DrawBase {
 
     protected _update(): void {
         const table = this.Selectors.table;
-        const net = this.models.net;
-        const configs = this.models.configurations;
+        const net = this.Models.net;
+        const configs = this.Models.configurations;
 
         table.html("");
 

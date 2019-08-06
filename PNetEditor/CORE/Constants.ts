@@ -1,4 +1,4 @@
-﻿export type d3BaseSelector = d3.Selection<d3.BaseType, any, HTMLElement, any>;
+﻿export type d3BaseSelector = d3.Selection<d3.BaseType, any, HTMLElement | d3.BaseType, any>;
 export type Position = { x: number, y: number }
 
 export const html = {
@@ -72,4 +72,14 @@ export const html = {
 export const numbers = {
     /** vysoké celé číslo symbolizující hodnotu omega */
     omega: 9007199254740666,
+}
+
+export interface ForceNode {
+    index: number;
+    vx: number;
+    vy: number;
+    x: number;
+    y: number;
+    fx: number;
+    fy: number;
 }

@@ -1,7 +1,6 @@
 ﻿import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
-import { messageType } from './Helpers/ProgramEventType';
 
 let mainWindow: BrowserWindow;
 const debug: boolean = true;
@@ -85,11 +84,11 @@ app.on('ready', createWindow);
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
-    }
+    };
 });
 
 app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
-    }
+    };
 });
