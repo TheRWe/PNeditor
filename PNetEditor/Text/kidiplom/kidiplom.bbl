@@ -88,9 +88,22 @@
       \verb https://developers.google.com/web/fundamentals/primers/promises
       \endverb
     \endentry
-    \entry{NodeJS}{online}{}
+    \entry{w3schoolsSVG}{online}{}
       \field{sortinit}{7}
       \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{labeltitlesource}{title}
+      \field{title}{\textbf{Webová stránka:} Jazyk sass a scss \\}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://sass-lang.com/
+      \endverb
+      \verb{url}
+      \verb https://sass-lang.com/
+      \endverb
+    \endentry
+    \entry{NodeJS}{online}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} NodeJS}
       \true{nocite}
@@ -99,19 +112,6 @@
       \endverb
       \verb{url}
       \verb https://nodejs.org/
-      \endverb
-    \endentry
-    \entry{w3schoolsSVG}{online}{}
-      \field{sortinit}{8}
-      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
-      \field{labeltitlesource}{title}
-      \field{title}{\textbf{Webová stránka:} Výukový materiál svg na w3schools\\}
-      \true{nocite}
-      \verb{urlraw}
-      \verb https://www.w3schools.com/graphics/
-      \endverb
-      \verb{url}
-      \verb https://www.w3schools.com/graphics/
       \endverb
     \endentry
   \enddatalist

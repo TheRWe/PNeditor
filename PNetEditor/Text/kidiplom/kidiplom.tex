@@ -151,23 +151,6 @@ panu Mgr. Petrovi Osičkovi, Ph.D. za hodnotné rady při vývoji editoru.
 \newcommand{\BibLaTeX}{\textsc{Bib}\LaTeX}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
 \todo{Smazat todo: command}
 
@@ -270,7 +253,7 @@ Na obrázku \ref{fig:jednoduchá síť zobrazení} můžeme vidět grafické
 vyobrazení jednoduché sítě s dvěmi místy, třemi přechody a čtyřmi hranami.
 \begin{figure}[h]
   \centering
-  \includegraphics{simple_net}
+  \includegraphics[scale=0.8]{simple_net}
   \caption[síť]{Příklad zobrazení jednoduché sítě}\label{fig:jednoduchá síť zobrazení}
 \end{figure}
 Již na první pohled si můžeme všimnou že pro jednoduší rozlišení 
@@ -627,9 +610,47 @@ z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu 
 \end{proof}
 
 \subsection{Příklady sítí}
-\todo{síť + analýza v programu}
+Na obrázcích \ref{fig:síť kniha 1}, \ref{fig:síť kniha 2}, \ref{fig:síť kniha 3} jsou říklady sítí z knihy Understanding petri nets\cite{reisig2013understanding} 
+s výsledky analýz editoru.
+Odkaz na síť v knice je součástí popisů obrázků.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[h]{0.78\linewidth}
+    \includegraphics[width=\linewidth]{net_cooking_vending_machine}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.2\linewidth}
+    \includegraphics[width=\linewidth]{net_cooking_vending_machine_analysis}
+  \end{subfigure}
+  \caption{Prodejní automat (fig 3.1)}
+  \label{fig:síť kniha 1}
+\end{figure}
 
 
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[h]{0.78\linewidth}
+    \includegraphics[width=\linewidth]{net_mutual_exclusion}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.2\linewidth}
+    \includegraphics[width=\linewidth]{net_mutual_exclusion_analysis}
+  \end{subfigure}
+  \caption{Vzájemné vyloučení (fig 3.2)}
+  \label{fig:síť kniha 2}
+\end{figure}
+
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[h]{0.78\linewidth}
+    \includegraphics[width=\linewidth]{net_crosstalk}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.2\linewidth}
+    \includegraphics[width=\linewidth]{net_crosstalk_analysis}
+  \end{subfigure}
+  \caption{Crosstalk algoritmus (fig 3.7)}
+  \label{fig:síť kniha 3}
+\end{figure}
 
 
 \clearpage
@@ -637,7 +658,8 @@ z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu 
 \subsection{Systémové požadavky}
 \begin{itemize}
   \item Operační systém: Windows 10 (starší verze windows netestovány)
-  \item Ovládání: klávesnice+myš
+  \item Ovládání: klávesnice + myš
+  \item Rozlišení obrazovky: minimálně 720p
 \end{itemize}
 
   
@@ -758,15 +780,22 @@ Funkce tlačítek panelu nástrojů zobrezeného v obrázku \ref{fig:Panel nást
     \textbf{Změna módu}  & Přepíná mezi \textbf{editovacím módem} a módem \textbf{spouštění sítě}. \\
   \end{tabular}
 \end{center}
-Tisk nemusí vždy fungovat, je to způsobené chybou ve verzi Electronu 
-která byla k vytvoření programu použita. Pokud tisk 
-nefunguje mělo by stačit editor restartovat.
+
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{bar}
   \caption{Panel nástrojů editoru}\label{fig:Panel nástrojů editoru}
 \end{figure}
+
+\subsubsubsection{Tisk}\label{tisk}
+
+Hlavní plocha má vždy rozměry pro tisk na papír formátu a4. Pro tisk 
+do pdf je potřeba virtuální tiskárna která tuto funci umožňuje (např. Microsoft print to PDF).
+
+Tisk nemusí vždy fungovat, je to způsobené chybou ve verzi Electronu 
+která byla k vytvoření programu použita. Pokud tisk 
+nefunguje mělo by stačit editor restartovat.
 
 \subsubsection{Tabulka ohodnocení}\label{tabulka ohodnocení}
 
@@ -836,6 +865,8 @@ Jak jednolivé vlastnosti přečíst je popsané v tabulce
 
 \subsubsection{Klávesové zkratky}\label{zkratky}
 
+Seznam klávesových zkratek použitelných v editoru je v tabulce \ref{tabulka zkratky}.
+\clearpage
 \begin{table}[h!]
   \centering
   \begin{tabular}{| c | l |}
@@ -851,9 +882,6 @@ Jak jednolivé vlastnosti přečíst je popsané v tabulce
   \end{tabular}
   \caption{Klavesové zkratky využitelné v editoru}\label{tabulka zkratky}
 \end{table}
-
-
-
 
 
 \section{Použité technologie}
@@ -1028,33 +1056,46 @@ jedním přechodem a hranou směřující do místa.
 }
 \end{kicode}
 
+\clearpage
 \section{Stavba programu}
 
 Editor je napsán hlavně v render straně elektronu. Díky tomu je možné 
 editor v případě potřeby v budoucnu předělat na webovou aplikaci.
+Struktura programu (Obrázek \ref{Struktura programu}) je tvořená 
+souborem program, který má na starosti vytváření hlavního okna 
+a načíst/uložit dialogů. Soubor main obsluhuje vytváření
+a ukládání editorů. Složky CORE a Helpers obsahují univerzální 
+funkcionalitu používanou editore a složka Editor obsahuje pak samotný editor
+tvořený třídamy Model, Draw a třídami které je propojují do jednoho celku.
 
-\subsection{Modely}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{struktura_programu}
+  \caption{Struktura programu}\label{Struktura programu}
+\end{figure}
+
+\subsection{Modely}\label{Modely}
 
 V programu jsou třídy nazvané model které obsahují data a starají se o jejich zpracování.
 Tyto modely obsahují také definice pro převod mezi anonymním objektem a objektem 
 vytvořeným z těchto tříd a díky tomu je jednoduché je serializovat a deserializovat.
 
-\subsection{Draw třídy}
+\subsection{Draw třídy}\label{Modely}
 
 Draw třídy obsahují logiku k zobrazovaní dat obsažených v modelech a taky
 zároveň odchytávání akcí způsobených na DOM elementech reprezentujících 
 data v modelech.
 
-\subsection{Třída editor}
+\subsection{Třída editor}\label{Modely}
 
 Třída editor propojuje všechny potřebné třídy a zároveň obsahuje obsluhu 
-akcí provedených na třídách draw.
-
-\subsection{}
-
+akcí provedených na třídách draw. Každá síť při načtení nebo vytvoření 
+má vlastní instanci třídy editor.
 
 
 
+\clearpage
 \section{Obsah přiloženého CD/DVD} \label{sec:ObsahCD}
 
 Na samotném konci textu práce je uveden stručný popis obsahu
