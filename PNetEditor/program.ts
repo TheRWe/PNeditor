@@ -6,7 +6,7 @@ let mainWindow: BrowserWindow;
 const debug: boolean = true;
 
 function createWindow() {
-    //todo: může být frameless window
+    // todo: frameless window
     mainWindow = new BrowserWindow({
         width: 1600, height: 900,
         title: 'PetriNetEdit',
@@ -43,8 +43,7 @@ function createWindow() {
                 { name: 'JSON file', extensions: ['json'] },
                 { name: 'All Files', extensions: ['*'] }
             ],
-            // todo: možnost otevřených více sítí v různých 
-            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
+            // todo: možnost otevřených více sítí v různých záložkách
             properties: ['openFile' /*, 'multiSelections' */]
         };
 
@@ -63,8 +62,6 @@ function createWindow() {
                 { name: 'JSON file', extensions: ['json'] },
                 { name: 'All Files', extensions: ['*'] }
             ],
-            // todo: možnost otevřených více sítí v různých 
-            //       záložkách(propojování mezi nimim, ukládání propojených do jednoho souboru nebo do více)
         };
 
         const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
