@@ -87,11 +87,11 @@
 %% Anotace práce, včetně anglické (obvykle překlad z jazyka
 %% práce). Jeden odstavec!
 \annotation{Cílem bakalářské práce bylo vytvořit editor 
-  petriho sítí umožňující jednoduché a pohodlné ovládání. 
-  Editor také obsahuje základní nástroje pro analýzu petriho 
+  Petriho sítí umožňující jednoduché a pohodlné ovládání. 
+  Editor také obsahuje základní nástroje pro analýzu Petriho 
   sítí. }
 
-\annotation[english]{The goal of bachelor thesis is to make editor for petri 
+\annotation[english]{The goal of bachelor thesis is to make editor for Petri 
 nets with simple convenient control. Editor contains basic analysis 
 tools too.}
 
@@ -149,10 +149,8 @@ panu Mgr. Petrovi Osičkovi, Ph.D. za hodnotné rady při vývoji editoru.
 %% -------------------------------------------------------------------
 
 \newcommand{\BibLaTeX}{\textsc{Bib}\LaTeX}
-
-
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
-\todo{Smazat todo: command}
+
 
 \section{Petriho sítě}
 Tato kapitola byla inspirovaná a čerpala informace z knihy 
@@ -162,7 +160,8 @@ Understanding petri nets\cite{reisig2013understanding}.
 
 Petriho síťe jsou matematickým nástrojem
 pro modelování a simulaci paralelních procesů a jejich sychronizaci.
-Jsou tvořené místy, přechody a hranami které jsou vždy propojením jednoho místa s jedním přechodem.
+Jsou tvořené místy, přechody a hranami. Každá hrana vždy propojuje
+jeden přechod s jedním místem.
 
 \begin{definition}[Petriho síť]
   $$ N = \langle P,T,A,M_{0}\rangle $$
@@ -191,10 +190,10 @@ $$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}
 dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
 $$ArcesOfTransition(t,A) = (^\to t \cup t ^\to)\;\; \subset A$$
 
-Aktuální stav petriho sítě neboli ohodnocení M je funkce přiřazující každému
-místu $p \in P$ petriho sítě počet značek
+Aktuální stav Petriho sítě neboli ohodnocení M je funkce přiřazující každému
+místu $p \in P$ Petriho sítě počet značek
 $$(\forall p \in P) M(p) \in \mathbb{N}_0$$
-počáteční ohodnocení petriho sítě se značí $M_{0}$.
+počáteční ohodnocení Petriho sítě se značí $M_{0}$.
 
 Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený
 pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
@@ -232,7 +231,7 @@ $M \to ^* M'$.
 
 Pro Petriho síť existuje nejenom matematické zobrazení ale i
 v praxi více využívané grafické zobrazení. 
-V grafickém zobrazení kolečka symbolizují místa petriho sítě
+V grafickém zobrazení kolečka symbolizují místa Petriho sítě
 a číslo v kolečku udává počet značek. 
 Přechody jsou symbolizované 
 čtverci. V editoru je čtverec zelený pokud je přechod povolený.
@@ -310,7 +309,7 @@ a hrany grafu jsou značené přechody které jsou aktivované aby z počátečn
   $$RG = \{M, \langle M, T', M' \rangle\}$$
   \begin{itemize}
     \item $RG$ je Graf dosažitelnosti
-    \item $M$ je Vrchol grafu který je zároveň konkrétní ohodnocení petriho sítě
+    \item $M$ je Vrchol grafu který je zároveň konkrétní ohodnocení Petriho sítě
     \item $\langle M, T', M' \rangle$ je Hrana grafu která je změnou z hodnocení $M$ libovolným přechodem $t \in T'$ ze kterého vzniká $M'$
   \end{itemize}
 \end{definition}
@@ -365,7 +364,7 @@ Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
   
 \end{definition}
   
-Logickou úvahoua a z vlastností grafů pak můžeme určit někré vzájemné závislosti vlastnosti:
+Logickou úvahou a z vlastností grafů pak můžeme určit někré vzájemné závislosti vlastnosti:
 \begin{itemize}
   \item Síť která je \textbf{vratná} nebo/a \textbf{živá} je zároveň i \textbf{bez mrtvého bodu}.
   \item Síť která je \textbf{bez mrtvého bodu} ne\textbf{skončí} a zároveň síť která \textbf{skončí} není \textbf{bez mrtvého bodu}(pozor, neznamená že síť musí mít alespoň jednu z těchto vlastností). 
@@ -373,7 +372,7 @@ Logickou úvahoua a z vlastností grafů pak můžeme určit někré vzájemné 
 \end{itemize}
 
 \clearpage
-\subsubsection{Příklady grafu dosažitelnosti s vlastnostmi}
+\subsubsection{Příklady grafu dosažitelnosti s vlastnostmi}\label{příklady sítí}
 
 \begin{figure}[h!]
   \centering
@@ -422,7 +421,7 @@ Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť (Obr�
 Proto existuje upravená verze grafu dosažitelnosti nazvaná grafu pokrytí,
 která může obsahovat tzv. $\omega$ ohodnocení které mimo celých 
 čísel přiřadí alespoň jednomu místu i hodnotu $\omega$ 
-symbolizující že místo může nabívat nekonečně vysokého počtu značek.
+symbolizující že místo může nabývat nekonečně vysokého počtu značek.
 Petriho síť se nemůže nacházet v $\omega$ ohodnocení, toto ohodnocení je pouze
 pro vytvoření abstrakce v grafu pokrytí.
 
@@ -537,7 +536,7 @@ ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
   \caption{Příklad neohraničené sítě s chybějící hranou v grafu pokrytí}\label{fig:neohraničená síť reversible}
 \end{figure}
 
-V Obrázku \ref{fig:neohraničená síť reversible} vidíme červěně zvíražněnou 
+V Obrázku \ref{fig:neohraničená síť reversible} vidíme červeně zvírazněnou 
 hrana která při použití algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
 chybí. Přitom by tam měla hrana být, protože když budeme neustále opakovat 
 aktivaci přechodu 2 tak se eventuálně (až bude počet aktivací přechodu 2 roven počtu aktivací 1) 
@@ -755,11 +754,11 @@ Při editaci je možné také využít nějaké klávesové zkratky které jsou 
   \centering
   \begin{subfigure}[h]{0,4\linewidth}
     \includegraphics{dialog_place}
-    \caption{editace ohodnocení místa}
+    \caption{Editace ohodnocení místa}
   \end{subfigure}
   \begin{subfigure}[h]{0,4\linewidth}
     \includegraphics[width=\linewidth]{dialog_arc}
-    \caption{editace hodnot hrany}
+    \caption{Editace násobků hrany}
   \end{subfigure}
   \caption{Editace hodnot}
   \label{fig:editace hodnot}
@@ -859,7 +858,7 @@ Jak jednolivé vlastnosti přečíst je popsané v tabulce
 \begin{figure}[h]
   \centering
   \includegraphics{analysis}
-  \caption{ukázka výsledků analýzy sítě}\label{analýza obrázek}
+  \caption{Ukázka výsledků analýzy sítě}\label{analýza obrázek}
 \end{figure}
 
 
@@ -1025,7 +1024,7 @@ použita v jiném programu který si ji rozparsuje a bude s ní dál pracovat.
 V ukázce (viz Zdrojový kód \ref{Uložení sítě}) je síť tvořená jedním místem s ohodnocením 2, 
 jedním přechodem a hranou směřující do místa.
 
-\begin{kicode}{JavaScript}{Uložení sítě}{Uložení petriho sítě}
+\begin{kicode}{JavaScript}{Uložení sítě}{Uložení Petriho sítě}
 {
   "places": [
     {
@@ -1094,24 +1093,40 @@ akcí provedených na třídách draw. Každá síť při načtení nebo vytvoř
 má vlastní instanci třídy editor.
 
 
+\section{Kompilace}
+
+Kompilace programu vyžaduje nainstalovaný \textit{NodeJS}. Pro kompilaci pak
+stačí pouze spustit skript \textit{src\char`\\Run.bat} a program se zkompiluje do složky 
+\textit{src\char`\\PNetEditor\char`\\dist\char`\\} kde je jako spustitelný (.exe) soubor.
+
+Pokud dojde ke změnám v TypeScriptových(.ts) souborech, je třeba zkompilovat i je.
+Ke kompilaci TypeScriptových souborů je potřeba mít visual studio 2017(instalační soubor na CD)
+s NodeJS sadou nástrojů. Stačí jen otevřít \textit{PNetEditor.sln} a v horní liště 
+visual studia a vybrat možnost "Build" $\to$ "Rebuild solution".
+
+
+\section{Srovnání s ostatními editory}
+
+Ostatní editory nabízí více funcionality například ve směru analýz, 
+ukládání a tisku. Většina editorů vytváří jednotlivé prvky sítě tak,
+že na každý prvek existuje nástroj v nástrojové liště. Oproti tomu 
+tento editor nevyžaduje na vytváření sítě žádné přepínání nástrojů.
+Na základě Fittova zákonu, když není potřeba přejíždět pořád nahorů do lišty 
+pro změnu nástrojů a díky tomu je tento editor rychlejší na vytváření sítí.
+Tento editor také vyčnívá svou tabulkou ohodnocení kde si uživatel velice 
+rychle může vyzkoušet a na jednom místě vidět jestli síť splňuje jeho požadavky.
+
 
 \clearpage
-\section{Obsah přiloženého CD/DVD} \label{sec:ObsahCD}
+\section{Obsah přiloženého CD} \label{sec:ObsahCD}
 
 Na samotném konci textu práce je uveden stručný popis obsahu
-přiloženého CD/DVD, tj.~jeho závazné adresářové struktury, důležitých
+přiloženého CD, tj.~jeho závazné adresářové struktury, důležitých
 souborů apod.
 
 \begin{description}
-
   \item[\texttt{bin/}] \hfill \\
-        Instalátor \textsc{Instalator} programu, popř.~program
-        \textsc{Program}, spustitelné přímo z~CD/DVD. / Kompletní adresářová
-        struktura webové aplikace \textsc{Webovka} (v~ZIP archivu) pro
-        zkopírování na webový server. Adresář obsahuje i~všechny runtime
-        knihovny a~další soubory potřebné pro bezproblémový běh instalátoru
-        a~programu z~CD/DVD / pro bezproblémový provoz webové aplikace na
-        webovém serveru.
+        Adresář obsahuje soubor pnet\_editor.exe který program spustí. 
 
   \item[\texttt{doc/}] \hfill \\
         Text práce ve formátu PDF, vytvořený s~použitím závazného stylu KI
@@ -1121,19 +1136,17 @@ souborů apod.
         obrázky, apod.
 
   \item[\texttt{src/}] \hfill \\
-        Kompletní zdrojové texty programu \textsc{Program} / webové aplikace
-        \textsc{Webovka} se všemi potřebnými (příp.~převzatými) zdrojovými
+        Kompletní zdrojové texty programu \textsc{Editor Petriho sítí} 
+        se všemi potřebnými (příp.~převzatými) zdrojovými
         texty, knihovnami a~dalšími soubory potřebnými pro bezproblémové
-        vytvoření spustitelných verzí programu / adresářové struktury pro
-        zkopírování na webový server.
+        vytvoření spustitelných verzí programu. Ve složce se nachází
+        soubor řešení Visual Studia \textit{PNetEditor.sln},
+        soubor na spouštění kompilace \textit{Build.bat} a
+        složka s kódy a knihovnami.
+        
 
   \item[\texttt{readme.txt}] \hfill \\
-        Instrukce pro instalaci a~spuštění programu \textsc{Program}, včetně
-        všech požadavků pro jeho bezproblémový provoz. / Instrukce pro
-        nasazení webové aplikace \textsc{Webovka} na webový server, včetně
-        všech požadavků pro její bezproblémový provoz, a~webová adresa, na
-        které je aplikace nasazena pro účel testování při tvorbě posudků
-        práce a~pro účel obhajoby práce.
+        Tento soubor obsahuje informace pro spuštění a kompilaci bakalářské práce 
 
 \end{description}
 
@@ -1141,19 +1154,11 @@ Navíc CD/DVD obsahuje:
 
 \begin{description}
 
-  \item[\texttt{data/}] \hfill \\
-        Ukázková a~testovací data použitá v~práci a~pro potřeby testování
-        práce při tvorbě posudků a~obhajoby práce.
+  \item[\texttt{examples/}] \hfill \\
+        Obsahuje uložené příklady sítí ze sekce \ref{příklady sítí}.
 
   \item[\texttt{install/}] \hfill \\
-        Instalátory aplikací, runtime knihoven a~jiných souborů potřebných
-        pro provoz programu \textsc{Program} / webové aplikace
-        \textsc{Webovka}, které nejsou standardní součástí operačního
-        systému určeného pro běh programu / provoz webové aplikace.
-
-  \item[\texttt{literature/}] \hfill \\
-        Vybrané položky bibliografie, příp.~jiná užitečná literatura
-        vztahující se k~práci.
+        Instalátory aplikací, knihoven potřebných pro kompilaci programu.
 
 \end{description}
 
@@ -1163,6 +1168,36 @@ držitele copyrightu. Pro všechny použité (a~citované) materiály,
 u~kterých toto není splněno a~nejsou tak obsaženy na CD/DVD, je uveden
 jejich zdroj (např.~webová adresa) v~bibliografii nebo textu práce
 nebo v souboru \texttt{readme.txt}.
+
+
+\begin{kiconclusions}
+  Při vytváření tohoto editoru jsem se snažil najít něco, čím bude 
+  editor vyčnívat od ostatních editorů. Proto jsem se rozhodl zaměřit
+  se na rychlost vytváření sítě za použití pouze myši. Myslím si, že se 
+  mi povedlo vytvořit editor, ve kterém se s trochou cviku dá vytvořit 
+  libovolná síť velice rychle a pohodlně.
+
+  Díky této práci jsem posunul své znalosti dál. Vyzkoušel jsem si různé 
+  způsoby vytváření GUI a také se obeznámil s touto problematikou jako celkem.
+  Také jsem rád že jsem díky této práci o trochu obohatil své znalosti 
+  na poli teoretické informatiky.
+\end{kiconclusions}
+
+\begin{kiconclusions}[english]
+  When creating this editor, I tried to find something in which would be
+  editor stand out from other. That's why I decided to focus
+  at the speed of making Petri nets using only mouse. I think that
+  I managed to create an editor in which I can create with a little practice
+  any network very quickly and conveniently.
+
+  Thanks to this work I have moved my knowledge further. I tried different ways
+  ways to create GUIs and also become familiar with this issue as a whole.
+  I am also glad that I have enriched my knowledge with this work
+  in the field of theoretical computer science.
+\end{kiconclusions}
+
+
+
 
 %% -------------------------------------------------------------------
 
