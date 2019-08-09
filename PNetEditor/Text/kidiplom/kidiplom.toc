@@ -37,43 +37,43 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.2}Ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i }, Hlavn\IeC {\'\i } plocha editoru}{22}{subsubsection.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{23}{subsubsection.2.2.3}% 
+\contentsline {subsubsection}{\numberline {2.2.3}Panel n\IeC {\'a}stroj\IeC {\r u} editoru}{24}{subsubsection.2.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{\numberline {2.2.3.1}Tisk}{23}{paragraph.2.2.3.1}% 
+\contentsline {paragraph}{\numberline {2.2.3.1}Tisk}{24}{paragraph.2.2.3.1}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {2.2.4}Tabulka ohodnocen\IeC {\'\i }}{24}{subsubsection.2.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{24}{subsubsection.2.2.5}% 
+\contentsline {subsubsection}{\numberline {2.2.5}V\IeC {\'y}sledky anal\IeC {\'y}zy}{25}{subsubsection.2.2.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {2.2.6}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{24}{subsubsection.2.2.6}% 
+\contentsline {subsubsection}{\numberline {2.2.6}Kl\IeC {\'a}vesov\IeC {\'e} zkratky}{26}{subsubsection.2.2.6}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Pou\IeC {\v z}it\IeC {\'e} technologie}{26}{section.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}nodejs}{26}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.1}NodeJS}{26}{subsection.3.1}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.2}TypeScript}{26}{subsection.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Electron}{26}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.3}Electron}{27}{subsection.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents - D3}{27}{subsection.3.4}% 
+\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{28}{subsection.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Scalable vector graphics (SVG)}{28}{subsection.3.5}% 
+\contentsline {subsection}{\numberline {3.5}Scalable vector graphics (SVG)}{29}{subsection.3.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{28}{subsection.3.6}% 
+\contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{29}{subsection.3.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Stavba programu}{31}{section.4}% 
+\contentsline {section}{\numberline {4}Stavba programu}{30}{section.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}Modely}{31}{subsection.4.1}% 
+\contentsline {subsection}{\numberline {4.1}Modely}{30}{subsection.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}Draw t\IeC {\v r}\IeC {\'\i }dy}{32}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.2}Draw t\IeC {\v r}\IeC {\'\i }dy}{31}{subsection.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da editor}{32}{subsection.4.3}% 
+\contentsline {subsection}{\numberline {4.3}T\IeC {\v r}\IeC {\'\i }da editor}{31}{subsection.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Kompilace}{32}{section.5}% 
+\contentsline {section}{\numberline {5}Kompilace}{31}{section.5}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {6}Srovn\IeC {\'a}n\IeC {\'\i } s ostatn\IeC {\'\i }mi editory}{32}{section.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD}{33}{section.7}% 
+\contentsline {section}{\numberline {7}Obsah p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD}{32}{section.7}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{Z\'av\v er}{34}{section*.28}% 
 \babel@toc {czech}{}
@@ -84,5 +84,3 @@
 \babel@toc {czech}{}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{Literatura}{36}{section*.32}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{Rejst\v {r}\'{i}k}{37}{section*.35}% 

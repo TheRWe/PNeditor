@@ -39,8 +39,8 @@
       \strng{authorbibnamehash}{a2d85b16fa767241f87bf049cbbeae3e}
       \strng{authornamehash}{a2d85b16fa767241f87bf049cbbeae3e}
       \strng{authorfullhash}{a2d85b16fa767241f87bf049cbbeae3e}
-      \field{sortinit}{2}
-      \field{sortinithash}{cbff857e587bcb4635511624d773949e}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-3-642-33277-7}
@@ -50,8 +50,8 @@
       \true{nocite}
     \endentry
     \entry{D3}{online}{}
-      \field{sortinit}{4}
-      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{sortinit}{3}
+      \field{sortinithash}{a4b52e5432884761f50fb9571273b93e}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} Data driven documents}
       \true{nocite}
@@ -63,8 +63,8 @@
       \endverb
     \endentry
     \entry{ElectronJS}{online}{}
-      \field{sortinit}{5}
-      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} ElectronJS}
       \true{nocite}
@@ -76,8 +76,8 @@
       \endverb
     \endentry
     \entry{GooglePromise}{online}{}
-      \field{sortinit}{6}
-      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
+      \field{sortinit}{5}
+      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} Google-developers JavaScript Promises: an Introduction}
       \true{nocite}
@@ -89,8 +89,8 @@
       \endverb
     \endentry
     \entry{w3schoolsSVG}{online}{}
-      \field{sortinit}{7}
-      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{sortinit}{6}
+      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} Jazyk sass a scss \\}
       \true{nocite}
@@ -102,8 +102,8 @@
       \endverb
     \endentry
     \entry{NodeJS}{online}{}
-      \field{sortinit}{8}
-      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
+      \field{sortinit}{7}
+      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
       \field{labeltitlesource}{title}
       \field{title}{\textbf{Webová stránka:} NodeJS}
       \true{nocite}

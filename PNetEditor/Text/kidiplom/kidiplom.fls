@@ -194,12 +194,6 @@ INPUT c:/texlive/2019/texmf-dist/tex/latex/csquotes/csquotes.cfg
 INPUT c:/texlive/2019/texmf-dist/tex/latex/csquotes/csquotes.cfg
 OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.glo
 OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.acn
-OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.idx
-INPUT c:/texlive/2019/texmf-dist/tex/latex/base/makeidx.sty
-INPUT c:/texlive/2019/texmf-dist/tex/latex/base/makeidx.sty
-INPUT c:/texlive/2019/texmf-dist/tex/latex/tools/multicol.sty
-INPUT c:/texlive/2019/texmf-dist/tex/latex/tools/multicol.sty
-OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.idx
 INPUT c:/texlive/2019/texmf-dist/tex/latex/biblatex/biblatex.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/biblatex/biblatex.sty
 INPUT c:/texlive/2019/texmf-dist/tex/latex/logreq/logreq.sty
@@ -376,9 +370,9 @@ INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmr17.tfm
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmbx12.tfm
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmr17.tfm
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmr12.tfm
-INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak.pdf
-INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak.pdf
-INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak.pdf
+INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak_outline.pdf
+INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak_outline.pdf
+INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/graphics/UP_znak_outline.pdf
 INPUT c:/texlive/2019/texmf-dist/tex/latex/lm/ot1lmr.fd
 INPUT c:/texlive/2019/texmf-dist/tex/latex/lm/ot1lmr.fd
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/rm-lmr12.tfm
@@ -539,8 +533,6 @@ INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PN
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/english-iso.lbx
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx
 INPUT c:/texlive/2019/texmf-dist/fonts/tfm/public/lm/ec-lmbxi10.tfm
-INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.ind
-INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.ind
 OUTPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.loe
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/kidiplom.aux
 INPUT c:/Users/rwehm/OneDrive/programovani/JavaScript/TypeScript/Electron/Bak/PNetEditor/PNetEditor/Text/kidiplom/czech-iso.lbx

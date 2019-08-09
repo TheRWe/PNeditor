@@ -1,91 +1,32 @@
+
 %%%  Ukázkový text a dokumentace stylu pro text závěrečné (bakalářské a
 %%%  diplomové) práce na KI PřF UP v Olomouci
 %%%  Copyright (C) 2012 Martin Rotter, <rotter.martinos@gmail.com>
 %%%  Copyright (C) 2014 Jan Outrata, <jan.outrata@upol.cz>
 
-
-%%  Pro získání PDF souboru dokumentu je třeba tento zdrojový text v
-%%  LaTeXu přeložit (dvakrát) programem pdfLaTeX.
-
-%%  V případě použití programu BibLaTeX pro tvorbu seznamu literatury
-%%  je poté ještě třeba spustit program Biber s parametrem jméno
-%%  souboru zdrojového textu bez přípony a následně opět (dvakrát)
-%%  přeložit zdrojový text programem pdfLaTeX.
-
-%%  Postup získání Postscriptového souboru je popsán v dokumentaci.
-
-
-%%  Třída dokumentu implementující styl pro závěrečnou práci. Vybrané
-%%  nepovinné parametry (ostatní v dokumentaci):
-
-%%  'master' pro sazbu diplomové práce, jinak se sází bakalářská práce
-
-%%  'field=kód' pro Váš studijní obor, kódy pro diplomovou práci 'uvt'
-%%  pro Učitelství výpočetní techniky pro střední školy a 'binf' pro
-%%  Bioinformatiku, jinak je výchozí Informatika, a pro bakalářskou
-%%  práci 'ainfk' pro Aplikovanou informatiku v kombinované formě,
-%%  'inf' pro Informatiku, 'infv' pro Informatiku pro vzdělávání a
-%%  'binf' pro Bioinfomatiku, jinak je výchozí Aplikovaná informatika
-%%  v prezenční formě
-
-%%  'printversion' pro sazbu verze pro tisk (nebarevné logo a odkazy,
-%%  odkazy s uvedením adresy za odkazem, ne odkazy do rejstříku),
-%%  jinak verze pro prohlížeč
-
-%%  'biblatex' pro zapnutí podpory pro sazbu bibliografie pomocí
-%%  BibLaTeXu, jinak je výchozí sazba v prostředí thebibliography
-
-%%  'language=jazyk' pro jazyk práce, jazyky english pro anglický,
-%%  slovak pro slovenský, jinak je výchozí czech pro český
-
-%%  'font=sans' pro bezpatkový font (Iwona Light), jinak výchozí
-%%  patkový (Latin Modern)
-
 \documentclass[
-%  master,
-%  field=inf,
-%  printversion,
   biblatex,
-%  language=english,
-%  font=sans,
   glossaries,
-  index
+  printversion
 ]{kidiplom}
 
 \usepackage{algorithm,algorithmicx,algpseudocode}
 
-%% Informace pro úvodní strany. V jazyku práce (pokud není v komentáři
-%% uvedeno česky) a anglicky. Uveďte všechny, u kterých není v
-%% komentáři uvedeno, že jsou volitelné. Při neuvedení se použijí
-%% výchozí texty. Text pro jiný než nastavený jazyk práce (nepovinným
-%% parametrem language makra \documentclass, výchozí český) se zadává
-%% použitím makra s uvedením jazyka jako nepovinného parametru.
 
-%% Název práce, česky a anglicky. Měl by se vysázet na jeden řádek.
 \title{Editor Petriho Sítí}
 \title[english]{Petri Nets Editor}
 
-%% Volitelný podnázev práce, česky a anglicky. Měl by se vysázet na
-%% jeden řádek. Výchozí je prázdný.
+
 \iffalse
 \subtitle{Ukázkový text a dokumentace stylu v \LaTeX{}u}
 \subtitle[english]{Sample text and documentation of the \LaTeX{} style}
 \fi
 
-%% Jméno autora práce. Makro nemá nepovinný parametr pro uvedení
-%% jazyka.
-\author{Roman Wehmhöner}
+\author{Roman Wehmhőner}
 
-%% Jméno vedoucího práce (včetně titulů). Makro nemá nepovinný
-%% parametr pro uvedení jazyka.
 \supervisor{Mgr. Petr Osička, Ph.D.}
 
-%% Volitelný rok odevzdání práce. Výchozí je aktuální (kalendářní)
-%% rok. Makro nemá nepovinný parametr pro uvedení jazyka.
-%\yearofsubmit{\the\year}
 
-%% Anotace práce, včetně anglické (obvykle překlad z jazyka
-%% práce). Jeden odstavec!
 \annotation{Cílem bakalářské práce bylo vytvořit editor 
   Petriho sítí umožňující jednoduché a pohodlné ovládání. 
   Editor také obsahuje základní nástroje pro analýzu Petriho 
@@ -95,30 +36,19 @@
 nets with simple convenient control. Editor contains basic analysis 
 tools too.}
 
-%% Klíčová slova práce, včetně anglických. Oddělená (obvykle) středníkem.
+
 \keywords{Petriho síť; Editor }
 \keywords[english]{Petri net; Editor}
 
-%% Volitelná specifikace příloh textu práce, i anglicky. Výchozí je '1
-%% CD/DVD'.
-%\supplements{jedno kulaté placaté CD/DVD s malou kulatou dírou uprostřed}
-%\supplements[english]{one round flat CD/DVD with a small round hole in the middle}
 
-%% Volitelné poděkování. Stručné! Výchozí je prázdné. Makro nemá
-%% nepovinný parametr pro uvedení jazyka.
 \thanks{Tímto bych chtěl poděkovat vedoucímu bakalářské práce 
 panu Mgr. Petrovi Osičkovi, Ph.D. za hodnotné rady při vývoji editoru.
 }
 
-%% Cesta k souboru s bibliografií pro její sazbu pomocí BibLaTeXu
-%% (zvolenou nepovinným parametrem biblatex makra
-%% \documentclass). Použijte pouze při této sazbě, ne při (výchozí)
-%% sazbě v prostředí thebibliography.
 \bibliography{bibliografie.bib}
 
-%% Další dodatečné styly (balíky) potřebné pro sazbu vlastního textu
-%% práce.
 \usepackage{lipsum}
+
 
 
 \usepackage{enumitem}
@@ -136,25 +66,21 @@ panu Mgr. Petrovi Osičkovi, Ph.D. za hodnotné rady při vývoji editoru.
 
 \begin{document}
 
-%% Sazba úvodních stran -- titulní, s bibliografickými údaji, s
-%% anotací a klíčovými slovy, s poděkováním a prohlášením, s obsahem a
-%% se seznamy obrázků, tabulek, vět a zdrojových kódů (pokud jejich
-%% sazba není vypnutá).
+
+
+
+
 \maketitle
-
-%% Vlastní text závěrečné práce. Pro povinné závěry, před přílohami,
-%% použijte prostředí kiconclusions. Povinná je i příloha s obsahem
-%% přiloženého CD/DVD.
-
-%% -------------------------------------------------------------------
 
 \newcommand{\BibLaTeX}{\textsc{Bib}\LaTeX}
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
 
 
+
 \section{Petriho sítě}
 Tato kapitola byla inspirovaná a čerpala informace z knihy 
 Understanding petri nets\cite{reisig2013understanding}.
+
 
 \subsection{Základní popis}
 
@@ -166,38 +92,42 @@ jeden přechod s jedním místem.
 \begin{definition}[Petriho síť]
   $$ N = \langle P,T,A,M_{0}\rangle $$
   \begin{itemize}
-    \item $N$ je Petriho sítí
-    \item $P$ je konečná množina míst
-    \item $T$ je konečná množina přechodů
-    \item $A$ je konečná množina hran
+    \item $N$ je Petriho sítí.
+    \item $P$ je konečná množina míst.
+    \item $T$ je konečná množina přechodů.
+    \item $A$ je konečná množina hran.
         $ A \subseteq ((P \times T) \cup (T \times P)) \times \mathbb{N}_0 $ \\
-        kde číslo symbolizuje násobek kolik značek hrana \uv{přesune}
-        \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení sítě (zkráceně ohodnocení) míst
-        kde pro každé místo $p \in P$ existuje počet jeho značek $m \in M_{0}$
+        kde číslo symbolizuje násobek kolik značek hrana \uv{přesune}.
+    \item $M_{0} : P \rightarrow \mathbb{N}_0$ je počáteční ohodnocení míst sítě (zkráceně ohodnocení),
+        kde pro každé místo $p \in P$ existuje počet jeho značek $M_{0}(p) = \mathbb{N}_0$.
   \end{itemize}
 \end{definition}
 
 Pro odkazovaní na jednotlivé členy prvků z množiny hran $a \in A$ 
-budeme používat notaci $P(a)$ pro odkázání na místo hrany,
+budeme používat notaci $P(a)$ pro odkázání na místo hrany $a$,
 $T(a)$ pro odkázání na přechod a $AM(a)$ pro odkaz na násobek.
 
 Každý přechod $t$ může mít \uv{přiřazený} libovolný počet
-hran, kde každá hrana $a$ je propojením s některým z míst $p \in P$.\\
+hran $a \in A_t$, kde každá hrana $a$ je propojením přechodu $t$ s některým z míst $p \in P$.\\
 Hrany přechodu $t$ můžeme rozlišit na hrany směrující do přechodu
 $$^\to t = \{a \in A | a \in (P \times T \times \mathbb{N}_0) \land t = T(a)\}$$
 a hrany směřující z přechodu (do místa)
 $$ t ^\to  = \{a \in A | a \in (T \times P \times \mathbb{N}_0) \land t = T(a)\}$$
 dohromady pak všechny hrany přechodu $t$ jsou spojením těchto dvou množin
-$$ArcesOfTransition(t,A) = (^\to t \cup t ^\to)\;\; \subset A$$
+$$ArcesOfTransition(t,A) = A_t = (^\to t \cup t ^\to)\;\; \subset A$$
+
+Mezi libovolným přechodem $t \in T$ a libovolným místem $p \in P$ může existovat \textbf{maximálně jedna} 
+hrana $a_{pt} \in \,^\to t$
+a \textbf{maximálně jedna} hrana $a_{tp} \in t ^\to$ (dohmady tedy maximálně 2 hrany, jedna \textbf{z} a druhá \textbf{do} přechodu).
 
 Aktuální stav Petriho sítě neboli ohodnocení M je funkce přiřazující každému
 místu $p \in P$ Petriho sítě počet značek
 $$(\forall p \in P) M(p) \in \mathbb{N}_0$$
-počáteční ohodnocení Petriho sítě se značí $M_{0}$.
+Počáteční ohodnocení Petriho sítě se značí $M_{0}$.
 
-Pro dané ohodnocení $M$ je přechod $t \in T$ označený jako povolený
+Pro libovolné ohodnocení $M$ je přechod $t \in T$ označený jako \textbf{povolený},
 pokud všechny hrany směřující do přechodu $\,^\to t$ splňují svou podmínku tzn.
-hrana splňuje svoji podmínku pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení
+hrana splňuje svoji podmínku, pokud místo ze kterého vychází má vyšší nebo stejné ohodnocení
 (v daném $M$) než je násobek hrany $AM$
 $$IsEnabled(P,t,A,M) = (\forall a \in \,^\to t)M(P(a)) \geq AM(a)$$
 Pak si můžeme ještě definovat množinu všech povolených přechodů pro zadané ohodnocení
@@ -206,10 +136,12 @@ $$
   \{ t \in T | IsEnabled(P,t,A,M) \}
 $$
 
-Pokud je přechod $t$ v ohodnocení $M$ Petriho sítě \textbf{povolen}, znamená to že může dojít
-k aktivování tohoto přechodu čímž dojde ke změně aktuálního ohodnocení z $M$ do ohodnocení $M'$
-tak, že pro každé místo $p \in P$ a každou hranu $A_{pt} \subset ArcesOfTransition(t,A)$ spojující $p$ s $t$
-že nové ohonocení v místě $M'(p)$ je sumou násobků hran $\sum_{a \in A_{pt}} AM(a)$ a původního hodnocení $M(p)$
+Pokud je přechod $t$ v ohodnocení $M$ Petriho sítě \textbf{povolený}, znamená to že může dojít
+k \textbf{aktivování} tohoto přechodu, čímž dojde ke změně aktuálního ohodnocení z $M$ do ohodnocení $M'$
+tak, že pro každé místo $p \in P$ a hrany $A_{t} \subset ArcesOfTransition(t,A)$ 
+spojující $p$ s $t$ že nové ohodnocení 
+v místě $M'(p)$ je sumou násobků 
+hran $\sum_{a \in A_{t}} AM(a)$ a původního hodnocení $M(p)$
 $$
   FireTransition(P,t,A,M) = function\:M'
 $$
@@ -217,31 +149,31 @@ Výsledné ohodnocení $M'$ je pak pro každé místo $p$ definováno
 $$
   M'(p) = M(p) + \sum_{a \in \{a_{tp} \in ArcesOfTransition(t,A) \,|\, P(a_{tp}) = p \}} AM(a)
 $$
-Tuto změnu můžeme značit $M \to ^t M'$
+Tuto změnu značíme $M \to ^t M'$.
 
 Ohodnocení $M'$ je označené jako 
-\textbf{dosažitelné}\index{dosažitelné ohodnocení} z ohodnocení $M$ 
+\textbf{dosažitelné} z ohodnocení $M$, 
 pokud existuje sekvence přechodů taková, že jejich postupným 
-aktivováním z ohodnocení $M$ vznikne ohodnocení $M'$.
-Ohdonocení $M'$ je dostupné z ohodnocení $M$ pak značíme 
+\textbf{aktivováním} z ohodnocení $M$ vznikne ohodnocení $M'$.
+Ohodnocení $M'$ je dostupné z ohodnocení $M$ pak značíme 
 $M \to ^* M'$.
 
 
 \subsection{Vizuální zobrazení sítě}
 
-Pro Petriho síť existuje nejenom matematické zobrazení ale i
+Pro Petriho síť existuje nejenom matematické zobrazení, ale i
 v praxi více využívané grafické zobrazení. 
 V grafickém zobrazení kolečka symbolizují místa Petriho sítě
 a číslo v kolečku udává počet značek. 
 Přechody jsou symbolizované 
-čtverci. V editoru je čtverec zelený pokud je přechod povolený.
+čtverci. V editoru je čtverec zelený, pokud je přechod povolený.
 Pokud má v sobě čtverec symbol $\epsilon$, znamená to že je 
 přechod určený pro komunikaci sítě s okolním prostředím.
 Na editor nemá žádný vliv jestli je přechod označený jako $\epsilon$
-a tak tedy toto označení je jen pro jednoduší orientaci v síti.
+a tak tedy toto označení je jen pro jednodušší orientaci v síti.
 Kolečka i čtverce mají pak nad sebou značení 
 konkrétního místa/přechodu které symbolizují. 
-Nakonec samotné hrany jsou symbolizované šipkamy které jsou 
+Nakonec samotné hrany jsou symbolizované šipkami které jsou 
 popsané násobkem kolik hrana \uv{přesune} značek.
 Popis hran je symbolizován dvěmi čísly oddělenými kolečkem.
 Číslo před kolečkem značí hodnotu hrany směrující z přechodu 
@@ -253,9 +185,9 @@ vyobrazení jednoduché sítě s dvěmi místy, třemi přechody a čtyřmi hran
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.8]{simple_net}
-  \caption[síť]{Příklad zobrazení jednoduché sítě}\label{fig:jednoduchá síť zobrazení}
+  \caption{Příklad zobrazení jednoduché sítě}\label{fig:jednoduchá síť zobrazení}
 \end{figure}
-Již na první pohled si můžeme všimnou že pro jednoduší rozlišení 
+\\Již na první pohled si můžeme všimnou, že pro jednoduší rozlišení 
 míst a přechodů jsou přechody značené čísli a místa písmeny.
 Tuto síť vyobrazenou na obrázku \ref{fig:jednoduchá síť zobrazení} 
 bychom mohli matematickým zápisem zapsat jako síť 
@@ -275,33 +207,35 @@ $M_{0}(a) = 0; M_{0}(b) = 2$
 V matematickém zápise sítě budeme místa značit malými písmeny (oproti editoru)
 abychom předešli případným nedorozuměním.
 
+
 \subsection{Zkrácený zápis ohodnocení sítě}
 
-Abychom předešli zdlouhavému psaní kaźdého případu ohodnocovací funkce
+Abychom se vyhnuli zdlouhavému psaní každého případu ohodnocovací funkce
 \\(např. $M(a) = 0; M(c) = 2; \dotsb$), zavedeme si kratší zápis.
-Nejdříve seřadíme všechny místa podle jejich značení jako by šlo 
-o číselnou soustavu (s písmeny místo čísel) 
+Nejdříve seřadíme všechny místa podle jejich značení abecedně jakoby šlo 
+o číselnou soustavu (s písmeny, bez čísel) 
 neboli $a, b, c, \dotsb, z, aa, ab, ac, \dotsb$.
 Pak si z těchto míst uděláme uspořádanou n-tici jejich ohodnocení $\langle M(a), M(b), M(c), \dotsb \rangle$.
 Tuto n-tici pak budeme používat jako kratší zápis ohodnocovací funkce:
 $$
  M = \langle M(a), M(b), M(c), \dotsb \rangle
 $$
-Například pro $M'(a) = 3; M'(b) = 0; M'(c) = 5$ by krátký zápis vypadal
-\\ $M' = \langle 3,0,5 \rangle$
+Například pro $M'(a) = 3; M'(b) = 0; M'(c) = 5$ je krátký zápis $M' = \langle 3,0,5 \rangle$
+
 
 \subsection{Využití Petriho sítí}
 
 Petriho sítě se používají k analýze a modelování paralelních
 a distribuovaných systému, databázových systémů atd. a to ať už
-pro analýzu při vývoji softwaru a nebo pro popis vnitřńí struktury
+pro analýzu při vývoji softwaru a nebo pro popis vnitřní struktury
 již hotového proprietárního softwaru umožnující lepší porozumění uživateli.
+
 
 \subsection{Graf dosažitelnosti}
 
 Graf dosažitelnosti je jeden z nejzákladnějších nástrojů pro analýzu Petriho sítí.
-Obsahuje vždy počáteční ohodnocení a všechny ohodnocení které jsou dostupné z počátečního ohodnocení, 
-takovéto ohodnocení budeme nazývat \textbf{dosažitelné ohodnocení}\index{dosažitelné ohodnocení}. 
+Obsahuje vždy počáteční ohodnocení a všechny ohodnocení které jsou \textbf{dosažitelné} z počátečního ohodnocení, 
+takovéto ohodnocení budeme zkráceně nazývat \textbf{dosažitelné ohodnocení}. 
 Vrcholy grafu jsou jednotlivá ohodnocení
 a hrany grafu jsou značené přechody které jsou aktivované aby z počátečního ohodnocení vzniklo cílové.
 
@@ -319,56 +253,59 @@ Z grafu dosažitelnosti Petriho sítě jsou odvoditelné tyto vlastnosti:
 
 \begin{definition}[Ohraničenost sítě]
   
-  Petriho síť je \textbf{ohraničená}\index{síť ohraničenost} pokud 
+  Petriho síť je \textbf{ohraničená}, pokud 
   je její graf dosažitelnosti konečný. Pokud existuje takové přirozené číslo $n$
   pro které v žádném dosažitelném ohodnocení nepřesahuje žádné místo svým ohodnocením 
-  číslo $n$. Pokud zvolíme $n$ aby splňovalo tuto podmínku a zároveň bylo 
-  nejmenší možné, pak můžeme nazývat síť že je \textbf{ohraničená $n$}.
+  číslo $n$ a zvolíme $n$ aby splňovalo tuto podmínku a zároveň bylo 
+  nejmenší možné, pak můžeme nazvat síť že je \textbf{ohraničená} číslem $n$.
   
 \end{definition}
 \begin{definition}[Konečnost sítě]\label{def:skončí}
   
-  Petriho síť \textbf{skončí}\index{síť skončí} za předpokladu
+  Petriho síť \textbf{skončí} za předpokladu
   že graf je konečný a zároveň neobsahuje žádné cykly.
-  Neboli Petriho sít vždy po nějakém počtu kroků dojde do stavu kdy žádný přechod není povolený.
+  Neboli Petriho síť vždy po nějakém počtu kroků dojde do stavu, kdy žádný přechod není povolený.
   
 \end{definition}
 \begin{definition}[Vratnost sítě]
   
-  Petriho síť je \textbf{vratná}\index{síť vratná}
+  Petriho síť je \textbf{vratná},
   pokud je její graf silně souvislý. Z každého dosažitelného 
-  ohdonocení je dosažitelné počáteční ohodnocení.
+  ohodnocení je dosažitelné počáteční ohodnocení.
 
 \end{definition}
+\clearpage
 \begin{definition}[Síť bez mrtvého bodu]
   
-  Petriho síť je \textbf{bez mrtvého bodu}\index{síť bez mrtvého bodu}
-  pokud z každého vrcholu grafu dosažitelnosti vede alespoň jedna hrana.
-  Petriho sít má v každém ohodnocení povolený alespoň jeden přechod.
+  Petriho síť je \textbf{bez mrtvého bodu},
+  pokud z každého vrcholu grafu
+  dosažitelnosti vede minimálně jedna hrana.
+  Petriho síť má v každém ohodnocení povolený minimálně jeden přechod.
 
 \end{definition}
 \begin{definition}[Slabě živá síť]
   
-  Petriho síť je \textbf{slabě živá}\index{síť slabě živá} pokud pro
-  každý přechod existuje v grafu hrana označená tímto přechodem.
+  Petriho síť je \textbf{slabě živá}, pokud pro
+  každý přechod existuje v grafu dosažitelnosti hrana označená tímto přechodem.
   Pro každý přechod Petriho sítě existuje dosažitelné ohodnocení které 
   povoluje daný přechod.
 
 \end{definition}
 \begin{definition}[Živá síť]
   
-  Petriho síť je \textbf{živá}\index{síť živá} pokud 
-  pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu cesta
-  z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu $t$.
+  Petriho síť je \textbf{živá}, pokud 
+  pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu dosažitelnosti cesta
+  z ohodnocení $M$ do ohodnocení ze kterého vede hrana s označením přechodu $t$.
   Pro každý přechod $t$ a každé ohodnocení $M$ existuje dosažitelné ohodnocení $M'$ které přechod $t$ povoluje.
   
 \end{definition}
   
-Logickou úvahou a z vlastností grafů pak můžeme určit někré vzájemné závislosti vlastnosti:
+Logickou úvahou a z vlastností grafů pak můžeme určit některé vzájemné
+ závislosti vlastností:
 \begin{itemize}
   \item Síť která je \textbf{vratná} nebo/a \textbf{živá} je zároveň i \textbf{bez mrtvého bodu}.
   \item Síť která je \textbf{bez mrtvého bodu} ne\textbf{skončí} a zároveň síť která \textbf{skončí} není \textbf{bez mrtvého bodu}(pozor, neznamená že síť musí mít alespoň jednu z těchto vlastností). 
-  \item Síť která není \textbf{slabě živá} nemůže být \textbf{živá}.
+  \item Síť která není \textbf{slabě živá} nemůže být ani \textbf{živá}.
 \end{itemize}
 
 \clearpage
@@ -379,36 +316,38 @@ Logickou úvahou a z vlastností grafů pak můžeme určit někré vzájemné z
   \begin{subfigure}[h]{\linewidth}
     \centering
     \includegraphics{net_props_01}
-    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 1}
+    \caption{}\label{fig:ukázka grafu dosažitelnosti 1}
   \end{subfigure}
   
   \begin{subfigure}[h]{\linewidth}
     \includegraphics[width=\linewidth]{net_props_02}
-    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 2}
+    \caption{}\label{fig:ukázka grafu dosažitelnosti 2}
   \end{subfigure}
   
   \begin{subfigure}[h]{\linewidth}
     \includegraphics[width=\linewidth]{net_props_03}
-    \caption[síť]{}\label{fig:ukázka grafu dosažitelnosti 3}
+    \caption{}\label{fig:ukázka grafu dosažitelnosti 3}
   \end{subfigure}
   \caption{Ukázky jednoduchých sítí s grafem dosažitelnosti}\label{fig: ukázky jednoduchých sítí}
 \end{figure}
 
-Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 1} \textbf{skončí} a je \textbf{slabě živá}.
-
-Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 2} \textbf{skončí} a není \textbf{slabě živá}.
-
-A síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 3} je \textbf{vratná} a \textbf{živá}.
+\begin{itemize}
+  \item 
+  Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 1} \textbf{skončí} a je \textbf{slabě živá}.
+  \item 
+  Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 2} \textbf{skončí} a není \textbf{slabě živá}.
+  \item 
+  Síť na obrázku \ref{fig:ukázka grafu dosažitelnosti 3} je \textbf{vratná} a \textbf{živá}.
+\end{itemize}
 
 Všechny tři sítě jsou ohraničené 1. Také si můžeme všimnout že 
 z výše uvedených vlastností u ukázkových sítí 
 stačí jen vypsané vlastnosti a ostatní se dají odvodit ze závislosti vlastností.
 
-\clearpage
 
 \subsection{Graf pokrytí}
 
-Hlavní nevýhodou grafu dosažitelnosti je že může být
+Hlavní nevýhodou grafu dosažitelnosti je, že může být
 nekonečný a tudíž je nemožné ho zkonstruovat celý.
 Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť (Obrázek \ref{fig:neohraničená síť}) u které by konstrukce jejího grafu dosažitelnosti nikdy neskončila.
 
@@ -418,8 +357,8 @@ Můžeme velice jednoduše navrhnout a sestrojit triviální Petriho síť (Obr�
   \caption{Příklad neohraničené sítě}\label{fig:neohraničená síť}
 \end{figure}
 
-Proto existuje upravená verze grafu dosažitelnosti nazvaná grafu pokrytí,
-která může obsahovat tzv. $\omega$ ohodnocení které mimo celých 
+Proto existuje upravená verze grafu dosažitelnosti nazvaný graf pokrytí,
+který může obsahovat tzv. $\omega$ ohodnocení, které mimo celých 
 čísel přiřadí alespoň jednomu místu i hodnotu $\omega$ 
 symbolizující že místo může nabývat nekonečně vysokého počtu značek.
 Petriho síť se nemůže nacházet v $\omega$ ohodnocení, toto ohodnocení je pouze
@@ -428,8 +367,10 @@ pro vytvoření abstrakce v grafu pokrytí.
 Protože hodnotu $\omega$ bereme jako nekonečno pak od ní můžeme 
 odečíst nebo přičíst libovolně velké číslo a hodnota se nezmění.
 $$\dotsb = \omega - 2 = \omega - 1 = \omega = \omega + 1 = \omega + 2 = \dotsb$$
+zároveň je taky vyšší jak libovolné přirozené číslo
+$$ (\forall n \in \mathbb{N}_0)n < \omega $$
 
-Ohodnocení $M$ značíme jako že je ostře menší $<$ než ohodnocení $M'$
+Ohodnocení $M$ značíme jako že je ostře menší $<$ než ohodnocení $M'$,
 pokud pro každé místo $p$ platí $M(p) \leq M'(p)$ a alespoň pro jedno
 místo $p$ platí $M(p) < M'(p)$.
 $$
@@ -440,14 +381,14 @@ $$
 
 Sestrojování grafu probíhá postupně přidáváním hran. Nejdříve se přidá počáteční 
 ohodnocení jako kořen grafu. Následně se z grafu vybírají náhodně
-nevypočítané povolené přechody a pokud vedou do místa které ještě 
-v grafu není tak se přidá a pokud je ostře menší než ohodnocení ze kterého
-je dosažitelné tak se přidají $\omega$ hodnoty na místa ve kterých má více značek.
+nevypočítané povolené přechody a pokud vedou do místa, které ještě 
+v grafu není, tak se přidá a pokud je ostře menší než ohodnocení ze kterého
+je dosažitelné, tak se přidají $\omega$ hodnoty na místa ve kterých má více značek.
 Algoritmus končí výpočet až jsou všechny povolené 
 přechody pro všechny vrcholy v grafu vypočítané.
 
 \begin{center}
-  Sestrojení grafu pokrytí pseudokód MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
+  Sestrojení grafu pokrytí pseudokód \ref{alg:MakeCoverabilityGraph} MakeCoverabilityGraph.
 \end{center}
 
 \begin{algorithm}
@@ -464,9 +405,8 @@ přechody pro všechny vrcholy v grafu vypočítané.
     \State $\langle M, t \rangle := RandomElement(WorkSet)$
     \State $WorkSet := WorkSet \setminus \{\langle M, t \rangle\}$
     \State $M' := FireTransition(P,t,A,M)$
-    \ForAll{$\{M'' \;|\; M'' \in V \land (M'' \to^* M \lor M'' = M) \land M'' < M'\}$}
+    \ForAll{$\{M'' \in V \;|\; (M'' \to^* M \lor M'' = M) \land M'' < M'\}$}
     \ForAll{$p \in P$}
-    \State $mp := M(p)$
     \If{$M''(p)<M'(p)$}
     \State $M'(p) := \omega$
     \EndIf
@@ -488,10 +428,10 @@ přechody pro všechny vrcholy v grafu vypočítané.
 \end{algorithm}
 
 Pokud sestrojený graf pokrytí neobsahuje žádné $\omega$ ohodnocení,
-pak je graf totožný s grafem dosažitelnosti. 
-Pokud graf pokrytí obsahuje $\omega$ ohodnocení, zanamená to že 
+pak je graf pokrytí totožný s grafem dosažitelnosti. 
+Pokud graf pokrytí obsahuje $\omega$ ohodnocení, znamená to že 
 graf dosažitelnosti by byl nekonečný a tudíž by nebylo možné 
-ho zkonstruovat celý a nešli by na něm zjišťovat některé nebo všechy vlastnosti.
+ho zkonstruovat celý a nešli by na něm zjišťovat některé nebo všechny vlastnosti.
 Proto si vystačíme s algoritmem na vytváření grafu pokrytí.
 
 \subsubsection{Různé výsledky grafu pokrytí}
@@ -499,67 +439,68 @@ Proto si vystačíme s algoritmem na vytváření grafu pokrytí.
 Při konstrukci grafu pokrytí záleží v jakém pořadí se hrany přidávají
 a výsledný graf může mít různý počet vrcholů a hran 
 v závislosti na pořadí přidávání hran.
-V našem algoritmu využíváme funkce $RandomElement$ která vybere 
-náhodný prvek množiny a snažíme se tak tipovat jaké pořadí hran bude
+V našem algoritmu využíváme funkci $RandomElement$, která vybere 
+náhodný prvek z množiny a snažíme se tak tipovat, jaké pořadí hran bude
 ideální pro sestrojení nejmenšího grafu. 
 Pokud bychom chtěli sestrojit minimální 
 graf pokrytí, museli bychom nahradit funkci $RandomElement$ nějakou
-funkcí která by vždy vybrala přechody právě 
-v takovém pořadí aby došlo k sestrojení minimálního grafu.
+funkcí, která by vždy vybrala přechody právě 
+v takovém pořadí, aby došlo k sestrojení minimálního grafu.
 
-Že záleží na pořadí v jakém se hrany přidávájí si můžeme ukázat na 
+Že záleží na pořadí v jakém se hrany přidávají si můžeme ukázat na 
 síti v obrázku \ref{fig:síť různé coverability}. Zde ale musíme 
-dávat pozor, protože v tomto případě čísla neznačí přechody,
+dávat pozor, protože v tomto případě čísla neznačí jednotlivé přechody,
 ale pořadí ve kterém byly hrany přidány.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{net_coverability_difference}
-  \caption{Příklad sítě z knihy Understanding petri nets\cite{reisig2013understanding}(fig.  14.1) }\label{fig:síť různé coverability}
+  \caption[Příklad sítě s rozdílnými grafy pokrytí. (fig.  14.1)]{Příklad sítě z knihy Understanding petri nets\cite{reisig2013understanding}(fig.  14.1) s rozdílnými grafy pokrytí. }\label{fig:síť různé coverability}
 \end{figure}
 
 
 \subsubsection{Upravená verze vlastností}\label{Upravená verze vlastností}
 
-Oproti grafu dosažitelnosti náš graf pokrytí tak jak jsme ho sestrojili 
-pomocí algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph} 
-nemusí obsahovat všechny výsledky přechodů které mohou nastat a to znamená 
+Oproti grafu dosažitelnosti náš graf pokrytí tak, jak jsme ho sestrojili 
+pomocí algoritmu \ref{alg:MakeCoverabilityGraph} MakeCoverabilityGraph 
+nemusí obsahovat všechny hrany přechodů, které mohou nastat a to znamená, 
 že v některých případech některé vlastnosti Petriho sítě nejsme schopni určit, 
-protože nám chybí informace o těchto chybějícíh hranách grafu pokrytí.
-Problém je částečně způsobený tím jak máme definovanou hodnotu $\omega$ a pokud 
-nějaké místo $p$ je ohodnoceno $\omega$ pak už není možné aby z vrcholu s tímto 
+protože nám chybí informace o těchto chybějících hranách grafu pokrytí.
+Problém je částečně způsobený tím, jak máme definovanou hodnotu $\omega$ a pokud 
+nějaké místo $p$ je ohodnoceno $\omega$ pak už není možné, aby z vrcholu s tímto 
 ohodnocením vedla hrana do vrcholu kde místo $p$ nebude mít hodnotu $\omega$.
 
+\clearpage
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{net_undecidable_reversion}
+  \includegraphics[width=0.8\linewidth]{net_undecidable_reversion}
   \caption{Příklad neohraničené sítě s chybějící hranou v grafu pokrytí}\label{fig:neohraničená síť reversible}
 \end{figure}
-
-V Obrázku \ref{fig:neohraničená síť reversible} vidíme červeně zvírazněnou 
-hrana která při použití algoritmu MakeCoverabilityGraph\ref{alg:MakeCoverabilityGraph}
+V Obrázku \ref{fig:neohraničená síť reversible} vidíme červeně zvýrazněnou 
+hranu, která při použití algoritmu \ref{alg:MakeCoverabilityGraph} MakeCoverabilityGraph
 chybí. Přitom by tam měla hrana být, protože když budeme neustále opakovat 
-aktivaci přechodu 2 tak se eventuálně (až bude počet aktivací přechodu 2 roven počtu aktivací 1) 
+aktivaci přechodu 2, tak se eventuálně (až bude počet aktivací přechodu 2 roven počtu aktivací 1) 
 dostaneme do ohodnocení kde má místo $A$
-hodnotu 0 což je zároveň výchozí ohodnocení. Díky této chybějící hraně 
-bychom síť určili jako že není \textbf{vratná} ale přitom ve skutečnosti je.
+hodnotu 0, což je zároveň výchozí ohodnocení. Díky této chybějící hraně 
+bychom síť určili jako že není \textbf{vratná}, ale přitom ve skutečnosti je.
 Proto musíme zjistit jestli jsou všechny vlastnosti grafu dosažitelnosti 
 aplikovatlné i na graf pokrytí, případně poupravit nebo rozšířit jejich definici.
+\\
 
-Síť je \textbf{ohraničená} pokud graf pokrytí neobsahuje žádné $\omega$ ohodnocení
+Síť je \textbf{ohraničená}, pokud graf pokrytí neobsahuje žádné $\omega$ ohodnocení
 \begin{proof}[Ohraničenost sítě v grafu pokrytí]
   \textbf{Ohraničenost} sítě je určená konečností grafu dosažitelnosti.
   Nekonečný rozvoj grafu dosažitelnosti je vždy v grafu pokrytí symbolizován
-  $\omega$ ohodnocenímy. Z toho můžeme vyvodit že síť je 
-  \textbf{ohraničená} pokud její graf pokrytí neobsahuje žádně $\omega$ ohodnocení.
+  $\omega$ ohodnoceními. Z toho můžeme vyvodit, že síť je 
+  \textbf{ohraničená}, pokud její graf pokrytí neobsahuje žádné $\omega$ ohodnocení.
 \end{proof}
 
 
-Petriho síť ne\textbf{skončí} pokud graf obsahuje $\omega$ ohodnocení.
+Petriho síť ne\textbf{skončí}, pokud graf obsahuje $\omega$ ohodnocení.
 \begin{proof}[Konečnost sítě v grafu pokrytí]
-  Petriho síť ne\textbf{skončí} pokud je její graf dosažitelnosti nekonečný tudíš
-  stejnou úvahou jako u ohraničenosti můžeme říct že síť ne\textbf{skončí}
-  pokud její graf pokrytí obsahuje $\omega$ ohodnocení a skončí pokud je splněná
+  Petriho síť ne\textbf{skončí}, pokud je její graf dosažitelnosti nekonečný tudíž,
+  stejnou úvahou jako u ohraničenosti můžeme říct, že síť ne\textbf{skončí}
+  pokud její graf pokrytí obsahuje $\omega$ ohodnocení a skončí, pokud je splněná
   původní podmínka v definici \ref{def:skončí}.
 \end{proof}
 
@@ -567,55 +508,59 @@ Petriho síť ne\textbf{skončí} pokud graf obsahuje $\omega$ ohodnocení.
 Jestli je síť \textbf{vratná} z grafu s $\omega$ ohodnocením jsme si už ukázali 
 že díky chybějícím hranám určitelné není. Můžeme si ale jednoduchou 
 úvahou určit množinu případů kdy síť rozhodně vratná není, a to v 
-situaci kdy existuje $\omega$ ohodnocení a neexistuje žádný přechod 
+situaci kdy existuje $\omega$ ohodnocení a neexistuje žádný přechod, 
 který by měl větší vstup jak výstup.
 \begin{proof}[Vratnost sítě v grafu pokrytí]
   Pokud máme $\omega$ ohodnocení tak to mimo jiné znamená že se suma značek všech 
   míst může při opakovaném aktivování
-  některých přechodů zvyšovat neustále. Pak musí existovat i přechod
-  terý tuto sumu snižuje, neboli přecho který má vyšší sumu
+  některých přechodů zvyšovat neustále. Pak musí existovat i přechod,
+  který tuto sumu snižuje neboli přechod, který má vyšší sumu
   násobků z místa $^\to t$ než do místa $t ^\to$. Pokud takový 
   přechod neexistuje přesto že v coverability grafu je $\omega$ ohodnocení,
   pak můžeme s jistotou říct že síť není \textbf{vratná}
 \end{proof}
-Pro určení jestli je síť \textbf{vratná} v ostatních případech
-bychom potřebovali algoritmus který vytváří i zpětné hrany z $\omega$ ohodnocení.
+Pro určení, jestli je síť \textbf{vratná} v ostatních případech
+bychom potřebovali algoritmus, který vytváří i zpětné hrany z $\omega$ ohodnocení.
 
 
-Petriho síť je \textbf{bez mrtvého bodu} pokud z každého vrcholu grafu 
+Petriho síť je \textbf{bez mrtvého bodu}, pokud z každého vrcholu grafu 
 pokrytí vede alespoň jedna hrana.
-\begin{proof}[Síť bez mrtvého bodu v grafu pokrytí]
+\begin{proof}[Mrtvý bod v grafu pokrytí]
   V tomto případě nemusíme rozlišovat $\omega$ ohodnocení a standardní ohodnocení,
-  pokud z něj vede v grafu hrana, znamená to že v tomto ohodnocení síť neuvázne.
+  pokud z něj vede v grafu hrana, znamená to, že v tomto ohodnocení síť neuvázne.
 \end{proof}
 
-Petriho síť je \textbf{slabě živá} pokud pro každý přechod existuje 
+Petriho síť je \textbf{slabě živá}, pokud pro každý přechod existuje 
 v grafu hrana označená tímto přechodem.
 \begin{proof}[Slabě živá síť v grafu pokrytí]
   $\omega$ ohodnocení stejně jako v případě 
   určování jestli je síť \textbf{bez mrtvého bodu} 
-  výsledek neovlivní.
+  výsledek neovlivní. Pokud je přechod povolený, 
+  nezáleží do jakého hodnocení vede, 
+  proto nevadí když chybí jeho hrana do nižšího ohodnocení.
 \end{proof}
 
-Petriho síť je \textbf{živá}\index{síť živá} pokud 
+Petriho síť je \textbf{živá}, pokud 
 pro každý přechod $t$ a každé ohodnocení $M$ existuje v grafu cesta
 z ohodnocení $M$ do ohodnocení ze kterého vede hrana z označením přechodu $t$.
-\begin{proof}[živá síť v grafu pokrytí]
+\begin{proof}[Živá síť v grafu pokrytí]
  Když jsou ohodnocení $M < M'$, pak pokud je přechod $t$ 
-  povolený v $M$ pak musí být povolený i v $M'$. Díky tomu můžemě určit
+  povolený v $M$ pak musí být povolený i v $M'$. Díky tomu můžeme určit
   že chybějící hrany z ostře větších ohodnocení do menších nejsou potřeba protože 
   by jejich existence stejně neumožňovala přístup k dalším přechodům a proto můžeme 
-  živost vyčíst i grafu pokrytí.
+  živost vyčíst i z grafu pokrytí.
 \end{proof}
 
+
 \subsection{Příklady sítí}
-Na obrázcích \ref{fig:síť kniha 1}, \ref{fig:síť kniha 2}, \ref{fig:síť kniha 3} jsou říklady sítí z knihy Understanding petri nets\cite{reisig2013understanding} 
+Na obrázcích \ref{fig:síť kniha 1}, \ref{fig:síť kniha 2}, \ref{fig:síť kniha 3} jsou příklady sítí z knihy Understanding petri nets\cite{reisig2013understanding} 
 s výsledky analýz editoru.
 Odkaz na síť v knice je součástí popisů obrázků.
 
+\clearpage
 \begin{figure}[h]
   \centering
-  \begin{subfigure}[h]{0.78\linewidth}
+  \begin{subfigure}[h]{0.7\linewidth}
     \includegraphics[width=\linewidth]{net_cooking_vending_machine}
   \end{subfigure}
   \begin{subfigure}[h]{0.2\linewidth}
@@ -624,11 +569,9 @@ Odkaz na síť v knice je součástí popisů obrázků.
   \caption{Prodejní automat (fig 3.1)}
   \label{fig:síť kniha 1}
 \end{figure}
-
-
 \begin{figure}[h]
   \centering
-  \begin{subfigure}[h]{0.78\linewidth}
+  \begin{subfigure}[h]{0.7\linewidth}
     \includegraphics[width=\linewidth]{net_mutual_exclusion}
   \end{subfigure}
   \begin{subfigure}[h]{0.2\linewidth}
@@ -637,11 +580,9 @@ Odkaz na síť v knice je součástí popisů obrázků.
   \caption{Vzájemné vyloučení (fig 3.2)}
   \label{fig:síť kniha 2}
 \end{figure}
-
-
 \begin{figure}[h]
   \centering
-  \begin{subfigure}[h]{0.78\linewidth}
+  \begin{subfigure}[h]{0.6\linewidth}
     \includegraphics[width=\linewidth]{net_crosstalk}
   \end{subfigure}
   \begin{subfigure}[h]{0.2\linewidth}
@@ -650,6 +591,7 @@ Odkaz na síť v knice je součástí popisů obrázků.
   \caption{Crosstalk algoritmus (fig 3.7)}
   \label{fig:síť kniha 3}
 \end{figure}
+
 
 
 \clearpage
@@ -664,8 +606,9 @@ Odkaz na síť v knice je součástí popisů obrázků.
   
 \subsection{Rozložení editoru}
 Editor je rozložený na několik částí. Všechny tyto části 
-jsou písmeny označené v Obrázku \ref{fig:Rozložení editoru} 
-Rozložení editoru.Každá část editoru je popsaná ve své vlastní sekci.
+jsou písmeny označené v
+obrázku \ref{fig:Rozložení editoru} 
+Rozložení editoru. Každá část editoru je popsaná ve své vlastní sekci.
 
 \begin{figure}[h]
   \centering
@@ -690,21 +633,20 @@ Rozložení editoru.Každá část editoru je popsaná ve své vlastní sekci.
   \end{subfigure}
 \end{figure}
 
-
 \subsubsection{Postranní panel}\label{panel}
 
-Postraní panel obsahuje tlačítka pro práci se záložkami a 
+Postranní panel obsahuje tlačítka pro práci se záložkami a 
 samotné záložky. Pod označením \textbf{FILE} jsou tlačítka:
 \begin{center}
   \begin{tabular}{c p{0.8\linewidth}}
-    \textbf{New}    & Vytvoří novou prázdnou záložku \\
-    \textbf{Load}   & Otevře dialog pro načtení uložené sítě \\
+    \textbf{New}    & Vytvoří novou prázdnou záložku. \\
+    \textbf{Load}   & Otevře dialog pro načtení uložené sítě. \\
     \textbf{Save}   & Uloží síť v otevřené záložce. Pokud byla síť již uložena 
-      nebo načtena dialog nabídne uživateli na výběr dvě možnosti.
+      nebo načtena, dialog nabídne uživateli na výběr dvě možnosti.
       Možnost \textit{yes} uloží a přepíše původní soubor.
       Možnost \textit{Select file} otevře dialog 
-      a uživatel vybere vlastní místo uložoní. \\
-    \textbf{Close}  & Zavře aktuálně otevřenou záložku \\
+      a uživatel vybere vlastní místo uložení. \\
+    \textbf{Close}  & Zavře aktuálně otevřenou záložku. \\
   \end{tabular}
 \end{center}
 
@@ -719,23 +661,25 @@ Záložky jsou nazvané podle jména souboru sítě.
 
 \subsubsection{Ovládání, Hlavní plocha editoru}\label{hlavní plocha}
 
-Editor je navržený tak aby bylo možné jej používat pouze za použítí 
-myši bez potřeby využívání klávesnice. Zároveň oproti ostatním editorům
+Editor je navržený tak aby bylo možné jej používat pouze za použití 
+myši bez využití klávesnice. Zároveň oproti ostatním editorům
 nemá různé nástroje (např. na vkládání různých objektů) a všechny 
-akce editování jsou možné bez toho aby kurzor opustil hlavní plochu editoru.
+akce editování jsou možné bez toho, aby kurzor opustil hlavní plochu editoru.
 
-Kliknutím levým tlačítkem myši se vytvoří přechod. 
+Kliknutí levým tlačítkem myši vytvoří přechod. 
 Kliknutím na přechod se začne vytvářet hrana. Pokud se při 
-vytváření hrany klikne do nějakého místa tak se na něj hrana 
-připojí. Pokud se klikne do prázdného prostoru vytvoří se zde nové místo.
-vytváření hrany jde zrušit pravým tlačítkem myši.
+vytváření hrany klikne do nějakého místa, tak se na něj hrana 
+připojí. Pokud se klikne do prázdného prostoru, vytvoří se zde nové místo.
+Vytváření hrany jde zrušit pravým tlačítkem myši.
 
-Při kliknutí na hranu nebo místo se otevře dialog na obrázku \ref{fig:editace hodnot} editace hodnoty.
-Při najetí nad editované pole se zobrazí šipky kterými 
+Při kliknutí na hranu nebo místo se otevře dialog 
+na obrázku \ref{fig:editace hodnot} editace hodnoty.
+Při najetí nad editované pole se zobrazí šipky, kterými 
 je možné přidávat nebo ubírat hodnotu, nebo je možné taky 
-do něj kliknout aby se do zde umístil kurzor klávesnice a 
-přitom když je myš stále nad polem použít kolečko na změnu hodnoty.
-Dialogy se ukládají kliknutím na OK nebo stiknutím Enter, kliknutí do jiného místa(levé i pravé) 
+do něj kliknout, aby se zde umístil kurzor klávesnice a 
+přitom, když je myš stále nad polem použít kolečko na změnu hodnoty.
+Dialogy se ukládají kliknutím na OK nebo stisknutím Enter. 
+Kliknutí(levé i pravé) do jíného prostoru
 hlavní plochy způsobí zavření dialogu bez provedení změny.
 
 Ohodnocení místa se dá měnit i bez otevření dialogu a to najetím myši
@@ -748,7 +692,9 @@ Při přesouvání se jednotlivé objekty navzájem odpuzují aby nedošlo k jej
 
 Nakonec pravým tlačítkem je možné místo, přechod nebo hranu odstranit.
 
-Při editaci je možné také využít nějaké klávesové zkratky které jsou popsané v \ref{zkratky}
+Při editaci je možné také využít klávesových zkratek které jsou popsané v sekci \ref{zkratky}.
+
+Pokud uživatel nevyžaduje zobrazené analýzy a tabulku ohodnocení, je možné je tlačítkem nad nimi skrýt.
 
 \begin{figure}[h]
   \centering
@@ -767,15 +713,16 @@ Při editaci je možné také využít nějaké klávesové zkratky které jsou 
 Pokud je mód nastavený na hodnotu \textit{Run} výše popsané akce myší 
 se vypnou. Jediná akce v tomto módu je aktivace přechodu.
 
+\clearpage
 \subsubsection{Panel nástrojů editoru}\label{panel nástrojů}
 
-Funkce tlačítek panelu nástrojů zobrezeného v obrázku \ref{fig:Panel nástrojů editoru}:
+Funkce tlačítek panelu nástrojů zobrazeného v obrázku \ref{fig:Panel nástrojů editoru}:
 \begin{center}
   \begin{tabular}{r p{0.6\linewidth}}
-    \textbf{Zpět/Vpřed}          & Vrátí poslední akci nebo zruší vrácení poslední akce \\
-    \textbf{Tisk}                & Otevře dialog pro tisk otevřené sítě \\
-    \textbf{Přiblížit/Oddálit}   & Přiblíží/Oddálí Petriho síť \\
-    \textbf{Skrýt/Zobrazit popisky}  & Skryje nebo zobrazí popisky míst a přechodů \\
+    \textbf{Zpět/Vpřed}          & Vrátí poslední akci nebo zruší vrácení poslední akce. \\
+    \textbf{Tisk}                & Otevře dialog pro tisk otevřené sítě. \\
+    \textbf{Přiblížit/Oddálit}   & Přiblíží/Oddálí Petriho síť. \\
+    \textbf{Skrýt/Zobrazit popisky}  & Skryje nebo zobrazí popisky míst a přechodů. \\
     \textbf{Změna módu}  & Přepíná mezi \textbf{editovacím módem} a módem \textbf{spouštění sítě}. \\
   \end{tabular}
 \end{center}
@@ -790,7 +737,7 @@ Funkce tlačítek panelu nástrojů zobrezeného v obrázku \ref{fig:Panel nást
 \subsubsubsection{Tisk}\label{tisk}
 
 Hlavní plocha má vždy rozměry pro tisk na papír formátu a4. Pro tisk 
-do pdf je potřeba virtuální tiskárna která tuto funci umožňuje (např. Microsoft print to PDF).
+do PDF je potřeba virtuální tiskárna, která tuto funkci umožňuje (např. Microsoft print to PDF).
 
 Tisk nemusí vždy fungovat, je to způsobené chybou ve verzi Electronu 
 která byla k vytvoření programu použita. Pokud tisk 
@@ -803,12 +750,12 @@ Každý řádek v tabulce reprezentuje jedno dosažitelné ohodnocení
 v levé části tabulky a povolené přechody v tomto ohodnocení jsou 
 zobrazeny zelenými obdelníčky v pravé části tabulky.
 Uživatel může kdykoliv kliknout na jakýkoliv ze zelených obdelníčků 
-a tím přidá další řádek pod řádek na který kliknul který obsahuje 
-nové ohodnocení vzíklé aplikací přechodu který uživatel vybral.
+a tím přidá další řádek pod řádek na který kliknul, který bude osahovat 
+nové ohodnocení vzniklé aplikací přechodu který uživatel vybral.
 Pokud uživatel vybral přechod na řádku pod kterým už řádky jsou, 
 tak budou všechny odebrány a pak až se přidá nový.
 
-Pokud uživatel najede na ikonu oka tak dojde k zobrazení ohodnocení 
+Pokud uživatel najede na ikonu oka dojde k zobrazení ohodnocení 
 daného řádku do sítě na hlavní ploše editoru.
 
 \begin{figure}[h]
@@ -817,25 +764,24 @@ daného řádku do sítě na hlavní ploše editoru.
   \caption{Tabulka ohodnocení}\label{fig:Tabulka ohodnocení obrázek}
 \end{figure}
 
-
 \subsubsection{Výsledky analýzy}\label{výsledky analýzy}
 
-Ve výsledcích analýzy (viz Obrázek \ref{analýza obrázek}) jsou zobrazeny vlasnosti sítě podle sekce \ref{Upravená verze vlastností}.
-Jak jednolivé vlastnosti přečíst je popsané v tabulce 
+Ve výsledcích analýzy (viz Obrázek \ref{analýza obrázek}) jsou zobrazeny vlastnosti sítě podle sekce \ref{Upravená verze vlastností}.
+Jak jednotlivé vlastnosti přečíst je popsané v tabulce \ref{vlastnosti site v editoru}.
 
 \begin{table}[h]
   \centering
   \begin{tabular}{| c | c | r l |}
   \hline
-    Název v editoru & Vlasnost & Hodnota & Význam \\
+    Název v editoru & Vlastnost & Hodnota & Význam \\
     \hline
     \hline
-    & states & - & počet stavů sítě \\ 
+     states & - & číslo & počet stavů sítě \\ 
     \hline
     \multirow{2}{*}{bounded} & \multirow{2}{*}{\textbf{ohraničenost}} & \textit{$\omega$} &  síť je \textbf{neohraničená} \\ 
     &                   & číslo & určuje \textbf{ohraničenost} \\ 
     \hline
-\multirow{2}{*}{terminates} & \multirow{2}{*}{síť \textbf{skončí}} & \textit{Yes} & sít \textbf{skončí} \\ 
+\multirow{2}{*}{terminates} & \multirow{2}{*}{síť \textbf{skončí}} & \textit{Yes} & síť \textbf{skončí} \\ 
     &                   & \textit{No} & síť ne\textbf{skončí} \\ 
     \hline
 \multirow{3}{*}{reversible} & \multirow{3}{*}{\textbf{vratná}} & \textit{Yes} & síť je \textbf{vratná} \\ 
@@ -852,8 +798,10 @@ Jak jednolivé vlastnosti přečíst je popsané v tabulce
     \hline
 
   \end{tabular}
-  \caption{Určování vlastností sítě v editoru} \label{}  
+  \caption{Určování vlastností sítě v editoru}\label{vlastnosti site v editoru}  
 \end{table}
+
+\clearpage
 
 \begin{figure}[h]
   \centering
@@ -861,11 +809,9 @@ Jak jednolivé vlastnosti přečíst je popsané v tabulce
   \caption{Ukázka výsledků analýzy sítě}\label{analýza obrázek}
 \end{figure}
 
-
 \subsubsection{Klávesové zkratky}\label{zkratky}
 
 Seznam klávesových zkratek použitelných v editoru je v tabulce \ref{tabulka zkratky}.
-\clearpage
 \begin{table}[h!]
   \centering
   \begin{tabular}{| c | l |}
@@ -879,44 +825,56 @@ Seznam klávesových zkratek použitelných v editoru je v tabulce \ref{tabulka 
     Ctrl + N & Vytvoření nové sítě \\
     \hline
   \end{tabular}
-  \caption{Klavesové zkratky využitelné v editoru}\label{tabulka zkratky}
+  \caption{Klávesové zkratky využitelné v editoru}\label{tabulka zkratky}
 \end{table}
+
+
 
 
 \section{Použité technologie}
 
-Následující technologie byly využity pro vytvoření editoru Petriho sítí.
+Následující technologie byly použity pro vytvoření editoru Petriho sítí.
 
-\subsection{nodejs}
+
+\subsection{NodeJS}
 Technologie která umožňuje využívat jazyk JavaScript pro psaní 
-serverových aplikací. Cílem platformy nodeJS je vytvořit
+serverových aplikací. Cílem platformy NodeJS je vytvořit
 ekosystém pro jednoduší vývoj webových stránek a aplikací, 
-kde stačí pro vyrvaření funkcionality pouze jeden programovací jazyk.
+kde stačí pro vytváření funkcionality pouze jeden programovací jazyk.
+
 
 \subsection{TypeScript}
-TypeScript je opensource programovací jazyk od společnosti Microsoft který je nadstavbou nad jazykem JavaScript.
-Jelikož je TypeScript nadstavbou nad programovacím jazykem JavaScript tak je jakýkoliv validní kód v JavaScriptu automaticky validním kódem v TypeScriptu.
-Typecript se kompiluje do Javascriptu a proto po stránce funkcionality nenabízí nic navíc avšak po stránce vývoje nabízí možnost statické typové kontroly
-se kterou je spjaté fungování našeptávačů v dnešních textových editorech a také nabízí možnost kompilace do starších verzí JavaScript se simulací funkcionality novejších verzí JavaScriptu.
+TypeScript je opensource programovací jazyk od společnosti Microsoft, který je nádstavbou nad jazykem JavaScript.
+Jelikož je TypeScript nádstavbou nad programovacím jazykem JavaScript, tak je jakýkoliv validní kód v JavaScriptu validním kódem v TypeScriptu.
+TypeScript se kompiluje do Javascriptu a proto po stránce 
+funkcionality nenabízí nic navíc, avšak po stránce vývoje 
+nabízí možnost statické typové kontroly
+se kterou je spjaté fungování našeptávačů v dnešních textových 
+editorech a také nabízí možnost kompilace do 
+starších verzí JavaScript se simulací funkcionality 
+novějších verzí JavaScriptu.
 
-Zdrojový kód \ref{TypeScript} je ukázka jednoduchého kódu v JavaScript. Můžeme
-si zde všimnou proměnné \textit{a} do které nakonec nahrajeme řetězec i přesto že 
-ji máme definouvanou jako číslo. Proto si musíme zároveň sami dávat pozor na to jestli
-tento jazyk využíváme správně a neobcházíme ho tak že bychom si jím spíš škodili než pomohli.
+Zdrojový kód \ref{TypeScript} je ukázka jednoduchého kódu v TypeScriptu. Můžeme
+si zde všimnou proměnné \textit{a} do které nakonec nahrajeme 
+řetězec, i přesto že 
+ji máme definovanou jako číslo. Proto si musíme zároveň sami dávat pozor na to jestli
+tento jazyk využíváme správně a neobcházíme ho, tak že bychom si jím spíš škodili než pomohli.
 \begin{kicode}{JavaScript}{TypeScript}{Ukázka TypeScriptu}
-  // typová inference 
+  // typová inference, a je číslo
   let a = 10;
   // řetězec není číslo CHYBA! - nezkompiluje se
   a = "necislo";
-  // 12 je číslo, v pořádku
+  // 12 je číslo, validní přiřazení
   a = 12; 
-  // obejití typovosti, proběhne v pořádku ale POZOR v a už není číslo ikdyž podle typescriptu to tak vypadá
+  // obejití typovosti, proběhne v pořádku ale POZOR 
+  // v a už není číslo, ikdyž podle TypeScriptu to tak vypadá
   (a as any) = "necislo"
   // definice typu s inicializací, b je číslo nebo text
   let b: number | string = 10;
   /**
-   * Funkce fnc je funce jednoho argumentu který je je složený objekt obsahující
-   * vlasnosti x a y které jseou čísla.
+   * Funkce fnc je funkce jednoho argumentu který 
+   * je složený objekt obsahující
+   * vlasnosti x a y které jsou čísla.
    * Funkce fnc vrací pravdivostní hodnotu.
    */
   function fnc(arg: {x:number,y:number}): boolean {
@@ -926,8 +884,9 @@ tento jazyk využíváme správně a neobcházíme ho tak že bychom si jím sp�
 
 \end{kicode}
 
+
 \subsection{Electron}
-Electron je opensource framework vytvořený v NodeJS který 
+Electron je opensource framework vytvořený v NodeJS, který 
 zaobaluje Windows API (viz zdrojový kód \ref{electron vyrvoření okna}) a dohromady se softwarem chromium umožňují 
 vytváření okenních aplikací za pomocí technologií HTML, CSS a JavaScript nebo TypeScript.
 Electron je stejně jako webová stránka nebo webová aplikace rozdělený
@@ -965,25 +924,26 @@ a přes \textit{ipcMain} na straně serveru (viz Zdrojový kód \ref{electron ko
   ipcRenderer.send("user-event-name", {/*DATA*/})
 \end{kicode}
 
-\subsection{Javascriptová Knihovna Data driven documents - D3}
+
+\subsection{Javascriptová Knihovna Data driven documents (D3)}
 Knihovna D3 se používá pro zobrazení dat do 
 \textit{document object modelu}.
-Knihovna obsahuje selektory které umožňují vybrat zároveň data 
+Knihovna obsahuje selektory, které umožňují vybrat zároveň data 
 i DOM objekty a pracovat s nimi najednou. Hlavní výhodou knihovny 
 je její rozdělení selektorů na \textbf{Enter}, \textbf{Exit}, \textbf{Update}.
-Selektor \textbf{Enter} se volá pokud dojde k případu že má kolekce 
-dat větši počet prvků než je vytvořeno DOM elementů do kterých se mají zobrazovat.
+Selektor \textbf{Enter} se volá, pokud dojde k případu, že má kolekce 
+dat větší počet prvků než je vytvořeno DOM elementů do kterých se mají zobrazovat.
 \textbf{Enter} je tedy selektor který definuje jak se vytváří nové DOM elementy 
 když přibydou data. Naopak \textbf{Exit} selektor je pravým opakem \textbf{Enter}
 selektoru a stará se tedy o případy kdy máme méně dat než máme DOM elementů.
-Poslední selektor je \textbf{Update} který je standardním selektorem 
+Poslední selektor je \textbf{Update}, který je standardním selektorem 
 (jako je například přímo v JavaScriptu document.querySelector), který přímo 
 aplikuje změny dat do DOM elemntů. Selektory \textbf{Enter} a \textbf{Exit} 
-mají své příkazy zatímco selektor \textbf{Update} speciální příkaz nemá a je to jen 
-souhrné označení všech ostatních selektorů. V ukázce (viz Zdrojový kód \ref{D3}) je
-jednoduchý kód který pro každý prvek dat zobrazí jeden řádek s těmito daty.
+mají své příkazy, zatímco selektor \textbf{Update} speciální příkaz nemá a je to jen 
+souhrnné označení všech ostatních selektorů. V ukázce (viz Zdrojový kód \ref{D3}) je
+jednoduchý kód, který pro každý prvek dat zobrazí jeden řádek s těmito daty.
 
-\begin{kicode}{JavaScript}{D3}{Ukázka kódu v D3}
+\begin{kicode}{JavaScript}{D3}{Ukázka kódu v knihovně D3}
 import * as d3 from 'd3';
 
 // vybere v DOM element co má id container
@@ -1008,21 +968,24 @@ container.data(data)
   
 \end{kicode}
 
+
 \subsection{Scalable vector graphics (SVG)}
-SVG je značkovací jazyk vycházející z XML který popsije vykreslovaní 
-vektororvé grafiky. Je idaální pro vytvaření grafiky je vyžadováno
+SVG je značkovací jazyk vycházející z XML, který popisuje vykreslovaní 
+vektorové grafiky. Je ideální pro vytváření grafiky, kde je vyžadováno
 aby se dala přibližovat a přitom se neztrácela kvalita obrazu (proto Scalable).
 V editoru je tato technologie využita v samotnému vykreslovaní sítí.
 
+
 \subsection{JavaScript object notation (JSON)}
 JSON je technologie která využívá notace javascriptových objektů pro ukladání dat.
-Výhodou tohoto formátu je že po rozparsování souboru se může s ním hned v 
+Výhodou tohoto formátu je, že po rozparsování souboru se může s ním hned v 
 javascriptu jednoduše pracovat a také je čitelný pro člověka a je podporovaný ve většině softwaru.
 Sítě vytvořené v editoru jsou ukládané v tomto formátu.
 Uložené sítě nejsou určené aby je někdo editoval, ale uložená síť může být třeba 
-použita v jiném programu který si ji rozparsuje a bude s ní dál pracovat.
+použita v jiném programu, který si ji rozparsuje a bude s ní dál pracovat.
 V ukázce (viz Zdrojový kód \ref{Uložení sítě}) je síť tvořená jedním místem s ohodnocením 2, 
 jedním přechodem a hranou směřující do místa.
+\clearpage
 
 \begin{kicode}{JavaScript}{Uložení sítě}{Uložení Petriho sítě}
 {
@@ -1055,78 +1018,89 @@ jedním přechodem a hranou směřující do místa.
 }
 \end{kicode}
 
-\clearpage
+
+
+
 \section{Stavba programu}
 
-Editor je napsán hlavně v render straně elektronu. Díky tomu je možné 
+Editor je napsán hlavně v renderer straně elektronu. Díky tomu je možné 
 editor v případě potřeby v budoucnu předělat na webovou aplikaci.
 Struktura programu (Obrázek \ref{Struktura programu}) je tvořená 
-souborem program, který má na starosti vytváření hlavního okna 
-a načíst/uložit dialogů. Soubor main obsluhuje vytváření
+souborem \textit{program.ts}, který má na starosti vytváření hlavního okna 
+a načíst/uložit dialogů. Soubor \textit{main.ts} obsluhuje vytváření
 a ukládání editorů. Složky CORE a Helpers obsahují univerzální 
-funkcionalitu používanou editore a složka Editor obsahuje pak samotný editor
-tvořený třídamy Model, Draw a třídami které je propojují do jednoho celku.
+funkcionalitu používanou editorem a složka Editor obsahuje pak 
+samotný editor tvořený třídami Model, Draw a 
+třídami které je propojují do jednoho celku.
 
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics[scale=1]{struktura_programu}
   \caption{Struktura programu}\label{Struktura programu}
 \end{figure}
 
-\subsection{Modely}\label{Modely}
 
-V programu jsou třídy nazvané model které obsahují data a starají se o jejich zpracování.
-Tyto modely obsahují také definice pro převod mezi anonymním objektem a objektem 
-vytvořeným z těchto tříd a díky tomu je jednoduché je serializovat a deserializovat.
+\subsection{Modely}
 
-\subsection{Draw třídy}\label{Modely}
+V programu jsou třídy nazvané model, které obsahují data a 
+starají se o jejich zpracování.
+Tyto modely obsahují také definice pro 
+převod mezi anonymním objektem a objektem 
+vytvořeným z těchto tříd a díky tomu je 
+jednoduché je serializovat a deserializovat.
+
+
+\subsection{Draw třídy}
 
 Draw třídy obsahují logiku k zobrazovaní dat obsažených v modelech a taky
 zároveň odchytávání akcí způsobených na DOM elementech reprezentujících 
 data v modelech.
 
-\subsection{Třída editor}\label{Modely}
+
+\subsection{Třída editor}
 
 Třída editor propojuje všechny potřebné třídy a zároveň obsahuje obsluhu 
 akcí provedených na třídách draw. Každá síť při načtení nebo vytvoření 
 má vlastní instanci třídy editor.
 
 
+
+
 \section{Kompilace}
 
 Kompilace programu vyžaduje nainstalovaný \textit{NodeJS}. Pro kompilaci pak
-stačí pouze spustit skript \textit{src\char`\\Run.bat} a program se zkompiluje do složky 
+stačí pouze spustit skript \textit{src\char`\\Build.bat} a program se zkompiluje do složky 
 \textit{src\char`\\PNetEditor\char`\\dist\char`\\} kde je jako spustitelný (.exe) soubor.
 
 Pokud dojde ke změnám v TypeScriptových(.ts) souborech, je třeba zkompilovat i je.
 Ke kompilaci TypeScriptových souborů je potřeba mít visual studio 2017(instalační soubor na CD)
-s NodeJS sadou nástrojů. Stačí jen otevřít \textit{PNetEditor.sln} a v horní liště 
-visual studia a vybrat možnost "Build" $\to$ "Rebuild solution".
+s NodeJS sadou nástrojů. Stačí jen otevřít \\
+\textit{PNetEditor.sln} a v horní liště 
+visual studia a vybrat možnost \textit{Build$\to$Rebuild solution}.
+
+
 
 
 \section{Srovnání s ostatními editory}
 
-Ostatní editory nabízí více funcionality například ve směru analýz, 
+Ostatní editory nabízí více funkcionality například ve směru analýz, 
 ukládání a tisku. Většina editorů vytváří jednotlivé prvky sítě tak,
 že na každý prvek existuje nástroj v nástrojové liště. Oproti tomu 
 tento editor nevyžaduje na vytváření sítě žádné přepínání nástrojů.
 Na základě Fittova zákonu, když není potřeba přejíždět pořád nahorů do lišty 
 pro změnu nástrojů a díky tomu je tento editor rychlejší na vytváření sítí.
-Tento editor také vyčnívá svou tabulkou ohodnocení kde si uživatel velice 
-rychle může vyzkoušet a na jednom místě vidět jestli síť splňuje jeho požadavky.
+Tento editor také vyčnívá svou tabulkou ohodnocení, kde si uživatel velice 
+rychle může vyzkoušet a na jednom místě vidět, jestli síť splňuje jeho požadavky.
 
 
-\clearpage
+
+
 \section{Obsah přiloženého CD} \label{sec:ObsahCD}
-
-Na samotném konci textu práce je uveden stručný popis obsahu
-přiloženého CD, tj.~jeho závazné adresářové struktury, důležitých
-souborů apod.
 
 \begin{description}
   \item[\texttt{bin/}] \hfill \\
-        Adresář obsahuje soubor pnet\_editor.exe který program spustí. 
+        Adresář obsahuje soubor \textit{pnet\_editor.exe} který program spustí. 
 
   \item[\texttt{doc/}] \hfill \\
         Text práce ve formátu PDF, vytvořený s~použitím závazného stylu KI
@@ -1140,7 +1114,7 @@ souborů apod.
         se všemi potřebnými (příp.~převzatými) zdrojovými
         texty, knihovnami a~dalšími soubory potřebnými pro bezproblémové
         vytvoření spustitelných verzí programu. Ve složce se nachází
-        soubor řešení Visual Studia \textit{PNetEditor.sln},
+        soubor řešení Visual Studia 2017 \textit{PNetEditor.sln},
         soubor na spouštění kompilace \textit{Build.bat} a
         složka s kódy a knihovnami.
         
@@ -1188,43 +1162,18 @@ nebo v souboru \texttt{readme.txt}.
   editor stand out from other. That's why I decided to focus
   at the speed of making Petri nets using only mouse. I think that
   I managed to create an editor in which I can create with a little practice
-  any network very quickly and conveniently.
+  arbitrary network very quickly and conveniently.
 
-  Thanks to this work I have moved my knowledge further. I tried different ways
+  Thanks to this work I have moved my knowledge further. I tried different
   ways to create GUIs and also become familiar with this issue as a whole.
   I am also glad that I have enriched my knowledge with this work
   in the field of theoretical computer science.
 \end{kiconclusions}
 
-
-
-
-%% -------------------------------------------------------------------
-
-%% Sazba volitelného seznamu zkratek, za přílohami.
-%\printglossary
-
-%% Sazba povinné bibliografie, za přílohami (případně i za seznamem
-%% zkratek). Při použití BibLaTeXu použijte makro
-%% \printbibliography. jinak prostředí thebibliography. Ne obojí!
-
-%% Sazba i v textu necitovaných zdrojů, při použití
-%% BibLaTeXu. Volitelné.
 \nocite{*}
-%% Vlastní sazba bibliografie při použití BibLaTeXu.
 
 \printbibliography
 
-%% Bibliografie, včetně sazby, při nepoužití BibLaTeXu.
-% \begin{thebibliography}{9}
-%\bibitem{kniha2} \uppercase{Hawke}, Paul. NanoHttpd: Light-weight HTTP server designed for embedding in other applications. GitHub [online]. 2014-05-12. [cit. 2014-12-06]. Dostupné z: \url{https://github.com/NanoHttpd/nanohttpd}
-%
-%\bibitem{jeske13} \uppercase{Jeske}, David; \uppercase{Novák}, Josef. Simple HTTP Server in \csharp: Threaded synchronous HTTP Server abstract class, to respond to HTTP requests. CodeProject: For those who code [online]. 2014-05-24. [cit. 2014-12-06]. Dostupné z: \url{http://www.codeproject.com/Articles/137979/Simple-HTTP-Server-in-C}
-%
-%\bibitem{uzis2012} \uppercase{ÚSTAV ZDRAVOTNICKÝCH INFORMACÍ A STATISTIKY ČR}. Lékaři, zubní lékaři a farmaceuti 2012 [online]. Praha 2, Palackého náměstí 4: Ústav zdravotnických informací a statistiky ČR, 2012 [cit. 2014-12-06]. ISBN 978-80-7472-089-5. Dostupné z: \url{http://www.uzis.cz/publikace/lekari-zubni-lekari-farmaceuti-2012}
-% \end{thebibliography}
 
-%% Sazba volitelného rejstříku, za bibliografií.
-\printindex
 
 \end{document}

@@ -1,6 +1,9 @@
 This is makeindex, version 2.15 [TeX Live 2019/W32TeX] (kpathsea + Thai support).
-Scanning input file kidiplom.idx....done (9 entries accepted, 0 rejected).
-Sorting entries....done (28 comparisons).
-Generating output file kidiplom.ind....done (23 lines written, 0 warnings).
+Scanning input file kidiplom.idx....done (11 entries accepted, 0 rejected).
+Sorting entries....done (37 comparisons).
+Generating output file kidiplom.ind....
+## Warning (input = kidiplom.idx, line = 3; output = kidiplom.ind, line = 10):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+done (29 lines written, 1 warning).
 Output written in kidiplom.ind.
 Transcript written in kidiplom.ilg.
