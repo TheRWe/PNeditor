@@ -51,13 +51,13 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1}NodeJS}{26}{subsection.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}TypeScript}{26}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.2}Scalable vector graphics (SVG)}{26}{subsection.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Electron}{27}{subsection.3.3}% 
+\contentsline {subsection}{\numberline {3.3}TypeScript}{27}{subsection.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{28}{subsection.3.4}% 
+\contentsline {subsection}{\numberline {3.4}Electron}{28}{subsection.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Scalable vector graphics (SVG)}{29}{subsection.3.5}% 
+\contentsline {subsection}{\numberline {3.5}Javascriptov\IeC {\'a} Knihovna Data driven documents (D3)}{28}{subsection.3.5}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.6}JavaScript object notation (JSON)}{29}{subsection.3.6}% 
 \defcounter {refsection}{0}\relax 

@@ -7,14 +7,14 @@
 \documentclass[
   biblatex,
   glossaries,
-  printversion
+%  printversion
 ]{kidiplom}
 
 \usepackage{algorithm,algorithmicx,algpseudocode}
 
 
-\title{Editor Petriho Sítí}
-\title[english]{Petri Nets Editor}
+\title{Editor Petriho sítí}
+\title[english]{Petri nets editor}
 
 
 \iffalse
@@ -843,6 +843,14 @@ ekosystém pro jednoduší vývoj webových stránek a aplikací,
 kde stačí pro vytváření funkcionality pouze jeden programovací jazyk.
 
 
+\subsection{Scalable vector graphics (SVG)}
+SVG je značkovací jazyk vycházející z XML, který popisuje vykreslovaní 
+vektorové grafiky. Je ideální pro vytváření grafiky, kde je vyžadováno
+aby se dala přibližovat a přitom se neztrácela kvalita obrazu (proto Scalable).
+V editoru je tato technologie využita v samotnému vykreslovaní sítí.
+
+
+\clearpage
 \subsection{TypeScript}
 TypeScript je opensource programovací jazyk od společnosti Microsoft, který je nádstavbou nad jazykem JavaScript.
 Jelikož je TypeScript nádstavbou nad programovacím jazykem JavaScript, tak je jakýkoliv validní kód v JavaScriptu validním kódem v TypeScriptu.
@@ -884,7 +892,7 @@ tento jazyk využíváme správně a neobcházíme ho, tak že bychom si jím sp
 
 \end{kicode}
 
-
+\clearpage
 \subsection{Electron}
 Electron je opensource framework vytvořený v NodeJS, který 
 zaobaluje Windows API (viz zdrojový kód \ref{electron vyrvoření okna}) a dohromady se softwarem chromium umožňují 
@@ -923,7 +931,6 @@ a přes \textit{ipcMain} na straně serveru (viz Zdrojový kód \ref{electron ko
   //renderer
   ipcRenderer.send("user-event-name", {/*DATA*/})
 \end{kicode}
-
 
 \subsection{Javascriptová Knihovna Data driven documents (D3)}
 Knihovna D3 se používá pro zobrazení dat do 
@@ -969,12 +976,6 @@ container.data(data)
 \end{kicode}
 
 
-\subsection{Scalable vector graphics (SVG)}
-SVG je značkovací jazyk vycházející z XML, který popisuje vykreslovaní 
-vektorové grafiky. Je ideální pro vytváření grafiky, kde je vyžadováno
-aby se dala přibližovat a přitom se neztrácela kvalita obrazu (proto Scalable).
-V editoru je tato technologie využita v samotnému vykreslovaní sítí.
-
 
 \subsection{JavaScript object notation (JSON)}
 JSON je technologie která využívá notace javascriptových objektů pro ukladání dat.
@@ -1017,7 +1018,6 @@ jedním přechodem a hranou směřující do místa.
   ]
 }
 \end{kicode}
-
 
 
 
