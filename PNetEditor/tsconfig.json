@@ -8,5 +8,8 @@
     "moduleResolution": "node",
     "skipLibCheck": true
   },
-  "exclude": ["js_compiled"]
+  "exclude": ["./js_compiled"],
+  "include": [
+    "src/**/*.ts"
+  ]
 }

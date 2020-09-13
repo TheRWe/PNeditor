@@ -1,6 +1,7 @@
 ﻿import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
+import { cwd } from "process";
 
 let mainWindow: BrowserWindow;
 const debug: boolean = false;
@@ -23,7 +24,6 @@ function createWindow() {
     (mainWindow as any).custom = { savePath: userQuickNetSavePath };
 
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-
 
     mainWindow.on('closed', function () {
         // delete reference for not used object

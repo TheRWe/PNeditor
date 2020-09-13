@@ -12,6 +12,7 @@ import { TabGroup } from './CORE/TabControl/TabGroup';
 
 export var tabControl: TabControl;
 
+alert("loaded")
 
 export var userDefaultNetSavePath: string;
 export var userQuickNetSavePath: string;

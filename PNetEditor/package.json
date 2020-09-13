@@ -4,10 +4,13 @@
   "version": "1.0.0",
   "description": "Electron.PNetEditor",
   "main": "./js_compiled/program.js",
+  "license": "MIT",
   "scripts": {
-    "start": "tsc && npm run _copy-html-css && electron .",
-    "_copy-html-css":"cp *.html ./js_compiled/ && cp *.css ./js_compiled/",
-    "build": "electron-builder"
+    "electron":"electron .",
+    "start": "yarn build && electron .",
+    "script": "cd ./scripts/ && ts-node-script",
+    "build": "tsc && yarn script build",
+    "clean": "yarn script clean"
   },
   "keywords": [
     "Electron",
@@ -18,13 +21,16 @@
   "dependencies": {
     "d3": "5.7.0",
     "object-hash": "^1.3.1",
-    "electron": "3.0.2",
     "ts-keycode-enum": "1.0.6"
   },
   "devDependencies": {
     "@types/d3": "5.7.0",
     "@types/object-hash": "^1.3.0",
-    "electron-builder": "21.2.0"
+    "@types/node": "^13.1.8",
+    "typescript": "^4.0.2",
+    "ts-node": "^9.0.0",
+    "electron": "^10.1.1",
+    "pkg": "^4.4.8"
   },
   "build": {
     "appId": "PetriNetEditor",
