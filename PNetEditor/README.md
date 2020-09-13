@@ -2,192 +2,192 @@
 
 ## Priority
 
-  - kadı objekt vlasní soubor
-  - kadá záloka bude mít vlastní stav 
-  - (nìkteré stavy budou reagovat na pøechod na jinou záloku nìkteré ne)
-  - dokumentovat hotové vìci
+  - kaÅ¾dÃ½ objekt vlasnÃ­ soubor
+  - kaÅ¾dÃ¡ zÃ¡loÅ¾ka bude mÃ­t vlastnÃ­ stav 
+  - (nÃ¬kterÃ© stavy budou reagovat na pÃ¸echod na jinou zÃ¡loÅ¾ku nÃ¬kterÃ© ne)
+  - dokumentovat hotovÃ© vÃ¬ci
 
 **FUNKCIONALITA > VZHLED > OPTIMALIZACE**
-  - Pouívání a aktualizace poznámek -> Pøed kadım commitem úpravy
-  - Základní funkcionalita
-  - Pøeètení kníky
-  - Prùbìná dokumentace
+  - PouÅ¾Ã­vÃ¡nÃ­ a aktualizace poznÃ¡mek -> PÃ¸ed kaÅ¾dÃ½m commitem Ãºpravy
+  - ZÃ¡kladnÃ­ funkcionalita
+  - PÃ¸eÃ¨tenÃ­ knÃ­Å¾ky
+  - PrÃ¹bÃ¬Å¾nÃ¡ dokumentace
   - Text obhajoba
-  - Buildování pomocí "build" v cmd
+  - BuildovÃ¡nÃ­ pomocÃ­ "build" v cmd
 
 ## TODO
 
 
-  - [ ] cílová architktura editoru
+  - [ ] cÃ­lovÃ¡ architktura editoru
     - Model
       - obsahuje data
-      - stará se o serializaci
-      - modely na sebe mùou navzájem odkazovat a mìnit se podle Action
-      - model obsahuje VŠECHNY data(vè. vybranıch objektù)
+      - starÃ¡ se o serializaci
+      - modely na sebe mÃ¹Å¾ou navzÃ¡jem odkazovat a mÃ¬nit se podle Action
+      - model obsahuje VÅ ECHNY data(vÃ¨. vybranÃ½ch objektÃ¹)
     - Actions 
-      - obsluná tøída pro modely
-      - umoòuje spouštìní analız a všechny editace modelù
+      - obsluÅ¾nÃ¡ tÃ¸Ã­da pro modely
+      - umoÅ¾Ã²uje spouÅ¡tÃ¬nÃ­ analÃ½z a vÅ¡echny editace modelÃ¹
     - DRAW
       - vykresluje model v svg
     - Compound
-      - zpracovává uivatelskı vstup -> propojuje pomocí callbackù draw->actions
+      - zpracovÃ¡vÃ¡ uÅ¾ivatelskÃ½ vstup -> propojuje pomocÃ­ callbackÃ¹ draw->actions
     - Service
       - obsluhuje Taby
-      - ukládá/naèítá modely
-      - zpracovává vzájemné referencování modelù
+      - uklÃ¡dÃ¡/naÃ¨Ã­tÃ¡ modely
+      - zpracovÃ¡vÃ¡ vzÃ¡jemnÃ© referencovÃ¡nÃ­ modelÃ¹
 
-  - [ ] analıza rozdìlení kódu do souborù
+  - [ ] analÃ½za rozdÃ¬lenÃ­ kÃ³du do souborÃ¹
   - [ ] show hitboxes
-  - [ ] Vykreslování abstrakce
+  - [ ] VykreslovÃ¡nÃ­ abstrakce
     - [ ] [Definice API](#vykreslovani-modelu)
     - [ ] Implementace
-  - [ ] Historie zmìn
+  - [ ] Historie zmÃ¬n
     - [x] Undo/Redo
-    - [ ] Vıpis všech zmìn
-      - [ ] Diference (zmìny v síti)
-      - [ ] PNet umoòuje serializaci a deserializaci diferencí
-      - [ ] Speciální vıpis -> vyfiltruje postup tak e bude pouze pøidávání a názvy
-    - [ ] Koleèko grupování
-    - [ ] Tlaèítka + Zkratky(controlbar-main)
-    - [ ] Monost uloit sí s historií zmìn
+    - [ ] VÃ½pis vÅ¡ech zmÃ¬n
+      - [ ] Diference (zmÃ¬ny v sÃ­ti)
+      - [ ] PNet umoÅ¾Ã²uje serializaci a deserializaci diferencÃ­
+      - [ ] SpeciÃ¡lnÃ­ vÃ½pis -> vyfiltruje postup tak Å¾e bude pouze pÃ¸idÃ¡vÃ¡nÃ­ a nÃ¡zvy
+    - [ ] KoleÃ¨ko grupovÃ¡nÃ­
+    - [ ] TlaÃ¨Ã­tka + Zkratky(controlbar-main)
+    - [ ] MoÅ¾nost uloÅ¾it sÃ­ï¿½ s historiÃ­ zmÃ¬n
   - [ ] Property bar
   - [ ] [Context menu](#Context-menu)
-    - [ ] Analıza
+    - [ ] AnalÃ½za
     - [ ] Round menu
   - [ ] Grid
-    - [ ] Combobox (velikosti gridu/zapínání vypínání)
-  - [ ] Labeled places (zobrazování písmen v places místo poètu a vedle zobrazení markings)
+    - [ ] Combobox (velikosti gridu/zapÃ­nÃ¡nÃ­ vypÃ­nÃ¡nÃ­)
+  - [ ] Labeled places (zobrazovÃ¡nÃ­ pÃ­smen v places mÃ­sto poÃ¨tu a vedle zobrazenÃ­ markings)
   - [ ] 
   - [x] Drag
-    - [x] Posouvání jednolivıch objektù
-    - [x] Závislost dragování na mousemode
-    - [x] Selekce v svg více objektù
-    - [x] Posouvání více vybranıch objektù
+    - [x] PosouvÃ¡nÃ­ jednolivÃ½ch objektÃ¹
+    - [x] ZÃ¡vislost dragovÃ¡nÃ­ na mousemode
+    - [x] Selekce v svg vÃ­ce objektÃ¹
+    - [x] PosouvÃ¡nÃ­ vÃ­ce vybranÃ½ch objektÃ¹
   - [ ] [Multiple selection](#Selections)
     - [ ] Integrace v property bar
-    - [ ] Kopírování vıbìru
-    - [ ] Vloit vıbìr jako (normálnì/subsí/vloit bez vybranıch vlastností/všechny markings jiné ....)? 
-  - [ ] Taby pro jednotlivé sítì
+    - [ ] KopÃ­rovÃ¡nÃ­ vÃ½bÃ¬ru
+    - [ ] VloÅ¾it vÃ½bÃ¬r jako (normÃ¡lnÃ¬/subsÃ­ï¿½/vloÅ¾it bez vybranÃ½ch vlastnostÃ­/vÅ¡echny markings jinÃ© ....)? 
+  - [ ] Taby pro jednotlivÃ© sÃ­tÃ¬
     - [x] Implementace
-    - [ ] Zavøení posledního tabu
-    - [ ] Modal s upozornìním na uloení zmìn
+    - [ ] ZavÃ¸enÃ­ poslednÃ­ho tabu
+    - [ ] Modal s upozornÃ¬nÃ­m na uloÅ¾enÃ­ zmÃ¬n
     - [ ] Zkratky (ctrl+tab/ctrl+shift+tab/ctrl+n/ctrl+w...)
-    - [ ] Scroll/zobrazení listu dolù tlaèítkem (pøi zaplnìní obrazovky)
-    - [ ] Prohazování tabù taením(drag)
-    - [x] Køíek pro zavøení
-      - [ ] monost skrytí všech køíkù
-    - [ ] Delší najetí zobrazí property sítì
-    - [ ] Vloení sítì z tabu do aktuálnì otevøeného tabu jako subsí
+    - [ ] Scroll/zobrazenÃ­ listu dolÃ¹ tlaÃ¨Ã­tkem (pÃ¸i zaplnÃ¬nÃ­ obrazovky)
+    - [ ] ProhazovÃ¡nÃ­ tabÃ¹ taÅ¾enÃ­m(drag)
+    - [x] KÃ¸Ã­Å¾ek pro zavÃ¸enÃ­
+      - [ ] moÅ¾nost skrytÃ­ vÅ¡ech kÃ¸Ã­Å¾kÃ¹
+    - [ ] DelÅ¡Ã­ najetÃ­ zobrazÃ­ property sÃ­tÃ¬
+    - [ ] VloÅ¾enÃ­ sÃ­tÃ¬ z tabu do aktuÃ¡lnÃ¬ otevÃ¸enÃ©ho tabu jako subsÃ­ï¿½
   - [ ] Tranformace featury
-    - [ ] Tlaèítko(foreign) pro otoèení arc
-    - [ ] Obojsmìrné transformace (GUI tlaèítko umonující zobrazit druhı textbox)
+    - [ ] TlaÃ¨Ã­tko(foreign) pro otoÃ¨enÃ­ arc
+    - [ ] ObojsmÃ¬rnÃ© transformace (GUI tlaÃ¨Ã­tko umoÅ¾nujÃ­cÃ­ zobrazit druhÃ½ textbox)
     - [ ] Scan arcs
-  - [ ] Barevné schémata
-    - [ ] vybrat tøi rùzné barevné schémata
-    - [ ] nastavitelné barvy
-  - [ ] [Analıza + soupis stavù](#nastaveni-stavy)(vhodnì pro budoucí vytvoøení dokumentace)
+  - [ ] BarevnÃ© schÃ©mata
+    - [ ] vybrat tÃ¸i rÃ¹znÃ© barevnÃ© schÃ©mata
+    - [ ] nastavitelnÃ© barvy
+  - [ ] [AnalÃ½za + soupis stavÃ¹](#nastaveni-stavy)(vhodnÃ¬ pro budoucÃ­ vytvoÃ¸enÃ­ dokumentace)
     - [ ] Implementace
-      - [X] Nejdøíve pouze checkboxy
-      - [ ] Toggles [speciální](https://proto.io/freebies/onoff/) (toggle button/switch CSS)
-      - [ ] Pøidání monosti uivatelského nastavení 
-(skopírování defaultního nastavení - tím vytvoøení souboru pro uivatelskou editaci)
-      - [ ] Monost uivatelského nastavení kde jsou 
-        uloené pouze diference s defaultním nastavením
-  - [ ] hitboxy pro elementy sítì (stejnì jako jsou pro arc), 
-kadı element sítì tvoøenı pomocí g - uniformní pøístup(v kaŸdém g bude tvar kterı bude hitbox vdy bude navrchu a prùhlednı ale klikatelnı)
+      - [X] NejdÃ¸Ã­ve pouze checkboxy
+      - [ ] Toggles [speciÃ¡lnÃ­](https://proto.io/freebies/onoff/) (toggle button/switch CSS)
+      - [ ] PÃ¸idÃ¡nÃ­ moÅ¾nosti uÅ¾ivatelskÃ©ho nastavenÃ­ 
+(skopÃ­rovÃ¡nÃ­ defaultnÃ­ho nastavenÃ­ - tÃ­m vytvoÃ¸enÃ­ souboru pro uÅ¾ivatelskou editaci)
+      - [ ] MoÅ¾nost uÅ¾ivatelskÃ©ho nastavenÃ­ kde jsou 
+        uloÅ¾enÃ© pouze diference s defaultnÃ­m nastavenÃ­m
+  - [ ] hitboxy pro elementy sÃ­tÃ¬ (stejnÃ¬ jako jsou pro arc), 
+kaÅ¾dÃ½ element sÃ­tÃ¬ tvoÃ¸enÃ½ pomocÃ­ g - uniformnÃ­ pÃ¸Ã­stup(v kaÅ¸dÃ©m g bude tvar kterÃ½ bude hitbox vÅ¾dy bude navrchu a prÃ¹hlednÃ½ ale klikatelnÃ½)
   - [ ] Blackbox
-    - [ ] [Pravidla](#subsite-pravidla) pro vytváøení subsítí, co musí subsítí splòovat
-    - [ ] základní Implementace subsítí [IN/OUT/SCAN](#IOC) (funguje jako transformace - jeden vstup, jeden vıstup, jeden scan (scan = pøeètení jestli hodnota splòuje poèet bez odebrání)) 
-    - [ ] pokroèílé sítì - "pojmenované IOS+Combined transformace" pak budou vaznaèené labely nebo znaèkami(obojí?)
-    - [ ] Pravidla pro vstupy a vıstupy(nemusí bıt vùbec sub-sí pouze má definované chovaní)
-  - [ ] Scoping (promìnné pro transition... - rùzné reimy jedné sítì)
-    - [ ] Analıza
+    - [ ] [Pravidla](#subsite-pravidla) pro vytvÃ¡Ã¸enÃ­ subsÃ­tÃ­, co musÃ­ subsÃ­tÃ­ splÃ²ovat
+    - [ ] zÃ¡kladnÃ­ Implementace subsÃ­tÃ­ [IN/OUT/SCAN](#IOC) (funguje jako transformace - jeden vstup, jeden vÃ½stup, jeden scan (scan = pÃ¸eÃ¨tenÃ­ jestli hodnota splÃ²uje poÃ¨et bez odebrÃ¡nÃ­)) 
+    - [ ] pokroÃ¨Ã­lÃ© sÃ­tÃ¬ - "pojmenovanÃ© IOS+Combined transformace" pak budou vaznaÃ¨enÃ© labely nebo znaÃ¨kami(obojÃ­?)
+    - [ ] Pravidla pro vstupy a vÃ½stupy(nemusÃ­ bÃ½t vÃ¹bec sub-sÃ­ï¿½ pouze mÃ¡ definovanÃ© chovanÃ­)
+  - [ ] Scoping (promÃ¬nnÃ© pro transition... - rÃ¹znÃ© reÅ¾imy jednÃ© sÃ­tÃ¬)
+    - [ ] AnalÃ½za
   - [ ] Distributed run
-  - [ ] Ovládání pouze klávesnicí
-    - [ ] Analıza
+  - [ ] OvlÃ¡dÃ¡nÃ­ pouze klÃ¡vesnicÃ­
+    - [ ] AnalÃ½za
     - [ ] Implementace zkratek / focus / add / move ...(rozepsat)
-  - Rùzné monosti ukládání
-    - Pouze pomocí transitions
-    - Se subsítìmi ve stejném souboru/v rùznıch souborech
-  - [ ] Monost editování textovì (stromu/JSON/vlastní formát ...)
-bìhem zobrazovaní zmìn do editoru(**vyaduje [Automatické pozice](#autopos)**)
-  - [ ] Spojování places/Transitions dragem
-  - [ ] sníit citlivost dragu
+  - RÃ¹znÃ© moÅ¾nosti uklÃ¡dÃ¡nÃ­
+    - Pouze pomocÃ­ transitions
+    - Se subsÃ­tÃ¬mi ve stejnÃ©m souboru/v rÃ¹znÃ½ch souborech
+  - [ ] MoÅ¾nost editovÃ¡nÃ­ textovÃ¬ (stromu/JSON/vlastnÃ­ formÃ¡t ...)
+bÃ¬hem zobrazovanÃ­ zmÃ¬n do editoru(**vyÅ¾aduje [AutomatickÃ© pozice](#autopos)**)
+  - [ ] SpojovÃ¡nÃ­ places/Transitions dragem
+  - [ ] snÃ­Å¾it citlivost dragu
   - [ ] multiwindow editor ?
-  - [ ] Projektové soubory
+  - [ ] ProjektovÃ© soubory
 
 
 
 ### Algoritmy
 
-**všechny algoritmy(analızy/úpravy/generování) budou funcionální** (pøedá se jim kopie sítì nebo èásti a vrátí hodnotu se kterou se pak dál pracuje)
-Pouít javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
+**vÅ¡echny algoritmy(analÃ½zy/Ãºpravy/generovÃ¡nÃ­) budou funcionÃ¡lnÃ­** (pÃ¸edÃ¡ se jim kopie sÃ­tÃ¬ nebo Ã¨Ã¡sti a vrÃ¡tÃ­ hodnotu se kterou se pak dÃ¡l pracuje)
+PouÅ¾Ã­t javascript-workery/[node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
   
-  - [ ] Zobrazovaní invariantu vybarvováním obvodu (place/transition/arc)
-  - [ ] Automatické pøepoèítávání algoritmù
+  - [ ] ZobrazovanÃ­ invariantu vybarvovÃ¡nÃ­m obvodu (place/transition/arc)
+  - [ ] AutomatickÃ© pÃ¸epoÃ¨Ã­tÃ¡vÃ¡nÃ­ algoritmÃ¹
   
-  - [ ] Koncepty síe pouívající logická a synchronizaèní primitiva(flip-flop,And,or ... Simulace logickıch obvodù?)
+  - [ ] Koncepty sÃ­ï¿½e pouÅ¾Ã­vajÃ­cÃ­ logickÃ¡ a synchronizaÃ¨nÃ­ primitiva(flip-flop,And,or ... Simulace logickÃ½ch obvodÃ¹?)
     
-  - [ ] v pøípadì dlouhého vıpoètu algoritmu bude vıpoèet lazy
-    - [ ] Invalidace analız pøi zmìnì sítì (opìtovné pøepoèítání invariant)
+  - [ ] v pÃ¸Ã­padÃ¬ dlouhÃ©ho vÃ½poÃ¨tu algoritmu bude vÃ½poÃ¨et lazy
+    - [ ] Invalidace analÃ½z pÃ¸i zmÃ¬nÃ¬ sÃ­tÃ¬ (opÃ¬tovnÃ© pÃ¸epoÃ¨Ã­tÃ¡nÃ­ invariant)
   - [ ] Algoritmy 
-    - [ ] Reachability graf (lazy vykreslování pro nekoneèné)
+    - [ ] Reachability graf (lazy vykreslovÃ¡nÃ­ pro nekoneÃ¨nÃ©)
     - [ ] 1-bounded net
-    - [ ] pokud sí 1-bounded -> umonit reachability aby byl formou zápisu názvù places
+    - [ ] pokud sÃ­ï¿½ 1-bounded -> umoÅ¾nit reachability aby byl formou zÃ¡pisu nÃ¡zvÃ¹ places
     - [ ] scenario-based
 
-  - [ ] Monost vykreslení vıstupu algoritmu pomocí [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
+  - [ ] MoÅ¾nost vykreslenÃ­ vÃ½stupu algoritmu pomocÃ­ [Dot lang](https://en.wikipedia.org/wiki/DOT_(graph_description_language))
 
-#### Generování sítí
+#### GenerovÃ¡nÃ­ sÃ­tÃ­
 
-  - Práce se sekvencemi(streamy)
-  - Definují se rùzné sekvence vstupù a vıstupù pøi zadanıch vstupech a automaticky se vygeneruje sí co splòuje tyto parametry
-  - Implementace a simulace turingova stroje pomocí Petri net
+  - PrÃ¡ce se sekvencemi(streamy)
+  - DefinujÃ­ se rÃ¹znÃ© sekvence vstupÃ¹ a vÃ½stupÃ¹ pÃ¸i zadanÃ½ch vstupech a automaticky se vygeneruje sÃ­ï¿½ co splÃ²uje tyto parametry
+  - Implementace a simulace turingova stroje pomocÃ­ Petri net
 
-### Vıstupy
+### VÃ½stupy
 
- - [ ] Tisk (png/html/svg/pdf ...) - rùzné nastavení (zobrazit vısledky analız / zvıraznit povolené transitions)
+ - [ ] Tisk (png/html/svg/pdf ...) - rÃ¹znÃ© nastavenÃ­ (zobrazit vÃ½sledky analÃ½z / zvÃ½raznit povolenÃ© transitions)
  - [ ] Do [Dot lang](http://thegarywilson.com/blog/2011/drawing-petri-nets/)
  - [ ] Do LateXu
 
-### Ukázky
+### UkÃ¡zky
 
   - [Oriented graph creator](https://bl.ocks.org/cjrd/6863459)
   - [Force graph](http://jsfiddle.net/689Qj/)
 
 ### Optimalizace
 
-  - [ ] dotahování sítí asynchronì (i subsítí?)
-  - NATIVE (C++ dodatek pro javascript pouívá se pøes import)
-  - Komunikace s jinım programem pøes stdin/stdout/stderr -> [node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
-  - [x] [SVG animace pomocí rAF](http://bl.ocks.org/pjanik/5169968)
+  - [ ] dotahovÃ¡nÃ­ sÃ­tÃ­ asynchronÃ¬ (i subsÃ­tÃ­?)
+  - NATIVE (C++ dodatek pro javascript pouÅ¾Ã­vÃ¡ se pÃ¸es import)
+  - Komunikace s jinÃ½m programem pÃ¸es stdin/stdout/stderr -> [node child process](https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a)
+  - [x] [SVG animace pomocÃ­ rAF](http://bl.ocks.org/pjanik/5169968)
   - -trace-opt -trace-deopt
 
 ### Vzhled
 
-  - [ ] [](#){#autopos} Automatické pozice elementù tak aby se nepøekrívali
-  - [ ] pøi vkládání monost zapnout force která odtlaèí pøekrıvající se elementy od sebe
-  - [ ] Opravit køíení arc(algoritmus rozplétání)
-  - [ ] Zobrazování pohybu sítì animace
+  - [ ] [](#){#autopos} AutomatickÃ© pozice elementÃ¹ tak aby se nepÃ¸ekrÃ­vali
+  - [ ] pÃ¸i vklÃ¡dÃ¡nÃ­ moÅ¾nost zapnout force kterÃ¡ odtlaÃ¨Ã­ pÃ¸ekrÃ½vajÃ­cÃ­ se elementy od sebe
+  - [ ] Opravit kÃ¸Ã­Å¾enÃ­ arc(algoritmus rozplÃ©tÃ¡nÃ­)
+  - [ ] ZobrazovÃ¡nÃ­ pohybu sÃ­tÃ¬ animace
   - Featury pro GUI
-    - [ ] Stromové zobrazování subsítí
+    - [ ] StromovÃ© zobrazovÃ¡nÃ­ subsÃ­tÃ­
   - [ ] Context menu circle selector
 
-### Vìci navíc
+### VÃ¬ci navÃ­c
 
-  - [ ] Propojování s I/O (klávesnice, displej pro vykreslování pixelù)
-  - [ ] Generování kódu ze sítì - Vlastnosti sítí které se musí splnit aby šlo ze sítì generovat kód
+  - [ ] PropojovÃ¡nÃ­ s I/O (klÃ¡vesnice, displej pro vykreslovÃ¡nÃ­ pixelÃ¹)
+  - [ ] GenerovÃ¡nÃ­ kÃ³du ze sÃ­tÃ¬ - Vlastnosti sÃ­tÃ­ kterÃ© se musÃ­ splnit aby Å¡lo ze sÃ­tÃ¬ generovat kÃ³d
   
-### Ostatní
+### OstatnÃ­
 
-  - [x] Odebrat vygenerované *.JS soubory jednotlivì z gitu
+  - [x] Odebrat vygenerovanÃ© *.JS soubory jednotlivÃ¬ z gitu
 
-### Poznámky k obhajobì
+### PoznÃ¡mky k obhajobÃ¬
 
-  - Nepsat zadání, psát pouze obsah hotového, pøedstírat e zadání není
-  - Známe technologie zmínit ale nepøibírá detailnì
-  - Nakonec zhodnocení co aplikace umí, co bych do budoucna dodìlal
-  - Srovnání s existujícími programy (co mùj program umí lépe, co pøináší nového)
+  - Nepsat zadÃ¡nÃ­, psÃ¡t pouze obsah hotovÃ©ho, pÃ¸edstÃ­rat Å¾e zadÃ¡nÃ­ nenÃ­
+  - ZnÃ¡me technologie zmÃ­nit ale nepÃ¸ibÃ­rÃ¡ detailnÃ¬
+  - Nakonec zhodnocenÃ­ co aplikace umÃ­, co bych do budoucna dodÃ¬lal
+  - SrovnÃ¡nÃ­ s existujÃ­cÃ­mi programy (co mÃ¹j program umÃ­ lÃ©pe, co pÃ¸inÃ¡Å¡Ã­ novÃ©ho)
 
 [JS variable validator](https://mothereff.in/js-variables)
 New Features at [Keep](https://keep.google.com/).
@@ -195,74 +195,74 @@ New Features at [Keep](https://keep.google.com/).
 
 
 # Dokumentace
-[Architektura editoru](https://codepen.io/TheRW/pen/GzxxYV) (a bude kompletní tak zkopírovat sem jako obrázek)
+[Architektura editoru](https://codepen.io/TheRW/pen/GzxxYV) (aÅ¾ bude kompletnÃ­ tak zkopÃ­rovat sem jako obrÃ¡zek)
 
-## Ovládání
+## OvlÃ¡dÃ¡nÃ­
 
-### Vıbìry (Selections){#Selections}
-Elementy modelu mohou bıt vybrané buï v reimu single/multiple(/all)
+### VÃ½bÃ¬ry (Selections){#Selections}
+Elementy modelu mohou bÃ½t vybranÃ© buÃ¯ v reÅ¾imu single/multiple(/all)
 
 
 ## Definice - PNet
 
 ### Transformace{#IOC}
 
- - IN Transformace - Transformace která má externí vstup(mùe bıt implementovanı jako scan vstup)
- - OUT Transformace - Transformace která má externí vıstup 
+ - IN Transformace - Transformace kterÃ¡ mÃ¡ externÃ­ vstup(mÃ¹Å¾e bÃ½t implementovanÃ½ jako scan vstup)
+ - OUT Transformace - Transformace kterÃ¡ mÃ¡ externÃ­ vÃ½stup 
 
 ### Arc
 
- - IN - z place do Transformace (záporné èíslo)
- - OUT - z Transformace do place (záporné èíslo)
- - Combined - kombinace IN i OUT arc (obì mezi jednou transformací a jendím place)
-   - Scan - speciální combined která vrací stejnì kolik bere (vısledek neovlivní place)
+ - IN - z place do Transformace (zÃ¡pornÃ© Ã¨Ã­slo)
+ - OUT - z Transformace do place (zÃ¡pornÃ© Ã¨Ã­slo)
+ - Combined - kombinace IN i OUT arc (obÃ¬ mezi jednou transformacÃ­ a jendÃ­m place)
+   - Scan - speciÃ¡lnÃ­ combined kterÃ¡ vracÃ­ stejnÃ¬ kolik bere (vÃ½sledek neovlivnÃ­ place)
 
 
-## Nastavení
-tor se nachází vdy v nìjaké mnoinì stavù která je sloena minímalnì z hlavního stavu.
-Mnoina stavù mùe obsahovat navíc pøepínací stavy. 
-Mezi stavy se pøechází událostmi nebo zmìnou pøepínaèù. 
+## NastavenÃ­
+tor se nachÃ¡zÃ­ vÅ¾dy v nÃ¬jakÃ© mnoÅ¾inÃ¬ stavÃ¹ kterÃ¡ je sloÅ¾ena minÃ­malnÃ¬ z hlavnÃ­ho stavu.
+MnoÅ¾ina stavÃ¹ mÃ¹Å¾e obsahovat navÃ­c pÃ¸epÃ­nacÃ­ stavy. 
+Mezi stavy se pÃ¸echÃ¡zÃ­ udÃ¡lostmi nebo zmÃ¬nou pÃ¸epÃ­naÃ¨Ã¹. 
 
-  - Hlavní stav
-    - Minimálnì default, monost pøecházení mezi stavy akcemi
-  - [Vıbìr - Selections](#Selections)
-  - Pøepínací stavy (øízené pøepínacími tlaèítky - pøepnutí tlaèítka taky bráno jako událost)
+  - HlavnÃ­ stav
+    - MinimÃ¡lnÃ¬ default, moÅ¾nost pÃ¸echÃ¡zenÃ­ mezi stavy akcemi
+  - [VÃ½bÃ¬r - Selections](#Selections)
+  - PÃ¸epÃ­nacÃ­ stavy (Ã¸Ã­zenÃ© pÃ¸epÃ­nacÃ­mi tlaÃ¨Ã­tky - pÃ¸epnutÃ­ tlaÃ¨Ã­tka taky brÃ¡no jako udÃ¡lost)
     - Toggle 
 
-### Události
-Události jsou vnìjší vlivy(uivatelskı vstup...) pùsobící na editor.
-Zpùsobují pøechody mezi stavy
+### UdÃ¡losti
+UdÃ¡losti jsou vnÃ¬jÅ¡Ã­ vlivy(uÅ¾ivatelskÃ½ vstup...) pÃ¹sobÃ­cÃ­ na editor.
+ZpÃ¹sobujÃ­ pÃ¸echody mezi stavy
 
   - Click, RightClick, DoubleClick
   - Drag
   - Scroll
-  - Keyboard, KeyPressed, klávesové zkratky
-  - (Dropdown soubor/vloení ze schránky)
+  - Keyboard, KeyPressed, klÃ¡vesovÃ© zkratky
+  - (Dropdown soubor/vloÅ¾enÃ­ ze schrÃ¡nky)
 
 ### Akce
-Definují co se dìje pøi pøechody mezi stavy.
-Mùe se jednat o akce aplikované na jeden nebo vıbìr elementù.
-Monost jednotlivıch akcí omezena podle podle událostí? 
-(akce nemùe bıt pøiøazena událestem pro které nedává smysl)
+DefinujÃ­ co se dÃ¬je pÃ¸i pÃ¸echody mezi stavy.
+MÃ¹Å¾e se jednat o akce aplikovanÃ© na jeden nebo vÃ½bÃ¬r elementÃ¹.
+MoÅ¾nost jednotlivÃ½ch akcÃ­ omezena podle podle udÃ¡lostÃ­? 
+(akce nemÃ¹Å¾e bÃ½t pÃ¸iÃ¸azena udÃ¡lestem pro kterÃ© nedÃ¡vÃ¡ smysl)
 
-  - souvysející s elementy modelu
-    - Pøidání
-    - Odebrání
-    - Úprava
-      - Vyaduje definovat editovací okno s mnoinou monıch vstupù
-    - Pøesun
-      - Implementován pomocí spleci
+  - souvysejÃ­cÃ­ s elementy modelu
+    - PÃ¸idÃ¡nÃ­
+    - OdebrÃ¡nÃ­
+    - Ãšprava
+      - VyÅ¾aduje definovat editovacÃ­ okno s mnoÅ¾inou moÅ¾nÃ½ch vstupÃ¹
+    - PÃ¸esun
+      - ImplementovÃ¡n pomocÃ­ spleci
     - Akce na elementu
 
-## Subsítì
+## SubsÃ­tÃ¬
 
 ### Pravidla{#subsite-pravidla}
 
 
-## Vykreslování{#vykreslovani-modelu}
-obsahuje definice jak se budou vykreslovat elementy daného modelu. pøedávání nastavení-reimù?
-sada funkcí do kterıch se pøedávají callbacky a element modelu a vrátí vykreslenı element(?)
-Definice tlaèítek v context menu v daném stavu(mode, selection...)
+## VykreslovÃ¡nÃ­{#vykreslovani-modelu}
+obsahuje definice jak se budou vykreslovat elementy danÃ©ho modelu. pÃ¸edÃ¡vÃ¡nÃ­ nastavenÃ­-reÅ¾imÃ¹?
+sada funkcÃ­ do kterÃ½ch se pÃ¸edÃ¡vajÃ­ callbacky a element modelu a vrÃ¡tÃ­ vykreslenÃ½ element(?)
+Definice tlaÃ¨Ã­tek v context menu v danÃ©m stavu(mode, selection...)
 
 ## Context menu
 
