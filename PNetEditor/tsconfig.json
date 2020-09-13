@@ -6,7 +6,9 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "removeComments": true
   },
   "exclude": ["./js_compiled"],
   "include": [

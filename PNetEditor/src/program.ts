@@ -11,7 +11,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1600, height: 900,
         title: 'PetriNetEdit',
-        minWidth: 900, minHeight: 500
+        minWidth: 900, minHeight: 500,
+        webPreferences: { nodeIntegration: true },
     });
 
     const userDefaultNetSavePath = path.join(app.getPath('userData'), 'User_saved_nets');
@@ -32,7 +33,7 @@ function createWindow() {
         app.quit();
     });
 
-    ipcMain.on('load-dialog', (e:any,arg:any) => {
+    ipcMain.on('load-dialog', (e: any, arg: any) => {
         const dialogOprions: Electron.OpenDialogOptions = {
             title: 'Select PNet to LOAD',
             // todo: více možností pro user data dle nastavení
@@ -49,7 +50,7 @@ function createWindow() {
 
         const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
         if (dialoRes)
-            e.sender.send('load-dialog-response', dialoRes[0]);
+            e.sender.send('load-dialog-response', (dialoRes as any)[0]);
     });
 
     ipcMain.on('save-dialog', (e: any, arg: any) => {

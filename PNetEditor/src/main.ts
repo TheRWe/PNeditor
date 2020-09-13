@@ -9,10 +9,7 @@ import { html } from "./CORE/Constants";
 import { TabKeyDownEvent } from './CORE/TabControl/Tab';
 import { TabGroup } from './CORE/TabControl/TabGroup';
 
-
 export var tabControl: TabControl;
-
-alert("loaded")
 
 export var userDefaultNetSavePath: string;
 export var userQuickNetSavePath: string;
