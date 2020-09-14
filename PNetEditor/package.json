@@ -3,7 +3,7 @@
   "productName": "pnet_editor",
   "version": "1.0.0",
   "description": "Electron.PNetEditor",
-  "main": "./js_compiled/program.js",
+  "main": "./js_compiled/electron/program.js",
   "license": "MIT",
   "scripts": {
     "electron": "electron .",

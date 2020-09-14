@@ -1,4 +1,4 @@
-﻿import { RemoveAll } from "../Helpers/purify";
+﻿import { RemoveAll } from "./Helpers/purify";
 
 export class Graph<VT, ET>{
     public nodes: GraphNode<VT>[] = [];
