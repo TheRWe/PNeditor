@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json.schemastore.org/tslint",
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "only-arrow-functions": true,
+    "member-ordering": false,
+    "interface-over-type-literal": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "arrays": "always",
+          "objects": "always",
+          "functions": "never",
+          "imports": "never",
+          "exports": "never"
+        },
+        "singleline": {
+          "arrays": "ignore",
+          "objects": "ignore",
+          "functions": "never",
+          "imports": "never",
+          "exports": "never"
+        }
+      }
+    ],
+    "ordered-imports": false,
+    "no-consecutive-blank-lines": [
+      true,
+      3
+    ],
+    "array-type": [
+      true,
+      "array"
+    ],
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "allow-pascal-case",
+        "allow-leading-underscore",
+        "check-format"
+      ]
+    },
+    "object-literal-sort-keys": false,
+    "align": false,
+    "whitespace": false,
+    "no-unused-variable": false,
+    "one-line": false,
+    "max-classes-per-file": false,
+    "arrow-parens": false,
+    "no-for-in": true,
+    "no-import-side-effect": true,
+    "no-internal-module": true,
+    "no-magic-numbers": true,
+    "no-non-null-assertion": true,
+    "no-parameter-reassignment": true,
+    "no-var-requires": true,
+    "await-promise": true,
+    "ban-comma-operator": true,
+    "curly": [true, "as-needed"],
+    "function-constructor": true,
+    "label-position": true,
+    "no-arg": true,
+    "no-conditional-assignment": true,
+    "no-console": true,
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-super": true,
+    "no-empty": [true, "allow-empty-functions"],
+    "no-eval": true,
+    "no-for-in-array": true,
+    "no-invalid-this": true,
+    "no-misused-new": true,
+    "no-string-throw": true,
+    "no-tautology-expression": true,
+    "no-var-keyword": true,
+    "prefer-conditional-expression": true,
+    "no-angle-bracket-type-assertion": true,
+    "no-boolean-literal-compare": true,
+    "no-trailing-whitespace": true,
+    "semicolon": [true, "always"]
+  },
+  "rulesDirectory": []
+}
