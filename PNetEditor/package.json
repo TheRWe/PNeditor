@@ -11,7 +11,9 @@
     "script": "cd ./scripts/ && ts-node-script",
     "build": "tsc && yarn script build",
     "clean": "yarn script clean",
-    "dist": "yarn build && electron-builder"
+    "dist": "yarn build && electron-builder",
+    "tslint": "tslint -p tslint.json",
+    "tslint:fix": "yarn tslint -- --fix"
   },
   "keywords": [
     "Electron",
@@ -32,6 +34,7 @@
     "electron-builder": "^22.8.0",
     "pkg": "^4.4.8",
     "ts-node": "^9.0.0",
+    "tslint": "^6.1.3",
     "typescript": "^4.0.2"
   },
   "build": {
@@ -40,8 +43,8 @@
       "target": "portable",
       "icon": "./src/PNIcon.png"
     },
-    "linux":{
-      "target":"deb",
+    "linux": {
+      "target": "deb",
       "icon": "./src/PNIcon.png"
     }
   }
