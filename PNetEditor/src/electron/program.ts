@@ -1,4 +1,4 @@
-﻿import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { cwd } from "process";
@@ -42,10 +42,10 @@ function createWindow() {
                 { name: 'PNet/JSON file', extensions: ['pnet', 'json'] },
                 { name: 'PNet file', extensions: ['pnet'] },
                 { name: 'JSON file', extensions: ['json'] },
-                { name: 'All Files', extensions: ['*'] }
+                { name: 'All Files', extensions: ['*'] },
             ],
             // todo: možnost otevřených více sítí v různých záložkách
-            properties: ['openFile' /*, 'multiSelections' */]
+            properties: ['openFile' /*, 'multiSelections' */],
         };
 
         const dialoRes = dialog.showOpenDialog(mainWindow, dialogOprions);
@@ -61,14 +61,14 @@ function createWindow() {
             filters: [
                 { name: 'PNet file', extensions: ['pnet'] },
                 { name: 'JSON file', extensions: ['json'] },
-                { name: 'All Files', extensions: ['*'] }
+                { name: 'All Files', extensions: ['*'] },
             ],
         };
 
         const dialoRes = dialog.showSaveDialog(mainWindow, dialogOprions);
         if (dialoRes)
             e.sender.send('save-dialog-response', dialoRes);
-    })
+    });
 
     if (debug) {
         mainWindow.webContents.openDevTools();
@@ -82,11 +82,11 @@ app.on('ready', createWindow);
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
-    };
+    }
 });
 
 app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
-    };
+    }
 });

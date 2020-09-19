@@ -1,4 +1,4 @@
-﻿import { ModelBase } from "../_Basic/ModelBase";
+import { ModelBase } from "../_Basic/ModelBase";
 import { Position, numbers, ForceNode } from "../../../definitions/Constants";
 
 export class PNModel extends ModelBase<JSONNet>{
@@ -13,7 +13,7 @@ export class PNModel extends ModelBase<JSONNet>{
             = this.places.map(p => { return { id: p.id, position: ((p.x !== undefined && p.y !== undefined) ? { x: p.x, y: p.y } : undefined), marking: p.marking }; });
 
         const transitions: { position?: Position, id: number, isCold?: boolean }[]
-            = this.transitions.map(t => { return { position: (t.x !== undefined && t.y !== undefined) ? { x: t.x, y: t.y } : undefined, id: t.id, isCold: t.isCold } });
+            = this.transitions.map(t => { return { position: (t.x !== undefined && t.y !== undefined) ? { x: t.x, y: t.y } : undefined, id: t.id, isCold: t.isCold }; });
 
         const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
             = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
@@ -33,16 +33,16 @@ export class PNModel extends ModelBase<JSONNet>{
             )
             return false;
 
-        const places: Place[] = json.places.map(p => new Place(p.position, p.marking || 0, p.id))
+        const places: Place[] = json.places.map(p => new Place(p.position, p.marking || 0, p.id));
 
         const transitions: Transition[] = json.transitions.map(tj => {
             const t = new Transition(tj.position, tj.id);
             t.isCold = tj.isCold || false;
             return t;
-        })
+        });
 
         const arcs = json.arcs.map(aj => {
-            const t = transitions.find(t => t.id === aj.transition_id)
+            const t = transitions.find(t => t.id === aj.transition_id);
             const p = places.find(p => p.id === aj.place_id);
             return new Arc(t, p, aj.toPlace || 0, aj.toTransition || 0);
         });
@@ -180,12 +180,12 @@ export type JSONNet = {
         toPlace: number,
         toTransition: number,
     }[],
-}
+};
 
 
 export type placeMarking = { id: number, marking: number };
 export type marking = placeMarking[];
-export type netConfiguration = { marking: placeMarking[], enabledTransitionsIDs: number[], usedTransition?: number }
+export type netConfiguration = { marking: placeMarking[], enabledTransitionsIDs: number[], usedTransition?: number };
 
 export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking, transitionID: number): netConfiguration {
     if (!GetEnabledTransitionsIDs(net, currentMarking).some(x => x === transitionID))
@@ -195,7 +195,7 @@ export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking
         let marking = (currentMarking.find(x => p.id === x.id) || { marking: 0 }).marking;
         const arces = net.arcs.filter(x => x.place_id === p.id && x.transition_id === transitionID);
         if (marking !== numbers.omega)
-            arces.forEach(x => { marking += x.toPlace - x.toTransition });
+            arces.forEach(x => { marking += x.toPlace - x.toTransition; });
         return { id: p.id, marking } as placeMarking;
     });
     const enabledTransitionsIDs: number[] = GetEnabledTransitionsIDs(net, marking);

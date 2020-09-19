@@ -1,4 +1,4 @@
-﻿import * as d3 from 'd3';
+import * as d3 from 'd3';
 import * as file from 'fs';
 import { ipcRenderer, remote } from 'electron';
 import { showModal, modalResult } from './components/Modal';
@@ -9,10 +9,10 @@ import { html } from "../definitions/Constants";
 import { TabKeyDownEvent } from './components/TabControl/Tab';
 import { TabGroup } from './components/TabControl/TabGroup';
 
-export var tabControl: TabControl;
+export let tabControl: TabControl;
 
-export var userDefaultNetSavePath: string;
-export var userQuickNetSavePath: string;
+export let userDefaultNetSavePath: string;
+export let userQuickNetSavePath: string;
 function InitSettings() {
 }
 
@@ -44,7 +44,7 @@ const TabActions = {
             showModal("cannot open file", "OK");
 
             console.error("cannot read file " + path);
-            console.error(ex)
+            console.error(ex);
             return false;
         }
 
@@ -104,7 +104,7 @@ const TabActions = {
         },
         load: () => { ipcRenderer.send('load-dialog'); },
     },
-}
+};
 
 function InitFileButtons() {
     const btn = html.id.controlPanel.buttons;
@@ -114,7 +114,7 @@ function InitFileButtons() {
     const buttonClose = d3.select("#" + btn.close);
 
     const c = "click";
-    buttonNew.on(c, TabActions.new)
+    buttonNew.on(c, TabActions.new);
     buttonLoad.on(c, TabActions.initDialog.load);
     buttonSave.on(c, async () => {
 
@@ -171,7 +171,7 @@ export interface TabInterface {
     Path: string;
 }
 
-export var groupmap: Map<TabGroup, TabInterface>;
+export let groupmap: Map<TabGroup, TabInterface>;
 
 async function main() {
     // called only once

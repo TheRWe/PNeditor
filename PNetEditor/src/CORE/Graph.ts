@@ -1,4 +1,4 @@
-﻿import { RemoveAll } from "./Helpers/purify";
+import { RemoveAll } from "./Helpers/purify";
 
 export class Graph<VT, ET>{
     public nodes: GraphNode<VT>[] = [];
@@ -16,7 +16,7 @@ export class Graph<VT, ET>{
 
     public Connect(from: GraphNode<VT>, to: GraphNode<VT>, data?: ET) {
         if (this._getConnectionIndex(from, to) >= 0) return;
-        this.connections.push({ from, to, data })
+        this.connections.push({ from, to, data });
     }
 
 
@@ -71,7 +71,7 @@ export class Graph<VT, ET>{
             if (nodes.findIndex(x => x === n) >= 0) return;
             nodes.push(n);
             this.connections.filter(x => x.from === n).forEach(x => rec(x.to));
-        }
+        };
         rec(node);
 
         return nodes;
@@ -85,7 +85,7 @@ export class Graph<VT, ET>{
             if (nodes.findIndex(x => x === n) >= 0) return;
             nodes.push(n);
             this.connections.filter(x => x.to === n).forEach(x => rec(x.from));
-        }
+        };
         rec(node);
 
         return nodes;

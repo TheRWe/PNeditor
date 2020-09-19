@@ -1,4 +1,4 @@
-﻿import { ModelBase } from "./ModelBase";
+import { ModelBase } from "./ModelBase";
 
 /** Class for catching  */
 export abstract class ActionBase<modelType extends ModelBase<any>>{
@@ -7,7 +7,7 @@ export abstract class ActionBase<modelType extends ModelBase<any>>{
     /** callback called when model is changed */
     public AddOnModelChange(callback: (model: modelType) => void): void {
         const old = this.onModelChange;
-        this.onModelChange = (...args) => { old(...args); callback(...args); }
+        this.onModelChange = (...args) => { old(...args); callback(...args); };
     }
 
     protected onModelChange = (model: modelType) => { };

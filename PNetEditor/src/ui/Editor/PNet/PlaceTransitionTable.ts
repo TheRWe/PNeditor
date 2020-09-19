@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../../definitions/Constants";
+import { d3BaseSelector } from "../../../definitions/Constants";
 import { JSONNet, netConfiguration } from "./PNModel";
 import { DrawBase, Callbacks } from "../_Basic/DrawBase";
 import { getArrayElementMapToNumber, convertToNumberingScheme } from "../../../CORE/Helpers/purify";
@@ -39,7 +39,7 @@ export class PlaceTransitionTableDraw extends DrawBase {
                 .forEach(x => {
                     const p = net.places.find(y => y.id === x);
                     head.append("th").text(convertToNumberingScheme(placeMapper(x)+1)).style("min-width", "1em");
-                })
+                });
 
             head.append("th").style("background", "black");
 
@@ -47,9 +47,9 @@ export class PlaceTransitionTableDraw extends DrawBase {
             transitionIndexes.forEach(x => {
                 const t = net.transitions.find(y => y.id === x);
                 head.append("th").text(transitionMapper(x)+1).style("min-width", "1.1em");
-            })
+            });
             return head;
-        }
+        };
         makeHead();
 
         const tableBody = table.append("tbody");
@@ -65,18 +65,18 @@ export class PlaceTransitionTableDraw extends DrawBase {
                 .classed("unselectable", true)
                 .on("mouseover", () => {
                     showbutton.style("filter", "invert(1)");
-                    this._onConfigShowHover({ configIndex: ci })
+                    this._onConfigShowHover({ configIndex: ci });
                 })
                 .on("mouseout", () => {
                     showbutton.style("filter", "");
-                    this._onConfigShowHover({ configIndex: null })
+                    this._onConfigShowHover({ configIndex: null });
                 })
                 .on("click", () => { this._onConfigShowClick({ configIndex: ci }); });
 
             placeIndexes.forEach(x => {
                 const m = c.marking.find(y => y.id === x);
                 row.append("td").text(m ? m.marking : 0);
-            })
+            });
 
             row.append("td").style("background", "black");
 
@@ -92,7 +92,7 @@ export class PlaceTransitionTableDraw extends DrawBase {
                     .classed("unselectable", true)
                     .classed("bright-on-hover", enabled ? true : false)
                     ;
-            })
+            });
 
         });
         (this.container.node() as HTMLElement).scrollTop = Number.MAX_SAFE_INTEGER;

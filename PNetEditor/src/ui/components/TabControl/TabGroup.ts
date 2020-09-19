@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../../definitions/Constants";
+import { d3BaseSelector } from "../../../definitions/Constants";
 import { TabControl } from "./TabControl";
 import { Tab } from "./Tab";
 
@@ -29,7 +29,7 @@ export class TabGroup{
 
         const tab: Tab = new Tab(tabContainer, tabButton, this);
         const tabControl = this.parentTabControl;
-        tab.tabButton.on("click", () => { tabControl.SelectTab(tab); })
+        tab.tabButton.on("click", () => { tabControl.SelectTab(tab); });
 
         this.tabs.push(tab);
         return tab;

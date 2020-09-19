@@ -1,4 +1,4 @@
-﻿import * as path from 'path';
+import * as path from 'path';
 import * as d3 from 'd3';
 import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../components/TabControl/Tab";
 import { d3BaseSelector, Position, ForceNode } from "../../definitions/Constants";
@@ -205,7 +205,7 @@ export class PNEditor implements TabInterface {
             onWheel: (t: Transition) => {
                 const e = d3.event;
                 //console.debug("transition wheel");
-                var deltaY = e.deltaY;
+                let deltaY = e.deltaY;
                 switch (this.mode.selected) {
                     case editorMode.default:
                         t.isCold = !t.isCold;
@@ -216,7 +216,7 @@ export class PNEditor implements TabInterface {
                     default:
                         notImplemented();
                 }
-            }
+            },
         },
         place: {
             onClick: (p: Place, pos: Position) => {
@@ -253,7 +253,7 @@ export class PNEditor implements TabInterface {
             onWheel: (p: Place) => {
                 const e = d3.event;
                 console.debug("place wheel");
-                var deltaY = e.deltaY;
+                let deltaY = e.deltaY;
                 switch (this.mode.selected) {
                     case editorMode.default:
                         if (deltaY < 0) {
@@ -272,7 +272,7 @@ export class PNEditor implements TabInterface {
                     default:
                         notImplemented();
                 }
-            }
+            },
         },
         arc: {
             onClick: (a: arc) => {
@@ -302,7 +302,7 @@ export class PNEditor implements TabInterface {
             onWheel: (a: arc) => {
                 const e = d3.event;
                 console.debug("arc wheel");
-                var deltaY = e.deltaY;
+                let deltaY = e.deltaY;
                 switch (this.mode.selected) {
                     case editorMode.default:
                         const toPlace = a.arc.toPlace;
@@ -318,7 +318,7 @@ export class PNEditor implements TabInterface {
                         notImplemented();
                 }
                 this.pnDraw.update();
-            }
+            },
         },
         onDragPositionMove: {
             start: (d: ForceNode, evPos: Position) => {
@@ -377,8 +377,8 @@ export class PNEditor implements TabInterface {
         },
         helpers: {
             arcMakeHolder: null as Place | Transition,
-        }
-    }
+        },
+    };
 
     /**
      * start arc from given transition or place
@@ -414,7 +414,7 @@ export class PNEditor implements TabInterface {
             }
         } else if (ending instanceof Place) {
             if (this.mouse.helpers.arcMakeHolder instanceof Transition) {
-                console.debug("connecting place")
+                console.debug("connecting place");
                 this.pnAction.AddArc(this.mouse.helpers.arcMakeHolder as Transition, ending, 1, null);
             } else {
                 //todo: hlaška nebo vyrvoření place mezi dvěma transitions
@@ -472,7 +472,7 @@ export class PNEditor implements TabInterface {
                     this.keyboard.inputs.arcValue.editedArc = null;
                     this.mode.swap();
                 },
-            }
+            },
         },
         shortcuts: {
             callback: ((e: TabKeyDownEvent) => {
@@ -497,7 +497,7 @@ export class PNEditor implements TabInterface {
                 }
             }),
         },
-    }
+    };
 
 
     /** open marking edit window for given place*/
@@ -562,7 +562,7 @@ export class PNEditor implements TabInterface {
     private _resetTable() {
         const jsonNet = this.pnModel.toJSON();
         this.tableDraw.Models.net = jsonNet;
-        const marking = jsonNet.places.map(p => { return { id: p.id, marking: p.marking }; })
+        const marking = jsonNet.places.map(p => { return { id: p.id, marking: p.marking }; });
         const enabledTransitionsIDs = GetEnabledTransitionsIDs(jsonNet, marking);
         this.tableDraw.Models.configurations = [{ marking, enabledTransitionsIDs }];
         this.tableDraw.update();
@@ -757,8 +757,6 @@ export class PNEditor implements TabInterface {
 
 
 
-
-
 export class EditorMode {
     public readonly default: editorMode = editorMode.default;
     private _last: editorMode = editorMode.default;
@@ -781,7 +779,7 @@ export class EditorMode {
         this.onChanged = () => {
             onChanged();
             callback();
-        }
+        };
     }
 
     public get last(): editorMode { return this._last; }

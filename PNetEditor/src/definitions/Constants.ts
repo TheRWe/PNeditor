@@ -1,5 +1,5 @@
-﻿export type d3BaseSelector = d3.Selection<d3.BaseType, any, HTMLElement | d3.BaseType, any>;
-export type Position = { x: number, y: number }
+export type d3BaseSelector = d3.Selection<d3.BaseType, any, HTMLElement | d3.BaseType, any>;
+export type Position = { x: number, y: number };
 
 export const html = {
     id: {
@@ -66,12 +66,12 @@ export const html = {
             labelOn: "switcher-label-on",
         },
     },
-}
+};
 
 export const numbers = {
     /** vysoké celé číslo symbolizující hodnotu omega */
     omega: 9007199254740666,
-}
+};
 
 export interface ForceNode {
     index: number;

@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector, Position } from "../../../../definitions/Constants";
+import { d3BaseSelector, Position } from "../../../../definitions/Constants";
 import * as d3 from "d3";
 import { Key } from "ts-keycode-enum";
 import { PNDraw } from "../PNDraw";
@@ -66,16 +66,16 @@ export class PNDrawInputs {
         (inputs.toPlace.node() as any).focus();
     }
 
-    private _onInputMarking = (input: number | null) => { }
+    private _onInputMarking = (input: number | null) => { };
     public AddOnInputMarking(callback: (intput: number | null) => void) {
         const old = this._onInputMarking;
-        this._onInputMarking = (...args) => { old(...args); callback(...args); }
+        this._onInputMarking = (...args) => { old(...args); callback(...args); };
     }
 
-    private _onInputArc = (input: { toPlace: number, toTransition: number } | null) => { }
+    private _onInputArc = (input: { toPlace: number, toTransition: number } | null) => { };
     public AddOnInputArc(callback: (intput: { toPlace: number, toTransition: number } | null) => void) {
         const old = this._onInputArc;
-        this._onInputArc = (...args) => { old(...args); callback(...args); }
+        this._onInputArc = (...args) => { old(...args); callback(...args); };
     }
 
 
@@ -100,7 +100,7 @@ export class PNDrawInputs {
             .attr("min", 0)
             .attr("max", 999)
             .style("width", "50px")
-            .style("height", "24px")
+            .style("height", "24px");
 
         const markingButtonOk = this.Selectors.marking.buttonOK = markingDiv.append("xhtml:input")
             .attr("type", "button")
@@ -115,12 +115,12 @@ export class PNDrawInputs {
                 this._onInputMarking(null);
             }
             this.HideAllInputs();
-        }
+        };
 
         markingButtonOk.on("click", () => {
             EndMarkingInput(true);
             d3.event.stopPropagation();
-        })
+        });
 
         markingInput.on("keypress", () => {
             if (d3.event.keyCode == Key.Enter) {
@@ -144,7 +144,7 @@ export class PNDrawInputs {
             .attr("min", -999)
             .attr("max", 999)
             .style("width", "50px")
-            .style("height", "24px")
+            .style("height", "24px");
 
         arcDiv.append("span").text("°");
 
@@ -153,13 +153,13 @@ export class PNDrawInputs {
             .attr("min", 0)
             .attr("max", 999)
             .style("width", "50px")
-            .style("height", "24px")
+            .style("height", "24px");
 
 
         const arcButtonOk = this.Selectors.arcValue.buttonOK = arcDiv.append("xhtml:input")
             .attr("type", "button")
             .attr("value", "OK")
-            .style("width", "35px")
+            .style("width", "35px");
 
         const EndArcInput = (save: boolean) => {
             if (save) {
@@ -170,12 +170,12 @@ export class PNDrawInputs {
                 this._onInputArc(null);
             }
             this.HideAllInputs();
-        }
+        };
 
         arcButtonOk.on("click", () => {
             EndArcInput(true);
             d3.event.stopPropagation();
-        })
+        });
 
         const arcInputOnKeypress = () => {
             if (d3.event.keyCode == Key.Enter) {
@@ -185,11 +185,11 @@ export class PNDrawInputs {
                 EndArcInput(false);
                 d3.event.stopPropagation();
             }
-        }
+        };
 
-                
-        arcDiv.on("click", () => { d3.event.stopPropagation(); })
-        markingDiv.on("click", () => { d3.event.stopPropagation(); })
+
+        arcDiv.on("click", () => { d3.event.stopPropagation(); });
+        markingDiv.on("click", () => { d3.event.stopPropagation(); });
 
         arcInputToPlace.on("keypress", arcInputOnKeypress);
         arcInputToTranisiton.on("keypress", arcInputOnKeypress);

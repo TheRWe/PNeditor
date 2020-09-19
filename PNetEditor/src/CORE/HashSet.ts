@@ -1,4 +1,4 @@
-﻿export class HashSet<T>{
+export class HashSet<T>{
     private colection: { [hash: number]: T[] } = {};
 
     private readonly hashFnc: (input: T) => number;
@@ -55,4 +55,4 @@ export function GetStringHash(s: string) {
         hash |= 0; // Convert to 32bit integer
     }
     return hash;
-};
+}

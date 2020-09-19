@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../../../definitions/Constants";
+import { d3BaseSelector } from "../../../../definitions/Constants";
 import { PNEditor, editorMode } from "../../PNEditor";
 import { ToggleSwitch } from "../../../components/ToggleSwitch";
 import { MakeZoomInOutIcon } from "../../../../CORE/Helpers/purify";
@@ -25,7 +25,7 @@ export class PNDrawControls {
                 if ((editor as any).mode.selected === editorMode.arcMake)
                     (editor as any).mouseEndArc();
                 editor.pnAction.Undo(); editor.pnDraw.update();
-            })
+            });
 
         container.append("input")
             .attr("type", "button")
@@ -38,7 +38,7 @@ export class PNDrawControls {
                 if ((editor as any).mode.selected === editorMode.arcMake)
                     (editor as any).mouseEndArc();
                 editor.pnAction.Redo(); editor.pnDraw.update();
-            })
+            });
 
         container.append("input")
             .attr("type", "button")
@@ -111,7 +111,7 @@ export class PNDrawControls {
             .style("font-size", "1.5em")
             .style("height", "1.4em")
             .style("padding-top", ".1em")
-            .on("click", () => { editor.pnDraw.showLabels = !editor.pnDraw.showLabels; })
+            .on("click", () => { editor.pnDraw.showLabels = !editor.pnDraw.showLabels; });
 
         this.toggleSwitchRunEdit = new ToggleSwitch(container, "Edit", "Run");
         this.toggleSwitchRunEdit.selectors.label

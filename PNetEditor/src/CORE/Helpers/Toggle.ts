@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from "../../definitions/Constants";
+import { d3BaseSelector } from "../../definitions/Constants";
 
 export enum ToggleState { on = "on", off = "off", hidden = "hidden" }
 
@@ -41,7 +41,7 @@ export class Toggle {
         this._toggleChangedHandler = (obj: Toggle) => {
             prevHandler(obj);
             handler(obj);
-        }
+        };
     }
 
     private ToggleChanged() {

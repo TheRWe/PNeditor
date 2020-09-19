@@ -1,4 +1,4 @@
-﻿import { d3BaseSelector } from '../../definitions/Constants';
+import { d3BaseSelector } from '../../definitions/Constants';
 type Position = { x: number, y: number };
 
 
@@ -25,7 +25,7 @@ export function RemoveAll<T>(arr: T[], removeFnc: (elm: T) => boolean) {
 
 export function IsInPosition(pos1: Position, pos2: Position, elmPos: Position) {
     return ((elmPos.x < pos1.x && elmPos.x > pos2.x) || (elmPos.x > pos1.x && elmPos.x < pos2.x))
-        && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y))
+        && ((elmPos.y < pos1.y && elmPos.y > pos2.y) || (elmPos.y > pos1.y && elmPos.y < pos2.y));
 }
 
 export function notImplemented() {
@@ -95,11 +95,11 @@ export function classify<T>(srr: T[], ...fncs: ((elm: T) => boolean)[]): { eleme
 /** type of class defining given type (typeof cls = Type<cls>) */
 export interface Type<T> extends Function { new(...args: any[]): T; }
 
-/** 
+/**
  * source: https://codereview.stackexchange.com/questions/16124/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting
  */
 export function convertToNumberingScheme(number: number) {
-    var baseChar = ("A").charCodeAt(0),
+    let baseChar = ("A").charCodeAt(0),
         letters = "";
 
     do {

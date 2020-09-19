@@ -1,4 +1,4 @@
-﻿import { Place, Arc, Transition, PNModel, netConfiguration } from "./PNModel";
+import { Place, Arc, Transition, PNModel, netConfiguration } from "./PNModel";
 import * as d3 from 'd3';
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
@@ -48,7 +48,7 @@ export class PNDraw extends DrawBase {
     };
 
     public _isArcDragLineVisible = false;
-    public get isArcDragLineVisible() { return this._isArcDragLineVisible; };
+    public get isArcDragLineVisible() { return this._isArcDragLineVisible; }
     /**
      * Show or hides ArcDragLine
      * @param startingFrom
@@ -82,7 +82,7 @@ export class PNDraw extends DrawBase {
                 arcDragLine
                     .attr("x2", pos.x)
                     .attr("y2", pos.y);
-            })
+            });
         }
     }
 
@@ -136,7 +136,7 @@ export class PNDraw extends DrawBase {
         const defsNames = html.classes.PNEditor.defs;
 
         const G = svg.append("g");
-        "transform: scale(2.4)"
+        "transform: scale(2.4)";
 
         G.append("g").classed(html.classes.PNEditor.g.arcs, true);
         G.append("g").classed(html.classes.PNEditor.g.places, true);
@@ -444,12 +444,12 @@ export class PNDraw extends DrawBase {
         const selected = net.selected;
         if (selected) {
             netSelectors.places()
-                .classed("selected", elm => (selected.places as any).includes(elm))
+                .classed("selected", elm => (selected.places as any).includes(elm));
             netSelectors.transitions()
-                .classed("selected", elm => (selected.tranisitons as any).includes(elm))
+                .classed("selected", elm => (selected.tranisitons as any).includes(elm));
         } else {
-            netSelectors.places().classed("selected", false)
-            netSelectors.transitions().classed("selected", false)
+            netSelectors.places().classed("selected", false);
+            netSelectors.transitions().classed("selected", false);
         }
 
         arcs().exit().remove();
@@ -468,8 +468,8 @@ export class PNDraw extends DrawBase {
                 //if (d.fx != null) d.fx = Math.max(margin, Math.min(width - margin, d.fx))
                 //if (d.fy != null) d.fy = Math.max(margin, Math.min(height - margin, d.fy))
 
-                d.x = Math.max(margin, Math.min(width - margin, d.x))
-                d.y = Math.max(margin, Math.min(height - margin, d.y))
+                d.x = Math.max(margin, Math.min(width - margin, d.x));
+                d.y = Math.max(margin, Math.min(height - margin, d.y));
             }) as (d: ForceNode) => void);
     }
 }

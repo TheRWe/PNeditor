@@ -1,4 +1,4 @@
-﻿import { JSONNet, marking, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "../PNet/PNModel";
+import { JSONNet, marking, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "../PNet/PNModel";
 import { numbers } from "../../../definitions/Constants";
 import { AsyncForeach, SortKeySelector, flatten, sleep } from "../../../CORE/Helpers/purify";
 import { sha1 } from 'object-hash';
@@ -17,7 +17,7 @@ type GraphHashed = { V: { [key: string]: Vertice[] }, E: EdgeHashed[] };
 export const ReachabilitySettings = {
     MaxMarking: 999,
     automaticalyStopCalculationAfterSeconds: 60,
-}
+};
 
 export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
 
@@ -28,7 +28,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
     private graph: Graph;
 
     public CancelCalculations() {
-        const call = (x: () => void) => { x() };
+        const call = (x: () => void) => { x(); };
         this.cancelFuncs.forEach(call);
     }
 
@@ -44,7 +44,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         let cancel = false;
         const cancelFnc = () => {
             cancel = true;
-        }
+        };
         this.cancelFuncs.push(cancelFnc);
 
         GetEnabledTransitionsIDs(this.net, this.root).forEach(transition => {
@@ -71,7 +71,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
 
                 await AsyncForeach(graphHashed.E.filter(x => x.to.hash === hash && isSameMarking(x.to.marking, node)),
                     x => searchAvailebleFrom(x.from));
-            }
+            };
             await searchAvailebleFrom({ marking, hash });
 
             flatten(Object.keys(availableFromHashed).map(h => { return availableFromHashed[h]; }))
@@ -101,7 +101,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
 
         const graph: Graph = {
             E: graphHashed.E.map(x => { return [x.from.marking, x.TransitionID, x.to.marking] as Edge; }),
-            V: flatten(Object.keys(graphHashed.V).map(x => graphHashed.V[x]))
+            V: flatten(Object.keys(graphHashed.V).map(x => graphHashed.V[x])),
         };
         const graphChanged = this.graph.V.length === 1 || graph.V.length < this.graph.V.length;
         if (graphChanged) {
@@ -120,7 +120,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         let cancel = false;
         const cancelFnc = () => {
             cancel = true;
-        }
+        };
         this.cancelFuncs.push(cancelFnc);
 
 
@@ -142,10 +142,10 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
             const searchAvailebleFrom = async (node: marking) => {
                 if (availableFrom.some(x => x === node)) return;
                 availableFrom.push(node);
-                
+
                 await AsyncForeach(graph.E.filter(x => x["2"] === node),
-                    x => searchAvailebleFrom(x["0"]))
-            }
+                    x => searchAvailebleFrom(x["0"]));
+            };
             await searchAvailebleFrom(marking);
 
             availableFrom.filter(x => isLowerSameMarking(x, calculatedMarking)).forEach(availebleFromMarking => {
@@ -187,10 +187,10 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
     }
     public get numStates(): number {
         return this.graph.V.length;
-    };
+    }
     public get maxMarking(): number {
         return Math.max(...this.graph.V.map(x => Math.max(...x.map(y => y.marking).filter(y => y !== omega))));
-    };
+    }
 
     public get reversible(): boolean {
         if (this.containstOmega) {
@@ -201,9 +201,9 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         const g = this.graph;
         const len = g.V.length;
         const fromToArray: boolean[][] = [];
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             const arr = [];
-            for (var j = 0; j < len; j++) {
+            for (let j = 0; j < len; j++) {
                 arr.push(false);
             }
             fromToArray.push(arr);
@@ -219,10 +219,10 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         do {
             changed = false;
 
-            for (var from = 0; from < len; from++) {
-                for (var to = 0; to < len; to++) {
+            for (let from = 0; from < len; from++) {
+                for (let to = 0; to < len; to++) {
                     if (fromToArray[from][to]) {
-                        for (var fromTo = 0; fromTo < len; fromTo++) {
+                        for (let fromTo = 0; fromTo < len; fromTo++) {
                             if (fromToArray[to][fromTo]) {
                                 if (!fromToArray[from][fromTo]) {
                                     fromToArray[from][fromTo] = true;
@@ -235,9 +235,9 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
             }
         } while (changed);
 
-        for (var i = 0; i < len; i++) {
-            for (var j = 0; j < len; j++) {
-                if (fromToArray[i][j] === false)
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len; j++) {
+                if (!fromToArray[i][j])
                     return this.containstOmega && null;
             }
         }
@@ -252,9 +252,9 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         const g = this.graph;
         const len = g.V.length;
         const fromToArray: boolean[][] = [];
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             const arr = [];
-            for (var j = 0; j < len; j++) {
+            for (let j = 0; j < len; j++) {
                 arr.push(false);
             }
             fromToArray.push(arr);
@@ -270,10 +270,10 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         do {
             changed = false;
 
-            for (var from = 0; from < len; from++) {
-                for (var to = 0; to < len; to++) {
+            for (let from = 0; from < len; from++) {
+                for (let to = 0; to < len; to++) {
                     if (fromToArray[from][to]) {
-                        for (var fromTo = 0; fromTo < len; fromTo++) {
+                        for (let fromTo = 0; fromTo < len; fromTo++) {
                             if (fromToArray[to][fromTo]) {
                                 if (!fromToArray[from][fromTo]) {
                                     fromToArray[from][fromTo] = true;
@@ -285,8 +285,8 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
                 }
             }
 
-            for (var i = 0; i < len; i++) {
-                if (fromToArray[i][i] === true)
+            for (let i = 0; i < len; i++) {
+                if (fromToArray[i][i])
                     return false;
             }
         } while (changed);
@@ -295,7 +295,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
     }
 
     public get live(): boolean {
-        if (this.weaklyLive === false)
+        if (!this.weaklyLive)
             return false;
         return this.net.transitions.every(t => {
             return this.graph.V.every((m,mi) => {
@@ -308,7 +308,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
                     if (comesFromThis.some(x => x["1"] === t.id))
                         return true;
                     return comesFromThis.some(x => checkMarking(x["2"]));
-                }
+                };
                 return checkMarking(m);
             });
         });
@@ -341,7 +341,7 @@ export class CoverabilityGraph extends ModelBase<CoverabilityGraphJSON> {
         super();
         this.net = net;
 
-        const marking: marking = this.net.places.map(x => { return { id: x.id, marking: x.marking } });
+        const marking: marking = this.net.places.map(x => { return { id: x.id, marking: x.marking }; });
 
         this.root = marking;
         this.graph = { V: [this.root], E: [] };

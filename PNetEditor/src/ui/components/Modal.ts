@@ -1,4 +1,4 @@
-﻿
+
 export enum modalResult { X, btn0, btn1, btn2, btn3 }
 /** Function that opens modals with given button labels and returns clicked button. */
 export async function showModal(message: string, btn0: string = null, btn1: string = null, btn2: string = null, btn3: string = null) {
@@ -20,7 +20,7 @@ export async function showModal(message: string, btn0: string = null, btn1: stri
     const result = await new Promise<modalResult>((resolve) => {
         btnWithCallbacks.forEach(x => {
             if (x.text) {
-                x.callback = () => { resolve(x.result) };
+                x.callback = () => { resolve(x.result); };
                 x.element.addEventListener("click", x.callback);
                 x.element.textContent = x.text;
                 x.element.classList.remove("hidden");
