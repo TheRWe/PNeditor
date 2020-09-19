@@ -7,13 +7,13 @@
   "license": "MIT",
   "scripts": {
     "electron": "electron .",
-    "start": "yarn build && electron .",
+    "start": "yarn compile && electron .",
     "script": "cd ./scripts/ && ts-node-script",
-    "build": "tsc && yarn script build",
     "clean": "yarn script clean",
-    "dist": "yarn build && electron-builder",
-    "tslint": "tslint -p tslint.json",
-    "tslint:fix": "yarn tslint -- --fix"
+    "compile":"tsc && yarn script build",
+    "build": "yarn compile && electron-builder",
+    "lint": "tslint -p tslint.json",
+    "lint:fix": "yarn tslint -- --fix"
   },
   "keywords": [
     "Electron",

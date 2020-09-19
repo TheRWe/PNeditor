@@ -10,7 +10,7 @@ yarn start
 ```
 Create executable:
 ```
-yarn dist
+yarn build
 ```
 ## Issues:
  - [ ] fix edit with input
