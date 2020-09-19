@@ -78,7 +78,9 @@
     "no-angle-bracket-type-assertion": true,
     "no-boolean-literal-compare": true,
     "no-trailing-whitespace": true,
-    "semicolon": [true, "always"]
+    "semicolon": [true, "always"],
+    "no-shadowed-variable": false,
+    "quotemark": [true, "double"]
   },
   "rulesDirectory": []
 }

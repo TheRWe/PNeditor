@@ -73,7 +73,7 @@ export const numbers = {
   omega: 9007199254740666,
 };
 
-export interface ForceNode {
+export type ForceNode = {
   index: number;
   vx: number;
   vy: number;
@@ -81,4 +81,4 @@ export interface ForceNode {
   y: number;
   fx: number;
   fy: number;
-}
+};

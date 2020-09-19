@@ -21,17 +21,14 @@ export class Toggle {
       return;
 
     this._state = state;
-    if (state === ToggleState.hidden) {
+    if (state === ToggleState.hidden)
       this.baseSelector.style("display", "none");
-    }
     else {
       this.baseSelector.style("display", "inline-block");
-      if (state === ToggleState.on) {
+      if (state === ToggleState.on)
         this.checkboxSelector.property("checked", true);
-      }
-      else if (state === ToggleState.off) {
+      else if (state === ToggleState.off)
         this.checkboxSelector.property("checked", false);
-      }
     }
   }
 

@@ -111,9 +111,9 @@ export class PNDrawInputs {
       if (save) {
         const value = +(markingInput.node() as any).value;
         this._onInputMarking(value);
-      } else {
+      } else
         this._onInputMarking(null);
-      }
+
       this.HideAllInputs();
     };
 
@@ -123,11 +123,11 @@ export class PNDrawInputs {
     });
 
     markingInput.on("keypress", () => {
-      if (d3.event.keyCode == Key.Enter) {
+      if (d3.event.keyCode === Key.Enter)
         EndMarkingInput(true);
-      } else if (d3.event.keyCode == Key.Escape) {
+      else if (d3.event.keyCode === Key.Escape)
         EndMarkingInput(false);
-      }
+
       d3.event.stopPropagation();
     });
 
@@ -166,9 +166,9 @@ export class PNDrawInputs {
         const toPlace = +(arcInputToPlace.node() as any).value;
         const toTransition = +(arcInputToTranisiton.node() as any).value;
         this._onInputArc({ toPlace, toTransition });
-      } else {
+      } else
         this._onInputArc(null);
-      }
+
       this.HideAllInputs();
     };
 
@@ -178,10 +178,10 @@ export class PNDrawInputs {
     });
 
     const arcInputOnKeypress = () => {
-      if (d3.event.keyCode == Key.Enter) {
+      if (d3.event.keyCode === Key.Enter) {
         EndArcInput(true);
         d3.event.stopPropagation();
-      } else if (d3.event.keyCode == Key.Escape) {
+      } else if (d3.event.keyCode === Key.Escape) {
         EndArcInput(false);
         d3.event.stopPropagation();
       }

@@ -123,8 +123,5 @@ export class PlaceTransitionTableDraw extends DrawBase {
       .classed("table", true)
       .classed("unselectable", true)
       ;
-
-    this.AddOnConfigTransitionClick((e) => { console.debug(`Table transition clicked cfgIndex:${e.configIndex} tIndex:${e.transitionID}`); });
-    this.AddOnConfigShowClick((e) => { console.debug(`Table config show clicked cfgIndex:${e.configIndex}`); });
   }
 }

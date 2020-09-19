@@ -7,8 +7,8 @@ import { PNModel, Arc } from "../PNModel";
  * @param net whole net
  * @param arc arc currently calculated arc
  */
-export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: Position } {
-  const tPos = { x: arc.transition.x, y: arc.transition.y  };
+export const GetArcEndpoints = (net: PNModel, arc: Arc): { from: Position, to: Position } => {
+  const tPos = { x: arc.transition.x, y: arc.transition.y };
 
   // get all arces of transition
   const arcesT = net.getArcesOfTransition(arc.transition);
@@ -25,14 +25,15 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
     const side: side = (x.classifications[0] && !x.classifications[1]) ? "TOP" :
       (!x.classifications[0] && !x.classifications[1]) ? "LEFT" :
         (x.classifications[0] && x.classifications[1]) ? "RIGHT" : "BOT";
-    return { arc: x.element, side: side };
+    return { arc: x.element, side };
   });
 
+  const size = 10;
   const defaultTransitionPositionSides = {
-    "TOP": { x: tPos.x - 10, y: tPos.y - 10 },
-    "BOT": { x: tPos.x - 10, y: tPos.y + 10 },
-    "LEFT": { x: tPos.x - 10, y: tPos.y - 10 },
-    "RIGHT": { x: tPos.x + 10, y: tPos.y - 10 },
+    "TOP": { x: tPos.x - size, y: tPos.y - size },
+    "BOT": { x: tPos.x - size, y: tPos.y + size },
+    "LEFT": { x: tPos.x - size, y: tPos.y - size },
+    "RIGHT": { x: tPos.x + size, y: tPos.y - size },
   };
 
   const arcWithTransitionPosition: { arc: Arc, pos: Position }[] = [];
@@ -45,10 +46,10 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
     const arcsInThisSide = arcesWithSides.filter(x => x.side === s).sort(selectorHelper);
     const len = arcsInThisSide.length;
     if (len === 0) return;
-    // odskok
+
     const jump = 20 / (len + 1);
 
-    let pos: Position = defaultTransitionPositionSides[s] as Position;
+    const pos: Position = defaultTransitionPositionSides[s] as Position;
 
     arcsInThisSide.forEach(a => {
       pos[sideDependentValue] += jump;
@@ -57,13 +58,13 @@ export function GetArcEndpoints(net: PNModel, arc: Arc): { from: Position, to: P
     });
   });
 
-  let transitionPos = arcWithTransitionPosition.find((ap) => {
+  const transitionPos = arcWithTransitionPosition.find((ap) => {
     const a = ap.arc;
-    return arc == a;
+    return arc === a;
   }).pos;
 
   return {
     from: transitionPos,
     to: { x: arc.place.x, y: arc.place.y },
   };
-}
+};

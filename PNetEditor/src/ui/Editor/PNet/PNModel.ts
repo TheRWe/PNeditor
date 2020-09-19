@@ -18,7 +18,7 @@ export class PNModel extends ModelBase<JSONNet>{
     const arcs: { transition_id: number, place_id: number, toPlace: number, toTransition: number, }[]
       = this.arcs.map(a => { return { place_id: a.place.id, transition_id: a.transition.id, toPlace: a.toPlace, toTransition: a.toTransition }; });
 
-    const json: JSONNet = { places: places, transitions: transitions, arcs: arcs };
+    const json: JSONNet = { places, transitions, arcs };
 
     return json;
   }
@@ -30,7 +30,7 @@ export class PNModel extends ModelBase<JSONNet>{
       || (json.arcs.map(a => a.transition_id).map(tid => json.transitions.map(t => t.id).findIndex(t => t === tid)).some(x => x === -1))
       || (json.arcs.map(a => a.toPlace || 0).some(x => x < 0))
       || (json.arcs.map(a => a.toTransition || 0).some(x => x < 0))
-      )
+    )
       return false;
 
     const places: Place[] = json.places.map(p => new Place(p.position, p.marking || 0, p.id));
@@ -47,7 +47,7 @@ export class PNModel extends ModelBase<JSONNet>{
       return new Arc(t, p, aj.toPlace || 0, aj.toTransition || 0);
     });
 
-    Object.assign(this, { places: places, transitions: transitions, arcs: arcs });
+    Object.assign(this, { places, transitions, arcs });
 
     return true;
   }
@@ -187,7 +187,7 @@ export type placeMarking = { id: number, marking: number };
 export type marking = placeMarking[];
 export type netConfiguration = { marking: placeMarking[], enabledTransitionsIDs: number[], usedTransition?: number };
 
-export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking, transitionID: number): netConfiguration {
+export const CalculateNextConfiguration = (net: JSONNet, currentMarking: marking, transitionID: number): netConfiguration => {
   if (!GetEnabledTransitionsIDs(net, currentMarking).some(x => x === transitionID))
     throw new Error("cannot enable transition");
 
@@ -201,13 +201,13 @@ export function CalculateNextConfiguration(net: JSONNet, currentMarking: marking
   const enabledTransitionsIDs: number[] = GetEnabledTransitionsIDs(net, marking);
 
   return { marking, enabledTransitionsIDs };
-}
+};
 
-export function GetEnabledTransitionsIDs(net: JSONNet, currentMarking: marking) {
+export const GetEnabledTransitionsIDs = (net: JSONNet, currentMarking: marking) => {
   return net.transitions.filter(t => {
     return net.arcs
       .filter(x => x.transition_id === t.id)
       .filter(x => x.toTransition > 0)
       .every(x => x.toTransition <= (currentMarking.find(y => y.id === x.place_id) || { marking: 0 }).marking);
   }).map(t => t.id);
-}
+};

@@ -11,12 +11,12 @@ export class TabGroup{
 
   public remove(tab: Tab) {
     const index = this.tabs.findIndex(x => x === tab);
-    if (index == -1) return;
+    if (index === -1) return;
 
     tab.tabButton.remove();
     tab.container.remove();
     this.tabs.splice(index, 1);
-    if (this.tabs.length == 0) {
+    if (this.tabs.length === 0) {
       this.parentTabControl.RemoveTabGroup(this);
       this.containerGroupContent.remove();
       this.containerLabel.remove();

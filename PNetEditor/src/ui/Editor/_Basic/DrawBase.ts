@@ -1,4 +1,4 @@
-﻿import * as d3 from 'd3';
+import * as d3 from "d3";
 import { Selection } from "d3";
 import { d3BaseSelector, Position } from "../../../definitions/Constants";
 import { ModelBase } from "./ModelBase";
@@ -6,7 +6,7 @@ import { ModelBase } from "./ModelBase";
 type d3Drag = d3.DragBehavior<Element, {}, {} | d3.SubjectPosition>;
 
 type selectors = { [key: string]: d3BaseSelector | (() => d3BaseSelector) | selectors };
-type models = { [key: string]: {} | ModelBase<any> | (() => ModelBase<any>) | models};
+type models = { [key: string]: {} | ModelBase<any> | (() => ModelBase<any>) | models };
 
 /** Base abstract class for handling visualisation of models. */
 export abstract class DrawBase {
@@ -46,7 +46,6 @@ export abstract class DrawBase {
   /** returns wheel delta y */
   protected getWheelDeltaY(): number {
     const e = d3.event;
-    console.debug("wheel");
     const deltaY = e.deltaY;
     return deltaY;
   }
@@ -67,18 +66,18 @@ export abstract class DrawBase {
   }
 }
 
-export enum CallbackType { 'letfClick', 'rightClick', 'wheel', 'dragStart', 'drag', 'dragEnd', 'dragRevert' }
+export enum CallbackType { "letfClick", "rightClick", "wheel", "dragStart", "drag", "dragEnd", "dragRevert" }
 /** class for holding mouse callbacks for drawmodels */
 export class Callbacks<type> {
   static readonly distanceDeadzone = 8;
 
-  public AddCallback(type: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;
-  public AddCallback(type: CallbackType.letfClick, callback: (obj: type, pos: Position) => void): void;
-  public AddCallback(type: CallbackType.rightClick, callback: (obj: type, pos: Position) => void): void;
-  public AddCallback(type: CallbackType.dragStart | CallbackType.drag | CallbackType.dragEnd | CallbackType.dragRevert, callback: (obj: type, pos: Position, startPos?: Position) => void): void;
-  public AddCallback(type: CallbackType, callback: any) {
+  public AddCallback(callbackType: CallbackType.wheel, callback: (obj: type, wheelDeltaY: number) => void): void;
+  public AddCallback(callbackType: CallbackType.letfClick, callback: (obj: type, pos: Position) => void): void;
+  public AddCallback(callbackType: CallbackType.rightClick, callback: (obj: type, pos: Position) => void): void;
+  public AddCallback(callbackType: CallbackType.dragStart | CallbackType.drag | CallbackType.dragEnd | CallbackType.dragRevert, callback: (obj: type, pos: Position, startPos?: Position) => void): void;
+  public AddCallback(callbackType: CallbackType, callback: any) {
     let old: any;
-    switch (type) {
+    switch (callbackType) {
       case CallbackType.letfClick:
         old = this.onClick; this.onClick = (...args) => { old(...args); callback(...args); };
         break;
@@ -138,8 +137,6 @@ export class Callbacks<type> {
         pos = { x, y };
       }
       this.positionStartDrag = pos;
-
-      console.debug({ startDrag: obj, pos: pos });
       this.onDragStart(obj, pos, { ...this.positionStartDrag });
     })
     .on("drag", (obj: type) => {
@@ -169,14 +166,10 @@ export class Callbacks<type> {
       const dx = pos.x - this.positionStartDrag.x;
       const dy = pos.y - this.positionStartDrag.y;
       const successfull = (dx * dx + dy * dy > Callbacks.distanceDeadzone * Callbacks.distanceDeadzone);
-      if (successfull) {
-        console.debug({ endDrag: obj, pos: pos });
+      if (successfull)
         this.onDragEnd(obj, pos, { ...this.positionStartDrag });
-      }
-      else {
-        console.debug({ revertDrag: obj, pos: pos });
+      else
         this.onDragDeadzoneRevert(obj, pos, { ...this.positionStartDrag });
-      }
 
       this.positionStartDrag = null;
     });

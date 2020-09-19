@@ -18,7 +18,6 @@ export class PNAction extends ActionBase<PNModel>{
   }
 
   private setHistory() {
-    console.debug({ netHistory: this.netHistory, settingHistoryIndex: this.netHistoryIndex });
     this.model.fromJSON(this.netHistory[this.netHistoryIndex]);
   }
 

@@ -29,9 +29,8 @@ export class ToggleSwitch {
       return;
 
     this._state = state;
-    if (state === ToggleSwitchState.hidden) {
+    if (state === ToggleSwitchState.hidden)
       this.selectors.label.style("display", "none");
-    }
     else {
       this.selectors.label.style("display", "inline-block");
 

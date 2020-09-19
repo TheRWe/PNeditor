@@ -96,12 +96,14 @@ export class Graph<VT, ET>{
     const c = this.connections;
 
     c.filter(x => x.from === copyFrom).forEach(x => {
-      const _from = copyTo, _to = x.to;
+      const _from = copyTo;
+      const _to = x.to;
       this.Connect(_from, _to);
       this.connections.find(y => y.from === _from && y.to === _to).data = edgeMergerFnc(x.data, this.GetConnectionData(_from, _to));
     });
     c.filter(x => x.from === copyFrom).forEach(x => {
-      const _from = x.from, _to = copyTo;
+      const _from = x.from;
+      const _to = copyTo;
       this.Connect(_from, _to);
       this.connections.find(y => y.from === _from && y.to === _to).data = edgeMergerFnc(x.data, this.GetConnectionData(_from, _to));
     });

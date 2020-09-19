@@ -1,7 +1,7 @@
 
 export enum modalResult { X, btn0, btn1, btn2, btn3 }
 /** Function that opens modals with given button labels and returns clicked button. */
-export async function showModal(message: string, btn0: string = null, btn1: string = null, btn2: string = null, btn3: string = null) {
+export const showModal = async (message: string, btn0: string = null, btn1: string = null, btn2: string = null, btn3: string = null) => {
   const modalElm = document.querySelector("#modal");
   const messageElm = document.querySelector(".js-modal-message");
 
@@ -31,11 +31,12 @@ export async function showModal(message: string, btn0: string = null, btn1: stri
   });
 
   btnWithCallbacks.forEach(x => {
-    if (x.text) { x.element.removeEventListener("click", x.callback); }
+    if (x.text)
+      x.element.removeEventListener("click", x.callback);
     x.element.textContent = "";
   });
 
   modalElm.classList.remove("modal-show");
 
   return result;
-}
+};

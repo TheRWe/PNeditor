@@ -1,13 +1,13 @@
-import * as d3 from 'd3';
-import * as file from 'fs';
-import { ipcRenderer, remote } from 'electron';
-import { showModal, modalResult } from './components/Modal';
-import { TabControl } from './components/TabControl/TabControl';
+import * as d3 from "d3";
+import * as file from "fs";
+import { ipcRenderer, remote } from "electron";
+import { showModal, modalResult } from "./components/Modal";
+import { TabControl } from "./components/TabControl/TabControl";
 import { PNModel, JSONNet, netConfiguration } from "./Editor/PNet/PNModel";
-import { PNEditor } from './Editor/PNEditor';
+import { PNEditor } from "./Editor/PNEditor";
 import { html } from "../definitions/Constants";
-import { TabKeyDownEvent } from './components/TabControl/Tab';
-import { TabGroup } from './components/TabControl/TabGroup';
+import { TabKeyDownEvent } from "./components/TabControl/Tab";
+import { TabGroup } from "./components/TabControl/TabGroup";
 
 export let tabControl: TabControl;
 
@@ -97,12 +97,12 @@ const TabActions = {
           if (result === modalResult.btn0)
             TabActions.save(obj.Path);
           else if (result === modalResult.btn1)
-            ipcRenderer.send('save-dialog');
+            ipcRenderer.send("save-dialog");
         });
       } else
-        ipcRenderer.send('save-dialog');
+        ipcRenderer.send("save-dialog");
     },
-    load: () => { ipcRenderer.send('load-dialog'); },
+    load: () => { ipcRenderer.send("load-dialog"); },
   },
 };
 
@@ -183,4 +183,4 @@ async function main() {
   const custom = (remote.getCurrentWindow() as any).custom;
 }
 
-window.addEventListener('load', main);
+window.addEventListener("load", main);

@@ -6,7 +6,7 @@ export abstract class ModelBase<JSONType>{
 
   /** copy of the object (by json fncs) */
   public get Copy(): this {
-    const obj = (new (this.constructor()) as this);
+    const obj = new (this.constructor())() as this;
     obj.fromJSON(this.toJSON());
     return obj;
   }

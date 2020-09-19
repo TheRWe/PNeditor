@@ -1,5 +1,5 @@
-import * as path from 'path';
-import * as d3 from 'd3';
+import * as path from "path";
+import * as d3 from "d3";
 import { Tab, TabKeyDownEvent, BeforeRemoveEvent } from "../components/TabControl/Tab";
 import { d3BaseSelector, Position, ForceNode } from "../../definitions/Constants";
 import { PNModel, Place, Arc, Transition, GetEnabledTransitionsIDs, CalculateNextConfiguration } from "./PNet/PNModel";
@@ -49,12 +49,12 @@ export class PNEditor implements TabInterface {
     this._path = val;
 
     const fileWithExtension = path.basename(val);
-    const splited = fileWithExtension.split('.');
-    const withoutExtension = (splited.length > 1) ? splited.slice(0, -1).join('.') : fileWithExtension;
+    const splited = fileWithExtension.split(".");
+    const withoutExtension = (splited.length > 1) ? splited.slice(0, -1).join(".") : fileWithExtension;
 
     const maxlength = 20;
 
-    this.tab.label = (withoutExtension.length > maxlength) ? (withoutExtension.slice(0, maxlength - 3) + '...') : withoutExtension;
+    this.tab.label = (withoutExtension.length > maxlength) ? (withoutExtension.slice(0, maxlength - 3) + "...") : withoutExtension;
   }
 
 
@@ -77,7 +77,7 @@ export class PNEditor implements TabInterface {
         this.keyboard.inputs.marking.editedPlace = null;
         break;
       default:
-        console.warn("implement");
+        console.warn("Not implemented");
         break;
     }
 
@@ -123,7 +123,7 @@ export class PNEditor implements TabInterface {
   /** mouse properties */
   private readonly mouse = {
     svg: {
-      //todo: redundantní kód s gePos na draw
+      // TODO: redundant code with gePos on draw
       getMousePosition: (): Position => {
         const svg = this.svg;
         const coords = d3.mouse(svg.node() as SVGSVGElement);
@@ -132,7 +132,6 @@ export class PNEditor implements TabInterface {
       },
 
       onClick: (_: null, pos: Position) => {
-        console.debug("svg clicked");
         const mouse = this.mouse;
         switch (this.mode.selected) {
           case editorMode.default:
@@ -171,7 +170,6 @@ export class PNEditor implements TabInterface {
     },
     transition: {
       onClick: (t: Transition) => {
-        console.debug("transition clicked");
         const mouse = this.mouse;
         switch (this.mode.selected) {
           case editorMode.default:
@@ -192,7 +190,6 @@ export class PNEditor implements TabInterface {
         }
       },
       onRightClick: (t: Transition) => {
-        console.debug("transition right click");
         switch (this.mode.selected) {
           case editorMode.default:
             this.pnAction.RemoveTransition(t);
@@ -204,8 +201,6 @@ export class PNEditor implements TabInterface {
       },
       onWheel: (t: Transition) => {
         const e = d3.event;
-        //console.debug("transition wheel");
-        let deltaY = e.deltaY;
         switch (this.mode.selected) {
           case editorMode.default:
             t.isCold = !t.isCold;
@@ -220,7 +215,6 @@ export class PNEditor implements TabInterface {
     },
     place: {
       onClick: (p: Place, pos: Position) => {
-        console.debug("place click");
         switch (this.mode.selected) {
           case editorMode.valueEdit:
           case editorMode.default:
@@ -240,7 +234,6 @@ export class PNEditor implements TabInterface {
         }
       },
       onRightClick: (p: Place) => {
-        console.debug("place right click");
         switch (this.mode.selected) {
           case editorMode.default:
             this.pnAction.RemovePlace(p);
@@ -252,8 +245,8 @@ export class PNEditor implements TabInterface {
       },
       onWheel: (p: Place) => {
         const e = d3.event;
-        console.debug("place wheel");
-        let deltaY = e.deltaY;
+        const deltaY = e.deltaY;
+
         switch (this.mode.selected) {
           case editorMode.default:
             if (deltaY < 0) {
@@ -276,7 +269,6 @@ export class PNEditor implements TabInterface {
     },
     arc: {
       onClick: (a: arc) => {
-        console.debug("arc clicked");
 
         switch (this.mode.selected) {
           case editorMode.valueEdit:
@@ -301,8 +293,7 @@ export class PNEditor implements TabInterface {
       },
       onWheel: (a: arc) => {
         const e = d3.event;
-        console.debug("arc wheel");
-        let deltaY = e.deltaY;
+
         switch (this.mode.selected) {
           case editorMode.default:
             const toPlace = a.arc.toPlace;
@@ -332,7 +323,6 @@ export class PNEditor implements TabInterface {
           default:
             notImplemented();
         }
-        console.debug({ startdrag: d });
       },
       drag: (d: ForceNode, evPos: Position, posStart: Position) => {
         switch (this.mode.selected) {
@@ -476,8 +466,7 @@ export class PNEditor implements TabInterface {
     },
     shortcuts: {
       callback: ((e: TabKeyDownEvent) => {
-        console.debug(e);
-        if (e.ctrlKey) {
+        if (e.ctrlKey)
           switch (e.keyCode) {
             case Key.Z:
             case Key.Y:
@@ -494,13 +483,14 @@ export class PNEditor implements TabInterface {
             default:
               break;
           }
-        }
       }),
     },
   };
 
 
-  /** open marking edit window for given place*/
+  /**
+   * open marking edit window for given place
+   */
   private StartInputArc(arc: Arc) {
     if (this.mode.selected !== editorMode.valueEdit)
       this.mode.selected = editorMode.valueEdit;
@@ -509,7 +499,9 @@ export class PNEditor implements TabInterface {
     this.inputs.ShowInputArc(this.mouse.svg.getMousePosition(), { toPlace: arc.toPlace, toTransition: arc.toTransition });
   }
 
-  /** open marking edit window for given place*/
+  /**
+   * open marking edit window for given place
+   */
   private StartInputMarking(p: Place) {
     if (this.mode.selected !== editorMode.valueEdit)
       this.mode.selected = editorMode.valueEdit;
@@ -577,10 +569,11 @@ export class PNEditor implements TabInterface {
       this.tableDraw.update();
     });
     this.tableDraw.AddOnConfigShowHover(({ configIndex }) => {
-      if (configIndex === null)
-        this.pnDraw.Models.configuration = null;
-      else
-        this.pnDraw.Models.configuration = this.tableDraw.Models.configurations[configIndex];
+
+      this.pnDraw.Models.configuration = (configIndex === null)
+        ? null
+        : this.tableDraw.Models.configurations[configIndex]
+        ;
       this.pnDraw.update();
     });
   }

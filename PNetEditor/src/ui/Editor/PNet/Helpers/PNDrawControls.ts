@@ -64,8 +64,6 @@ export class PNDrawControls {
       })
       ;
 
-
-
     const zoomInContainer = container
       .append("div")
       .style("display", "inline-block")

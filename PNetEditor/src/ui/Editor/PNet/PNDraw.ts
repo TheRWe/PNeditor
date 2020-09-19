@@ -1,5 +1,5 @@
 import { Place, Arc, Transition, PNModel, netConfiguration } from "./PNModel";
-import * as d3 from 'd3';
+import * as d3 from "d3";
 import { rgb } from "d3";
 import { GetArcEndpoints } from "./Helpers/ArrowEndpointCalculationHelper";
 import { convertToNumberingScheme, getArrayElementMapToNumber } from "../../../CORE/Helpers/purify";
@@ -77,7 +77,6 @@ export class PNDraw extends DrawBase {
 
       container.on("mousemove", () => {
         const pos = this.getPos();
-        console.debug(pos);
 
         arcDragLine
           .attr("x2", pos.x)
@@ -132,11 +131,10 @@ export class PNDraw extends DrawBase {
       .style("border", "1px lightgray solid")
       ;
 
-    const defs = svg.append('svg:defs');
+    const defs = svg.append("svg:defs");
     const defsNames = html.classes.PNEditor.defs;
 
     const G = svg.append("g");
-    "transform: scale(2.4)";
 
     G.append("g").classed(html.classes.PNEditor.g.arcs, true);
     G.append("g").classed(html.classes.PNEditor.g.places, true);
@@ -145,26 +143,26 @@ export class PNDraw extends DrawBase {
 
 
     // define arrow markers for leading arrow
-    defs.append('svg:marker')
-      .attr('id', this.defs.arrowTransitionEnd)
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 1)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 8)
-      .attr('orient', 'auto')
-      .append('svg:path')
-      .attr('d', 'M10,-5 L0,0 L10,5');
+    defs.append("svg:marker")
+      .attr("id", this.defs.arrowTransitionEnd)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 1)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 8)
+      .attr("orient", "auto")
+      .append("svg:path")
+      .attr("d", "M10,-5 L0,0 L10,5");
 
     // define arrow markers for leading arrow
-    defs.append('svg:marker')
-      .attr('id', this.defs.arrowPlaceEnd)
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 23)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 8)
-      .attr('orient', 'auto')
-      .append('svg:path')
-      .attr('d', 'M0,-5L10,0L0,5');
+    defs.append("svg:marker")
+      .attr("id", this.defs.arrowPlaceEnd)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 23)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 8)
+      .attr("orient", "auto")
+      .append("svg:path")
+      .attr("d", "M0,-5L10,0L0,5");
 
     this.Selectors.arcDragLine
       .style("stroke", "black")
@@ -194,8 +192,6 @@ export class PNDraw extends DrawBase {
     const callbacks = this.Callbacks;
     const getPos = this.getPos.bind(this);
     const getWheelDeltaY = this.getWheelDeltaY;
-
-    console.debug("%c update", "color: rgb(0, 160, 160)");
 
     const defsNames = html.classes.PNEditor.defs;
 
@@ -396,8 +392,8 @@ export class PNDraw extends DrawBase {
     callbacks.arc.ConnectToElement(enterArcText, getPos, getWheelDeltaY);
 
     arcs().select(`.${html.classes.PNEditor.helper.arcVisibleLine}`)
-      .style('marker-end', a => a.arc.toPlace > 0 ? `url(#${this.defs.arrowPlaceEnd})` : "")
-      .style('marker-start', a => a.arc.toTransition > 0 ? `url(#${this.defs.arrowTransitionEnd})` : "")
+      .style("marker-end", a => a.arc.toPlace > 0 ? `url(#${this.defs.arrowPlaceEnd})` : "")
+      .style("marker-start", a => a.arc.toTransition > 0 ? `url(#${this.defs.arrowTransitionEnd})` : "")
       .attr("x1", a => a.line.from.x)
       .attr("y1", a => a.line.from.y)
       .attr("x2", a => a.line.to.x)
@@ -409,7 +405,7 @@ export class PNDraw extends DrawBase {
       .attr("x2", a => a.line.to.x)
       .attr("y2", a => a.line.to.y);
 
-    arcs().select('.text-foreground')
+    arcs().select(".text-foreground")
       .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
       .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
       .text(d => {
@@ -422,7 +418,7 @@ export class PNDraw extends DrawBase {
         return (toPlace + "°" + toTransition) || "";
       });
 
-    arcs().select('.text-background')
+    arcs().select(".text-background")
       .attr("x", a => Math.abs(a.line.to.x - a.line.from.x) / 2 + Math.min(a.line.to.x, a.line.from.x) - 5)
       .attr("y", a => Math.abs(a.line.to.y - a.line.from.y) / 2 + Math.min(a.line.to.y, a.line.from.y) - 5)
       .text(d => {

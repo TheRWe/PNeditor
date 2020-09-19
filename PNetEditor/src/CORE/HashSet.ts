@@ -20,9 +20,9 @@ export class HashSet<T>{
     const hash = this.hashFnc(val);
     const found = this.colection[hash];
 
-    if (!found) {
+    if (!found)
       this.colection[hash] = [val];
-    } else {
+    else {
       if (found.findIndex(x => { return this.equalityComparer(x, val); }) >= 0)
         return false;
 
@@ -44,15 +44,18 @@ export class HashSet<T>{
 
 
 // source: https://jsperf.com/hashcodelordvlad
-export function GetStringHash(s: string) {
-  let hash = 0,
-    i, char;
-  if (s.length == 0) return hash;
+export const GetStringHash = (s: string) => {
+  let hash = 0;
+  let i: number;
+  let char: number;
+  if (s.length === 0) return hash;
   const l = s.length;
   for (i = 0; i < l; i++) {
     char = s.charCodeAt(i);
+    // tslint:disable
     hash = ((hash << 5) - hash) + char;
     hash |= 0; // Convert to 32bit integer
+    // tslint:enable
   }
   return hash;
-}
+};
