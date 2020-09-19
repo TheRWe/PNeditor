@@ -18,8 +18,8 @@ yarn build
 ## TODO:
  - [X] Fix compilation
  - [X] Remove VS17 files and build using yarn
- - [ ] Code styling (tslint/prettier/tsc ...)
- - [ ] building executables
+ - [X] Code styling (tslint/prettier/tsc ...)
+ - [X] building executables
    - [X] win
    - [ ] linux
  - [ ] Create documentation
@@ -31,4 +31,3 @@ yarn build
  - [ ] Debuging with vscode tasks
  - [ ] Semantic version
  - [ ] eng only
- - [ ] Continuous integration ?
